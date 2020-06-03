@@ -109,11 +109,31 @@
                         <com.pramod.todaysword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToForkProject()}"
-                            app:icon="@drawable/ic_source_fork"
+                            android:onClick="@{()->aboutAppViewModel.openDonatePage()}"
+                            app:icon="@drawable/ic_baseline_card_giftcard_24"
                             app:showRadioButton="false"
                             app:subTitle="Liked my work?"
                             app:title="Donate"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.shareApp()}"
+                            app:icon="@drawable/ic_outline_share_24"
+                            app:showRadioButton="false"
+                            app:subTitle="Share with your family, friends and colleague learn a word together"
+                            app:title="Share"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.openGooglePlayReview()}"
+                            app:icon="@drawable/ic_outline_rate_review_24"
+                            app:showRadioButton="false"
+                            app:subTitle="Give us your precious time to rate my app on google playstore"
+                            app:title="Rate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                     </LinearLayout>

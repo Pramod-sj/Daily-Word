@@ -10,6 +10,9 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
     , DeveloperLinkNavigate, OtherLinkNavigate, CreditLinkNavigate, AppLinkNavigate {
 
     private val navigateToAppGithubLinkLiveData = MutableLiveData<Event<Boolean>>()
+    private val navigateToGooglePlayReviewLiveData = MutableLiveData<Event<Boolean>>()
+    private val navigateToDonatePageLiveData = MutableLiveData<Event<Boolean>>()
+    private val shareAppLiveData = MutableLiveData<Event<Boolean>>()
 
     private val navigateToDevGithubLiveData = MutableLiveData<Event<Boolean>>()
     private val navigateToDevFacebookLiveData = MutableLiveData<Event<Boolean>>()
@@ -64,8 +67,29 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
         navigateToAppGithubLinkLiveData.value = Event.init(true)
     }
 
+    override fun openGooglePlayReview() {
+        navigateToGooglePlayReviewLiveData.value = Event.init(true)
+    }
+
+    override fun openDonatePage() {
+        navigateToDonatePageLiveData.value = Event.init(true)
+    }
+
+    override fun shareApp() {
+        shareAppLiveData.value = Event.init(true)
+    }
+
     fun navigateToAppGithubLinkLiveData(): LiveData<Event<Boolean>> =
         navigateToAppGithubLinkLiveData;
+
+    fun navigateToDonatePageLiveData(): LiveData<Event<Boolean>> =
+        navigateToDonatePageLiveData;
+
+    fun navigateToGooglePlayReviewLiveData(): LiveData<Event<Boolean>> =
+        navigateToGooglePlayReviewLiveData;
+
+    fun shareAppLiveData(): LiveData<Event<Boolean>> =
+        shareAppLiveData;
 
     fun navigateToDevGithubLiveData(): LiveData<Event<Boolean>> = navigateToDevGithubLiveData
     fun navigateToDevFacebookLiveData(): LiveData<Event<Boolean>> = navigateToDevFacebookLiveData
@@ -85,6 +109,9 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
 
 interface AppLinkNavigate {
     fun navigateToForkProject()
+    fun openGooglePlayReview()
+    fun openDonatePage()
+    fun shareApp()
 }
 
 interface DeveloperLinkNavigate {

@@ -11,6 +11,7 @@ import com.pramod.todaysword.BR
 import com.pramod.todaysword.R
 import com.pramod.todaysword.databinding.ActivityAboutAppBinding
 import com.pramod.todaysword.helper.openGmail
+import com.pramod.todaysword.helper.openGoogleReviewPage
 import com.pramod.todaysword.helper.openWebsite
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
@@ -56,6 +57,19 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
             it?.let {
                 openWebsite(resources.getString(R.string.app_git_url))
             }
+        })
+        mViewModel.navigateToGooglePlayReviewLiveData().observe(this, Observer {
+            it?.let {
+                openGoogleReviewPage()
+            }
+        })
+
+        mViewModel.navigateToDonatePageLiveData().observe(this, Observer {
+
+        })
+
+        mViewModel.shareAppLiveData().observe(this, Observer {
+
         })
     }
 

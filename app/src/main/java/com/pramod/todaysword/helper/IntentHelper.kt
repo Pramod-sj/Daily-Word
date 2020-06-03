@@ -51,5 +51,16 @@ fun Context.openGmail(emails: Array<String>, subject: String, body: String) {
     } else {
         Toast.makeText(this, "Please install Gmail app", Toast.LENGTH_SHORT).show()
     }
+}
 
+fun Context.openGoogleReviewPage() {
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("market://details?id=$packageName")
+    )
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+    } else {
+        Toast.makeText(this, "Please install or update Google play app", Toast.LENGTH_SHORT).show()
+    }
 }
