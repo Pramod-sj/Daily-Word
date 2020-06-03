@@ -7,6 +7,9 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.anjlab.android.iab.v3.BillingProcessor
+import com.anjlab.android.iab.v3.TransactionDetails
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.todaysword.BR
 import com.pramod.todaysword.R
 import com.pramod.todaysword.databinding.ActivityAboutAppBinding
@@ -14,6 +17,7 @@ import com.pramod.todaysword.helper.openGmail
 import com.pramod.todaysword.helper.openGoogleReviewPage
 import com.pramod.todaysword.helper.openWebsite
 import com.pramod.todaysword.ui.BaseActivity
+import com.pramod.todaysword.ui.about_app.donate.DonateActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
 
 import kotlinx.android.synthetic.main.activity_about_app.*
@@ -42,7 +46,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         setAppLink()
         setDeveloperLink()
         setCreditLink()
-        setOthersLink()
     }
 
     private fun setUpToolbar() {
@@ -50,7 +53,10 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         supportActionBar?.let {
             it.title = null
         }
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
+        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
+
 
     private fun setAppLink() {
         mViewModel.navigateToAppGithubLinkLiveData().observe(this, Observer {
@@ -65,7 +71,9 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         })
 
         mViewModel.navigateToDonatePageLiveData().observe(this, Observer {
-
+            it?.let {
+                DonateActivity.openActivity(this)
+            }
         })
 
         mViewModel.shareAppLiveData().observe(this, Observer {
@@ -90,7 +98,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
             }
         })
     }
-
 
     private fun setDeveloperLink() {
         mViewModel.navigateToDevFacebookLiveData().observe(this, Observer {
@@ -135,5 +142,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         })
 
     }
+
 
 }

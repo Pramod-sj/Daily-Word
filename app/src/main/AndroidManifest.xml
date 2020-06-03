@@ -3,6 +3,9 @@
     package="com.pramod.todaysword">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+
 
     <application
         android:name=".WOTDApp"
@@ -14,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.about_app.donate.DonateActivity"></activity>
         <activity android:name=".ui.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +36,7 @@
             android:screenOrientation="nosensor" />
         <activity
             android:name=".ui.home.HomeActivity"
-            android:screenOrientation="nosensor"/>
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".ui.crash_handler.CustomCrashActivity"
             android:screenOrientation="nosensor" />

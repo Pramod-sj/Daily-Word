@@ -26,6 +26,8 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
     private val navigateToFreePikWebsiteLiveData = MutableLiveData<Event<Boolean>>()
     private val navigateToFreeMaterialIconLiveData = MutableLiveData<Event<Boolean>>()
 
+
+
     override fun navigateToGithub() {
         navigateToDevGithubLiveData.value = Event.init(true)
     }

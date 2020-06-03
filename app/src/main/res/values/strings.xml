@@ -48,6 +48,10 @@
     <string name="made_in">Made with \u2764 in India</string>
 
     <!--unicode-->
+    <string name="unicode_rupee_symbol">\u20B9</string>
     <string name="unicode_bullet">\u2022</string>
     <string name="unicode_heart">\u2764</string>
+    <!--end-->
+
+    <string name="title_donate">Support Development</string>
 </resources>
