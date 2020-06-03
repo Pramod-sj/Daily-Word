@@ -7,7 +7,10 @@ import com.pramod.todaysword.ui.BaseViewModel
 import com.pramod.todaysword.util.Event
 
 class AboutAppViewModel(application: Application) : BaseViewModel(application)
-    , DeveloperLinkNavigate, OtherLinkNavigate, CreditLinkNavigate {
+    , DeveloperLinkNavigate, OtherLinkNavigate, CreditLinkNavigate, AppLinkNavigate {
+
+    private val navigateToAppGithubLinkLiveData = MutableLiveData<Event<Boolean>>()
+
     private val navigateToDevGithubLiveData = MutableLiveData<Event<Boolean>>()
     private val navigateToDevFacebookLiveData = MutableLiveData<Event<Boolean>>()
     private val navigateToDevGmailLiveData = MutableLiveData<Event<Boolean>>()
@@ -57,17 +60,31 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
     }
 
 
+    override fun navigateToForkProject() {
+        navigateToAppGithubLinkLiveData.value = Event.init(true)
+    }
+
+    fun navigateToAppGithubLinkLiveData(): LiveData<Event<Boolean>> =
+        navigateToAppGithubLinkLiveData;
+
     fun navigateToDevGithubLiveData(): LiveData<Event<Boolean>> = navigateToDevGithubLiveData
     fun navigateToDevFacebookLiveData(): LiveData<Event<Boolean>> = navigateToDevFacebookLiveData
     fun navigateToDevGmailLiveData(): LiveData<Event<Boolean>> = navigateToDevGmailLiveData
     fun navigateToDevInstagramLiveData(): LiveData<Event<Boolean>> = navigateToDevInstagramLiveData
 
 
+    fun navigateToFreepikLiveData(): LiveData<Event<Boolean>> = navigateToFreePikWebsiteLiveData;
+    fun navigateToMaterialIconLiveData(): LiveData<Event<Boolean>> =
+        navigateToFreeMaterialIconLiveData;
+
     fun showTermAndConditionLiveData(): LiveData<Event<Boolean>> = showTermAndServiceLiveData
     fun showPrivacyPolicyLiveData(): LiveData<Event<Boolean>> = showPrivacyPolicyLiveData
     fun showOpenSourceLibsLiveData(): LiveData<Event<Boolean>> = showOpenSourceLibLiveData
 
+}
 
+interface AppLinkNavigate {
+    fun navigateToForkProject()
 }
 
 interface DeveloperLinkNavigate {

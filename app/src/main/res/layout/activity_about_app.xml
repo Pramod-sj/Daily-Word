@@ -99,10 +99,21 @@
                         <com.pramod.todaysword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToForkProject()}"
                             app:icon="@drawable/ic_source_fork"
                             app:showRadioButton="false"
                             app:subTitle="View source code or fork on github"
                             app:title="Fork on github"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToForkProject()}"
+                            app:icon="@drawable/ic_source_fork"
+                            app:showRadioButton="false"
+                            app:subTitle="Liked my work?"
+                            app:title="Donate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                     </LinearLayout>
@@ -313,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_medium"
-                    android:text="Made in India" />
+                    android:text="@string/made_in" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

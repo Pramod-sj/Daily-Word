@@ -38,8 +38,10 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar()
+        setAppLink()
         setDeveloperLink()
         setCreditLink()
+        setOthersLink()
     }
 
     private fun setUpToolbar() {
@@ -47,6 +49,32 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         supportActionBar?.let {
             it.title = null
         }
+    }
+
+    private fun setAppLink() {
+        mViewModel.navigateToAppGithubLinkLiveData().observe(this, Observer {
+            it?.let {
+                openWebsite(resources.getString(R.string.app_git_url))
+            }
+        })
+    }
+
+    private fun setOthersLink() {
+        mViewModel.showOpenSourceLibsLiveData().observe(this, Observer {
+            it?.let {
+
+            }
+        })
+        mViewModel.showPrivacyPolicyLiveData().observe(this, Observer {
+            it?.let {
+
+            }
+        })
+        mViewModel.showTermAndConditionLiveData().observe(this, Observer {
+            it?.let {
+
+            }
+        })
     }
 
 
@@ -79,23 +107,19 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     }
 
     private fun setCreditLink() {
-        mViewModel.showOpenSourceLibsLiveData().observe(this, Observer {
+        mViewModel.navigateToFreepikLiveData().observe(this, Observer {
             it?.let {
-
+                openWebsite(resources.getString(R.string.app_credit_freepik_url))
             }
         })
 
-        mViewModel.showPrivacyPolicyLiveData().observe(this, Observer {
-            it?.let {
 
+        mViewModel.navigateToMaterialIconLiveData().observe(this, Observer {
+            it?.let {
+                openWebsite(resources.getString(R.string.app_credit_material_icon_url))
             }
         })
 
-        mViewModel.showTermAndConditionLiveData().observe(this, Observer {
-            it?.let {
-
-            }
-        })
     }
 
 }

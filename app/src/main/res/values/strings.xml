@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Daily Word</string>
 
-    <string name="bullet">\u2022</string>
     <string name="network_state_btn_retry">Retry</string>
 
 
@@ -41,4 +40,14 @@
     <string name="dev_instagram_url">http://www.instagram.com</string>
     <string name="dev_github_url">http://www.github.com/pramod-sj</string>
 
+    <string name="app_git_url">http://www.github.com/pramod-sj/Daily-Word</string>
+
+    <string name="app_credit_freepik_url">https://www.flaticon.com/authors/freepik</string>
+    <string name="app_credit_material_icon_url">http://www.materialdesignicons.com</string>
+
+    <string name="made_in">Made with \u2764 in India</string>
+
+    <!--unicode-->
+    <string name="unicode_bullet">\u2022</string>
+    <string name="unicode_heart">\u2764</string>
 </resources>
