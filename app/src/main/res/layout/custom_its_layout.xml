@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/linearLayout_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_medium">
+
+        <FrameLayout
+            android:id="@+id/its_frame_layout_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:animateLayoutChanges="true">
+
+            <FrameLayout
+                android:id="@+id/its_frame_layout_image_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_medium"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/background_icon"
+                android:padding="@dimen/padding_small">
+
+                <ImageView
+                    android:id="@+id/imageIcon_custom_layout"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:tint="@color/grey_extra_dark" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_toStartOf="@id/its_frame_layout_tail"
+            android:layout_toEndOf="@id/its_frame_layout_head"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtView_custom_title"
+                style="@style/ITSTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txtView_custom_subtitle"
+                style="@style/ITSSubTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/its_frame_layout_tail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:animateLayoutChanges="true">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/its_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:clickable="false"
+                android:focusable="false"
+                android:longClickable="false"
+                android:visibility="gone" />
+
+        </FrameLayout>
+    </RelativeLayout>
+
+</layout>

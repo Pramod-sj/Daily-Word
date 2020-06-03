@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.pramod.todaysword.util.CommonUtils" />
+
+        <import type="com.pramod.todaysword.helper.PrefManager" />
+
+        <variable
+            name="appSettingViewModel"
+            type="com.pramod.todaysword.ui.settings.AppSettingViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.about_app.AboutAppActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/windowBackground">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_settings" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.pramod.todaysword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->appSettingViewModel.showThemeSelector()}"
+                    app:icon="@drawable/ic_format_paint_black_24dp"
+                    app:iconColorTint="@color/app_theme_icon_tint"
+                    app:showIconBackground="true"
+                    app:subTitle="@{CommonUtils.capitalizeFirstLetter(appSettingViewModel.themeOption())}"
+                    app:title="Theme" />
+
+                <com.pramod.todaysword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checked="@{appSettingViewModel.coloredNavBarEnabled.contentIfNotHandled}"
+                    app:icon="@drawable/ic_colorize_black_24dp"
+                    app:iconColorTint="@color/navigation_bar_icon_tint"
+                    app:onCheckedChanged="@{(switch,isChecked)->appSettingViewModel.changeColoredNavBarEnable(isChecked)}"
+                    app:showIconBackground="true"
+                    app:showRadioButton="true"
+                    app:subTitle="Change system navigationbar color"
+                    app:title="Colored navigation bar" />
+
+                <com.pramod.todaysword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checked="@{appSettingViewModel.notificationEnabled.contentIfNotHandled}"
+                    app:icon="@drawable/ic_notifications_none_black_24dp"
+                    app:iconColorTint="@color/notification_icon_tint"
+                    app:onCheckedChanged="@{(switch,isChecked)->appSettingViewModel.changeNotificationEnable(isChecked)}"
+                    app:showIconBackground="true"
+                    app:showRadioButton="true"
+                    app:subTitle="@{appSettingViewModel.notificationEnabled.contentIfNotHandled?`notifications is enabled`:`notifications is disabled`}"
+                    app:title="Notification" />
+
+                <com.pramod.todaysword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->appSettingViewModel.goToAbout()}"
+                    app:icon="@drawable/ic_info_outline_black_24dp"
+                    app:iconColorTint="@color/about_icon_tint"
+                    app:showIconBackground="true"
+                    app:showRadioButton="false"
+                    app:subTitle="developers, links, license"
+                    app:title="About" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

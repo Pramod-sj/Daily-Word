@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_small">5dp</dimen>
+    <dimen name="margin_medium">10dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_extra_large">22dp</dimen>
+
+
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="padding_medium">10dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_sub_title">15sp</dimen>
+
+    <dimen name="text_h1">40sp</dimen>
+    <dimen name="text_h2">35sp</dimen>
+    <dimen name="text_h3">30sp</dimen>
+    <dimen name="text_h4">25sp</dimen>
+    <dimen name="text_h5">20sp</dimen>
+
+    <dimen name="text_large">20sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
+    <dimen name="text_small">13sp</dimen>
+    <dimen name="text_tiny">10sp</dimen>
+
+
+    <!-- Button Style -->
+    <dimen name="button_radius">30dp</dimen>
+    <dimen name="button_height">60dp</dimen>
+
+    <!--Card Style-->
+    <dimen name="card_radius_max">10dp</dimen>
+
+    <dimen name="card_radius">5dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+
+    <dimen name="card_elevation_min">2dp</dimen>
+    <!--icon size-->
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="splash_icon_big">230dp</dimen>
+    <dimen name="splash_icon_normal">130dp</dimen>
+
+</resources>

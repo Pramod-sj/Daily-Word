@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#6200EE</color>
+
+    <color name="app_logo_tint">@color/black</color>
+
+    <color name="app_icon_tint">@color/grey_extra_dark</color>
+
+
+    <color name="grey_very_extra_dark">#4C4B4B</color>
+    <color name="grey_extra_dark">#5E5D5D</color>
+    <color name="grey_dark">#ACABAB</color>
+    <color name="grey_light">#E6E6E6</color>
+    <color name="grey_extra_light">#F5F3F3</color>
+    <color name="grey_very_extra_light">#FAF7F7</color>
+
+
+    <!-- with increasing level transparency increases-->
+    <color name="transparent_white_level_4">#44FFFFFF</color>
+    <color name="transparent_white_level_3">#99FFFFFF</color>
+    <color name="transparent_white_level_2">#AAFFFFFF</color>
+    <color name="transparent_white_level_1">#EEFFFFFF</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="progress_color_below_10">#dd2c00</color>
+    <color name="progress_color_below_40">#BB5204</color>
+    <color name="progress_color_below_70">#D89104</color>
+    <color name="progress_color_below_99">#8BC34A</color>
+
+    <color name="translucent_55_colorPrimaryDark">#553700B3</color>
+
+    <color name="red_600">#e53935</color>
+    <color name="red_400">#ef5350</color>
+    <color name="red_200">#ef9a9a</color>
+
+    <color name="pink_600">#d81b60</color>
+    <color name="pink_400">#ec407a</color>
+    <color name="pink_200">#f48fb1</color>
+
+    <color name="purple_600">#8e24aa</color>
+    <color name="purple_400">#ab47bc</color>
+    <color name="purple_200">#ce93d8</color>
+
+    <color name="orange_600">#fb8c00</color>
+    <color name="orange_400">#ffa726</color>
+    <color name="orange_200">#ffcc80</color>
+
+    <color name="deepOrange_600">#f4511e</color>
+    <color name="deepOrange_400">#ff7043</color>
+    <color name="deepOrange_200">#ffab91</color>
+
+    <color name="lime_600">#c0ca33</color>
+    <color name="lime_400">#d4e157</color>
+    <color name="lime_200">#e6ee9c</color>
+
+    <color name="lightGreen_600">#7cb342</color>
+    <color name="lightGreen_400">#9ccc65</color>
+    <color name="lightGreen_200">#c5e1a5</color>
+
+    <color name="green_600">#43a047</color>
+    <color name="green_400">#66bb6a</color>
+    <color name="green_200">#a5d6a7</color>
+
+
+    <color name="lightBlue_600">#039be5</color>
+    <color name="lightBlue_400">#29b6f6</color>
+    <color name="lightBlue_200">#81d4fa</color>
+
+
+    <color name="blue_600">#1e88e5</color>
+    <color name="blue_400">#42a5f5</color>
+    <color name="blue_200">#90caf9</color>
+
+
+    <color name="app_theme_icon_tint">#43a047</color>
+    <color name="navigation_bar_icon_tint">#1e88e5</color>
+    <color name="notification_icon_tint">#f4511e</color>
+    <color name="about_icon_tint">#8e24aa</color>
+
+
+    <!--Text Colors-->
+    <color name="textColor_highEmphasis">#B3000000</color>
+    <color name="textColor_mediumEmphasis">#99000000</color>
+    <color name="textColor_disabled">#61000000</color>
+</resources>

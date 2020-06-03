@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ITSCustomLayout">
+        <attr name="title" format="string|reference" />
+        <attr name="subTitle" format="string|reference" />
+        <attr name="icon" format="reference" />
+        <attr name="iconColorTint" format="reference" />
+        <attr name="showRadioButton" format="boolean" />
+        <attr name="iconBackgroundTint" format="boolean" />
+        <attr name="showIconBackground" format="boolean" />
+        <attr name="titleTextSize" format="dimension|reference" />
+    </declare-styleable>
+    <declare-styleable name="CircularImageView">
+        <attr name="civ_border" format="boolean" />
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_shadow" format="boolean" />
+        <attr name="civ_shadow_color" format="color" />
+        <attr name="civ_shadow_radius" format="float" />
+    </declare-styleable>
+</resources>

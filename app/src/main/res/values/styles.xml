@@ -1,0 +1,90 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="AppTheme.Header5TextStyle">
+        <item name="android:textSize">@dimen/text_h5</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+    <style name="AppTheme.Header5TextStyle.Bold" parent="AppTheme.Header5TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.Header4TextStyle">
+        <item name="android:textSize">@dimen/text_h4</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+    <style name="AppTheme.Header3TextStyle">
+        <item name="android:textSize">@dimen/text_h3</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+
+    <style name="AppTheme.Header3TextStyle.Bold" parent="AppTheme.Header3TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="AppTheme.Header2TextStyle">
+        <item name="android:textSize">@dimen/text_h3</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+    <style name="AppTheme.Header2TextStyle.Bold" parent="AppTheme.Header2TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.TitleTextStyle">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+    <style name="AppTheme.TitleTextStyle.Bold" parent="AppTheme.TitleTextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="AppTheme.SubTitleTextStyle">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/textColor_mediumEmphasis</item>
+    </style>
+
+    <style name="AppTheme.SmallTextStyle">
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/textColor_mediumEmphasis</item>
+    </style>
+
+    <style name="ITSTitleStyle" parent="AppTheme.TitleTextStyle">
+        <item name="android:textSize">@dimen/text_sub_title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ITSSubTitleStyle" parent="AppTheme.SubTitleTextStyle">
+        <item name="android:textSize">@dimen/text_sub_title</item>
+    </style>
+
+</resources>

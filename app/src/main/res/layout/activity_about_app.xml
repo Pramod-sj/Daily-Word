@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.pramod.todaysword.util.CommonUtils" />
+
+        <import type="com.pramod.todaysword.BuildConfig" />
+
+        <variable
+            name="aboutAppViewModel"
+            type="com.pramod.todaysword.ui.about_app.AboutAppViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.about_app.AboutAppActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),220)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_about" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="?actionBarSize">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_min">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:src="@drawable/ic_app_icon" />
+
+                        <TextView
+                            style="@style/AppTheme.Header5TextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_name" />
+
+                        <TextView
+                            style="@style/ITSSubTitleStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_tag_line" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            app:icon="@drawable/ic_info_outline_black_24dp"
+                            app:showRadioButton="false"
+                            app:subTitle="@{BuildConfig.VERSION_NAME}"
+                            app:title="Version"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:icon="@drawable/ic_source_fork"
+                            app:showRadioButton="false"
+                            app:subTitle="View source code or fork on github"
+                            app:title="Fork on github"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_min">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@drawable/background_about_titles_curve_edge"
+                            android:backgroundTint="?colorPrimary"
+                            android:padding="@dimen/margin_medium"
+                            android:text="Developer"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/windowBackground"
+                            android:textStyle="bold" />
+
+                        <com.pramod.todaysword.view.CircularImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/margin_medium"
+                            android:src="@drawable/dev_profile" />
+
+                        <TextView
+                            style="@style/AppTheme.Header5TextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/dev_name" />
+
+                        <TextView
+                            style="@style/ITSSubTitleStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/dev_info" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:onClick="@{()->aboutAppViewModel.navigateToGithub()}"
+                            app:icon="@drawable/ic_github"
+                            app:showRadioButton="false"
+                            app:subTitle="Follow me on github for more projects"
+                            app:title="Github"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToGmail()}"
+                            app:icon="@drawable/ic_gmail"
+                            app:showRadioButton="false"
+                            app:subTitle="Have an query drop a mail"
+                            app:title="Gmail"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToInstagram()}"
+                            app:icon="@drawable/ic_instagram"
+                            app:showRadioButton="false"
+                            app:subTitle="Follow me on instagram"
+                            app:title="Instagram"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToFacebook()}"
+                            app:icon="@drawable/ic_facebook"
+                            app:showRadioButton="false"
+                            app:subTitle="Follow me on facebook"
+                            app:title="Facebook"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_min">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@drawable/background_about_titles_curve_edge"
+                            android:backgroundTint="?colorPrimary"
+                            android:padding="@dimen/margin_medium"
+                            android:text="Credits"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/windowBackground"
+                            android:textStyle="bold" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToFreePikWebsite()}"
+                            app:icon="@drawable/ic_freepik"
+                            app:subTitle="App icon/logo made by Freepik from flaticon"
+                            app:title="App Logo" />
+
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToMaterialDesignIcon()}"
+                            app:icon="@drawable/ic_vector_square"
+                            app:subTitle="All material designed icons are used from this website"
+                            app:title="Material Design Icons" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:subTitle="Words are picked from Merriam Webster"
+                            app:title="Merriam Webster" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_min">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@drawable/background_about_titles_curve_edge"
+                            android:backgroundTint="?colorPrimary"
+                            android:padding="@dimen/padding_medium"
+                            android:text="@string/about_app_others"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/windowBackground"
+                            android:textStyle="bold" />
+
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.showOpenSourceLibs()}"
+                            app:icon="@drawable/ic_open_source_license"
+                            app:showRadioButton="false"
+                            app:subTitle="All used libraries details"
+                            app:title="Open Source Libraries"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.showTermsAndService()}"
+                            app:icon="@drawable/ic_terms_and_conditions"
+                            app:showRadioButton="false"
+                            app:title="Terms &amp; Services"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.todaysword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.showPrivacyPolicy()}"
+                            app:icon="@drawable/ic_privacy_policy_black_24dp"
+                            app:showRadioButton="false"
+                            app:title="Privacy Policies"
+                            app:titleTextSize="@dimen/text_sub_title" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:text="Made in India" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

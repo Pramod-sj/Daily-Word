@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.pramod.todaysword.helper.PrefManager" />
+
+        <variable
+            name="splashScreenViewModel"
+            type="com.pramod.todaysword.ui.splash_screen.SplashScreenViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.splash_screen.SplashScreenActivity">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="50dp">
+
+            <ImageView
+                android:id="@+id/splash_app_icon"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/margin_medium"
+                android:src="@drawable/ic_vocabulary"
+                android:tint="@color/app_logo_tint" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/splash_app_icon"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{splashScreenViewModel.splashScreenTextVisible()?View.VISIBLE:View.INVISIBLE}">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    switchText="@{splashScreenViewModel.splashScreenText()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    switchText="@{splashScreenViewModel.splashScreenSubText()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_medium" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="@dimen/margin_large"
+            android:enabled="@{splashScreenViewModel.enableStartButton()}"
+            android:onClick="@{()->splashScreenViewModel.goToHomePage()}"
+            android:text="Get Started"
+            android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
+
+        <ProgressBar
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="@dimen/margin_large"
+            android:visibility="@{PrefManager.getInstance(context).newUser?View.GONE:View.VISIBLE}" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
