@@ -165,7 +165,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="@dimen/padding_small"
-                            android:text="@string/bullet" />
+                            android:text="@string/unicode_bullet" />
 
                         <TextView
                             style="@style/AppTheme.TitleTextStyle"

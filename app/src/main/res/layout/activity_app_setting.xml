@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.showThemeSelector()}"
-                    app:icon="@drawable/ic_format_paint_black_24dp"
+                    app:icon="@drawable/ic_outline_theme_24"
                     app:iconColorTint="@color/app_theme_icon_tint"
                     app:showIconBackground="true"
                     app:subTitle="@{CommonUtils.capitalizeFirstLetter(appSettingViewModel.themeOption())}"
