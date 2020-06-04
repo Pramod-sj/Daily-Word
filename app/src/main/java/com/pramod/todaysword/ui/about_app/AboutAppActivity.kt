@@ -16,6 +16,7 @@ import com.pramod.todaysword.databinding.ActivityAboutAppBinding
 import com.pramod.todaysword.helper.openGmail
 import com.pramod.todaysword.helper.openGoogleReviewPage
 import com.pramod.todaysword.helper.openWebsite
+import com.pramod.todaysword.helper.shareApp
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.about_app.donate.DonateActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
@@ -77,7 +78,9 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         })
 
         mViewModel.shareAppLiveData().observe(this, Observer {
-
+            it?.let {
+                shareApp()
+            }
         })
     }
 

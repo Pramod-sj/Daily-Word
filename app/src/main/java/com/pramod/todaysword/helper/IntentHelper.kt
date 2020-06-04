@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.pramod.todaysword.R
 
 
 fun Context.restartApp() {
@@ -63,4 +65,15 @@ fun Context.openGoogleReviewPage() {
     } else {
         Toast.makeText(this, "Please install or update Google play app", Toast.LENGTH_SHORT).show()
     }
+}
+
+fun Context.shareApp() {
+    val intent = Intent(Intent.ACTION_SEND)
+        .apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name))
+            putExtra(Intent.EXTRA_TEXT, "Test share")
+        }
+    startActivity(Intent.createChooser(intent, "Choose app..."))
+
 }
