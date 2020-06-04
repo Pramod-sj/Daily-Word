@@ -23,6 +23,8 @@ import com.pramod.todaysword.SnackbarMessage
 import com.pramod.todaysword.databinding.ActivityMainBinding
 import com.pramod.todaysword.db.model.WordOfTheDay
 import com.pramod.todaysword.helper.NotificationHelper
+import com.pramod.todaysword.helper.PrefManager
+import com.pramod.todaysword.helper.showStaticPageDialog
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
 import com.pramod.todaysword.ui.word_details.WordDetailedActivity
@@ -60,7 +62,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         setUpRecyclerViewAdapter()
         setObservers()
         initLearnAllEvent()
-        mBinding.homeImageViewBuildings.callOnClick()
+        shouldShowRatingDialog()
         //showDummyNotification()
     }
 
@@ -210,6 +212,23 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }
         bottomSheetDialog = BottomSheetDialog(this@HomeActivity)
         bottomSheetDialog.setContentView(navigationView)
+    }
+
+    private fun shouldShowRatingDialog() {
+        if (PrefManager.getInstance(this)
+                .shouldShowRateNowDialog()
+        ) {
+            showStaticPageDialog(
+                R.layout.dialog_rate_app,
+                positiveText = "Rate Now",
+                positiveClickCallback = {
+
+                },
+                negativeText = "Later",
+                neutralText = "Never"
+
+            )
+        }
     }
 
 }

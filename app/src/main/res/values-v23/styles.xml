@@ -12,5 +12,6 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
     </style>
 </resources>

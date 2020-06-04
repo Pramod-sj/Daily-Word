@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:statusBarColor">?android:attr/colorBackground</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -12,6 +11,20 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+    </style>
+
+    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/MaterialAlertDialog.App.ShapeAppearance</item>
+    </style>
+
+    <style name="MaterialAlertDialog.App.ShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/card_radius_max</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

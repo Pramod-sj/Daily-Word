@@ -1,13 +1,45 @@
 package com.pramod.todaysword.helper
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.todaysword.R
 import java.util.*
+
+fun Context.showStaticPageDialog(
+    layoutId: Int,
+    positiveText: String? = null,
+    positiveClickCallback: (() -> Unit)? = null,
+    negativeText: String? = null,
+    negativeClickCallback: (() -> Unit)? = null,
+    neutralText: String? = null,
+    neutralClickCallback: (() -> Unit)? = null
+) {
+    val builder = MaterialAlertDialogBuilder(this)
+        .setView(layoutId)
+    positiveText?.let {
+        builder.setPositiveButton(positiveText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            positiveClickCallback?.invoke()
+        }
+    }
+    negativeText?.let {
+        builder.setNegativeButton(negativeText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            negativeClickCallback?.invoke()
+        }
+    }
+
+    neutralText?.let {
+        builder.setNeutralButton(neutralText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            neutralClickCallback?.invoke()
+        }
+    }
+    builder.show()
+}
+
 
 class DailogHelper {
     companion object {
@@ -41,3 +73,4 @@ class DailogHelper {
         }
     }
 }
+
