@@ -29,6 +29,10 @@ class ITSCustomLayout : LinearLayout {
     private var showIconBackground = false
     private var iconBackgroundTintResId = -1
 
+    private var titlePaddingStart = 0f
+    private var titlePaddingEnd = 0f
+
+
     companion object {
         @JvmStatic
         @BindingAdapter("app:checked")
@@ -95,6 +99,19 @@ class ITSCustomLayout : LinearLayout {
                 0
             ).toFloat()
         )
+        titlePaddingStart =
+            a.getDimensionPixelSize(
+                R.styleable.ITSCustomLayout_titlePaddingStart,
+                0
+            ).toFloat()
+
+        titlePaddingEnd =
+            a.getDimensionPixelSize(
+                R.styleable.ITSCustomLayout_titlePaddingEnd,
+                0
+            ).toFloat()
+
+
         init()
         a.recycle()
     }
@@ -106,6 +123,7 @@ class ITSCustomLayout : LinearLayout {
             this,
             true
         )
+        addPaddingIfSaid()
         if (titleTextSize != 0f) {
             customItsLayoutBinding.txtViewCustomTitle.textSize = titleTextSize!!
         }
@@ -113,6 +131,20 @@ class ITSCustomLayout : LinearLayout {
         setSubTitle(subTitle)
         setIcon(icon)
         shouldShowSwitch(showSwitch)
+    }
+
+    private fun addPaddingIfSaid() {
+        val paddingStart = customItsLayoutBinding.itLinearLayoutTitleSubTitle.paddingStart
+        val paddingEnd = customItsLayoutBinding.itLinearLayoutTitleSubTitle.paddingEnd
+        val paddingTop = customItsLayoutBinding.itLinearLayoutTitleSubTitle.paddingTop
+        val paddingBottom = customItsLayoutBinding.itLinearLayoutTitleSubTitle.paddingBottom
+        customItsLayoutBinding.itLinearLayoutTitleSubTitle.setPadding(
+            (paddingStart + titlePaddingStart).toInt(),
+            paddingTop,
+            (paddingEnd + titlePaddingEnd).toInt(),
+            paddingBottom
+        )
+
     }
 
     private fun shouldShowBackgroundTint() {
