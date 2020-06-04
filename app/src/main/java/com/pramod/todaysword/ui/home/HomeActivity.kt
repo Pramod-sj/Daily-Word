@@ -24,6 +24,7 @@ import com.pramod.todaysword.databinding.ActivityMainBinding
 import com.pramod.todaysword.db.model.WordOfTheDay
 import com.pramod.todaysword.helper.NotificationHelper
 import com.pramod.todaysword.helper.PrefManager
+import com.pramod.todaysword.helper.openGoogleReviewPage
 import com.pramod.todaysword.helper.showStaticPageDialog
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
@@ -222,11 +223,16 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 R.layout.dialog_rate_app,
                 positiveText = "Rate Now",
                 positiveClickCallback = {
-
+                    PrefManager.getInstance(this)
+                        .setUserClickedRateNow()
+                    openGoogleReviewPage()
                 },
                 negativeText = "Later",
-                neutralText = "Never"
-
+                neutralText = "Never",
+                neutralClickCallback = {
+                    PrefManager.getInstance(this)
+                        .setUserClickedNever()
+                }
             )
         }
     }
