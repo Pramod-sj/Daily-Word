@@ -60,7 +60,8 @@
                     app:iconColorTint="@color/app_theme_icon_tint"
                     app:showIconBackground="true"
                     app:subTitle="@{CommonUtils.capitalizeFirstLetter(appSettingViewModel.themeOption())}"
-                    app:title="Theme" />
+                    app:title="Theme"
+                    app:titlePaddingStart="@dimen/margin_medium" />
 
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -72,7 +73,8 @@
                     app:showIconBackground="true"
                     app:showRadioButton="true"
                     app:subTitle="Change system navigationbar color"
-                    app:title="Colored navigation bar" />
+                    app:title="Colored navigation bar"
+                    app:titlePaddingStart="@dimen/margin_medium" />
 
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -84,7 +86,8 @@
                     app:showIconBackground="true"
                     app:showRadioButton="true"
                     app:subTitle="@{appSettingViewModel.notificationEnabled.contentIfNotHandled?`notifications is enabled`:`notifications is disabled`}"
-                    app:title="Notification" />
+                    app:title="Notification"
+                    app:titlePaddingStart="@dimen/margin_medium" />
 
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -94,8 +97,9 @@
                     app:iconColorTint="@color/about_icon_tint"
                     app:showIconBackground="true"
                     app:showRadioButton="false"
-                    app:subTitle="developers, links, license"
-                    app:title="About" />
+                    app:subTitle="links, developer, license, others"
+                    app:title="About"
+                    app:titlePaddingStart="@dimen/margin_medium" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

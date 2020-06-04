@@ -45,8 +45,10 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     private fun setUpToolbar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.let {
-            title = null
+            it.title = null
         }
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
+        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun initThemeSelector() {
