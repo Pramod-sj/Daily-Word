@@ -10,6 +10,8 @@
         <attr name="iconBackgroundTint" format="boolean" />
         <attr name="showIconBackground" format="boolean" />
         <attr name="titleTextSize" format="dimension|reference" />
+        <attr name="titlePaddingStart" format="dimension|reference" />
+        <attr name="titlePaddingEnd" format="dimension|reference" />
     </declare-styleable>
     <declare-styleable name="CircularImageView">
         <attr name="civ_border" format="boolean" />
