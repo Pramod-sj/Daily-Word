@@ -34,7 +34,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
                         enabledStartButton.postValue(true)
                     }, 2000)
                 } else {
-                    splashScreenText.value = "Today's Word"
+                    splashScreenText.value = "Daily Word"
                     Handler().postDelayed({
                         goToHomePage()
                     }, 2000)

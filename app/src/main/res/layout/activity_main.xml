@@ -73,7 +73,7 @@
                     <TextView
                         android:id="@+id/toolbar_title"
                         style="@style/AppTheme.Header5TextStyle.Bold"
-                        switchText="@{CommonUtils.greetMessage + `, There!`}"
+                        android:text="@{CommonUtils.greetMessage + `, There!`}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -81,7 +81,7 @@
                         style="@style/AppTheme.Header5TextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{CommonUtils.getColoredSpannedText(context,`Here is your Today's Word`,12,25,@color/colorPrimary)}" />
+                        android:text="@{CommonUtils.getColoredSpannedText(context,`Here is your Daily Word`,12,23,@color/colorPrimary)}" />
                 </LinearLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 
