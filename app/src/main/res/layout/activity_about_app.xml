@@ -19,28 +19,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.about_app.AboutAppActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),220)}"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/nestedScrollView">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-
-                <TextView
-                    style="@style/AppTheme.Header5TextStyle.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_about" />
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
@@ -362,5 +340,30 @@
                     android:text="@string/made_in" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_gravity="top"
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_about" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -17,11 +17,26 @@
         android:layout_height="match_parent"
         tools:context=".ui.about_app.donate.DonateActivity">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/donate_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingTop="?actionBarSize"
+            android:paddingEnd="@dimen/padding_medium"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2" />
+
         <com.google.android.material.appbar.AppBarLayout
+            android:alpha="0.8"
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),220)}"
+            android:layout_gravity="top"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 
@@ -38,19 +53,5 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/donate_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingStart="@dimen/padding_medium"
-            android:paddingTop="?actionBarSize"
-            android:paddingEnd="@dimen/padding_medium"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
