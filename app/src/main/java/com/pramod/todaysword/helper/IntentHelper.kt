@@ -1,9 +1,11 @@
 package com.pramod.todaysword.helper
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.transition.Fade
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -28,6 +30,23 @@ fun Context.restartApp() {
             ).show()
         }
     }
+}
+
+fun Activity.restartActivitySmoothly() {
+    val fade = Fade().apply {
+        duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        removeTarget(android.R.id.statusBarBackground)
+        removeTarget(android.R.id.navigationBarBackground)
+    }
+    //window.enterTransition = fade
+    //window.exitTransition = fade
+    finish()
+    overridePendingTransition(0, 0)
+    startActivity(getIntent())
+    overridePendingTransition(0, 0)
+/*
+    val option = ActivityOptions.makeSceneTransitionAnimation(this)
+    startActivity(intent, option.toBundle())*/
 }
 
 fun Context.openWebsite(url: String) {

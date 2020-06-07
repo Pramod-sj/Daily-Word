@@ -3,8 +3,12 @@ package com.pramod.todaysword.ui.about_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.anjlab.android.iab.v3.BillingProcessor
@@ -13,10 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.todaysword.BR
 import com.pramod.todaysword.R
 import com.pramod.todaysword.databinding.ActivityAboutAppBinding
-import com.pramod.todaysword.helper.openGmail
-import com.pramod.todaysword.helper.openGoogleReviewPage
-import com.pramod.todaysword.helper.openWebsite
-import com.pramod.todaysword.helper.shareApp
+import com.pramod.todaysword.helper.*
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.about_app.donate.DonateActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
@@ -44,9 +45,33 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar()
+        arrangeViewsAccordingToEdgeToEdge()
         setAppLink()
         setDeveloperLink()
         setCreditLink()
+    }
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.appBar.setPadding(
+                    0, insets.systemWindowInsetTop, 0, 0
+                )
+
+                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.nestedScrollView.setPadding(
+                    0,
+                    paddingTop,
+                    0,
+                    paddingBottom
+                )
+                insets
+            };
+        }
     }
 
     private fun setUpToolbar() {
@@ -57,7 +82,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
-
 
     private fun setAppLink() {
         mViewModel.navigateToAppGithubLinkLiveData().observe(this, Observer {

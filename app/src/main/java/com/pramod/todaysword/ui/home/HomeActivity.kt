@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.transition.Explode
 import android.transition.Fade
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,10 +22,7 @@ import com.pramod.todaysword.R
 import com.pramod.todaysword.SnackbarMessage
 import com.pramod.todaysword.databinding.ActivityMainBinding
 import com.pramod.todaysword.db.model.WordOfTheDay
-import com.pramod.todaysword.helper.NotificationHelper
-import com.pramod.todaysword.helper.PrefManager
-import com.pramod.todaysword.helper.openGoogleReviewPage
-import com.pramod.todaysword.helper.showStaticPageDialog
+import com.pramod.todaysword.helper.*
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.settings.AppSettingActivity
 import com.pramod.todaysword.ui.word_details.WordDetailedActivity
@@ -64,7 +61,32 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         setObservers()
         initLearnAllEvent()
         shouldShowRatingDialog()
+        edgeToEdgeSettingChanged()
+        arrangeViewsAccordingToEdgeToEdge()
         //showDummyNotification()
+    }
+
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.appBar.setPadding(
+                    0, insets.systemWindowInsetTop, 0, 0
+                )
+
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.homeImageViewBuildings.setPadding(
+                    0,
+                    0,
+                    0,
+                    paddingBottom
+                )
+                insets
+            };
+        }
     }
 
     private fun initToolbar() {
@@ -167,6 +189,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
     }
 
+    private fun edgeToEdgeSettingChanged() {
+        WindowPreferencesManager.newInstance(this).getLiveData().observe(this, Observer<Boolean> {
+            if (it) {
+                restartActivitySmoothly()
+            }
+        })
+    }
 
     override fun getViewModel(): HomeViewModel {
         return ViewModelProviders.of(this).get(HomeViewModel::class.java)

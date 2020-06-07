@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.todaysword.SnackbarMessage
+import com.pramod.todaysword.helper.WindowPreferencesManager
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     AppCompatActivity() {
@@ -18,6 +19,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     abstract fun getBindingVariable(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        shouldApplyEdgeToEdge()
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView<T>(this@BaseActivity, getLayoutId())
         mViewModel = getViewModel()
@@ -38,5 +40,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
         }
     }
 
+    fun shouldApplyEdgeToEdge() {
+        val pref = WindowPreferencesManager.newInstance(this)
+        pref.applyEdgeToEdgePreference(window)
+    }
 
 }

@@ -26,29 +26,6 @@ class PrefManager(context: Context) {
         editor.putBoolean(IS_NEW_USER, isNewUser).commit()
     }
 
-
-    fun setThemeOption(option: ThemeManager.Options) {
-        editor.putInt(THEME_OPTION, option.ordinal)
-    }
-
-    fun getThemeOption(): ThemeManager.Options =
-        ThemeManager.Options.values()[sPref.getInt(
-            THEME_OPTION,
-            ThemeManager.Options.DEFAULT.ordinal
-        )]
-
-    fun isNotificationEnabled() = sPref.getBoolean(ENABLE_NOTIFICATION, true)
-
-    fun setNotificationEnabled(enable: Boolean) {
-        editor.putBoolean(ENABLE_NOTIFICATION, enable).commit()
-    }
-
-    fun isColoredNavBarEnabled() = sPref.getBoolean(COLORED_NAV_BAR, false)
-
-    fun setColorNavBarEnabled(enable: Boolean) {
-        editor.putBoolean(COLORED_NAV_BAR, enable).commit()
-    }
-
     fun incrementAppLaunchCount() {
         val launchCount = sPref.getInt(APP_LAUNCH_COUNT, 0) + 1
         editor.putInt(APP_LAUNCH_COUNT, launchCount).commit()

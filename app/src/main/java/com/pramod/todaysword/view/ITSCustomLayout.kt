@@ -208,7 +208,7 @@ class ITSCustomLayout : LinearLayout {
     private fun shouldShowSwitch(show: Boolean) {
         if (show) {
             customItsLayoutBinding.itsSwitch.visibility = View.VISIBLE
-            setSwitchClickListener()
+            //setSwitchClickListener()
         } else {
             customItsLayoutBinding.itsSwitch.visibility = View.GONE
         }

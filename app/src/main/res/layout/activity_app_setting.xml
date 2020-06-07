@@ -20,32 +20,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.about_app.AboutAppActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/nestedScrollView">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?android:attr/windowBackground">
-
-                <TextView
-                    style="@style/AppTheme.Header5TextStyle.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_settings" />
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="?actionBarSize">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -66,26 +48,26 @@
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:checked="@{appSettingViewModel.coloredNavBarEnabled.contentIfNotHandled}"
-                    app:icon="@drawable/ic_colorize_black_24dp"
+                    android:onClick="@{()->appSettingViewModel.toggleEdgeToEdge()}"
+                    app:checked="@{appSettingViewModel.windowPrefManager.liveData}"
+                    app:icon="@drawable/ic_baseline_fullscreen_24"
                     app:iconColorTint="@color/navigation_bar_icon_tint"
-                    app:onCheckedChanged="@{(switch,isChecked)->appSettingViewModel.changeColoredNavBarEnable(isChecked)}"
                     app:showIconBackground="true"
                     app:showRadioButton="true"
-                    app:subTitle="Change system navigationbar color"
-                    app:title="Colored navigation bar"
+                    app:subTitle="Use full screen"
+                    app:title="Edge to Edge"
                     app:titlePaddingStart="@dimen/margin_medium" />
 
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:checked="@{appSettingViewModel.notificationEnabled.contentIfNotHandled}"
+                    android:onClick="@{()->appSettingViewModel.toggleNotification()}"
+                    app:checked="@{appSettingViewModel.notificationPrefManager.liveData}"
                     app:icon="@drawable/ic_notifications_none_black_24dp"
                     app:iconColorTint="@color/notification_icon_tint"
-                    app:onCheckedChanged="@{(switch,isChecked)->appSettingViewModel.changeNotificationEnable(isChecked)}"
                     app:showIconBackground="true"
                     app:showRadioButton="true"
-                    app:subTitle="@{appSettingViewModel.notificationEnabled.contentIfNotHandled?`notifications is enabled`:`notifications is disabled`}"
+                    app:subTitle="@{appSettingViewModel.notificationPrefManager.liveData?`notifications is enabled`:`notifications is disabled`}"
                     app:title="Notification"
                     app:titlePaddingStart="@dimen/margin_medium" />
 
@@ -103,6 +85,31 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/windowBackground">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_settings" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -4,6 +4,8 @@ import android.app.Application
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pramod.todaysword.db.model.WordOfTheDay
@@ -12,13 +14,24 @@ import com.pramod.todaysword.ui.BaseViewModel
 class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTheDay) :
     BaseViewModel(application) {
 
+    private val showTitle = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+
+    fun setTitleVisibility(show: Boolean) {
+        showTitle.value = show
+    }
+
+    fun showTitle(): LiveData<Boolean> = showTitle
 
     fun pronounceWord(url: String) {
         Log.d("AUDIO URL", url)
         try {
             val mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(url)
-            mediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            mediaPlayer.setAudioAttributes(
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+            )
             mediaPlayer.setOnPreparedListener {
                 it.start()
             }
@@ -27,7 +40,6 @@ class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTh
             Log.d("AUDIO ERROR", e.toString())
         }
     }
-
 
 
     class Factory(

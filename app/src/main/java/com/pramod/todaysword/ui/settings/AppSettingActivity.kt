@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.todaysword.R
@@ -11,8 +12,7 @@ import com.pramod.todaysword.databinding.ActivityAppSettingBinding
 import com.pramod.todaysword.ui.BaseActivity
 
 import com.pramod.todaysword.BR
-import com.pramod.todaysword.helper.DailogHelper
-import com.pramod.todaysword.helper.ThemeManager
+import com.pramod.todaysword.helper.*
 import com.pramod.todaysword.ui.about_app.AboutAppActivity
 import com.pramod.todaysword.ui.home.HomeActivity
 
@@ -40,6 +40,33 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
         setUpToolbar()
         initThemeSelector()
         navigateToAbout()
+        edgeToEdgeSettingChanged()
+        arrangeViewsAccordingToEdgeToEdge()
+    }
+
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.appBar.setPadding(
+                    0, insets.systemWindowInsetTop, 0, 0
+                )
+
+                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.nestedScrollView.setPadding(
+                    0,
+                    paddingTop,
+                    0,
+                    paddingBottom
+                )
+
+                insets
+            };
+        }
     }
 
     private fun setUpToolbar() {
@@ -74,6 +101,14 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                 if (navigate) {
                     AboutAppActivity.openActivity(this)
                 }
+            }
+        })
+    }
+
+    private fun edgeToEdgeSettingChanged() {
+        mViewModel.recreateActivity().observe(this, Observer {
+            it?.let { recreate ->
+                restartActivitySmoothly()
             }
         })
     }
