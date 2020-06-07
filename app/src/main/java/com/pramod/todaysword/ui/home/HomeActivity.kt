@@ -16,6 +16,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.install.InstallState
+import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.gson.Gson
 import com.pramod.todaysword.BR
 import com.pramod.todaysword.R
@@ -55,13 +58,14 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         initEnterTransition()
         initExitTransition()
         super.onCreate(savedInstanceState)
+        initAppUpdate()
         initToolbar()
         initBottomMenu()
         setUpRecyclerViewAdapter()
         setObservers()
         initLearnAllEvent()
         shouldShowRatingDialog()
-        edgeToEdgeSettingChanged()
+        //edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
         //showDummyNotification()
     }
@@ -264,6 +268,28 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 }
             )
         }
+    }
+
+    var appUpdateHelper: AppUpdateHelper? = null;
+    private fun initAppUpdate() {
+        appUpdateHelper = AppUpdateHelper(this)
+        appUpdateHelper?.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
+            override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
+                appUpdateHelper?.startImmediateUpdate(appUpdateInfo) {
+                    mViewModel.setMessage(SnackbarMessage.init(it))
+                }
+            }
+
+            override fun onUpdateNotAvailable() {
+
+            }
+        })
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        appUpdateHelper?.onActivityResult(requestCode, resultCode, data)
     }
 
 }
