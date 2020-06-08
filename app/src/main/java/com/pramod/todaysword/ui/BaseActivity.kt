@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.todaysword.SnackbarMessage
 import com.pramod.todaysword.helper.WindowPreferencesManager
@@ -26,23 +27,29 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
         mBinding.lifecycleOwner = this
         mBinding.setVariable(getBindingVariable(), mViewModel)
         mBinding.executePendingBindings()
+        setSnackBarObserver()
     }
 
 
     fun showSnackBar(
-        snackbarMessage: SnackbarMessage,
-        onActionClickListener: View.OnClickListener? = null
+        snackbarMessage: SnackbarMessage
     ) {
         val snackbar =
-            Snackbar.make(mBinding!!.root, snackbarMessage.message, snackbarMessage.duration)
-        snackbarMessage.actionText?.let {
-            snackbar.setAction(snackbarMessage.actionText, onActionClickListener)
-        }
+            Snackbar.make(mBinding.root, snackbarMessage.message, snackbarMessage.duration)
+        snackbar.show()
     }
 
     fun shouldApplyEdgeToEdge() {
         val pref = WindowPreferencesManager.newInstance(this)
         pref.applyEdgeToEdgePreference(window)
+    }
+
+    private fun setSnackBarObserver() {
+        mViewModel.getMessage().observe(this, Observer {
+            it?.let {
+                showSnackBar(it.peekContent())
+            }
+        })
     }
 
 }

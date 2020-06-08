@@ -157,10 +157,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 pastWordAdapter.setWords(words)
             }
         })
-        mViewModel.messageLiveData.observe(this, Observer {
-            val snackbarMessage: SnackbarMessage? = it.getContentIfNotHandled()
-            snackbarMessage?.let { data -> showSnackBar(data) }
-        })
         mViewModel.observeNavigateToWordDetailedEvent().observe(this, Observer {
             val selectedItemEvent = it.getContentIfNotHandled()
             selectedItemEvent?.let { selectedItem ->
