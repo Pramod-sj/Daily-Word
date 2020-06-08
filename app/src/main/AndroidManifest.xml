@@ -6,7 +6,6 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
 
-
     <application
         android:name=".WOTDApp"
         android:allowBackup="true"
@@ -40,6 +39,10 @@
         <activity
             android:name=".ui.crash_handler.CustomCrashActivity"
             android:screenOrientation="nosensor" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_foreground" />
 
         <service android:name=".service.TodaysWordFirebaseMessageService">
             <intent-filter>

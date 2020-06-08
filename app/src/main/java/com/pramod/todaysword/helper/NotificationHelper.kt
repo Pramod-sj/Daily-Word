@@ -61,7 +61,7 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
             applicationContext,
             NOTIFICATION_CHANNEL
         )
-        builder.setSmallIcon(R.mipmap.ic_launcher_round)
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
         builder.setContentTitle(title)
         builder.setContentText(body)
         builder.setAutoCancel(cancelable)
