@@ -220,7 +220,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_more -> bottomSheetDialog.show()
             R.id.menu_setting -> AppSettingActivity.openActivity(this@HomeActivity)
 
         }

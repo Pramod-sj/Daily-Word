@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.9"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            android:paddingBottom="@dimen/padding_medium"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScroll">
 
@@ -110,45 +111,23 @@
                     android:paddingEnd="@dimen/margin_large"
                     android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
 
-                    <RelativeLayout
+
+                    <TextView
+                        android:id="@+id/txtView_word_of_the_day"
+                        style="@style/AppTheme.Header2TextStyle.Bold"
+                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                        rootLayout="@{coordinatorLayout}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:clipToPadding="false">
-
-                        <TextView
-                            android:id="@+id/txtView_word_of_the_day"
-                            style="@style/AppTheme.Header2TextStyle.Bold"
-                            copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                            rootLayout="@{coordinatorLayout}"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="@dimen/margin_medium"
-                            android:layout_toLeftOf="@id/main_card_view_pronounce"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.word}" />
-
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/main_card_view_pronounce"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:hapticFeedbackEnabled="true"
-                            android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
-                            android:src="@drawable/ic_volume_up_black_24dp"
-                            app:backgroundTint="?android:attr/windowBackground"
-                            app:fabSize="mini"
-                            app:tint="@android:color/darker_gray" />
-                    </RelativeLayout>
+                        android:layout_marginEnd="@dimen/margin_medium"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@{mainViewModel.todaysWordOfTheDay.word}" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
 
                         <TextView
                             style="@style/AppTheme.TitleTextStyle"
@@ -170,6 +149,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
+
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/main_card_view_pronounce"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_small"
+                            android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
+                            android:src="@drawable/ic_volume_up_black_24dp"
+                            app:backgroundTint="?android:attr/windowBackground"
+                            app:elevation="@dimen/card_elevation_min"
+                            app:fabSize="mini"
+                            app:tint="@color/app_icon_tint" />
 
                     </LinearLayout>
 

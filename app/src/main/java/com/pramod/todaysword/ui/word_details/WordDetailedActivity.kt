@@ -2,6 +2,7 @@ package com.pramod.todaysword.ui.word_details
 
 import com.pramod.todaysword.BR
 import android.os.Bundle
+import android.transition.ArcMotion
 import android.transition.Fade
 import android.util.Log
 import android.view.View
@@ -16,6 +17,7 @@ import com.pramod.todaysword.R
 import com.pramod.todaysword.db.model.WordOfTheDay
 import com.pramod.todaysword.helper.WindowPreferencesManager
 import com.pramod.todaysword.ui.BaseActivity
+import com.pramod.todaysword.util.CommonUtils
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -34,8 +36,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun onCreate(savedInstanceState: Bundle?) {
         initEnterAndReturnTransition()
         super.onCreate(savedInstanceState)
-        arrangeViewsAccordingToEdgeToEdge()
         setNestedScrollListener()
+        arrangeViewsAccordingToEdgeToEdge()
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
@@ -67,28 +69,30 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             addTarget(android.R.id.content);
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
+            pathMotion = ArcMotion()
             duration = 300
             fadeMode = MaterialContainerTransform.FADE_MODE_OUT
             interpolator = FastOutSlowInInterpolator();
-            /*        containerColor =
-                        CommonUtils.resolveAttrToColor(
-                            this@WordDetailedActivity,
-                            android.R.attr.windowBackground
-                        )*/
+            containerColor =
+                CommonUtils.resolveAttrToColor(
+                    this@WordDetailedActivity,
+                    android.R.attr.windowBackground
+                )
         }
 
         val returnTransition = MaterialContainerTransform().apply {
             addTarget(android.R.id.content);
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
+            pathMotion = ArcMotion()
             duration = 300;
             fadeMode = MaterialContainerTransform.FADE_MODE_IN
             interpolator = FastOutSlowInInterpolator();
-            /*containerColor =
+            containerColor =
                 CommonUtils.resolveAttrToColor(
                     this@WordDetailedActivity,
                     android.R.attr.windowBackground
-                )*/
+                )
         }
 
 
@@ -96,10 +100,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         window.sharedElementEnterTransition = enterTransition;
         window.sharedElementReturnTransition = returnTransition;
         window.sharedElementsUseOverlay = false;
-        val fade = Fade()
-        fade.duration = 150
-        window.returnTransition = fade
-        window.enterTransition = fade
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 

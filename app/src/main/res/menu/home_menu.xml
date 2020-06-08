@@ -7,11 +7,4 @@
         android:title="@string/menu_settings"
         app:iconTint="@color/app_icon_tint"
         app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menu_more"
-        android:icon="@drawable/ic_more_vert_black_24dp"
-        android:title="@string/menu_more"
-        app:iconTint="@color/app_icon_tint"
-        app:showAsAction="always" />
 </menu>

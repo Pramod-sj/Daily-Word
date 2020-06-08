@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Fade
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
@@ -15,9 +16,11 @@ import com.pramod.todaysword.BR
 import com.pramod.todaysword.R
 import com.pramod.todaysword.databinding.ActivityWordListBinding
 import com.pramod.todaysword.db.model.WordOfTheDay
+import com.pramod.todaysword.helper.WindowPreferencesManager
 import com.pramod.todaysword.ui.BaseActivity
 import com.pramod.todaysword.ui.home.HomeActivity
 import com.pramod.todaysword.ui.word_details.WordDetailedActivity
+import com.pramod.todaysword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.view.*
 
 class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel>() {
@@ -47,6 +50,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         initExitTransition()
         super.onCreate(savedInstanceState)
         initAdapter()
+        arrangeViewsAccordingToEdgeToEdge()
     }
 
     private fun initAdapter() {
@@ -82,12 +86,39 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
     private fun initExitTransition() {
-        val fade = Fade()
-        fade.duration = 150
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        window.exitTransition = fade
         window.sharedElementsUseOverlay = false;
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
+
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.appBar.setPadding(
+                    0, insets.systemWindowInsetTop, 0, 0
+                )
+
+                val paddingTop = insets.systemWindowInsetTop + mBinding.recyclerviewWords.paddingTop
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.recyclerviewWords.setPadding(
+                    0,
+                    paddingTop,
+                    0,
+                    paddingBottom
+                )
+
+                mBinding.swipeToRefresh.setProgressViewOffset(true, paddingTop, 100 + paddingTop)
+
+                insets
+            };
+        }
+
+        val actionBarSize = CommonUtils.calculateActionBarHeight(this)
+        mBinding.swipeToRefresh.setProgressViewOffset(true, actionBarSize, 100 + actionBarSize)
+
+    }
+
 }

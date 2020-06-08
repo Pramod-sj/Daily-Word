@@ -193,6 +193,24 @@ class CommonUtils {
         fun pixelToSp(context: Context, pixel: Float): Float =
             pixel / context.resources.displayMetrics.scaledDensity
 
+
+        @JvmStatic
+        fun pixelToDp(context: Context, pixel: Float): Float =
+            pixel / context.resources.displayMetrics.density
+
+
+        @JvmStatic
+        fun calculateActionBarHeight(context: Context): Int {
+            val typedValue = TypedValue()
+            if (context.theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+                return TypedValue.complexToDimensionPixelSize(
+                    typedValue.data,
+                    context.resources.displayMetrics
+                )
+            }
+            return 0;
+        }
+
     }
 
 }

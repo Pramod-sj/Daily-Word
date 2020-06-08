@@ -43,4 +43,5 @@
     <dimen name="splash_icon_big">230dp</dimen>
     <dimen name="splash_icon_normal">130dp</dimen>
 
+    <dimen name="its_icon_padding">8dp</dimen>
 </resources>

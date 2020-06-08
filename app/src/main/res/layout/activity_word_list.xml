@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.pramod.todaysword.util.CommonUtils" />
+
         <import type="com.pramod.todaysword.db.model.Status" />
 
         <variable
@@ -21,31 +23,11 @@
         android:layout_height="match_parent"
         tools:context=".ui.words.WordListActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/recyclerview_words">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_small"
-                    android:text="All Words"
-                    android:textSize="@dimen/text_h5"
-                    android:textStyle="bold" />
-            </com.google.android.material.appbar.MaterialToolbar>
-        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:onRefreshListener="@{()->wordListViewModel.refresh()}"
             app:refreshing="@{wordListViewModel.refreshState.status==Status.RUNNING}">
 
@@ -53,9 +35,35 @@
                 android:id="@+id/recyclerview_words"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="?attr/actionBarSize"
                 app:adapter="@{wordListAdapter}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.9"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/recyclerview_words">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_round_back_arrow">
+
+                <TextView
+                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Words till date" />
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

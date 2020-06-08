@@ -37,44 +37,22 @@
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large">
 
-                <RelativeLayout
+
+                <TextView
+                    android:id="@+id/txtView_word_of_the_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:clipToPadding="false">
-
-                    <TextView
-                        android:id="@+id/txtView_word_of_the_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/margin_medium"
-                        android:layout_toLeftOf="@id/main_card_view_pronounce"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="@{wordDetailedViewModel.wordOfTheDay.word}"
-                        android:textSize="@dimen/text_h2"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/main_card_view_pronounce"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="@dimen/margin_small"
-                        android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDay.pronounceAudio)}"
-                        android:src="@drawable/ic_volume_up_black_24dp"
-                        app:backgroundTint="?android:attr/windowBackground"
-                        app:fabSize="mini"
-                        app:tint="@android:color/darker_gray" />
-
-                </RelativeLayout>
+                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@{wordDetailedViewModel.wordOfTheDay.word}"
+                    android:textSize="@dimen/text_h2"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -97,6 +75,19 @@
                         android:text="@{wordDetailedViewModel.wordOfTheDay.pronounce}"
                         android:textSize="@dimen/text_title" />
 
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/main_card_view_pronounce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDay.pronounceAudio)}"
+                        android:src="@drawable/ic_volume_up_black_24dp"
+                        app:backgroundTint="?android:attr/windowBackground"
+                        app:elevation="@dimen/card_elevation_min"
+                        app:fabSize="mini"
+                        app:tint="@color/app_icon_tint"
+                        app:useCompatPadding="true" />
                 </LinearLayout>
 
                 <TextView
@@ -133,7 +124,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:alpha="0.9"
             android:animateLayoutChanges="true"
@@ -141,14 +132,38 @@
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 android:animateLayoutChanges="true"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_close_black_24dp"
-                app:titleTextAppearance="@style/AppTheme.Header5TextStyle.Bold">
+                android:gravity="center_vertical"
+                app:contentInsetStart="0dp"
+                app:navigationIcon="@drawable/ic_round_back_arrow">
+
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:animateLayoutChanges="true"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/margin_medium"
+                                        android:layout_marginEnd="@dimen/margin_medium"
+                                        android:src="@drawable/ic_close_black_24dp"
+                                        app:backgroundTint="?android:attr/windowBackground"
+                                        app:fabSize="mini"
+                                        app:elevation="@dimen/card_elevation_min"
+                                        app:tint="@android:color/darker_gray"
+                                        app:useCompatPadding="true" />
+
+                                </LinearLayout>
+                -->
+
 
                 <TextView
                     style="@style/AppTheme.Header5TextStyle.Bold"
@@ -156,7 +171,8 @@
                     android:layout_height="wrap_content"
                     android:text="@{wordDetailedViewModel.wordOfTheDay.word}"
                     android:visibility="@{wordDetailedViewModel.showTitle()?View.VISIBLE:View.INVISIBLE}" />
-            </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.MaterialToolbar>
 
 
         </com.google.android.material.appbar.AppBarLayout>

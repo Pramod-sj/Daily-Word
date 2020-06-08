@@ -6,7 +6,7 @@
 
     <color name="app_logo_tint">@color/black</color>
 
-    <color name="app_icon_tint">@color/grey_extra_dark</color>
+    <color name="app_icon_tint">@color/grey_very_extra_dark</color>
 
 
     <color name="grey_very_extra_dark">#4C4B4B</color>
