@@ -50,8 +50,18 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         initExitTransition()
         super.onCreate(savedInstanceState)
+        setUpToolbar()
         initAdapter()
         arrangeViewsAccordingToEdgeToEdge()
+    }
+
+    private fun setUpToolbar() {
+        setSupportActionBar(mBinding.toolbar)
+        supportActionBar?.let {
+            it.title = null
+        }
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
+        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun initAdapter() {

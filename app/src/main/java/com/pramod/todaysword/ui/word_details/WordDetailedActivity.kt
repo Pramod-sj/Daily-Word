@@ -36,8 +36,18 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun onCreate(savedInstanceState: Bundle?) {
         initEnterAndReturnTransition()
         super.onCreate(savedInstanceState)
+        setUpToolbar()
         setNestedScrollListener()
         arrangeViewsAccordingToEdgeToEdge()
+    }
+
+    private fun setUpToolbar() {
+        setSupportActionBar(mBinding.toolbar)
+        supportActionBar?.let {
+            it.title = null
+        }
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
+        mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
