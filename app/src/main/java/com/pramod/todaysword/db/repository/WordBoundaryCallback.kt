@@ -11,6 +11,7 @@ import com.pramod.todaysword.db.remote.WOTDApiService
 import com.pramod.todaysword.helper.PagingRequestHelper
 import com.pramod.todaysword.helper.createStatusLiveData
 import com.pramod.todaysword.util.CalenderUtil
+import com.pramod.todaysword.util.CommonUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,12 +100,15 @@ class WordBoundaryCallback(
                             Log.i(TAG, "RESPONSE DATA LIST COUNT: ${it.size}")
                             for (i: WordOfTheDay in apiResponse.data!!) {
                                 i.date?.let { date ->
-                                    i.dateTimeInMillis =
-                                        CalenderUtil.convertStringToCalender(
-                                            date,
-                                            CalenderUtil.DATE_FORMAT
-                                        )
-                                            ?.timeInMillis
+                                    val cal = CalenderUtil.convertStringToCalender(
+                                        date,
+                                        CalenderUtil.DATE_FORMAT
+                                    )
+
+                                    i.dateTimeInMillis = cal?.timeInMillis
+                                    val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                                    i.wordColor = dayColor[0]
+                                    i.wordDesaturatedColor = dayColor[1]
 
                                 }
                             }

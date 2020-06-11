@@ -1,7 +1,5 @@
 package com.pramod.todaysword.util
 
-import android.text.format.Time
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,7 +51,7 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun isToday(dateString: String, dateFormat: String): Boolean {
+        fun isToday(dateString: String, dateFormat: String = DATE_FORMAT): Boolean {
             val cal: Calendar = Calendar.getInstance()
             return convertCalenderToString(cal, dateFormat) == dateString
         }
@@ -67,5 +65,25 @@ class CalenderUtil {
             calender.set(Calendar.SECOND, 0)
             return calender
         }
+
+        @JvmStatic
+        fun getDayFromDateString(date: String, format: String): String {
+            val calendar = convertStringToCalender(date, format)
+            if (calendar != null) {
+                return SimpleDateFormat("dd", Locale.getDefault()).format(calendar.time)
+            }
+            return date.substring(0, 2);
+        }
+
+
+        @JvmStatic
+        fun getMonthFromDateString(date: String, format: String): String {
+            val calendar = convertStringToCalender(date, format)
+            if (calendar != null) {
+                return SimpleDateFormat("MMM", Locale.getDefault()).format(calendar.time)
+            }
+            return date.substring(2, 5);
+        }
+
     }
 }

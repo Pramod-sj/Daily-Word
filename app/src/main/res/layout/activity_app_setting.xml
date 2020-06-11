@@ -56,7 +56,7 @@
                     app:showRadioButton="true"
                     app:subTitle="Use full screen"
                     app:title="Edge to Edge"
-                    app:titlePaddingStart="@dimen/margin_small"/>
+                    app:titlePaddingStart="@dimen/margin_small" />
 
                 <com.pramod.todaysword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     app:showRadioButton="false"
                     app:subTitle="links, developer, license, others"
                     app:title="About"
-                    app:titlePaddingStart="@dimen/margin_small"/>
+                    app:titlePaddingStart="@dimen/margin_small" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

@@ -1,5 +1,7 @@
 package com.pramod.todaysword.helper
 
+import android.content.Context
+import android.content.res.Configuration
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import com.pramod.todaysword.util.CommonUtils
@@ -12,6 +14,15 @@ class ThemeManager {
     }
 
     companion object {
+        @JvmStatic
+        fun isNightModeActive(context: Context): Boolean {
+            return when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    true
+                }
+                else -> false;
+            }
+        }
 
         fun getDefaultThemeMode(): Int = AppCompatDelegate.getDefaultNightMode()
 

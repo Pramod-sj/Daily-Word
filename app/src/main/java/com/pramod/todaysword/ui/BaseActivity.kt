@@ -46,8 +46,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
 
     private fun setSnackBarObserver() {
         mViewModel.getMessage().observe(this, Observer {
-            it?.let {
-                showSnackBar(it.peekContent())
+            it.getContentIfNotHandled()?.let { snackbar ->
+                showSnackBar(snackbar)
             }
         })
     }

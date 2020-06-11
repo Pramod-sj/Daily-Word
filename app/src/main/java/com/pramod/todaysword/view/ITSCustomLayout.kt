@@ -155,7 +155,7 @@ class ITSCustomLayout : LinearLayout {
                 else
                     ContextCompat.getColor(context, R.color.app_icon_tint)
             val colorWithAlphaComponent =
-                ColorUtils.setAlphaComponent(color, 50)
+                ColorUtils.setAlphaComponent(color, 30)
             customItsLayoutBinding.itsFrameLayoutImageIcon
                 .backgroundTintList = ColorStateList.valueOf(colorWithAlphaComponent)
         }

@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.pramod.todaysword.util.CalenderUtil" />
+
         <import type="android.view.View" />
 
         <import type="com.pramod.todaysword.util.CommonUtils" />
@@ -37,16 +39,14 @@
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large">
 
-
                 <TextView
                     android:id="@+id/txtView_word_of_the_day"
+                    style="@style/AppTheme.Header1TextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_medium"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@{wordDetailedViewModel.wordOfTheDay.word}"
-                    android:textSize="@dimen/text_h2"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -55,6 +55,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
+                        style="@style/AppTheme.TitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{wordDetailedViewModel.wordOfTheDay.attribute}"
@@ -62,25 +63,23 @@
                         android:textStyle="italic" />
 
                     <TextView
+                        style="@style/AppTheme.TitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:padding="@dimen/padding_small"
-                        android:text="@string/unicode_bullet"
-                        android:textSize="@dimen/text_title" />
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:text="@string/unicode_bullet" />
 
                     <TextView
+                        style="@style/AppTheme.TitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{wordDetailedViewModel.wordOfTheDay.pronounce}"
-                        android:textSize="@dimen/text_title" />
+                        android:text="@{wordDetailedViewModel.wordOfTheDay.pronounce}" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/main_card_view_pronounce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDay.pronounceAudio)}"
                         android:src="@drawable/ic_volume_up_black_24dp"
                         app:backgroundTint="?android:attr/windowBackground"
@@ -91,12 +90,12 @@
                 </LinearLayout>
 
                 <TextView
+                    style="@style/AppTheme.TitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.meanings,`\n`)}"
-                    android:textSize="@dimen/text_h5" />
+                    android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.meanings,`\n`)}" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -105,6 +104,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`How to use `+wordDetailedViewModel.wordOfTheDay.word}"
@@ -112,10 +112,10 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}"
-                        android:textSize="@dimen/text_sub_title" />
+                        android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}" />
                 </LinearLayout>
             </LinearLayout>
 

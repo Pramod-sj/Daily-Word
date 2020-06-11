@@ -13,6 +13,7 @@ import com.pramod.todaysword.db.model.Listing
 import com.pramod.todaysword.db.model.NetworkState
 import com.pramod.todaysword.db.model.WordOfTheDay
 import com.pramod.todaysword.util.CalenderUtil
+import com.pramod.todaysword.util.CommonUtils
 import com.pramod.todaysword.util.NetworkUtils
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,13 +38,15 @@ class WordsRepository(
             if (words.isNotEmpty()) {
                 for (i: WordOfTheDay in words) {
                     i.date?.let { date ->
-                        i.dateTimeInMillis =
-                            CalenderUtil.convertStringToCalender(
-                                date,
-                                CalenderUtil.DATE_FORMAT
-                            )
-                                ?.timeInMillis
+                        val cal = CalenderUtil.convertStringToCalender(
+                            date,
+                            CalenderUtil.DATE_FORMAT
+                        )
+                        i.dateTimeInMillis = cal?.timeInMillis
 
+                        val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                        i.wordColor = dayColor[0]
+                        i.wordDesaturatedColor = dayColor[1]
                     }
                 }
                 appDB.getWordOfTheDayDao().addAll(words)

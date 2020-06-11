@@ -67,6 +67,15 @@
         <item name="android:textColor">@color/textColor_highEmphasis</item>
     </style>
 
+    <style name="AppTheme.Header1TextStyle">
+        <item name="android:textSize">@dimen/text_h1</item>
+        <item name="android:textColor">@color/textColor_highEmphasis</item>
+    </style>
+
+    <style name="AppTheme.Header1TextStyle.Bold" parent="AppTheme.Header1TextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="AppTheme.Header2TextStyle.Bold" parent="AppTheme.Header2TextStyle">
         <item name="android:textStyle">bold</item>
     </style>
@@ -111,5 +120,13 @@
         <item name="android:textSize">@dimen/text_h5</item>
         <item name="android:textColor">@color/textColor_highEmphasis</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CardShapeWordOfTheDay" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/card_radius_max</item>
+        <item name="cornerSizeTopLeft">25dp</item>
+        <item name="cornerSizeBottomLeft">@dimen/card_radius_max</item>
+        <item name="cornerSizeBottomRight">25dp</item>
     </style>
 </resources>

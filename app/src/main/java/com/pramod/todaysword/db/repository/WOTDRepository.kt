@@ -12,6 +12,7 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.work.*
+import com.google.android.gms.common.internal.service.Common
 import com.google.gson.Gson
 import com.pramod.todaysword.db.NetworkBoundedResource
 import com.pramod.todaysword.db.Resource
@@ -69,9 +70,13 @@ class WOTDRepository(private val context: Context) {
             override fun saveCallResult(item: WordOfTheDay?) {
                 item?.let {
                     it.date?.let { date ->
-                        it.dateTimeInMillis =
+                        val cal =
                             CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
-                                ?.timeInMillis
+                        it.dateTimeInMillis =
+                            cal?.timeInMillis
+                        val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                        it.wordColor = dayColor[0]
+                        it.wordDesaturatedColor = dayColor[1]
                         localDb!!.getWordOfTheDayDao().add(it)
                     }
                 }
@@ -118,13 +123,15 @@ class WOTDRepository(private val context: Context) {
             }
 
             override fun saveCallResult(items: List<WordOfTheDay>?) {
-                items?.let {
+                items?.let {80
                     for (i: WordOfTheDay in items) {
                         i.date?.let { date ->
-                            i.dateTimeInMillis =
+                            val cal =
                                 CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
-                                    ?.timeInMillis
-
+                            i.dateTimeInMillis = cal?.timeInMillis
+                            val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                            i.wordColor = dayColor[0]
+                            i.wordDesaturatedColor = dayColor[1]
                         }
                     }
                     localDb!!.getWordOfTheDayDao().addAll(it)

@@ -13,23 +13,32 @@ class WordOfTheDay : Serializable {
     @NonNull
     @SerializedName("GID")
     var id: Long? = null
+
     @SerializedName("WORD")
     var word: String? = null
+
     @SerializedName("PRONOUNCE")
     var pronounce: String? = null
+
     @SerializedName("PRONOUNCE_AUDIO_URL")
     var pronounceAudio: String? = null
+
     @SerializedName("DEFINATION")
     var meanings: List<String>? = null
+
     @SerializedName("ATTRIBUTE")
     var attribute: String? = null
+
     @SerializedName("EXAMPLE")
     var examples: List<String>? = null
+
     @SerializedName("DATE")
     var date: String? = null
     var dateTimeInMillis: Long? = null
     var isSeen: Boolean = false
     var seenAtTimeInMillis: Long? = null
+    var wordColor: Int? = -1
+    var wordDesaturatedColor: Int? = -1
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

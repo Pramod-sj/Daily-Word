@@ -43,6 +43,10 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     private val navigateToWordDetailedActivity: MutableLiveData<Event<SelectedItem<WordOfTheDay>>> =
         MutableLiveData()
 
+    private val navigateToWordDetailedActivityFromTodaysCard: MutableLiveData<Event<WordOfTheDay>> =
+        MutableLiveData()
+
+
     init {
         wordOfTheDayLoading.value = Event.init(true)
         val todaysWordResourceLiveData = wordOfTheDayRepo.getTodaysWordOfTheDay()
@@ -97,7 +101,9 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         try {
             val mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(url)
-            mediaPlayer.setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            mediaPlayer.setAudioAttributes(
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+            )
             mediaPlayer.setOnPreparedListener {
                 it.start()
             }
@@ -113,8 +119,16 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         navigateToWordDetailedActivity.value = Event.init(selectedItem)
     }
 
+
+    fun navigateToWordDetailedFromTodaysWord(word: WordOfTheDay) {
+        navigateToWordDetailedActivityFromTodaysCard.value = Event.init(word)
+    }
+
     fun observeNavigateToWordDetailedEvent(): LiveData<Event<SelectedItem<WordOfTheDay>>> =
         navigateToWordDetailedActivity
+
+    fun observeNavigateToWordDetailedEventFromTodaysCard(): LiveData<Event<WordOfTheDay>> =
+        navigateToWordDetailedActivityFromTodaysCard
 
 
     fun updateWordSeenStatus(word: WordOfTheDay) {

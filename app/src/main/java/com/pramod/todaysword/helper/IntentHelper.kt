@@ -32,21 +32,14 @@ fun Context.restartApp() {
     }
 }
 
-fun Activity.restartActivitySmoothly() {
-    val fade = Fade().apply {
-        duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-        removeTarget(android.R.id.statusBarBackground)
-        removeTarget(android.R.id.navigationBarBackground)
+fun Activity.restartActivity(smooth: Boolean = false) {
+    startActivity(intent)
+    if (smooth) {
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    } else {
+        overridePendingTransition(0, 0)
     }
-    //window.enterTransition = fade
-    //window.exitTransition = fade
     finish()
-    overridePendingTransition(0, 0)
-    startActivity(getIntent())
-    overridePendingTransition(0, 0)
-/*
-    val option = ActivityOptions.makeSceneTransitionAnimation(this)
-    startActivity(intent, option.toBundle())*/
 }
 
 fun Context.openWebsite(url: String) {

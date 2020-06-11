@@ -65,7 +65,6 @@
     <color name="green_400">#66bb6a</color>
     <color name="green_200">#a5d6a7</color>
 
-
     <color name="lightBlue_600">#039be5</color>
     <color name="lightBlue_400">#29b6f6</color>
     <color name="lightBlue_200">#81d4fa</color>
@@ -74,6 +73,10 @@
     <color name="blue_600">#1e88e5</color>
     <color name="blue_400">#42a5f5</color>
     <color name="blue_200">#90caf9</color>
+
+    <color name="yellow_100">#FFFF8D</color>
+    <color name="yellow_400">#FFEA00</color>
+    <color name="yellow_600">#FBC02D</color>
 
 
     <color name="app_theme_icon_tint">#43a047</color>
@@ -86,4 +89,27 @@
     <color name="textColor_highEmphasis">#B3000000</color>
     <color name="textColor_mediumEmphasis">#99000000</color>
     <color name="textColor_disabled">#61000000</color>
+
+
+    <!--days colors-->
+    <color name="color_sun">@color/yellow_600</color>
+    <color name="color_mon">@color/orange_600</color>
+    <color name="color_tue">@color/deepOrange_600</color>
+    <color name="color_wed">@color/red_600</color>
+    <color name="color_thur">@color/purple_600</color>
+    <color name="color_fri">@color/pink_600</color>
+    <color name="color_sat">@color/green_600</color>
+    <!--ended days colors-->
+
+
+    <!--days desaturated colors-->
+    <color name="desaturated_color_sun">@color/yellow_100</color>
+    <color name="desaturated_color_mon">@color/orange_200</color>
+    <color name="desaturated_color_tue">@color/deepOrange_200</color>
+    <color name="desaturated_color_wed">@color/red_200</color>
+    <color name="desaturated_color_thur">@color/purple_200</color>
+    <color name="desaturated_color_fri">@color/pink_200</color>
+    <color name="desaturated_color_sat">@color/green_200</color>
+    <!--ended days colors-->
+
 </resources>

@@ -3,6 +3,12 @@
 
     <data>
 
+        <import type="androidx.core.content.ContextCompat" />
+
+        <import type="com.pramod.todaysword.helper.ThemeManager" />
+
+        <import type="com.pramod.todaysword.util.CommonUtils" />
+
         <import type="com.pramod.todaysword.util.CalenderUtil" />
 
         <variable
@@ -10,37 +16,65 @@
             type="com.pramod.todaysword.db.model.WordOfTheDay" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/item_word_list_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_word_list_cardView"
-        app:cardCornerRadius="@dimen/card_radius"
-        app:cardElevation="@dimen/card_elevation"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:layout_marginBottom="@dimen/margin_small">
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="@dimen/padding_small">
+
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/item_word_list_date"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/background_word_list_date"
+            android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor)),30)}"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/margin_medium">
+            android:padding="@dimen/padding_small">
 
             <TextView
+                style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:text="@{wordOfTheDay.word}"
-                android:textSize="@dimen/text_h5"
+                android:text="@{CalenderUtil.getDayFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
+                android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wordOfTheDay.meanings.get(0)}"
-                android:textSize="@dimen/text_sub_title" />
+                android:text="@{CalenderUtil.getMonthFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
+                android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
+                android:textSize="@dimen/text_small" />
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/item_word_list_date"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingVertical="@dimen/padding_small">
+
+            <TextView
+                style="@style/AppTheme.Header5TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@{wordOfTheDay.word}" />
+
+            <TextView
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{wordOfTheDay.meanings.get(0)}" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </layout>

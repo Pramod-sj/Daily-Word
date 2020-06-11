@@ -39,7 +39,7 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
 
     fun toggleEdgeToEdge() {
         windowPrefManager.toggleEdgeToEdgeEnabled()
-        recreateActivity.value = Event.init(true)
+        recreate()
     }
 
     fun toggleNotification() {
@@ -50,6 +50,9 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
         navigateToAbout.value = Event.init(true)
     }
 
+    fun recreate() {
+        recreateActivity.value = Event.init(true)
+    }
 
     fun themeOption(): LiveData<String> = themeOption
     fun getShowThemeSelector(): LiveData<Event<ThemeManager.Options>> = showThemeSelector

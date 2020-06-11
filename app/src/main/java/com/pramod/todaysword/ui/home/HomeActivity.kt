@@ -9,6 +9,7 @@ import android.transition.Fade
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -129,7 +130,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     private fun setUpRecyclerViewAdapter() {
         pastWordAdapter = PastWordAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
-            getViewModel().navigateToWordDetailed(SelectedItem.init(i, wordOfTheDay))
+            getViewModel().navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
         }
         mBinding.pastWordAdapter = pastWordAdapter
     }
@@ -163,19 +164,17 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 val view = mBinding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(
                     selectedItem.position
                 )
-                val option = ActivityOptions.makeSceneTransitionAnimation(
-                    this@HomeActivity,
-                    view!!,
-                    "CONTAINER"
-                )
-                val intent = Intent(this@HomeActivity, WordDetailedActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable("WORD", selectedItem.data)
-                intent.putExtras(bundle)
-                startActivity(intent, option.toBundle())
+                intentToWordDetail(view!!, selectedItem.data)
             }
         })
 
+        mViewModel.observeNavigateToWordDetailedEventFromTodaysCard().observe(this, Observer {
+            val selectedItemEvent = it.getContentIfNotHandled()
+            selectedItemEvent?.let { word ->
+                val view = mBinding.cardViewWord
+                intentToWordDetail(view, word)
+            }
+        })
 
         mViewModel.observeWordOfTheDayWork().observe(this, Observer {
             Log.d("HomeActivity", DailyWordWorker.TAG + " : " + Gson().toJson(it))
@@ -189,10 +188,23 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
     }
 
+    private fun intentToWordDetail(view: View, word: WordOfTheDay) {
+        val option = ActivityOptions.makeSceneTransitionAnimation(
+            this@HomeActivity,
+            view,
+            "CONTAINER"
+        )
+        val intent = Intent(this@HomeActivity, WordDetailedActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("WORD", word)
+        intent.putExtras(bundle)
+        startActivity(intent, option.toBundle())
+    }
+
     private fun edgeToEdgeSettingChanged() {
         WindowPreferencesManager.newInstance(this).getLiveData().observe(this, Observer<Boolean> {
             if (it) {
-                restartActivitySmoothly()
+
             }
         })
     }

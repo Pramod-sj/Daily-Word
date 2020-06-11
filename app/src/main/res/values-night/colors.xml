@@ -15,11 +15,9 @@
     <color name="app_icon_tint">@color/grey_extra_light</color>
 
 
-
-
-
     <!--Text Colors-->
     <color name="textColor_highEmphasis">#DEFFFFFF</color>
     <color name="textColor_mediumEmphasis">#99FFFFFF</color>
     <color name="textColor_disabled">#61FFFFFF</color>
+
 </resources>

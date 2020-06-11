@@ -108,7 +108,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     private fun edgeToEdgeSettingChanged() {
         mViewModel.recreateActivity().observe(this, Observer {
             it?.let { recreate ->
-                restartActivitySmoothly()
+                restartActivity()
             }
         })
     }

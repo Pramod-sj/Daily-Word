@@ -22,9 +22,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.todaysword.BuildConfig
+import com.pramod.todaysword.R
 import com.pramod.todaysword.worker.DailyWordWorker
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -112,7 +112,7 @@ class CommonUtils {
             return typedValue.data;
         }
 
-
+/*
         fun createWorkerRequest(
             workerClass: Class<out ListenableWorker>,
             scheduleAtCalendar: Calendar?,
@@ -136,7 +136,7 @@ class CommonUtils {
                 oneTimeWorkRequestBuilder.setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             }
             return oneTimeWorkRequestBuilder.build()
-        }
+        }*/
 
 
         fun isAtLeastAndroidP() = Build.VERSION.SDK_INT >= 28
@@ -190,6 +190,10 @@ class CommonUtils {
         fun changeAlpha(color: Int, alpha: Int) = ColorUtils.setAlphaComponent(color, alpha)
 
         @JvmStatic
+        fun changeAlpha(context: Context, color: Int, alpha: Int) =
+            ColorUtils.setAlphaComponent(ContextCompat.getColor(context, color), alpha)
+
+        @JvmStatic
         fun pixelToSp(context: Context, pixel: Float): Float =
             pixel / context.resources.displayMetrics.scaledDensity
 
@@ -209,6 +213,23 @@ class CommonUtils {
                 )
             }
             return 0;
+        }
+
+        @JvmStatic
+        fun getColorBasedOnDay(cal: Calendar?): List<Int> {
+
+            return when (cal?.get(Calendar.DAY_OF_WEEK)
+                ?: Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                Calendar.MONDAY -> arrayListOf(R.color.color_mon, R.color.desaturated_color_mon)
+                Calendar.TUESDAY -> arrayListOf(R.color.color_tue, R.color.desaturated_color_tue)
+                Calendar.WEDNESDAY -> arrayListOf(R.color.color_wed, R.color.desaturated_color_wed)
+                Calendar.THURSDAY -> arrayListOf(R.color.color_thur, R.color.desaturated_color_thur)
+                Calendar.FRIDAY -> arrayListOf(R.color.color_fri, R.color.desaturated_color_fri)
+                Calendar.SATURDAY -> arrayListOf(R.color.color_sat, R.color.desaturated_color_sat)
+                Calendar.SUNDAY -> arrayListOf(R.color.color_sun, R.color.desaturated_color_sun)
+                else -> arrayListOf(-1, -1)
+            }
+
         }
 
     }
