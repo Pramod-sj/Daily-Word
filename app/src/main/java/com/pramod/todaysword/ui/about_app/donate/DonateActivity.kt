@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProviders
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
 import com.pramod.todaysword.R
 import com.pramod.todaysword.BR
 import com.pramod.todaysword.databinding.ActivityDonateBinding
+import com.pramod.todaysword.helper.WindowPreferencesManager
 import com.pramod.todaysword.ui.BaseActivity
 
 class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
@@ -37,6 +39,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         setUpToolbar()
         setUpBilling()
         setUpDonateItemRecyclerView()
+        arrangeViewsAccordingToEdgeToEdge()
     }
 
 
@@ -78,6 +81,29 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         }
         mBinding.donateRecyclerView.adapter = donateItemAdapter
         donateItemAdapter.submitList(mViewModel.donateItemList)
+    }
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.appBar.setPadding(
+                    0, insets.systemWindowInsetTop, 0, 0
+                )
+
+                val paddingTop = insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.donateRecyclerView.setPadding(
+                    0,
+                    paddingTop,
+                    0,
+                    paddingBottom
+                )
+                insets
+            };
+        }
     }
 
 

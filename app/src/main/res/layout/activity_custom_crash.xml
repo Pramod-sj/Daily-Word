@@ -14,6 +14,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/relative_parent_layotu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

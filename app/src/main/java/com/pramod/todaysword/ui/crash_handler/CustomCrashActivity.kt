@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.todaysword.BR
@@ -15,6 +16,7 @@ import com.pramod.todaysword.BuildConfig
 import com.pramod.todaysword.R
 import com.pramod.todaysword.WOTDApp
 import com.pramod.todaysword.databinding.ActivityCustomCrashBinding
+import com.pramod.todaysword.helper.WindowPreferencesManager
 import com.pramod.todaysword.helper.openGmail
 import com.pramod.todaysword.helper.restartApp
 import com.pramod.todaysword.ui.BaseActivity
@@ -46,8 +48,21 @@ class CustomCrashActivity :
         initCloseActivity()
         initRestartApp()
         initSendMail()
+        arrangeViewsAccordingToEdgeToEdge()
     }
 
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                mBinding.relativeParentLayotu.setPadding(
+                    0, insets.systemWindowInsetTop, 0, insets.systemWindowInsetBottom
+                )
+                insets
+            };
+        }
+    }
 
     private fun initCloseActivity() {
         mViewModel.closeActivityLiveData().observe(this, Observer {
