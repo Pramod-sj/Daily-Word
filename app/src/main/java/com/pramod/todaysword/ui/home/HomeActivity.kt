@@ -171,7 +171,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         mViewModel.observeNavigateToWordDetailedEventFromTodaysCard().observe(this, Observer {
             val selectedItemEvent = it.getContentIfNotHandled()
             selectedItemEvent?.let { word ->
-                val view = mBinding.cardViewWord
+                val view = mBinding.mainLinearLayoutWotd
                 intentToWordDetail(view, word)
             }
         })

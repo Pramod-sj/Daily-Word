@@ -69,7 +69,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             addTarget(android.R.id.content);
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
-            pathMotion = ArcMotion()
             duration = 300
             fadeMode = MaterialContainerTransform.FADE_MODE_OUT
             interpolator = FastOutSlowInInterpolator();
@@ -84,8 +83,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             addTarget(android.R.id.content);
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
-            pathMotion = ArcMotion()
-            duration = 300;
+            duration = 250;
             fadeMode = MaterialContainerTransform.FADE_MODE_IN
             interpolator = FastOutSlowInInterpolator();
             containerColor =

@@ -108,11 +108,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`How to use `+wordDetailedViewModel.wordOfTheDay.word}"
-                        android:textSize="@dimen/text_sub_title"
-                        android:textStyle="bold" />
+                         android:textStyle="bold" />
 
                     <TextView
-                        style="@style/AppTheme.SubTitleTextStyle"
+                        style="@style/AppTheme.SmallTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}" />
