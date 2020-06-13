@@ -10,8 +10,10 @@ import com.google.gson.Gson
 import com.pramod.dailyword.db.repository.WOTDRepository
 import com.pramod.dailyword.helper.NotificationHelper
 import com.pramod.dailyword.ui.home.HomeActivity
+import com.pramod.dailyword.util.CalenderUtil
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 class TodaysWordFirebaseMessageService : FirebaseMessagingService() {
 
@@ -42,7 +44,12 @@ class TodaysWordFirebaseMessageService : FirebaseMessagingService() {
 
             val repo = WOTDRepository(applicationContext)
             GlobalScope.launch {
-                val wordOfTheDay = repo.getJustTopOneNonLive()
+                val wordOfTheDay = repo.getJustNonLive(
+                    CalenderUtil.convertCalenderToString(
+                        Calendar.getInstance(),
+                        CalenderUtil.DATE_FORMAT
+                    )
+                )
                 var notification: Notification? = null
                 if (wordOfTheDay != null && payload.noitificationType == NOTIFICATION_REMINDER) {
                     //checking whether word seen or not

@@ -20,8 +20,8 @@
         android:id="@+id/item_word_list_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/padding_medium"
-        android:paddingVertical="@dimen/padding_small">
+        android:background="?selectableItemBackground"
+        android:padding="@dimen/padding_medium">
 
 
         <LinearLayout

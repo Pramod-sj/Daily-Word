@@ -9,7 +9,7 @@ import com.pramod.dailyword.db.repository.PaginationWordRepository
 import com.pramod.dailyword.ui.BaseViewModel
 import java.util.concurrent.Executors
 
-private const val PAGE_SIZE = 10
+private const val PAGE_SIZE = 20
 
 class WordListViewModel(application: Application) : BaseViewModel(application) {
 

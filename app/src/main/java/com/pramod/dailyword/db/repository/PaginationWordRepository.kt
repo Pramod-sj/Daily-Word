@@ -120,12 +120,10 @@ class PaginationWordRepository(
             apiService, appDB!!, pageSize, Executors.newSingleThreadExecutor()
         )
 
-        val refreshTrigger = MutableLiveData<Unit?>()
+        val refreshTrigger = MutableLiveData<Unit>()
 
         val refreshState = Transformations.switchMap(refreshTrigger) {
-            it?.let {
-                refreshAllWord()
-            }
+            refreshAllWord()
         }
 
         val livePagedList = LivePagedListBuilder(

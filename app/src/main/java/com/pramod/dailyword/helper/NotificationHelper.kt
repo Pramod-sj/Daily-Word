@@ -9,6 +9,7 @@ import android.content.ContextWrapper
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.pramod.dailyword.R
@@ -20,8 +21,9 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
     val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
     companion object {
-        private const val DEFAULT_NOTIFICATION_TITLE = "Today's Word Notification"
-        private const val NOTIFICATION_CHANNEL = "com.pramod.todaysword.notification_channel"
+        private const val TAG = "NotificationHelper"
+        private const val DEFAULT_NOTIFICATION_TITLE = "Daily Word Notification"
+        private const val NOTIFICATION_CHANNEL = "com.pramod.dailyword.notification_channel"
 
         private val atomicInteger: AtomicInteger = AtomicInteger(1)
 
@@ -76,7 +78,11 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         notification: Notification,
         notificationId: Int = generateUniqueNotificationId()
     ) {
-        notificationManager.notify(notificationId, notification)
+        if (NotificationPrefManager.newInstance(context).isNotificationEnabled()) {
+            notificationManager.notify(notificationId, notification)
+        } else {
+            Log.i(TAG, "Notification are disabled, enable it from settings")
+        }
     }
 
     fun cancelNotification(notificationId: Int) {

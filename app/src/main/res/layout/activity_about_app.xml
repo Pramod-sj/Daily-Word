@@ -343,10 +343,10 @@
 
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_gravity="top"
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:alpha="0.9"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
             app:liftOnScroll="true"
@@ -361,7 +361,8 @@
                     style="@style/AppTheme.Header5TextStyle.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_about" />
+                    android:text="@string/title_about"
+                    android:textColor="@color/textColor_highEmphasis" />
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>

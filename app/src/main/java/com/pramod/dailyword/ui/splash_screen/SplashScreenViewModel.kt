@@ -28,15 +28,18 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
                 if (prefManager.isNewUser()) {
                     splashScreenText.value = "Hi, There!"
                     Handler().postDelayed({
-                        splashScreenText.postValue("Welcome to Today's Word")
-                        splashScreenSubText.postValue("Learn a new word every day!")
-                        enabledStartButton.postValue(true)
+                        splashScreenText.postValue("Welcome to Daily Word")
+                        Handler().postDelayed(
+                            {
+                                splashScreenSubText.postValue("Learn a new word every day!")
+                                enabledStartButton.postValue(true)
+                            }, 1000
+                        );
                     }, 2000)
                 } else {
-                    splashScreenText.value = "Daily Word"
                     Handler().postDelayed({
                         goToHomePage()
-                    }, 2000)
+                    }, 1000)
                 }
             }
         })

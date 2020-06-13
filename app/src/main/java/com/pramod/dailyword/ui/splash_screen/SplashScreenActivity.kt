@@ -2,11 +2,13 @@ package com.pramod.dailyword.ui.splash_screen
 
 import android.os.Bundle
 import android.transition.Fade
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
+import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.home.HomeActivity
 import com.pramod.dailyword.util.CommonUtils
@@ -20,19 +22,39 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     override fun getBindingVariable(): Int = BR.splashScreenViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setUpExitTransition()
         super.onCreate(savedInstanceState)
         animateAppIcon()
         navigateToHomePage()
+        arrangeViewsAccordingToEdgeToEdge()
     }
 
-    private fun setUpExitTransition() {
-        val fade = Fade()
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        fade.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
-        window.exitTransition = fade
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                val paddingBottom = insets.systemWindowInsetBottom
+
+                mBinding.btnGetStarted.setPadding(
+                    0,
+                    0,
+                    0,
+                    paddingBottom
+                )
+
+                mBinding.progress.setPadding(
+                    0,
+                    0,
+                    0,
+                    paddingBottom
+                )
+
+                insets
+            }
+        }
     }
+
 
     private fun navigateToHomePage() {
         mViewModel.navigateToHomePage().observe(this, Observer {

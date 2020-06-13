@@ -65,6 +65,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_get_started"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -75,6 +76,7 @@
             android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
         <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_gravity="bottom|center_horizontal"
