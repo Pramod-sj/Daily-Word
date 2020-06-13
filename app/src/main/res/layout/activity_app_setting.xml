@@ -3,13 +3,13 @@
 
     <data>
 
-        <import type="com.pramod.todaysword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.util.CommonUtils" />
 
-        <import type="com.pramod.todaysword.helper.PrefManager" />
+        <import type="com.pramod.dailyword.helper.PrefManager" />
 
         <variable
             name="appSettingViewModel"
-            type="com.pramod.todaysword.ui.settings.AppSettingViewModel" />
+            type="com.pramod.dailyword.ui.settings.AppSettingViewModel" />
 
     </data>
 
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.pramod.todaysword.view.ITSCustomLayout
+                <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.showThemeSelector()}"
@@ -45,7 +45,7 @@
                     app:title="Theme"
                     app:titlePaddingStart="@dimen/margin_small" />
 
-                <com.pramod.todaysword.view.ITSCustomLayout
+                <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.toggleEdgeToEdge()}"
@@ -58,7 +58,7 @@
                     app:title="Edge to Edge"
                     app:titlePaddingStart="@dimen/margin_small" />
 
-                <com.pramod.todaysword.view.ITSCustomLayout
+                <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.toggleNotification()}"
@@ -71,7 +71,7 @@
                     app:title="Notification"
                     app:titlePaddingStart="@dimen/margin_small" />
 
-                <com.pramod.todaysword.view.ITSCustomLayout
+                <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.goToAbout()}"

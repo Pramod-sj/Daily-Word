@@ -3,17 +3,17 @@
 
     <data>
 
-        <import type="com.pramod.todaysword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.util.CommonUtils" />
 
-        <import type="com.pramod.todaysword.db.model.Status" />
+        <import type="com.pramod.dailyword.db.model.Status" />
 
         <variable
             name="wordListAdapter"
-            type="com.pramod.todaysword.ui.words.WordListAdapter" />
+            type="com.pramod.dailyword.ui.words.WordListAdapter" />
 
         <variable
             name="wordListViewModel"
-            type="com.pramod.todaysword.ui.words.WordListViewModel" />
+            type="com.pramod.dailyword.ui.words.WordListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"

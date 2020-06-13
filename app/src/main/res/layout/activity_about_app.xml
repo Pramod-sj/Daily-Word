@@ -3,13 +3,13 @@
 
     <data>
 
-        <import type="com.pramod.todaysword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.util.CommonUtils" />
 
-        <import type="com.pramod.todaysword.BuildConfig" />
+        <import type="com.pramod.dailyword.BuildConfig" />
 
         <variable
             name="aboutAppViewModel"
-            type="com.pramod.todaysword.ui.about_app.AboutAppViewModel" />
+            type="com.pramod.dailyword.ui.about_app.AboutAppViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -79,7 +79,7 @@
                             android:layout_gravity="center_horizontal"
                             android:text="@string/app_tag_line" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
@@ -89,7 +89,7 @@
                             app:title="Version"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToForkProject()}"
@@ -99,7 +99,7 @@
                             app:title="Fork on github"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.openDonatePage()}"
@@ -109,7 +109,7 @@
                             app:title="Donate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.shareApp()}"
@@ -119,7 +119,7 @@
                             app:title="Share"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.openGooglePlayReview()}"
@@ -157,7 +157,7 @@
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
-                        <com.pramod.todaysword.view.CircularImageView
+                        <com.pramod.dailyword.view.CircularImageView
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_gravity="center"
@@ -178,7 +178,7 @@
                             android:layout_gravity="center"
                             android:text="@string/dev_info" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
@@ -189,7 +189,7 @@
                             app:title="Github"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToGmail()}"
@@ -199,7 +199,7 @@
                             app:title="Gmail"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToInstagram()}"
@@ -209,7 +209,7 @@
                             app:title="Instagram"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToFacebook()}"
@@ -248,7 +248,7 @@
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToFreePikWebsite()}"
@@ -257,7 +257,7 @@
                             app:title="App Logo" />
 
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.navigateToMaterialDesignIcon()}"
@@ -265,7 +265,7 @@
                             app:subTitle="All material designed icons are used from this website"
                             app:title="Material Design Icons" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:subTitle="Words are picked from Merriam Webster"
@@ -301,7 +301,7 @@
                             android:textStyle="bold" />
 
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.showOpenSourceLibs()}"
@@ -311,7 +311,7 @@
                             app:title="Open Source Libraries"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.showTermsAndService()}"
@@ -320,7 +320,7 @@
                             app:title="Terms &amp; Services"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.todaysword.view.ITSCustomLayout
+                        <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->aboutAppViewModel.showPrivacyPolicy()}"

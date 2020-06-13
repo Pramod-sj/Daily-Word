@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.pramod.todaysword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.util.CalenderUtil" />
 
         <import type="java.util.Calendar" />
 
-        <import type="com.pramod.todaysword.db.model.WordOfTheDay" />
+        <import type="com.pramod.dailyword.db.model.WordOfTheDay" />
 
-        <import type="com.pramod.todaysword.ui.home.SelectedItem" />
+        <import type="com.pramod.dailyword.ui.home.SelectedItem" />
 
         <variable
             name="position"
@@ -19,7 +19,7 @@
 
         <variable
             name="wordOfTheDay"
-            type="com.pramod.todaysword.db.model.WordOfTheDay" />
+            type="com.pramod.dailyword.db.model.WordOfTheDay" />
 
     </data>
 

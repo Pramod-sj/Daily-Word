@@ -5,7 +5,7 @@
 
         <variable
             name="customCrashViewModel"
-            type="com.pramod.todaysword.ui.crash_handler.CustomCrashViewModel" />
+            type="com.pramod.dailyword.ui.crash_handler.CustomCrashViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"

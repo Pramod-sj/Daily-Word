@@ -3,11 +3,11 @@
 
     <data>
 
-        <import type="com.pramod.todaysword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.util.CommonUtils" />
 
         <variable
             name="donateViewModel"
-            type="com.pramod.todaysword.ui.about_app.donate.DonateViewModel" />
+            type="com.pramod.dailyword.ui.about_app.donate.DonateViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"

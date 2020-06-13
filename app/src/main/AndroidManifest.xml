@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pramod.todaysword">
+    package="com.pramod.dailyword">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
 
     <application
-        android:name=".WOTDApp"
+        android:name="com.pramod.dailyword.WOTDApp"
         android:allowBackup="true"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.about_app.donate.DonateActivity"></activity>
+        <activity android:name=".ui.about_app.donate.DonateActivity" />
         <activity android:name=".ui.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_foreground" />
+            android:resource="@drawable/ic_notification" />
 
         <service android:name=".service.TodaysWordFirebaseMessageService">
             <intent-filter>

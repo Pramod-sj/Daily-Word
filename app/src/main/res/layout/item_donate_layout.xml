@@ -6,7 +6,7 @@
 
         <variable
             name="donateItem"
-            type="com.pramod.todaysword.ui.about_app.donate.DonateItem" />
+            type="com.pramod.dailyword.ui.about_app.donate.DonateItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

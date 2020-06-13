@@ -5,15 +5,15 @@
 
         <import type="androidx.core.content.ContextCompat" />
 
-        <import type="com.pramod.todaysword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
 
-        <import type="com.pramod.todaysword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.util.CommonUtils" />
 
-        <import type="com.pramod.todaysword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.util.CalenderUtil" />
 
         <variable
             name="wordOfTheDay"
-            type="com.pramod.todaysword.db.model.WordOfTheDay" />
+            type="com.pramod.dailyword.db.model.WordOfTheDay" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:875181542870:android:48b5f05414e6d03776e877",
+        "android_client_info": {
+          "package_name": "com.pramod.dailyword"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875181542870-68sf7ms8aunakl4tm756ktdidhq3k2mb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjsLl9zBoMe12NI2TtAdVLvU8SnxdDCFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875181542870-68sf7ms8aunakl4tm756ktdidhq3k2mb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:875181542870:android:247cfa18b47901c276e877",
         "android_client_info": {
           "package_name": "com.pramod.todaysword"
