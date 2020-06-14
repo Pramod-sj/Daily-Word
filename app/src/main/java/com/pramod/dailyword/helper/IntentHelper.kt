@@ -81,7 +81,10 @@ fun Context.shareApp() {
         .apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name))
-            putExtra(Intent.EXTRA_TEXT, "Test share")
+            putExtra(
+                Intent.EXTRA_TEXT,
+                resources.getString(R.string.share_text) + "\n" + resources.getString(R.string.google_app_url)
+            )
         }
     startActivity(Intent.createChooser(intent, "Choose app..."))
 
