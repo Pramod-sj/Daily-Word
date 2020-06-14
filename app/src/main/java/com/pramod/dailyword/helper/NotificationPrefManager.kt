@@ -28,14 +28,14 @@ class NotificationPrefManager private constructor(private val context: Context) 
 
     fun isNotificationEnabled() = sharedPreferences.getBoolean(
         KEY_NOTIFICATION_ENABLED,
-        false
+        true
     )
 
 
     fun getLiveData(): SPrefBooleanLiveData {
         return SPrefBooleanLiveData(
             sharedPreferences,
-            KEY_NOTIFICATION_ENABLED, false
+            KEY_NOTIFICATION_ENABLED, true
         )
     }
 
