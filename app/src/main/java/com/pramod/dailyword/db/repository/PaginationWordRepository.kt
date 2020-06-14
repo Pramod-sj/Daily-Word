@@ -27,7 +27,7 @@ import java.util.concurrent.Executors
 
 class PaginationWordRepository(
     private val application: Application,
-    private val pageSize: Int = 5,
+    private val pageSize: Int = 10,
     private val executor: Executor
 ) {
     private val apiService = NetworkUtils.getWOTDApiService()
@@ -114,7 +114,7 @@ class PaginationWordRepository(
     fun getAllWords(): Listing<WordOfTheDay> {
         val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(pageSize)
-            .setEnablePlaceholders(true)
+            .setEnablePlaceholders(false)
             .build()
         val boundaryCallback = WordBoundaryCallback(
             apiService, appDB!!, pageSize, Executors.newSingleThreadExecutor()

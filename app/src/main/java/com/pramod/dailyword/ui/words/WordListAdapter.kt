@@ -1,5 +1,6 @@
 package com.pramod.dailyword.ui.words
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemNetworkStateLayoutBinding
 import com.pramod.dailyword.databinding.ItemWordListLayoutBinding
@@ -15,6 +17,7 @@ import com.pramod.dailyword.db.model.NetworkState.Companion.LOADED
 import com.pramod.dailyword.db.model.Status
 import com.pramod.dailyword.db.model.WordOfTheDay
 import java.lang.IllegalArgumentException
+
 
 class WordListAdapter(
     val itemClickCallback: ((pos: Int, word: WordOfTheDay) -> Unit)? = null,
@@ -46,6 +49,7 @@ class WordListAdapter(
         }
 
         fun bindTo(networkState: NetworkState?) {
+            Log.i("Network State", Gson().toJson(networkState))
             binding.networkStateProgress.visibility =
                 if (networkState?.status == Status.RUNNING) View.VISIBLE else View.INVISIBLE
             binding.networkStateErrorLayout.visibility =
