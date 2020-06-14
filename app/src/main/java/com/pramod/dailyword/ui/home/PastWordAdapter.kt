@@ -47,7 +47,7 @@ class PastWordAdapter(
     inner class WordViewHolder(val binding: ItemPastWordLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.cardViewRootItemLayout.setOnClickListener {
+            binding.root.setOnClickListener {
                 onItemClickCallback.invoke(
                     layoutPosition,
                     words[layoutPosition]

@@ -112,4 +112,6 @@
     <color name="desaturated_color_sat">@color/green_200</color>
     <!--ended days colors-->
 
+
+    <color name="home_past_word_color">@color/grey_very_extra_light</color>
 </resources>

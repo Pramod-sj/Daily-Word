@@ -2,6 +2,7 @@ package com.pramod.dailyword.ui.word_details
 
 import com.pramod.dailyword.BR
 import android.os.Bundle
+import android.transition.ArcMotion
 import android.util.Log
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -79,6 +80,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             excludeTarget(android.R.id.navigationBarBackground, true)
             duration = 300
             fadeMode = MaterialContainerTransform.FADE_MODE_OUT
+            pathMotion = ArcMotion()
             interpolator = FastOutSlowInInterpolator()
             containerColor =
                 CommonUtils.resolveAttrToColor(
@@ -92,6 +94,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
             duration = 250
+            pathMotion = ArcMotion()
             fadeMode = MaterialContainerTransform.FADE_MODE_IN
             interpolator = FastOutSlowInInterpolator()
             containerColor =
