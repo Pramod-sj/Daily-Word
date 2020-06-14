@@ -10,7 +10,7 @@ class NetworkUtils {
     companion object {
         fun getWOTDApiService(): WOTDApiService {
             val client = Retrofit.Builder()
-                .baseUrl(EndPoints.WOTD_BASE_URL)
+                .baseUrl(EndPoints.WOTD_API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return client.create(WOTDApiService::class.java)

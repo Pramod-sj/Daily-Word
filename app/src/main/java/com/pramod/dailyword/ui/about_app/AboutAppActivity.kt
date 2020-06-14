@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAboutAppBinding
+import com.pramod.dailyword.db.remote.EndPoints
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.about_app.donate.DonateActivity
@@ -38,6 +39,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         setAppLink()
         setDeveloperLink()
         setCreditLink()
+        setOthersLink()
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
@@ -105,12 +107,12 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         })
         mViewModel.showPrivacyPolicyLiveData().observe(this, Observer {
             it?.let {
-
+                showWebViewDialog(EndPoints.PRIVACY_POLICY)
             }
         })
         mViewModel.showTermAndConditionLiveData().observe(this, Observer {
             it?.let {
-
+                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
             }
         })
     }

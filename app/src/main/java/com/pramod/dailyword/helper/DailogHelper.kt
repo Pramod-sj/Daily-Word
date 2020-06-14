@@ -2,9 +2,53 @@ package com.pramod.dailyword.helper
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Bitmap
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.databinding.DataBindingUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
+import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import java.util.*
+
+fun Context.showWebViewDialog(url: String) {
+    val dialogWebviewLayoutBinding: DialogWebviewLayoutBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(this),
+        R.layout.dialog_webview_layout,
+        null,
+        false
+    )
+    Log.i("URL", url)
+    dialogWebviewLayoutBinding.webView.webViewClient = object : WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            dialogWebviewLayoutBinding.webViewProgress.visibility = View.GONE
+        }
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            dialogWebviewLayoutBinding.webViewProgress.visibility = View.VISIBLE
+        }
+    }
+    dialogWebviewLayoutBinding.webView.loadUrl(url)
+    val dialog = MaterialAlertDialogBuilder(this)
+        .setView(dialogWebviewLayoutBinding.root)
+        .create()
+
+    dialog.show()
+
+    dialog.window?.setLayout(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
+
+
+}
 
 fun Context.showStaticPageDialog(
     layoutId: Int,
