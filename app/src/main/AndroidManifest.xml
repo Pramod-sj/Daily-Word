@@ -16,8 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.about_app.donate.DonateActivity" />
-        <activity android:name=".ui.splash_screen.SplashScreenActivity">
+        <activity
+            android:name=".ui.about_app.donate.DonateActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.splash_screen.SplashScreenActivity"
+            android:screenOrientation="nosensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +31,14 @@
         <activity
             android:name=".ui.about_app.AboutAppActivity"
             android:label="@string/title_activity_about_app"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.settings.AppSettingActivity" />
-        <activity android:name=".ui.words.WordListActivity" />
+        <activity
+            android:name=".ui.settings.AppSettingActivity"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.words.WordListActivity"
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".ui.word_details.WordDetailedActivity"
             android:screenOrientation="nosensor" />
@@ -43,6 +52,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
 
         <service android:name=".service.TodaysWordFirebaseMessageService">
             <intent-filter>
