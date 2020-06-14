@@ -40,7 +40,8 @@
                 style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(donateItem.title)}" />
+                android:text="@{String.valueOf(donateItem.title)}"
+                android:visibility="gone" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
