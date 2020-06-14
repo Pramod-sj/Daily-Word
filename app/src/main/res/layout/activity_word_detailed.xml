@@ -165,7 +165,7 @@
 
 
                 <TextView
-                    style="@style/AppTheme.Header5TextStyle.Bold"
+                    style="@style/ToolbarTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{wordDetailedViewModel.wordOfTheDay.word}"

@@ -73,13 +73,13 @@
 
                     <TextView
                         android:id="@+id/toolbar_title"
-                        style="@style/AppTheme.Header5TextStyle.Bold"
+                        style="@style/ToolbarTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.greetMessage + `, There!`}" />
 
                     <TextView
-                        style="@style/AppTheme.Header5TextStyle.Bold"
+                        style="@style/AppTheme.Header5TextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.getColoredSpannedText(context,`Here is your Daily Word`,12,23,@color/colorPrimary)}" />
