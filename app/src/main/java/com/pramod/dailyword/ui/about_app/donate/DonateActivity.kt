@@ -76,7 +76,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
-            billingProcessor.purchase(this, donateItem.title)
+            billingProcessor.purchase(this, donateItem.itemPurchaseId)
         }
         mBinding.donateRecyclerView.adapter = donateItemAdapter
         donateItemAdapter.submitList(mViewModel.donateItemList)

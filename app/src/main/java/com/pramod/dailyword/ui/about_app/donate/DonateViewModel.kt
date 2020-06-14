@@ -7,11 +7,16 @@ import com.pramod.dailyword.ui.BaseViewModel
 class DonateViewModel(application: Application) : BaseViewModel(application) {
 
     val donateItemList = arrayListOf(
-        DonateItem(R.drawable.ic_cookie, "Cookie", 10),
-        DonateItem(R.drawable.ic_coffee_outline, "Coffee", 50),
-        DonateItem(R.drawable.ic_baseline_card_giftcard_24, "Gift", 150)
+        DonateItem("cookie_", R.drawable.ic_cookie, "Cookie", 20),
+        DonateItem("coffee_", R.drawable.ic_coffee_outline, "Coffee", 50),
+        DonateItem("gift_", R.drawable.ic_baseline_card_giftcard_24, "Gift", 150)
     )
 }
 
 
-data class DonateItem(val drawableId: Int, val title: String, val amount: Int)
+data class DonateItem(
+    val itemPurchaseId: String,
+    val drawableId: Int,
+    val title: String,
+    val amount: Int
+)
