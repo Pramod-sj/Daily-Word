@@ -3,28 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/margin_medium">
+    android:padding="@dimen/padding_large">
 
     <ImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/margin_small"
-        android:src="@drawable/ic_outline_rate_review_24"
-        android:tint="@color/app_icon_tint" />
+        android:src="@drawable/ic_star" />
 
     <TextView
         style="@style/AppTheme.TitleTextStyle.Bold"
         android:layout_width="wrap_content"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="@dimen/margin_small"
-        android:text="Rate" />
+        android:text="@string/rating_title" />
 
     <TextView
-        style="@style/AppTheme.SmallTextStyle"
+        style="@style/AppTheme.SubTitleTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Liked this app, give some stars." />
+        android:textAlignment="center"
+        android:text="@string/rating_message" />
 </LinearLayout>

@@ -58,4 +58,6 @@
 
     <string name="share_text">Start learning a new word every day \nClick below link to download</string>
     <string name="google_app_url">https://play.google.com/store/apps/details?id=com.pramod.dailyword</string>
+    <string name="rating_title">Liked Daily Word?</string>
+    <string name="rating_message">If you liked my app, please take a moment to rate it on Google play store.</string>
 </resources>
