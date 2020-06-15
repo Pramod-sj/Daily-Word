@@ -16,6 +16,42 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import java.util.*
 
+
+fun Context.showBasicDialog(
+    title: String,
+    message: String,
+    positiveText: String?,
+    positiveClickCallback: (() -> Unit)?,
+    negativeText: String?,
+    negativeClickCallback: (() -> Unit)?,
+    neutralText: String?,
+    neutralClickCallback: (() -> Unit)?
+) {
+    val builder = MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+    positiveText?.let {
+        builder.setPositiveButton(positiveText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            positiveClickCallback?.invoke()
+        }
+    }
+    negativeText?.let {
+        builder.setNegativeButton(negativeText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            negativeClickCallback?.invoke()
+        }
+    }
+
+    neutralText?.let {
+        builder.setNeutralButton(neutralText) { dialogInterface: DialogInterface, i: Int ->
+            dialogInterface.dismiss()
+            neutralClickCallback?.invoke()
+        }
+    }
+    builder.create().show()
+}
+
 fun Context.showWebViewDialog(url: String) {
     val dialogWebviewLayoutBinding: DialogWebviewLayoutBinding = DataBindingUtil.inflate(
         LayoutInflater.from(this),

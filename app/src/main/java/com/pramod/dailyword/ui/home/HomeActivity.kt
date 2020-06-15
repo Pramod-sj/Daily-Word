@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.gson.Gson
+import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.SnackbarMessage
@@ -65,6 +66,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         //edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
         //showDummyNotification()
+        promptAutoStart()
     }
 
 
@@ -277,6 +279,36 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
             }
         })
+    }
+
+    private fun promptAutoStart() {
+        val autoStartPermissionHelper = AutoStartPermissionHelper.getInstance()
+        val autoStartPrefManager = AutoStartPrefManager.newInstance(this)
+        if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
+            if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
+                showBasicDialog(
+                    title = "Auto Start",
+                    message =
+                    if (!autoStartPrefManager.isClickedOnSetting())
+                        "Please enable auto start else notification feature won't work properly!"
+                    else
+                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                    positiveText = "Setting",
+                    positiveClickCallback = {
+                        autoStartPermissionHelper.getAutoStartPermission(this)
+                        autoStartPrefManager.clickedOnSetting()
+                    },
+                    negativeText = "Cancel",
+                    negativeClickCallback = {
+
+                    },
+                    neutralText = "Already Enabled",
+                    neutralClickCallback = {
+                        autoStartPrefManager.clickedOnAlreadyEnabled()
+                    }
+                )
+            }
+        }
     }
 
 
