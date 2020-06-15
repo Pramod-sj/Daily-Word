@@ -266,6 +266,7 @@
                             app:title="Material Design Icons" />
 
                         <com.pramod.dailyword.view.ITSCustomLayout
+                            android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:subTitle="Words are picked from Merriam Webster"

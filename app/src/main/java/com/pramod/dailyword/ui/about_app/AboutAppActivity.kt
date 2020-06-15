@@ -158,6 +158,11 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
                 openWebsite(resources.getString(R.string.app_credit_material_icon_url))
             }
         })
+        mViewModel.navigateToMerriamWebsterLiveData().observe(this, Observer {
+            it?.let {
+                openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
+            }
+        })
 
     }
 

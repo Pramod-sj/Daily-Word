@@ -25,7 +25,7 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
 
     private val navigateToFreePikWebsiteLiveData = MutableLiveData<Event<Boolean>>()
     private val navigateToFreeMaterialIconLiveData = MutableLiveData<Event<Boolean>>()
-
+    private val navigateToMerriamWebsterLiveData = MutableLiveData<Event<Boolean>>()
 
 
     override fun navigateToGithub() {
@@ -62,6 +62,10 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
 
     override fun navigateToMaterialDesignIcon() {
         navigateToFreeMaterialIconLiveData.value = Event.init(true)
+    }
+
+    override fun navigateToMerriamWebster() {
+        navigateToMerriamWebsterLiveData.value = Event.init(true)
     }
 
 
@@ -102,6 +106,8 @@ class AboutAppViewModel(application: Application) : BaseViewModel(application)
     fun navigateToFreepikLiveData(): LiveData<Event<Boolean>> = navigateToFreePikWebsiteLiveData
     fun navigateToMaterialIconLiveData(): LiveData<Event<Boolean>> =
         navigateToFreeMaterialIconLiveData
+    fun navigateToMerriamWebsterLiveData(): LiveData<Event<Boolean>> =
+        navigateToMerriamWebsterLiveData
 
     fun showTermAndConditionLiveData(): LiveData<Event<Boolean>> = showTermAndServiceLiveData
     fun showPrivacyPolicyLiveData(): LiveData<Event<Boolean>> = showPrivacyPolicyLiveData
@@ -132,4 +138,5 @@ interface OtherLinkNavigate {
 interface CreditLinkNavigate {
     fun navigateToFreePikWebsite()
     fun navigateToMaterialDesignIcon()
+    fun navigateToMerriamWebster()
 }
