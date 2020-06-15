@@ -47,6 +47,6 @@ class PrefManager(context: Context) {
         editor.putBoolean(NEVER_SHOW_RATING, true).commit()
     }
 
-    private fun isUserEverClickedOnNeverOrRateNow() = sPref.getBoolean(NEVER_SHOW_RATING, false)
+    private fun isUserEverClickedOnNeverOrRateNow() = !sPref.getBoolean(NEVER_SHOW_RATING, false)
 
 }
