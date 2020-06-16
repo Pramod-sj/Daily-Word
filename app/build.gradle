@@ -12,8 +12,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 202006141
-        versionName "1.0-BETA-02"
+        versionCode 202006151
+        versionName "1.0-BETA-03"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,8 +67,6 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.2.5'
 
     kapt "com.android.databinding:compiler:3.6.1"
-
-    implementation 'androidx.work:work-runtime-ktx:2.4.0-beta01'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha04'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha04'

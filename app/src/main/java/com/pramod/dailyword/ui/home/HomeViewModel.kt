@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.work.WorkInfo
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.repository.WOTDRepository

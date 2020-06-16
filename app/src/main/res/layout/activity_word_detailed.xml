@@ -9,6 +9,8 @@
 
         <import type="com.pramod.dailyword.util.CommonUtils" />
 
+        <import type="com.pramod.dailyword.R" />
+
         <variable
             name="wordDetailedViewModel"
             type="com.pramod.dailyword.ui.word_details.WordDetailedViewModel" />
@@ -108,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`How to use `+wordDetailedViewModel.wordOfTheDay.word}"
-                         android:textStyle="bold" />
+                        android:textStyle="bold" />
 
                     <TextView
                         style="@style/AppTheme.SmallTextStyle"
@@ -116,9 +118,25 @@
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}" />
                 </LinearLayout>
+
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_got_to_mw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/margin_large"
+            android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
+            android:text="@string/go_to_merriam_webster"
+            android:textColor="?android:attr/windowBackground"
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/ic_round_format_align_left_24"
+            app:iconTint="?android:attr/windowBackground" />
+
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"

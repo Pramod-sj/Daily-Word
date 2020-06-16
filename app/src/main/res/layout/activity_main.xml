@@ -204,6 +204,7 @@
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:clipToPadding="false"
+                    android:nestedScrollingEnabled="true"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/padding_small"

@@ -267,16 +267,17 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     var appUpdateHelper: AppUpdateHelper? = null
     private fun initAppUpdate() {
-        appUpdateHelper = AppUpdateHelper(this)
+        appUpdateHelper = AppUpdateHelper(applicationContext)
         appUpdateHelper?.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
             override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
+                Log.i("HomeActivity", "Update avaible")
                 appUpdateHelper?.startImmediateUpdate(appUpdateInfo) {
                     mViewModel.setMessage(SnackbarMessage.init(it))
                 }
             }
 
             override fun onUpdateNotAvailable() {
-
+                Log.i("HomeActivity", "You're up to date!")
             }
         })
     }
