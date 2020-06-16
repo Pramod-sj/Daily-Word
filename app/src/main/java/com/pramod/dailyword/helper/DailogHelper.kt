@@ -3,6 +3,7 @@ package com.pramod.dailyword.helper
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,35 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.AdapterView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
+import com.pramod.dailyword.ui.about_app.AboutAppActivity
 import java.util.*
 
+
+fun AboutAppActivity.showLib() {
+    val dialog = MaterialAlertDialogBuilder(this)
+        .setTitle("Open source libraries")
+        .setItems(R.array.libraries_name, null)
+        .create()
+    dialog.setOnShowListener {
+        Log.i("DIALOG", "dialog");
+        for (i in 0 until dialog.listView.count) {
+            val textView: TextView = dialog.listView[i].findViewById(android.R.id.text1)
+            textView.linksClickable = true
+            textView.movementMethod = LinkMovementMethod.getInstance()
+            textView.background = null
+        }
+    }
+    dialog.show()
+
+}
 
 fun Context.showBasicDialog(
     title: String,

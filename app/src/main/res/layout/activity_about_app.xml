@@ -125,7 +125,7 @@
                             android:onClick="@{()->aboutAppViewModel.openGooglePlayReview()}"
                             app:icon="@drawable/ic_outline_rate_review_24"
                             app:showRadioButton="false"
-                            app:subTitle="Give us your precious time to rate my app on google playstore"
+                            app:subTitle="Take a moment to rate my app on Google playstore"
                             app:title="Rate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
@@ -195,7 +195,7 @@
                             android:onClick="@{()->aboutAppViewModel.navigateToGmail()}"
                             app:icon="@drawable/ic_gmail"
                             app:showRadioButton="false"
-                            app:subTitle="Have an query drop a mail"
+                            app:subTitle="Have query drop a mail"
                             app:title="Gmail"
                             app:titleTextSize="@dimen/text_sub_title" />
 
@@ -266,9 +266,9 @@
                             app:title="Material Design Icons" />
 
                         <com.pramod.dailyword.view.ITSCustomLayout
-                            android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
                             app:subTitle="Words are picked from Merriam Webster"
                             app:title="Merriam Webster" />
 
@@ -337,6 +337,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColor_highEmphasis"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@string/made_in" />
             </LinearLayout>
@@ -362,8 +364,7 @@
                     style="@style/ToolbarTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_about"
-                    android:textColor="@color/textColor_highEmphasis" />
+                    android:text="@string/title_about"/>
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>

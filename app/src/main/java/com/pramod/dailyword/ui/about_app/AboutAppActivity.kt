@@ -102,7 +102,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     private fun setOthersLink() {
         mViewModel.showOpenSourceLibsLiveData().observe(this, Observer {
             it?.let {
-
+                showLib()
             }
         })
         mViewModel.showPrivacyPolicyLiveData().observe(this, Observer {
