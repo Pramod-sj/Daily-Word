@@ -10,12 +10,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.ui.BaseViewModel
+import com.pramod.dailyword.util.Event
 
 class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTheDay) :
     BaseViewModel(application) {
 
     private val showTitle = MutableLiveData<Boolean>().apply {
         value = false
+    }
+
+    private val navigateToMerriamWebster = MutableLiveData<Event<String>>()
+
+
+    fun navigateToWordMW(url: String) {
+        navigateToMerriamWebster.value = Event.init(url)
     }
 
     fun setTitleVisibility(show: Boolean) {
@@ -41,6 +49,7 @@ class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTh
         }
     }
 
+    fun navigateToMerriamWebster() : LiveData<Event<String>> = navigateToMerriamWebster
 
     class Factory(
         private val application: Application,

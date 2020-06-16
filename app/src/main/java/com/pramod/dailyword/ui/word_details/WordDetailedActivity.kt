@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.transition.ArcMotion
 import android.util.Log
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import androidx.core.view.marginBottom
 import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -15,6 +18,7 @@ import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.R
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.openWebsite
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
 
@@ -37,6 +41,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         super.onCreate(savedInstanceState)
         setUpToolbar()
         setNestedScrollListener()
+        setNavigateMW()
         arrangeViewsAccordingToEdgeToEdge()
     }
 
@@ -47,6 +52,14 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    private fun setNavigateMW() {
+        mViewModel.navigateToMerriamWebster().observe(this, Observer {
+            it.getContentIfNotHandled()?.let { url ->
+                openWebsite(url)
+            }
+        })
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
@@ -67,6 +80,18 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     0,
                     paddingBottom
                 )
+
+                val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
+                val layoutParam: CoordinatorLayout.LayoutParams =
+                    mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
+                layoutParam.setMargins(
+                    mBinding.fabGotToMw.left,
+                    mBinding.fabGotToMw.top,
+                    mBinding.fabGotToMw.right,
+                    fabMarginBottom
+                )
+                mBinding.fabGotToMw.layoutParams = layoutParam
+
                 insets
             }
         }
@@ -115,8 +140,12 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun setNestedScrollListener() {
         mBinding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
             val distanceToCover = mBinding.txtViewWordOfTheDay.height
-            Log.i("TEXTVIEW HEIGHT", distanceToCover.toString())
             mViewModel.setTitleVisibility(distanceToCover < oldScrollY)
+            if (oldScrollY < scrollY) {
+                mBinding.fabGotToMw.shrink()
+            } else {
+                mBinding.fabGotToMw.extend()
+            }
         }
     }
 }
