@@ -42,14 +42,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
                     0,
                     paddingBottom
                 )
-
-                mBinding.progress.setPadding(
-                    0,
-                    0,
-                    0,
-                    paddingBottom
-                )
-
                 insets
             }
         }

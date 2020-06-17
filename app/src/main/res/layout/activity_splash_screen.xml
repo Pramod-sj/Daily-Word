@@ -75,12 +75,5 @@
             android:text="Get Started"
             android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_margin="@dimen/margin_large"
-            android:visibility="@{PrefManager.getInstance(context).newUser?View.GONE:View.VISIBLE}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
