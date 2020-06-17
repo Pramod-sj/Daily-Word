@@ -268,7 +268,9 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:noIconColorTint="true"
                             android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
+                            app:icon="@drawable/merriam_webster_logo"
                             app:subTitle="Words are picked from Merriam Webster"
                             app:title="Merriam Webster" />
 
@@ -337,10 +339,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/textColor_highEmphasis"
                     android:layout_margin="@dimen/margin_medium"
-                    android:text="@string/made_in" />
+                    android:text="@string/made_in"
+                    android:textColor="@color/textColor_highEmphasis"
+                    android:textStyle="bold" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -364,7 +366,7 @@
                     style="@style/ToolbarTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_about"/>
+                    android:text="@string/title_about" />
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>

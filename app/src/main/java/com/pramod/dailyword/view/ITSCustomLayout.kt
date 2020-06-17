@@ -26,6 +26,7 @@ class ITSCustomLayout : LinearLayout {
     @DrawableRes
     private var icon = -1
     private var iconTintResId = -1
+    private var noIconTint = false
     private var showIconBackground = false
     private var iconBackgroundTintResId = -1
 
@@ -92,6 +93,8 @@ class ITSCustomLayout : LinearLayout {
         showIconBackground = a.getBoolean(R.styleable.ITSCustomLayout_showIconBackground, false)
         iconBackgroundTintResId =
             a.getResourceId(R.styleable.ITSCustomLayout_iconBackgroundTint, -1)
+        noIconTint =
+            a.getBoolean(R.styleable.ITSCustomLayout_noIconColorTint, false)
         titleTextSize = CommonUtils.pixelToSp(
             context,
             a.getDimensionPixelSize(
@@ -148,7 +151,7 @@ class ITSCustomLayout : LinearLayout {
     }
 
     private fun shouldShowBackgroundTint() {
-        if (showIconBackground) {
+        if (showIconBackground && !noIconTint) {
             val color =
                 if (iconTintResId != -1)
                     ContextCompat.getColor(context, iconTintResId)
@@ -190,13 +193,15 @@ class ITSCustomLayout : LinearLayout {
                     resId
                 )
             )
-            customItsLayoutBinding.imageIconCustomLayout.imageTintList =
-                if (iconTintResId != -1)
-                    ColorStateList.valueOf(ContextCompat.getColor(context, iconTintResId))
-                else
-                    ColorStateList.valueOf(
-                        ContextCompat.getColor(context, R.color.app_icon_tint)
-                    )
+            if(!noIconTint) {
+                customItsLayoutBinding.imageIconCustomLayout.imageTintList =
+                    if (iconTintResId != -1)
+                        ColorStateList.valueOf(ContextCompat.getColor(context, iconTintResId))
+                    else
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(context, R.color.app_icon_tint)
+                        )
+            }
             customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.VISIBLE
             shouldShowBackgroundTint()
         } else {

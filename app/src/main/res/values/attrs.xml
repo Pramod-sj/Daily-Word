@@ -6,6 +6,7 @@
         <attr name="subTitle" format="string|reference" />
         <attr name="icon" format="reference" />
         <attr name="iconColorTint" format="reference" />
+        <attr name="noIconColorTint" format="boolean" />
         <attr name="showRadioButton" format="boolean" />
         <attr name="iconBackgroundTint" format="boolean" />
         <attr name="showIconBackground" format="boolean" />

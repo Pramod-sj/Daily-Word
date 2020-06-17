@@ -31,8 +31,7 @@
                 <ImageView
                     android:id="@+id/imageIcon_custom_layout"
                     android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:tint="@color/grey_extra_dark" />
+                    android:layout_height="@dimen/icon_size" />
             </FrameLayout>
         </FrameLayout>
 
