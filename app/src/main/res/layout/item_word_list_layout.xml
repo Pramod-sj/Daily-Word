@@ -67,8 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:text="@{wordOfTheDay.word}"
-                android:textColor="@color/textColor_mediumEmphasis" />
+                android:text="@{wordOfTheDay.word}"/>
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"

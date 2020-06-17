@@ -92,7 +92,7 @@
 
 
     <style name="AppTheme.SubTitleTextStyle">
-        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textSize">@dimen/text_sub_title</item>
         <item name="android:textColor">@color/textColor_mediumEmphasis</item>
     </style>
 
