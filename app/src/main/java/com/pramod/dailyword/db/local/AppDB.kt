@@ -12,7 +12,7 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.util.ListConverter
 
 @TypeConverters(ListConverter::class)
-@Database(entities = [WordOfTheDay::class], version = 3, exportSchema = false)
+@Database(entities = [WordOfTheDay::class], version = 4, exportSchema = false)
 abstract class AppDB : RoomDatabase() {
 
     companion object {
@@ -43,11 +43,16 @@ abstract class AppDB : RoomDatabase() {
         }
 
 
-
         private object migration_1_2 : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN isSeen INTEGER NOT NULL DEFAULT 0")
                 database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN seenAtTimeInMillis INTEGER")
+            }
+        }
+
+        private object migration_2_3 : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN DID_YOU_KNOW TEXT")
             }
         }
     }

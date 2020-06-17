@@ -6,8 +6,7 @@ import android.transition.ArcMotion
 import android.util.Log
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.marginBottom
+import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
@@ -85,9 +84,9 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                 val layoutParam: CoordinatorLayout.LayoutParams =
                     mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
                 layoutParam.setMargins(
-                    mBinding.fabGotToMw.left,
-                    mBinding.fabGotToMw.top,
-                    mBinding.fabGotToMw.right,
+                    mBinding.fabGotToMw.marginLeft,
+                    mBinding.fabGotToMw.marginTop,
+                    mBinding.fabGotToMw.marginRight,
                     fabMarginBottom
                 )
                 mBinding.fabGotToMw.layoutParams = layoutParam

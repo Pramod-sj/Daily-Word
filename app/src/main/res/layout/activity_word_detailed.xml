@@ -54,6 +54,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-7dp"
+                    android:layout_marginBottom="-7dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -102,7 +104,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
                     android:orientation="vertical">
 
                     <TextView
@@ -113,13 +114,31 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@style/AppTheme.SmallTextStyle"
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{wordDetailedViewModel.wordOfTheDay.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}"
+                    android:orientation="vertical">
 
+                    <TextView
+                        style="@style/AppTheme.SubTitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/did_you_know"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/AppTheme.SubTitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{wordDetailedViewModel.wordOfTheDay.didYouKnow}" />
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

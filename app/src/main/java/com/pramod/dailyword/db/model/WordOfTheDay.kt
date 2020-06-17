@@ -1,11 +1,13 @@
 package com.pramod.dailyword.db.model
 
+import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
+@Keep
 @Entity
 class WordOfTheDay : Serializable {
     @PrimaryKey
@@ -24,6 +26,9 @@ class WordOfTheDay : Serializable {
 
     @SerializedName("DEFINATION")
     var meanings: List<String>? = null
+
+    @SerializedName("DID_YOU_KNOW")
+    var didYouKnow: String? = null
 
     @SerializedName("ATTRIBUTE")
     var attribute: String? = null
@@ -55,6 +60,7 @@ class WordOfTheDay : Serializable {
         if (date != other.date) return false
         if (dateTimeInMillis != other.dateTimeInMillis) return false
         if (isSeen != other.isSeen) return false
+        if (didYouKnow != other.didYouKnow) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
 
         return true

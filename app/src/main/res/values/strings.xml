@@ -73,6 +73,7 @@
     <string name="lib_material"><a href="https://www.github.com/judemanutd/AutoStarter">Autostarter</a> by Judemanutd</string>
     <string name="lib_retrofit"><a href="https://www.github.com/square/retrofit">Retrofit</a> by Square team</string>
     <string name="lib_room"><a href="https://developer.android.com/jetpack/androidx/releases/room">Room</a> from Jetpack</string>
+    <string name="did_you_know">Did you know?</string>
     <string-array name="libraries_name">
         <item>@string/lib_android_paging</item>
         <item>@string/lib_android_lifecycle</item>

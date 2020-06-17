@@ -79,7 +79,7 @@
                         android:text="@{CommonUtils.greetMessage + `, There!`}" />
 
                     <TextView
-                        style="@style/AppTheme.Header5TextStyle"
+                        style="@style/AppTheme.Header5TextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{CommonUtils.getColoredSpannedText(context,`Here is your Daily Word`,12,23,@color/colorPrimary)}" />
@@ -193,8 +193,7 @@
                             style="@style/AppTheme.SubTitleTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}"
-                            android:textSize="@dimen/text_sub_title" />
+                            android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -221,7 +220,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:onClick="@{()->mainViewModel.learnAll()}"
                     android:text="@string/learn_all"
-                    android:visibility="@{(mainViewModel.wordsExceptToday.size()==6)?View.VISIBLE:View.GONE}" />
+                    android:visibility="@{(mainViewModel.wordsExceptToday.size()>=6)?View.VISIBLE:View.GONE}" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
