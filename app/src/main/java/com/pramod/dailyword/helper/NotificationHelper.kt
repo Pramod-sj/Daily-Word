@@ -4,10 +4,13 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -18,7 +21,13 @@ import java.util.concurrent.atomic.AtomicInteger
 class NotificationHelper(val context: Context) : ContextWrapper(context) {
     private val notificationManager: NotificationManager =
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+    private val defaultVibrationPattern = longArrayOf(0, 250, 250, 250)
+    private val uri = Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+        .authority(applicationContext.packageName)
+        .path(R.raw.notification.toString())
+        .build()
+    /*val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)*/
 
     companion object {
         private const val TAG = "NotificationHelper"
@@ -44,10 +53,16 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
             NOTIFICATION_CHANNEL,
             DEFAULT_NOTIFICATION_TITLE, NotificationManager.IMPORTANCE_HIGH
         )
+        notificationChannel.importance = NotificationManager.IMPORTANCE_HIGH
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.BLUE
         notificationChannel.setShowBadge(true)
-        notificationChannel.setSound(uri, null)
+        notificationChannel.vibrationPattern = defaultVibrationPattern
+        val audioAttribute = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
+        notificationChannel.setSound(uri, audioAttribute)
         notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         notificationManager.createNotificationChannel(notificationChannel)
     }
@@ -68,6 +83,8 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         builder.setContentText(body)
         builder.setAutoCancel(cancelable)
         builder.setSound(uri)
+        builder.priority = Notification.PRIORITY_MAX
+        builder.setVibrate(defaultVibrationPattern)
         if (pendingIntent != null) {
             builder.setContentIntent(pendingIntent)
         }
