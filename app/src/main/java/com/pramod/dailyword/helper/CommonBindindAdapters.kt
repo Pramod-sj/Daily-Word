@@ -5,9 +5,14 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextSwitcher
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -28,14 +33,45 @@ class CommonBindindAdapters {
             imageView.setImageResource(drawableRes)
         }
 
+        @JvmStatic
+        @BindingAdapter("switchingText")
+        fun switchingText(textView: TextView, text: String?) {
+            text?.let {
+                if (textView.text == text) {
+                    textView.text = text
+                    return
+                }
+                val anim = AlphaAnimation(1f, 0f)
+                anim.duration = 200L
+                anim.repeatCount = 1
+                anim.repeatMode = Animation.REVERSE
+                anim.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation?) {
+                        Log.i("TEXT", it)
+                        textView.text = it
+                    }
+
+                    override fun onAnimationEnd(animation: Animation?) {
+
+                    }
+
+                    override fun onAnimationStart(animation: Animation?) {
+                    }
+
+                })
+                textView.startAnimation(anim)
+            }
+        }
 
         @JvmStatic
         @BindingAdapter("switchText")
         fun switchText(textView: TextView, text: String?) {
+            Log.d("TEXT", textView.text.toString() + "==" + text + ":TEXT")
             if (text == null) {
                 return
             }
             if (textView.text == text) {
+                textView.text = text
                 return
             }
             val colorStateList = textView.textColors
@@ -108,6 +144,18 @@ class CommonBindindAdapters {
         @BindingAdapter("hapticVibrate")
         fun hapticVibrate(view: View, vibrate: Boolean) {
             if (vibrate) view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        }
+
+
+        @JvmStatic
+        @BindingAdapter("applyTextSwitcherFadeAnim")
+        fun applyFadeAnimation(view: TextSwitcher, duration: Long) {
+            val fadeIn = AnimationUtils.loadAnimation(view.context, android.R.anim.fade_in)
+            fadeIn.duration = duration
+            val fadeOut = AnimationUtils.loadAnimation(view.context, android.R.anim.fade_out)
+            fadeOut.duration = duration
+            view.inAnimation = fadeIn
+            view.outAnimation = fadeOut
         }
     }
 }

@@ -65,24 +65,25 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/padding_medium"
-                    android:paddingBottom="@dimen/padding_medium">
+                    android:paddingBottom="@dimen/padding_small">
 
                     <TextView
                         android:id="@+id/toolbar_title"
                         style="@style/ToolbarTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{CommonUtils.greetMessage + `, There!`}" />
+                        android:text="@{`Hi, There!`}" />
 
                     <TextView
                         style="@style/AppTheme.Header5TextStyle.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{CommonUtils.getColoredSpannedText(context,`Here is your Daily Word`,12,23,@color/colorPrimary)}" />
+                        switchingText="@{mainViewModel.title()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                 </LinearLayout>
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -193,7 +194,7 @@
                             style="@style/AppTheme.SubTitleTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}"/>
+                            android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -203,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:nestedScrollingEnabled="true"
+                    android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/padding_small"

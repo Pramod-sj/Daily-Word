@@ -20,7 +20,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         WOTDRepository(application)
 
     private val title = MutableLiveData<String>().apply {
-        value = CommonUtils.getGreetMessage() + ", There!"
+        value = CommonUtils.getGreetMessage()
     }
 
     fun title(): LiveData<String> = title
@@ -48,8 +48,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
             if (it.status != Resource.Status.LOADING) {
                 Handler().postDelayed({
                     title.postValue(
-                        "Today's Word"
-
+                        "Here's your Daily Word"
                     )
                 }, 2000)
             }

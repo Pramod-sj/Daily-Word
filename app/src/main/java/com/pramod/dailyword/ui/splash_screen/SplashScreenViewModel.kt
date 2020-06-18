@@ -34,7 +34,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
                                 splashScreenSubText.postValue("Learn a new word every day!")
                                 enabledStartButton.postValue(true)
                             }, 1000
-                        );
+                        )
                     }, 2000)
                 } else {
                     Handler().postDelayed({

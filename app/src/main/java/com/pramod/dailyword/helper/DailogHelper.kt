@@ -29,7 +29,7 @@ fun AboutAppActivity.showLib() {
         .setItems(R.array.libraries_name, null)
         .create()
     dialog.setOnShowListener {
-        Log.i("DIALOG", "dialog");
+        Log.i("DIALOG", "dialog")
         for (i in 0 until dialog.listView.count) {
             val textView: TextView = dialog.listView[i].findViewById(android.R.id.text1)
             textView.linksClickable = true
