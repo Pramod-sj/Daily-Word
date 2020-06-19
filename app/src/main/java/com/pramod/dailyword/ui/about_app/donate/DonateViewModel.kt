@@ -9,7 +9,8 @@ class DonateViewModel(application: Application) : BaseViewModel(application) {
     val donateItemList = arrayListOf(
         DonateItem("cookie_", R.drawable.ic_cookie, "Cookie", 20),
         DonateItem("coffee_", R.drawable.ic_coffee_outline, "Coffee", 50),
-        DonateItem("gift_", R.drawable.ic_baseline_card_giftcard_24, "Gift", 150)
+        DonateItem("gift_", R.drawable.ic_baseline_card_giftcard_24, "Gift", 150),
+        DonateItem("server_", R.drawable.ic_server, "Server", 200)
     )
 }
 
