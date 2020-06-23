@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="androidx.core.content.ContextCompat" />
+
         <import type="com.pramod.dailyword.util.CalenderUtil" />
 
         <import type="android.view.View" />
@@ -127,8 +129,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-7dp"
-                        android:layout_marginBottom="-7dp"
                         android:clipChildren="false"
                         android:clipToPadding="false"
                         android:gravity="center_vertical"
@@ -155,17 +155,18 @@
                             android:layout_height="wrap_content"
                             android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        <ImageButton
                             android:id="@+id/main_card_view_pronounce"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_small"
+                            android:layout_marginHorizontal="@dimen/padding_medium"
+                            android:background="@drawable/background_circle_ripple"
+                            android:backgroundTint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)),30):@color/colorPrimary}"
                             android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
+                            android:padding="@dimen/padding_medium"
                             android:src="@drawable/ic_volume_up_black_24dp"
-                            app:backgroundTint="?android:attr/windowBackground"
-                            app:elevation="@dimen/card_elevation_min"
-                            app:fabSize="mini"
-                            app:tint="@color/app_icon_tint" />
+                            android:tint="@{mainViewModel.todaysWordOfTheDay!=null?ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)):@color/colorPrimary}" />
+
                     </LinearLayout>
 
                     <TextView
