@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,6 +15,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordListBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
+import com.pramod.dailyword.helper.DividerItemDecoration
 import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
@@ -89,6 +91,12 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         mViewModel.networkState.observe(this, Observer {
             adapter.setNetworkState(it)
         })
+        mBinding.recyclerviewWords.addItemDecoration(
+            androidx.recyclerview.widget.DividerItemDecoration(
+                this,
+                (mBinding.recyclerviewWords.layoutManager as LinearLayoutManager).orientation
+            )
+        )
     }
 
     private fun initExitTransition() {
