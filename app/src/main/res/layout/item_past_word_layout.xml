@@ -23,21 +23,19 @@
 
     </data>
 
-    <RelativeLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:background="@drawable/background_home_word"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingTop="@dimen/padding_medium"
-        android:paddingEnd="@dimen/padding_large"
-        android:paddingBottom="@dimen/padding_medium">
+        app:cardCornerRadius="25dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/padding_small">
+            android:paddingHorizontal="@dimen/padding_large"
+            android:paddingVertical="@dimen/padding_large">
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"
@@ -56,5 +54,5 @@
                 android:transitionName="CONTAINER" />
 
         </LinearLayout>
-    </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
