@@ -4,6 +4,8 @@ import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.transition.ArcMotion
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
@@ -18,6 +20,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.helper.openWebsite
+import com.pramod.dailyword.helper.shareApp
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
 
@@ -39,6 +42,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         initEnterAndReturnTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
+        setUpExampleRecyclerView()
+        setUpDefinationRecyclerView()
         setNestedScrollListener()
         setNavigateMW()
         arrangeViewsAccordingToEdgeToEdge()
@@ -51,6 +56,24 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    private fun setUpExampleRecyclerView() {
+        val adapter = ExampleAdapter(
+            mViewModel.wordOfTheDay.examples,
+            mViewModel.wordOfTheDay.wordColor,
+            mViewModel.wordOfTheDay.wordDesaturatedColor
+        )
+        mBinding.wordDetailedExamplesRecyclerview.adapter = adapter
+    }
+
+    private fun setUpDefinationRecyclerView() {
+        val adapter = DefinationAdapter(
+            mViewModel.wordOfTheDay.meanings,
+            mViewModel.wordOfTheDay.wordColor,
+            mViewModel.wordOfTheDay.wordDesaturatedColor
+        )
+        mBinding.wordDetailedDefinationsRecyclerview.adapter = adapter
     }
 
     private fun setNavigateMW() {
@@ -138,13 +161,26 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     private fun setNestedScrollListener() {
         mBinding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
-            val distanceToCover = mBinding.txtViewWordOfTheDay.height
+            val distanceToCover =
+                mBinding.txtViewWordOfTheDay.height + mBinding.txtViewWordOfTheDayDate.height
             mViewModel.setTitleVisibility(distanceToCover < oldScrollY)
-            if (oldScrollY < scrollY) {
-                mBinding.fabGotToMw.shrink()
-            } else {
-                mBinding.fabGotToMw.extend()
-            }
+            /*  if (oldScrollY < scrollY) {
+                  mBinding.fabGotToMw.shrink()
+              } else {
+                  mBinding.fabGotToMw.extend()
+              }*/
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.word_detail_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_share_word -> shareApp()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

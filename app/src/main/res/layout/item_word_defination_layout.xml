@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <variable
+            name="colorResId"
+            type="Integer" />
+
+        <variable
+            name="desaturatedColorResId"
+            type="Integer" />
+
+        <variable
+            name="srNo"
+            type="Integer" />
+
+        <variable
+            name="defination"
+            type="String" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/padding_small">
+
+        <!--
+                <TextView
+                    android:id="@+id/word_example_sr_no"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/background_curve"
+                    android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?desaturatedColorResId:colorResId)),30)}"
+                    android:gravity="center"
+                    android:text="@{String.valueOf(srNo)}"
+                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}" />
+        -->
+
+        <View
+            android:id="@+id/word_example_dot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/background_circle"
+            android:backgroundTint="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}"
+            android:layout_marginHorizontal="@dimen/padding_medium" />
+
+        <TextView
+            style="@style/AppTheme.TitleTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/word_example_dot"
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:text="@{defination}" />
+    </RelativeLayout>
+</layout>

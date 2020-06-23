@@ -11,6 +11,10 @@
 
         <import type="com.pramod.dailyword.R" />
 
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
         <variable
             name="wordDetailedViewModel"
             type="com.pramod.dailyword.ui.word_details.WordDetailedViewModel" />
@@ -38,8 +42,25 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
+                android:paddingVertical="@dimen/padding_small"
                 android:paddingStart="@dimen/margin_large"
                 android:paddingEnd="@dimen/margin_large">
+
+                <TextView
+                    android:id="@+id/txtView_word_of_the_day_date"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_home_word"
+                    android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor)),30)}"
+                    android:ellipsize="marquee"
+                    android:paddingHorizontal="@dimen/padding_medium"
+                    android:paddingVertical="@dimen/padding_small"
+                    android:singleLine="true"
+                    android:text="@{CalenderUtil.convertDateStringToSpecifiedDateString(wordDetailedViewModel.wordOfTheDay.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+` - Merriam Webster Word`}"
+                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}"
+                    android:textStyle="bold"
+                    app:selected="@{true}" />
 
                 <TextView
                     android:id="@+id/txtView_word_of_the_day"
@@ -47,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:paddingTop="@dimen/padding_small"
                     android:singleLine="true"
                     android:text="@{wordDetailedViewModel.wordOfTheDay.word}"
                     android:textStyle="bold" />
@@ -54,8 +76,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:layout_marginBottom="-7dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -80,54 +100,60 @@
                         android:layout_height="wrap_content"
                         android:text="@{wordDetailedViewModel.wordOfTheDay.pronounce}" />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    <ImageButton
                         android:id="@+id/main_card_view_pronounce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/padding_medium"
+                        android:background="@drawable/background_circle_ripple"
+                        android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor)),30)}"
                         android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDay.pronounceAudio)}"
+                        android:padding="@dimen/padding_medium"
                         android:src="@drawable/ic_volume_up_black_24dp"
-                        app:backgroundTint="?android:attr/windowBackground"
-                        app:elevation="@dimen/card_elevation_min"
-                        app:fabSize="mini"
-                        app:tint="@color/app_icon_tint"
-                        app:useCompatPadding="true" />
+                        android:tint="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}" />
+
                 </LinearLayout>
 
-                <TextView
-                    style="@style/AppTheme.TitleTextStyle"
-                    android:layout_width="wrap_content"
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/word_detailed_definations_recyclerview"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.meanings,`\n`)}" />
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:paddingVertical="@dimen/padding_small"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/AppTheme.SubTitleTextStyle"
+                        style="@style/AppTheme.TitleTextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`How to use `+wordDetailedViewModel.wordOfTheDay.word}"
                         android:textStyle="bold" />
 
-                    <TextView
-                        style="@style/AppTheme.SubTitleTextStyle"
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/word_detailed_examples_recyclerview"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{CommonUtils.formattedListToString(wordDetailedViewModel.wordOfTheDay.examples,`\n`)}" />
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:paddingVertical="@dimen/padding_small"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{wordDetailedViewModel.wordOfTheDay.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="@{wordDetailedViewModel.wordOfTheDay.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}">
 
                     <TextView
-                        style="@style/AppTheme.SubTitleTextStyle"
+                        style="@style/AppTheme.TitleTextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/did_you_know"
@@ -147,14 +173,16 @@
             android:id="@+id/fab_got_to_mw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="@dimen/margin_large"
+            android:height="56dp"
             android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
             android:text="@string/go_to_merriam_webster"
             android:textColor="?android:attr/windowBackground"
             app:backgroundTint="@color/colorPrimary"
             app:icon="@drawable/ic_round_format_align_left_24"
-            app:iconTint="?android:attr/windowBackground" />
+            app:iconTint="?android:attr/windowBackground"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
 
         <com.google.android.material.appbar.AppBarLayout
