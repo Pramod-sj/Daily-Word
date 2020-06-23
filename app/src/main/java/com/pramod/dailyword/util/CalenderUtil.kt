@@ -6,6 +6,7 @@ import java.util.*
 class CalenderUtil {
     companion object {
         const val DATE_FORMAT_DISPLAY = "dd MMM"
+        const val DATE_WITH_YEAR_FORMAT_DISPLAY = "dd MMM YY"
         const val DATE_FORMAT = "yyyy-MM-dd"
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
 

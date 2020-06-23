@@ -193,6 +193,10 @@ class CommonUtils {
         fun pixelToDp(context: Context, pixel: Float): Float =
             pixel / context.resources.displayMetrics.density
 
+        @JvmStatic
+        fun dpToPixel(context: Context, dp: Float): Float =
+            dp * context.resources.displayMetrics.density * 0.5f
+
 
         @JvmStatic
         fun calculateActionBarHeight(context: Context): Int {

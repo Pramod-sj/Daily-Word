@@ -15,6 +15,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.DEFAULT_SOUND
+import androidx.core.app.NotificationCompat.DEFAULT_VIBRATE
 import com.pramod.dailyword.R
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -80,10 +82,11 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         )
         builder.setSmallIcon(R.drawable.ic_notification)
         builder.setContentTitle(title)
+        builder.setDefaults(DEFAULT_SOUND + DEFAULT_VIBRATE)
         builder.setContentText(body)
         builder.setAutoCancel(cancelable)
         builder.setSound(uri)
-        builder.priority = Notification.PRIORITY_MAX
+        builder.priority = NotificationCompat.PRIORITY_MAX
         builder.setVibrate(defaultVibrationPattern)
         if (pendingIntent != null) {
             builder.setContentIntent(pendingIntent)

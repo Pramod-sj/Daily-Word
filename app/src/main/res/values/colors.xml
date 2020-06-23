@@ -92,7 +92,7 @@
 
 
     <!--days colors-->
-    <color name="color_sun">@color/yellow_600</color>
+    <color name="color_sun">@color/blue_600</color>
     <color name="color_mon">@color/orange_600</color>
     <color name="color_tue">@color/deepOrange_600</color>
     <color name="color_wed">@color/red_600</color>
@@ -103,7 +103,7 @@
 
 
     <!--days desaturated colors-->
-    <color name="desaturated_color_sun">@color/yellow_100</color>
+    <color name="desaturated_color_sun">@color/blue_200</color>
     <color name="desaturated_color_mon">@color/orange_200</color>
     <color name="desaturated_color_tue">@color/deepOrange_200</color>
     <color name="desaturated_color_wed">@color/red_200</color>
