@@ -67,7 +67,7 @@
                     app:iconColorTint="@color/notification_icon_tint"
                     app:showIconBackground="true"
                     app:showRadioButton="true"
-                    app:subTitle="@{appSettingViewModel.notificationPrefManager.liveData?`notifications is enabled`:`notifications is disabled`}"
+                    app:subTitle="@{appSettingViewModel.notificationPrefManager.liveData?`Notifications is enabled`:`Notifications is disabled`}"
                     app:title="Notification"
                     app:titlePaddingStart="@dimen/margin_small" />
 
@@ -79,7 +79,7 @@
                     app:iconColorTint="@color/about_icon_tint"
                     app:showIconBackground="true"
                     app:showRadioButton="false"
-                    app:subTitle="links, developer, license, others"
+                    app:subTitle="Links, developer, license, others"
                     app:title="About"
                     app:titlePaddingStart="@dimen/margin_small" />
 
