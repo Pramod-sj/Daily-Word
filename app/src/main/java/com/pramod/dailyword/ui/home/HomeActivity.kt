@@ -69,6 +69,10 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         promptAutoStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+        pastWordAdapter?.setCanStartActivity(true)
+    }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
         if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
@@ -153,7 +157,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
         mViewModel.getWordsExceptToday().observe(this, Observer {
             it?.let { words ->
-                pastWordAdapter.setWords(words)
+                pastWordAdapter.submitList(words)
             }
         })
         mViewModel.observeNavigateToWordDetailedEvent().observe(this, Observer {

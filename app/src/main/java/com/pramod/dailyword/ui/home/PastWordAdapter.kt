@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemPastWordLayoutBinding
@@ -11,16 +12,12 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 
 class PastWordAdapter(
     val onItemClickCallback: (Int, WordOfTheDay) -> Unit
-) : RecyclerView.Adapter<PastWordAdapter.WordViewHolder>() {
-    private val words: MutableList<WordOfTheDay> = ArrayList()
+) : ListAdapter<WordOfTheDay, PastWordAdapter.WordViewHolder>(diffCallback) {
+    private var canStartActivity = true
 
-    fun setWords(words: List<WordOfTheDay>) {
-        val result = DiffUtil.calculateDiff(WordDiffCallback(this.words, words))
-        result.dispatchUpdatesTo(this)
-        this.words.clear()
-        this.words.addAll(words)
+    fun setCanStartActivity(canStart: Boolean) {
+        canStartActivity = canStart
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val binding: ItemPastWordLayoutBinding = DataBindingUtil.inflate(
@@ -33,45 +30,50 @@ class PastWordAdapter(
         return WordViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return words.size
-    }
-
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.binding.wordOfTheDay = words[position]
+        holder.binding.wordOfTheDay = getItem(position)
         holder.binding.position = position
+        holder.setUpListener(position)
         holder.binding.executePendingBindings()
     }
 
 
     inner class WordViewHolder(val binding: ItemPastWordLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
+
+        fun setUpListener(position: Int) {
             binding.root.setOnClickListener {
-                onItemClickCallback.invoke(
-                    layoutPosition,
-                    words[layoutPosition]
-                )
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    onItemClickCallback.invoke(
+                        position,
+                        getItem(position)
+                    )
+                }
             }
         }
     }
 
-    class WordDiffCallback(
-        private val oldList: List<WordOfTheDay>?,
-        private val newList: List<WordOfTheDay>?
-    ) : DiffUtil.Callback() {
 
-        override fun getOldListSize(): Int = oldList?.size ?: 0
+    companion object {
+        private val diffCallback =
+            object : DiffUtil.ItemCallback<WordOfTheDay>() {
+                override fun areItemsTheSame(
+                    oldItem: WordOfTheDay,
+                    newItem: WordOfTheDay
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-        override fun getNewListSize(): Int = newList?.size ?: 0
+                override fun areContentsTheSame(
+                    oldItem: WordOfTheDay,
+                    newItem: WordOfTheDay
+                ): Boolean {
+                    return oldItem == newItem
+                }
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList!![oldItemPosition].date == newList!![newItemPosition].date
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList!![oldItemPosition] == newList!![newItemPosition]
+            }
     }
-
 
 }
 

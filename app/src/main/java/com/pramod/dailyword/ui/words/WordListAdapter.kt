@@ -25,13 +25,21 @@ class WordListAdapter(
 ) :
     PagedListAdapter<WordOfTheDay, RecyclerView.ViewHolder>(diffCallback) {
     private var networkState: NetworkState? = null
+    private var canStartActivity = false
+
+    fun setCanStartActivity(canStart: Boolean) {
+        canStartActivity = canStart
+    }
 
     inner class WordViewHolder(private val binding: ItemWordListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int, word: WordOfTheDay?) {
             binding.wordOfTheDay = word
             binding.itemWordListCardView.setOnClickListener {
-                itemClickCallback?.invoke(position, word!!)
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    itemClickCallback?.invoke(position, word!!)
+                }
             }
             binding.executePendingBindings()
         }

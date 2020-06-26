@@ -52,6 +52,11 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         arrangeViewsAccordingToEdgeToEdge()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter?.setCanStartActivity(true)
+    }
+
     private fun setUpToolbar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.let {
@@ -61,8 +66,9 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
+    private var adapter: WordListAdapter? = null
     private fun initAdapter() {
-        val adapter = WordListAdapter({ i: Int, wordOfTheDay: WordOfTheDay ->
+        adapter = WordListAdapter({ i: Int, wordOfTheDay: WordOfTheDay ->
             val view = mBinding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this@WordListActivity,
@@ -79,7 +85,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         })
         mBinding.wordListAdapter = adapter
         mViewModel.words.observe(this, Observer {
-            adapter.submitList(it).apply {
+            adapter?.submitList(it).apply {
                 val layoutManager =
                     (mBinding.recyclerviewWords.layoutManager as LinearLayoutManager)
                 val position = layoutManager.findFirstCompletelyVisibleItemPosition()
@@ -89,7 +95,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
             }
         })
         mViewModel.networkState.observe(this, Observer {
-            adapter.setNetworkState(it)
+            adapter?.setNetworkState(it)
         })
         mBinding.recyclerviewWords.addItemDecoration(
             androidx.recyclerview.widget.DividerItemDecoration(
