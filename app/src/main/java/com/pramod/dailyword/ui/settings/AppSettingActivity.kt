@@ -83,9 +83,11 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                     this@AppSettingActivity,
                     "Choose App Theme",
                     R.array.theme_options,
-                    option.name
-                ) { optionString ->
-                    mViewModel.changeThemePref(ThemeManager.Options.valueOf(optionString))
+                    option.name,
+                    "Apply",
+                    "Cancel"
+                ) { selectedThemeText ->
+                    mViewModel.changeThemePref(ThemeManager.Options.valueOf(selectedThemeText))
                 }
             }
         })

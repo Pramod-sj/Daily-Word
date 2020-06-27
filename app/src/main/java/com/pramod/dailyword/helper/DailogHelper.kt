@@ -151,7 +151,9 @@ class DailogHelper {
             title: String,
             arrayResId: Int,
             selectedItem: String,
-            itemSelectedCallback: (String) -> Unit
+            positionText: String?,
+            negativeText: String?,
+            positiveClickCallback: ((String) -> Unit)?
         ) {
             val items = context.resources.getStringArray(arrayResId)
             var selectedItemIndex = -1
@@ -163,15 +165,27 @@ class DailogHelper {
                 }
             }
 
-            val dialog = MaterialAlertDialogBuilder(context)
+            val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setSingleChoiceItems(
                     items,
                     selectedItemIndex
-                ) { dialogInterface: DialogInterface, i: Int ->
-                    dialogInterface.dismiss()
-                    itemSelectedCallback.invoke(items[i].toUpperCase())
+                )
+                { dialogInterface: DialogInterface, i: Int ->
+                    selectedItemIndex = i
                 }
+            positionText?.let {
+                dialog.setPositiveButton(it) { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.dismiss()
+                    positiveClickCallback?.invoke(items[selectedItemIndex].toUpperCase())
+                }
+            }
+            negativeText?.let {
+                dialog.setNegativeButton(negativeText) { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.dismiss()
+                }
+            }
+
             dialog.show()
         }
     }
