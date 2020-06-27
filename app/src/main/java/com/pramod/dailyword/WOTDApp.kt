@@ -13,7 +13,7 @@ class WOTDApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        ThemeManager.applyTheme(ThemeManager.getDefaultThemeOption())
+        ThemeManager.newInstance(this).applyTheme()
 
         if (Thread.getDefaultUncaughtExceptionHandler() !is CustomExceptionHandler) {
             Thread.setDefaultUncaughtExceptionHandler(CustomExceptionHandler(this))

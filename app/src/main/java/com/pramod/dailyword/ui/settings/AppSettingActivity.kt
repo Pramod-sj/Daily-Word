@@ -85,11 +85,12 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                     R.array.theme_options,
                     option.name
                 ) { optionString ->
-                    mViewModel.changeThemePref(
-                        ThemeManager.Options.valueOf(optionString)
-                    )
+                    mViewModel.changeThemePref(ThemeManager.Options.valueOf(optionString))
                 }
             }
+        })
+        mViewModel.themeManager.liveData().observe(this, Observer {
+            mViewModel.applyTheme(ThemeManager.Options.values()[it])
         })
     }
 

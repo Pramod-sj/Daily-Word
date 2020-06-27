@@ -17,9 +17,7 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
 
     val notificationPrefManager = NotificationPrefManager.newInstance(application)
 
-    private val themeOption = MutableLiveData<String>().apply {
-        value = ThemeManager.getDefaultThemeOption().name
-    }
+    val themeManager = ThemeManager.newInstance(application)
 
     private val showThemeSelector = MutableLiveData<Event<ThemeManager.Options>>()
 
@@ -29,13 +27,17 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
     private val recreateActivity = MutableLiveData<Event<Boolean>>()
 
     fun showThemeSelector() {
-        showThemeSelector.value = Event.init(ThemeManager.getDefaultThemeOption())
+        showThemeSelector.value = Event.init(themeManager.getDefaultThemeModeOption())
     }
 
     fun changeThemePref(option: ThemeManager.Options) {
-        ThemeManager.applyTheme(option)
-        themeOption.value = option.name
+        themeManager.setDefaultThemeMode(option)
     }
+
+    fun applyTheme(option: ThemeManager.Options) {
+        themeManager.applyTheme(option);
+    }
+
 
     fun toggleEdgeToEdge() {
         windowPrefManager.toggleEdgeToEdgeEnabled()
@@ -54,7 +56,6 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
         recreateActivity.value = Event.init(true)
     }
 
-    fun themeOption(): LiveData<String> = themeOption
     fun getShowThemeSelector(): LiveData<Event<ThemeManager.Options>> = showThemeSelector
     fun navigateToAbout(): LiveData<Event<Boolean>> = navigateToAbout
     fun recreateActivity(): LiveData<Event<Boolean>> = recreateActivity
