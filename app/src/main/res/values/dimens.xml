@@ -31,11 +31,13 @@
 
     <!--Card Style-->
     <dimen name="card_radius_max">10dp</dimen>
+    <dimen name="card_elevation_max">5dp</dimen>
 
     <dimen name="card_radius">5dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
 
     <dimen name="card_elevation_min">2dp</dimen>
+    <dimen name="card_no_elevation">0dp</dimen>
     <!--icon size-->
     <dimen name="icon_size">24dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

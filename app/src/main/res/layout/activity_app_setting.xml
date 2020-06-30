@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
+
         <import type="com.pramod.dailyword.util.CommonUtils" />
 
         <import type="com.pramod.dailyword.helper.PrefManager" />
@@ -41,7 +43,7 @@
                     app:icon="@drawable/ic_outline_theme_24"
                     app:iconColorTint="@color/app_theme_icon_tint"
                     app:showIconBackground="true"
-                    app:subTitle="@{CommonUtils.capitalizeFirstLetter(appSettingViewModel.themeOption())}"
+                    app:subTitle="@{CommonUtils.capitalizeFirstLetter(ThemeManager.getThemeNameFromOrdinal(appSettingViewModel.themeManager.liveData))}"
                     app:title="Theme"
                     app:titlePaddingStart="@dimen/margin_small" />
 
