@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordListBinding
@@ -45,6 +47,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        lightStatusBar()
         initExitTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
@@ -85,11 +88,12 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         })
         mBinding.wordListAdapter = adapter
         mViewModel.words.observe(this, Observer {
+            Log.i("DATA", it.size.toString())
             adapter?.submitList(it).apply {
                 val layoutManager =
                     (mBinding.recyclerviewWords.layoutManager as LinearLayoutManager)
                 val position = layoutManager.findFirstCompletelyVisibleItemPosition()
-                if (position == RecyclerView.NO_POSITION) {
+                if (position != RecyclerView.NO_POSITION) {
                     mBinding.recyclerviewWords.scrollToPosition(position)
                 }
             }
@@ -97,12 +101,12 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         mViewModel.networkState.observe(this, Observer {
             adapter?.setNetworkState(it)
         })
-        mBinding.recyclerviewWords.addItemDecoration(
+        /*mBinding.recyclerviewWords.addItemDecoration(
             androidx.recyclerview.widget.DividerItemDecoration(
                 this,
                 (mBinding.recyclerviewWords.layoutManager as LinearLayoutManager).orientation
             )
-        )
+        )*/
     }
 
     private fun initExitTransition() {
