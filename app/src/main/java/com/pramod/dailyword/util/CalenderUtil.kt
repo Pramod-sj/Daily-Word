@@ -6,7 +6,7 @@ import java.util.*
 class CalenderUtil {
     companion object {
         const val DATE_FORMAT_DISPLAY = "dd MMM"
-        const val DATE_WITH_YEAR_FORMAT_DISPLAY = "dd MMM YY"
+        const val DATE_WITH_YEAR_FORMAT_DISPLAY = "dd MMM yy"
         const val DATE_FORMAT = "yyyy-MM-dd"
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
 
@@ -21,7 +21,7 @@ class CalenderUtil {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
-                val calender = Calendar.getInstance()
+                val calender = Calendar.getInstance(Locale.US)
                 calender.time = date
                 return calender
             }
@@ -45,21 +45,21 @@ class CalenderUtil {
 
         @JvmStatic
         fun isYesterday(dateString: String, dateFormat: String = DATE_FORMAT): Boolean {
-            val cal: Calendar = Calendar.getInstance()
+            val cal: Calendar = Calendar.getInstance(Locale.US)
             cal.roll(Calendar.DATE, false)
             return convertCalenderToString(cal, dateFormat) == dateString
         }
 
         @JvmStatic
         fun isToday(dateString: String, dateFormat: String = DATE_FORMAT): Boolean {
-            val cal: Calendar = Calendar.getInstance()
+            val cal: Calendar = Calendar.getInstance(Locale.US)
             return convertCalenderToString(cal, dateFormat) == dateString
         }
 
 
         @JvmStatic
         fun createCalendarForHourOfDayAndMin(hourOfDay: Int, minute: Int = 0): Calendar {
-            val calender = Calendar.getInstance()
+            val calender = Calendar.getInstance(Locale.US)
             calender.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calender.set(Calendar.MINUTE, minute)
             calender.set(Calendar.SECOND, 0)
@@ -70,7 +70,7 @@ class CalenderUtil {
         fun getDayFromDateString(date: String, format: String): String {
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
-                return SimpleDateFormat("dd", Locale.getDefault()).format(calendar.time)
+                return SimpleDateFormat("dd", Locale.US).format(calendar.time)
             }
             return date.substring(0, 2)
         }
@@ -80,7 +80,7 @@ class CalenderUtil {
         fun getMonthFromDateString(date: String, format: String): String {
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
-                return SimpleDateFormat("MMM", Locale.getDefault()).format(calendar.time)
+                return SimpleDateFormat("MMM", Locale.US).format(calendar.time)
             }
             return date.substring(2, 5)
         }
