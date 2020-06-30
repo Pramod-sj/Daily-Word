@@ -7,8 +7,6 @@
 
         <import type="com.pramod.dailyword.util.CalenderUtil" />
 
-        <import type="java.util.Calendar" />
-
         <import type="com.pramod.dailyword.db.model.WordOfTheDay" />
 
         <import type="com.pramod.dailyword.ui.home.SelectedItem" />

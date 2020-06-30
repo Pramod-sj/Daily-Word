@@ -54,6 +54,8 @@ class PastWordAdapter(
         }
     }
 
+    fun canStart() = canStartActivity
+
 
     companion object {
         private val diffCallback =
