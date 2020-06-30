@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.paging.DataSource
+import androidx.paging.ItemKeyedDataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.pramod.dailyword.db.local.AppDB
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.Executor
@@ -33,31 +36,17 @@ class PaginationWordRepository(
     private val apiService = NetworkUtils.getWOTDApiService()
     private val appDB = AppDB.getInstance(application)
 
+/*
     private fun insertWordsIntoDb(
         words: List<WordOfTheDay>
     ) {
         appDB!!.runInTransaction {
             GlobalScope.launch(Dispatchers.IO) {
-                if (words.isNotEmpty()) {
-                    for (i: WordOfTheDay in words) {
-                        i.date?.let { date ->
-                            val cal = CalenderUtil.convertStringToCalender(
-                                date,
-                                CalenderUtil.DATE_FORMAT
-                            )
-                            i.dateTimeInMillis = cal?.timeInMillis
-
-                            val dayColor = CommonUtils.getColorBasedOnDay(cal)
-                            i.wordColor = dayColor[0]
-                            i.wordDesaturatedColor = dayColor[1]
-                        }
-                    }
-                    appDB.getWordOfTheDayDao().addAll(words)
-                }
             }
 
         }
     }
+*/
 
 
     private fun refreshAllWord(): LiveData<NetworkState> {
@@ -67,7 +56,7 @@ class PaginationWordRepository(
             .enqueue(object : Callback<ApiResponse<List<WordOfTheDay>>> {
                 override fun onFailure(call: Call<ApiResponse<List<WordOfTheDay>>>, t: Throwable) {
                     when (t) {
-                        is UnknownHostException -> {
+                        is ConnectException, is UnknownHostException -> {
                             networkState.value =
                                 NetworkState.error("You don't have a proper internet connection")
                         }
@@ -92,8 +81,26 @@ class PaginationWordRepository(
                                 appDB!!.runInTransaction {
                                     GlobalScope.launch(Dispatchers.IO) {
                                         appDB.getWordOfTheDayDao().deleteAll()
-                                        if (apiResponse.data != null) {
-                                            insertWordsIntoDb(apiResponse.data!!)
+                                        apiResponse.data?.let { words ->
+                                            if (words.isNotEmpty()) {
+                                                for (i: WordOfTheDay in words) {
+                                                    i.date?.let { date ->
+                                                        val cal =
+                                                            CalenderUtil.convertStringToCalender(
+                                                                date,
+                                                                CalenderUtil.DATE_FORMAT
+                                                            )
+                                                        i.dateTimeInMillis = cal?.timeInMillis
+
+                                                        val dayColor =
+                                                            CommonUtils.getColorBasedOnDay(cal)
+                                                        i.wordColor = dayColor[0]
+                                                        i.wordDesaturatedColor = dayColor[1]
+                                                    }
+                                                }
+                                                appDB.getWordOfTheDayDao().addAll(words)
+                                            }
+                                            //insertWordsIntoDb(apiResponse.data!!)
                                         }
                                     }
                                 }
@@ -117,7 +124,7 @@ class PaginationWordRepository(
             .setEnablePlaceholders(false)
             .build()
         val boundaryCallback = WordBoundaryCallback(
-            apiService, appDB!!, pageSize, Executors.newSingleThreadExecutor()
+            apiService, appDB!!, pageSize, executor
         )
 
         val refreshTrigger = MutableLiveData<Unit>()
@@ -130,7 +137,6 @@ class PaginationWordRepository(
             appDB.getWordOfTheDayDao().getAll()
             , pagedListConfig
         ).setBoundaryCallback(boundaryCallback).build()
-
         return Listing(
             pagedList = livePagedList,
             networkState = boundaryCallback.networkState,
@@ -143,5 +149,4 @@ class PaginationWordRepository(
             refreshState = refreshState
         )
     }
-
 }

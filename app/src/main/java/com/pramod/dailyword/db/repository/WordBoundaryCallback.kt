@@ -33,7 +33,6 @@ class WordBoundaryCallback(
     val networkState = paginationHelper.createStatusLiveData()
 
     override fun onZeroItemsLoaded() {
-        super.onZeroItemsLoaded()
         paginationHelper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
             apiService.getWords(
                 limit = pageSize
@@ -42,7 +41,6 @@ class WordBoundaryCallback(
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: WordOfTheDay) {
-        super.onItemAtEndLoaded(itemAtEnd)
         Log.i(TAG, itemAtEnd.date)
         paginationHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
 

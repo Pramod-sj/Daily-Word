@@ -15,6 +15,7 @@ import com.pramod.dailyword.db.model.ApiResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -51,7 +52,7 @@ abstract class NetworkBoundedResource<RequestType, ResultType> {
                     TAG,
                     Gson().toJson(apiResponse)
                 )
-                if(apiResponse != null) {
+                if (apiResponse != null) {
                     if (apiResponse.code == "200") {
                         saveResultAndReInit(apiResponse.data)
                     } else {
@@ -67,8 +68,7 @@ abstract class NetworkBoundedResource<RequestType, ResultType> {
                             )
                         }
                     }
-                }
-                else{
+                } else {
                     result.addSource(
                         dataSource
                     ) { newData: ResultType? ->
@@ -88,7 +88,7 @@ abstract class NetworkBoundedResource<RequestType, ResultType> {
                 t: Throwable
             ) {
                 result.removeSource(dataSource)
-                if (t is UnknownHostException) {
+                if (t is UnknownHostException || t is ConnectException) {
                     result.addSource(
                         dataSource
                     ) { newData: ResultType? ->
