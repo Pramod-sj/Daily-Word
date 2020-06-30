@@ -79,8 +79,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
+                mBinding.homeCardToolbar.setContentPadding(
+                    0, insets.systemWindowInsetTop, 0, mBinding.homeCardToolbar.contentPaddingBottom
                 )
 
                 val paddingBottom = insets.systemWindowInsetBottom
@@ -135,6 +135,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             getViewModel().navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
         }
         mBinding.pastWordAdapter = pastWordAdapter
+        mBinding.mainRecyclerviewPastWords.setItemViewCacheSize(7)
     }
 
     private fun initLearnAllEvent() {

@@ -10,16 +10,18 @@
         android:name="com.pramod.dailyword.WOTDApp"
         android:allowBackup="true"
         android:enabled="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:theme="@style/AppTheme"
             android:name=".ui.about_app.donate.DonateActivity"
             android:screenOrientation="nosensor" />
         <activity
+            android:theme="@style/AppTheme"
             android:name=".ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor">
             <intent-filter>
@@ -32,20 +34,25 @@
             android:name=".ui.about_app.AboutAppActivity"
             android:label="@string/title_activity_about_app"
             android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.settings.AppSettingActivity"
-            android:screenOrientation="nosensor" />
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.words.WordListActivity"
-            android:screenOrientation="nosensor" />
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.word_details.WordDetailedActivity"
-            android:screenOrientation="nosensor" />
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.home.HomeActivity"
+            android:theme="@style/AppTheme.HomeActivity"
             android:screenOrientation="nosensor" />
         <activity
+            android:theme="@style/AppTheme"
             android:name=".ui.crash_handler.CustomCrashActivity"
             android:screenOrientation="nosensor" />
 

@@ -14,4 +14,10 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
     </style>
+
+    <style name="AppTheme.HomeActivity" parent="AppTheme">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
 </resources>

@@ -56,70 +56,112 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.9"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            android:background="@android:color/transparent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:paddingBottom="@dimen/padding_medium"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/nestedScroll">
+            app:elevation="0dp">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_card_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@{ThemeManager.isNightModeActive(context)?CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground):@color/colorPrimary}"
+                app:cardElevation="@dimen/card_elevation_max"
+                app:cardPreventCornerOverlap="false"
+                app:contentPaddingBottom="@dimen/padding_medium"
+                app:shapeAppearanceOverlay="@style/HomeToolbarCardShape">
 
-                <LinearLayout
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/padding_medium"
-                    android:paddingBottom="@dimen/padding_small">
+                    app:layout_collapseMode="pin">
 
-                    <TextView
-                        android:id="@+id/toolbar_title"
-                        style="@style/ToolbarTitleTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{`Hi, There!`}" />
-
-                    <TextView
-                        style="@style/AppTheme.Header5TextStyle.Bold"
-                        switchingText="@{mainViewModel.title()}"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
 
-                </LinearLayout>
-            </com.google.android.material.appbar.MaterialToolbar>
+                        <ImageView
+                            android:id="@+id/home_app_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/margin_medium"
+                            android:src="@drawable/ic_vocabulary"
+                            android:tint="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/home_app_icon"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/padding_medium"
+                            android:paddingBottom="@dimen/padding_small">
+
+                            <TextView
+                                android:id="@+id/toolbar_title"
+                                style="@style/ToolbarTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:textColor="@color/white"
+                                android:layout_height="wrap_content"
+                                android:text="Hi, There!" />
+
+                            <TextView
+                                style="@style/AppTheme.Header5TextStyle"
+                                switchingText="@{mainViewModel.title()}"
+                                android:layout_width="match_parent"
+                                android:textColor="@color/white"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                </com.google.android.material.appbar.MaterialToolbar>
+            </com.google.android.material.card.MaterialCardView>
+
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:fillViewport="true"
             android:isScrollContainer="true"
             android:scrollbars="vertical"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/padding_small">
 
                 <LinearLayout
                     android:id="@+id/main_linearLayout_wotd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->mainViewModel.navigateToWordDetailedFromTodaysWord(mainViewModel.todaysWordOfTheDay)}"
+                    android:onClick="@{()->pastWordAdapter.canStart()?mainViewModel.navigateToWordDetailedFromTodaysWord(mainViewModel.todaysWordOfTheDay):null}"
                     android:orientation="vertical"
                     android:paddingHorizontal="@dimen/padding_large"
                     android:paddingVertical="@dimen/padding_small"
+                    android:transitionGroup="true"
                     android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
+
+<!--
+                    copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                    rootLayout="@{coordinatorLayout}"
+-->
+
 
                     <TextView
                         android:id="@+id/txtView_word_of_the_day"
                         style="@style/AppTheme.Header1TextStyle.Bold"
-                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                        rootLayout="@{coordinatorLayout}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -206,16 +248,17 @@
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
-                    android:splitMotionEvents="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/padding_small"
                     android:paddingVertical="@dimen/padding_large"
+                    android:splitMotionEvents="false"
                     app:adapter="@{pastWordAdapter}"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Widget.MaterialComponents.Button.TextButton"
+                    applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),50)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -227,5 +270,7 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

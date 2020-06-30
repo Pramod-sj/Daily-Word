@@ -5,6 +5,6 @@
         android:id="@+id/menu_setting"
         android:icon="@drawable/ic_settings_outline"
         android:title="@string/menu_settings"
-        app:iconTint="@color/app_icon_tint"
+        app:iconTint="@color/white"
         app:showAsAction="always" />
 </menu>

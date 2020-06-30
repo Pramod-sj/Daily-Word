@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryDark">#3D01C3</color>
     <color name="colorAccent">#6200EE</color>
 
     <color name="app_logo_tint">@color/black</color>
 
     <color name="app_icon_tint">@color/grey_very_extra_dark</color>
 
+    <color name="card_color">#323232</color>
 
     <color name="grey_very_extra_dark">#4C4B4B</color>
     <color name="grey_extra_dark">#5E5D5D</color>
@@ -114,4 +115,6 @@
 
 
     <color name="home_past_word_color">@color/grey_very_extra_light</color>
+
+
 </resources>
