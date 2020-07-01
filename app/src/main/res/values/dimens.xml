@@ -46,4 +46,9 @@
     <dimen name="splash_icon_normal">130dp</dimen>
 
     <dimen name="its_icon_padding">8dp</dimen>
+
+
+    <!-- Appbar alpha -->
+    <item name="appbar_alpha" format="float" type="dimen">0.95</item>
+    <!--end-->
 </resources>

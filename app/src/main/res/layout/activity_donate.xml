@@ -31,7 +31,7 @@
             app:spanCount="2" />
 
         <com.google.android.material.appbar.AppBarLayout
-            android:alpha="0.8"
+            android:alpha="@dimen/appbar_alpha"
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
