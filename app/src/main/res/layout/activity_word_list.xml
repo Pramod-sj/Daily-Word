@@ -7,9 +7,6 @@
 
         <import type="com.pramod.dailyword.db.model.Status" />
 
-        <variable
-            name="wordListAdapter"
-            type="com.pramod.dailyword.ui.words.WordListAdapter" />
 
         <variable
             name="wordListViewModel"
@@ -33,14 +30,13 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_words"
-                android:splitMotionEvents="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
-                app:adapter="@{wordListAdapter}"
+                android:splitMotionEvents="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

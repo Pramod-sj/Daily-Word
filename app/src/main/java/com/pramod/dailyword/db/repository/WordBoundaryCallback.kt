@@ -3,127 +3,74 @@ package com.pramod.dailyword.db.repository
 import android.util.Log
 import androidx.paging.PagedList
 import com.google.gson.Gson
-import com.pramod.dailyword.db.local.AppDB
-import com.pramod.dailyword.db.model.ApiResponse
+import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.model.WordOfTheDay
-import com.pramod.dailyword.db.remote.WOTDApiService
 import com.pramod.dailyword.helper.PagingRequestHelper
 import com.pramod.dailyword.helper.createStatusLiveData
+import com.pramod.dailyword.ui.words.NETWORK_PAGE_SIZE
 import com.pramod.dailyword.util.CalenderUtil
-import com.pramod.dailyword.util.CommonUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.Executor
 
 class WordBoundaryCallback(
-    private val apiService: WOTDApiService,
-    private val localDb: AppDB,
-    private val pageSize: Int,
+    private val repository: WOTDRepository,
     private val executor: Executor
 ) : PagedList.BoundaryCallback<WordOfTheDay>() {
     private val TAG = "WordBoundaryCallback"
 
     val paginationHelper = PagingRequestHelper(executor)
     val networkState = paginationHelper.createStatusLiveData()
+    var isReachedToEnd: Boolean = false
 
     override fun onZeroItemsLoaded() {
         paginationHelper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            apiService.getWords(
-                limit = pageSize
-            ).enqueue(createWebServiceCallback(it))
+            GlobalScope.launch(Dispatchers.Main) {
+                fetchWords(null, it)
+            }
         }
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: WordOfTheDay) {
         Log.i(TAG, itemAtEnd.date)
-        paginationHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-
-            val endCalendar = CalenderUtil.convertStringToCalender(
-                itemAtEnd.date!!,
-                CalenderUtil.DATE_FORMAT
-            )
-            //subtract the calendar by one day which will be the next startFrom
-            endCalendar!!.roll(Calendar.DATE, false)
-            val startFrom = CalenderUtil.convertCalenderToString(
-                endCalendar,
-                CalenderUtil.DATE_FORMAT
-            )
-
-            apiService.getWords(
-                startFrom = startFrom,
-                limit = pageSize
-            ).enqueue(createWebServiceCallback(it))
-        }
-    }
-
-
-    private fun createWebServiceCallback(it: PagingRequestHelper.Request.Callback):
-            Callback<ApiResponse<List<WordOfTheDay>>> {
-        return object : Callback<ApiResponse<List<WordOfTheDay>>> {
-            override fun onFailure(call: Call<ApiResponse<List<WordOfTheDay>>>, t: Throwable) {
-                if (t is UnknownHostException) {
-                    it.recordFailure(Throwable("You don't have a proper internet connection"))
-                } else if (t is SocketTimeoutException) {
-                    it.recordFailure(Throwable("Timeout! Please check your internet connection or retry!"))
-                } else {
-                    it.recordFailure(t)
+        if (!isReachedToEnd) {
+            paginationHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    fetchWords(findStartFrom(itemAtEnd.date!!), it)
                 }
             }
-
-            override fun onResponse(
-                call: Call<ApiResponse<List<WordOfTheDay>>>,
-                response: Response<ApiResponse<List<WordOfTheDay>>>
-            ) {
-                insertItemIntoDb(response, it)
-            }
-
         }
     }
 
-    private fun insertItemIntoDb(
-        response: Response<ApiResponse<List<WordOfTheDay>>>,
-        it: PagingRequestHelper.Request.Callback
+
+    private suspend fun fetchWords(
+        startFrom: String?,
+        requestCallback: PagingRequestHelper.Request.Callback
     ) {
-        executor.execute {
-            val apiResponse = response.body()
-            if (apiResponse != null) {
-                if (apiResponse.code == "200") {
-                    apiResponse.data?.let {
-                        if (it.isNotEmpty()) {
-                            GlobalScope.launch {
-                                for (i: WordOfTheDay in apiResponse.data!!) {
-                                    i.date?.let { date ->
-                                        val cal = CalenderUtil.convertStringToCalender(
-                                            date,
-                                            CalenderUtil.DATE_FORMAT
-                                        )
-
-                                        i.dateTimeInMillis = cal?.timeInMillis
-                                        val dayColor = CommonUtils.getColorBasedOnDay(cal)
-                                        i.wordColor = dayColor[0]
-                                        i.wordDesaturatedColor = dayColor[1]
-
-                                    }
-                                }
-                                localDb.getWordOfTheDayDao().addAll(it)
-                            }
-                        }
-                    }
-                    it.recordSuccess()
-                } else {
-                    it.recordFailure(Throwable(apiResponse.message))
-                }
-            } else {
-                it.recordFailure(Throwable("No response from server"))
+        val apiResponse = repository.getWords(startFrom, NETWORK_PAGE_SIZE)
+        if (apiResponse.status == Resource.Status.SUCCESS) {
+            apiResponse.data?.also {
+                repository.addAllWord(it)
             }
+            Log.i("RESPONSE $startFrom", Gson().toJson(apiResponse.data));
+            isReachedToEnd = apiResponse.data.isNullOrEmpty()
+            requestCallback.recordSuccess()
+        } else {
+            requestCallback.recordFailure(Throwable(apiResponse.message))
         }
     }
 
+
+    private fun findStartFrom(date: String): String {
+        Log.i("START FROM", date)
+        val actualStartFrom = CalenderUtil.subtractDaysFromCalendar(
+            date,
+            1
+        )
+        Log.i("ACTUAL START FROM", actualStartFrom)
+        return actualStartFrom
+    }
 
 }

@@ -3,7 +3,7 @@ package com.pramod.dailyword.db.model
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 
-data class Listing<T>(
+data class Listing<T:Any>(
     // the LiveData of paged lists for the UI to observe
     val pagedList: LiveData<PagedList<T>>,
     // represents the network request status to show to the user

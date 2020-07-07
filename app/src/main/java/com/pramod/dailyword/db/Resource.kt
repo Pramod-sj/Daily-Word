@@ -1,10 +1,11 @@
 package com.pramod.dailyword.db
 
+import com.pramod.dailyword.db.model.WordOfTheDay
+
 class Resource<T> private constructor(
     val status: Status,
     val data: T?,
-    val message: String?,
-    val errorType: ErrorType = ErrorType.UNKNOWN
+    val message: String?
 ) {
 
     enum class Status {
@@ -26,12 +27,11 @@ class Resource<T> private constructor(
         }
 
         @JvmStatic
-        fun <T> error(msg: String?, data: T?, errorType: ErrorType): Resource<T?> {
+        fun <T> error(msg: String?, data: T?): Resource<T?> {
             return Resource(
                 Status.ERROR,
                 data,
-                msg,
-                errorType
+                msg
             )
         }
 

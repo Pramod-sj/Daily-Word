@@ -14,10 +14,10 @@ class WOTDApp : Application() {
         super.onCreate()
 
         ThemeManager.newInstance(this).applyTheme()
-
+/*
         if (Thread.getDefaultUncaughtExceptionHandler() !is CustomExceptionHandler) {
             Thread.setDefaultUncaughtExceptionHandler(CustomExceptionHandler(this))
-        }
+        }*/
 
         if (AudienceNetworkAds.isInAdsProcess(this)) {
             return

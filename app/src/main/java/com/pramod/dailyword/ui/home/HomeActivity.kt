@@ -148,6 +148,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     private fun setObservers() {
         mViewModel.getTodaysWordOfTheDay().observe(this, Observer {
+            Log.i("TODAYS WORD", Gson().toJson(it))
             it?.let {
                 if (!it.isSeen) {
                     it.isSeen = true

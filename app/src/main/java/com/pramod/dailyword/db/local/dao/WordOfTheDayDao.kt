@@ -2,6 +2,8 @@ package com.pramod.dailyword.db.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.pramod.dailyword.db.model.WordOfTheDay
 
@@ -18,7 +20,10 @@ interface WordOfTheDayDao {
     fun getFewExceptTopOne(count: Int): LiveData<List<WordOfTheDay>?>
 
     @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC")
-    fun getAll(): DataSource.Factory<Int, WordOfTheDay>
+    fun pagingSourceWords(): PagingSource<Int, WordOfTheDay>
+
+    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC")
+    fun dataSourceWords(): DataSource.Factory<Int, WordOfTheDay>
 
     @Query("SELECT * FROM WordOfTheDay WHERE date!=:date")
     fun getAllExcept(date: String): LiveData<List<WordOfTheDay>?>
@@ -42,10 +47,10 @@ interface WordOfTheDayDao {
     @Update
     suspend fun update(wordOfTheDay: WordOfTheDay): Int
 
-    @Query("DELETE FROM WordOfTheDay WHERE word=:word COLLATE NOCASE")
-    suspend fun delete(word: String)
+    @Query("DELETE FROM WordOfTheDay WHERE word=:word")
+    suspend fun delete(word: String): Int
 
     @Query("DELETE FROM WordOfTheDay")
-    suspend fun deleteAll()
+    suspend fun deleteAll() : Int
 
 }

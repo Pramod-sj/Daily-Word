@@ -12,7 +12,7 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.util.ListConverter
 
 @TypeConverters(ListConverter::class)
-@Database(entities = [WordOfTheDay::class], version = 4, exportSchema = false)
+@Database(entities = [WordOfTheDay::class], version = 5, exportSchema = false)
 abstract class AppDB : RoomDatabase() {
 
     companion object {
@@ -21,7 +21,7 @@ abstract class AppDB : RoomDatabase() {
         @Volatile
         var INSTANCE: AppDB? = null
 
-        fun getInstance(context: Context): AppDB? {
+        fun getInstance(context: Context): AppDB {
             if (INSTANCE == null) {
                 synchronized(AppDB::class) {
                     INSTANCE = Room.databaseBuilder(
@@ -36,10 +36,10 @@ abstract class AppDB : RoomDatabase() {
                             }
                         })
                      */   .build()
-                    return INSTANCE
+                    return INSTANCE!!
                 }
             }
-            return INSTANCE
+            return INSTANCE!!
         }
 
 

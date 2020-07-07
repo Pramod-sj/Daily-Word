@@ -2,6 +2,7 @@ package com.pramod.dailyword.db.model
 
 import androidx.annotation.Keep
 import androidx.annotation.NonNull
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -13,35 +14,54 @@ class WordOfTheDay : Serializable {
     @PrimaryKey
     @NonNull
     @SerializedName("GID")
+    @ColumnInfo(name = "id")
     var id: Long? = null
 
     @SerializedName("WORD")
+    @ColumnInfo(name = "word")
     var word: String? = null
 
     @SerializedName("PRONOUNCE")
+    @ColumnInfo(name = "pronounce")
     var pronounce: String? = null
 
     @SerializedName("PRONOUNCE_AUDIO_URL")
+    @ColumnInfo(name = "pronounceAudio")
     var pronounceAudio: String? = null
 
     @SerializedName("DEFINATION")
+    @ColumnInfo(name = "meanings")
     var meanings: List<String>? = null
 
     @SerializedName("DID_YOU_KNOW")
+    @ColumnInfo(name = "didYouKnow")
     var didYouKnow: String? = null
 
     @SerializedName("ATTRIBUTE")
+    @ColumnInfo(name = "attribute")
     var attribute: String? = null
 
     @SerializedName("EXAMPLE")
+    @ColumnInfo(name = "examples")
     var examples: List<String>? = null
 
     @SerializedName("DATE")
+    @ColumnInfo(name = "date")
     var date: String? = null
+
+    @ColumnInfo(name = "dateTimeInMillis")
     var dateTimeInMillis: Long? = null
+
+    @ColumnInfo(name = "isSeen")
     var isSeen: Boolean = false
+
+    @ColumnInfo(name = "seenAtTimeInMillis")
     var seenAtTimeInMillis: Long? = null
+
+    @ColumnInfo(name = "wordColor")
     var wordColor: Int? = -1
+
+    @ColumnInfo(name = "wordDesaturatedColor")
     var wordDesaturatedColor: Int? = -1
 
     override fun equals(other: Any?): Boolean {

@@ -2,6 +2,7 @@ package com.pramod.dailyword.util
 
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 class CalenderUtil {
     companion object {
@@ -84,6 +85,28 @@ class CalenderUtil {
             }
             return date.substring(2, 5)
         }
+
+
+        fun subtractDaysFromCalendar(
+            dateString: String?,
+            howManyDays: Int,
+            dateFormat: String = DATE_FORMAT
+        ): String {
+            val calendar: Calendar = if (dateString != null) {
+                convertStringToCalender(
+                    dateString,
+                    DATE_FORMAT
+                )!!
+            } else {
+                Calendar.getInstance()
+            }
+            calendar.add(Calendar.DATE, -abs(howManyDays))
+            return convertCalenderToString(
+                calendar,
+                DATE_FORMAT
+            )
+        }
+
 
     }
 }
