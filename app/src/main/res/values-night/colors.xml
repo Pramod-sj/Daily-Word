@@ -22,4 +22,5 @@
 
     <color name="home_past_word_color">#282828</color>
 
+    <color name="scroll_thumb_color">#4DBB86FC</color>
 </resources>

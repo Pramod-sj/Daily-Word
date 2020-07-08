@@ -32,10 +32,11 @@
                 android:id="@+id/recyclerview_words"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:scrollbars="vertical"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
+                android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
                 android:splitMotionEvents="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

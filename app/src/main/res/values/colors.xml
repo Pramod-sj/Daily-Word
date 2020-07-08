@@ -117,4 +117,5 @@
     <color name="home_past_word_color">@color/grey_very_extra_light</color>
 
 
+    <color name="scroll_thumb_color">#4D6200EE</color>
 </resources>
