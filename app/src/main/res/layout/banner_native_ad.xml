@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/ad_choice_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/padding_small" />
+
+            <TextView
+                style="@style/AppTheme.SmallTextStyle"
+                android:id="@+id/native_ad_sponsered_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/grey_dark" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.ads.AdIconView
+                android:id="@+id/native_ad_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/margin_small" />
+
+            <LinearLayout
+                android:id="@+id/ad_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/native_ad_button"
+                android:layout_toEndOf="@id/native_ad_icon"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_small">
+
+                <TextView
+                    android:id="@+id/native_ad_title"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Ad title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/native_ad_social_context"
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="Ad Desc" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/native_ad_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/padding_small"
+                android:background="@drawable/background_curve"
+                android:backgroundTint="@color/colorPrimary"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/padding_medium"
+                android:text="Download"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

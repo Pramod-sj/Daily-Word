@@ -18,11 +18,13 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.R
 import com.pramod.dailyword.db.model.WordOfTheDay
+import com.pramod.dailyword.helper.AdsManager
 import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.helper.openWebsite
 import com.pramod.dailyword.helper.shareApp
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
+import kotlinx.android.synthetic.main.activity_word_detailed.*
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -172,6 +174,22 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
     }
 
+    private val adsManager: AdsManager = AdsManager.newInstance(this)
+
+    private fun showInterstitialAd() {
+
+    }
+
+    private fun showBannerAd() {
+        val showing = adsManager.showBannerAdInCoordinateLayout(coordinatorLayout)
+        if (showing) {
+            //if ads are shown than increase the padding of the recyclerview by banner ad size
+            ViewCompat.setOnApplyWindowInsetsListener(coordinatorLayout) { view: View, windowInsetsCompat: WindowInsetsCompat ->
+                windowInsetsCompat
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.word_detail_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -183,4 +201,11 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
         return super.onOptionsItemSelected(item)
     }
+
+
+    override fun onDestroy() {
+        adsManager.destroyAdsIfActive()
+        super.onDestroy()
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.pramod.dailyword.service
+package com.pramod.dailyword.firebase
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class TodaysWordFirebaseMessageService : FirebaseMessagingService() {
+class FBMessageService : FirebaseMessagingService() {
 
     companion object {
         const val NOTIFICATION_NEW_WORD = "new_word"

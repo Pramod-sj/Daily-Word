@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="com.pramod.dailyword.helper.AdsManager" />
+
+        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
 
         <import type="com.pramod.dailyword.util.CalenderUtil" />
 
@@ -21,8 +26,8 @@
     </data>
 
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:transitionGroup="true">
@@ -47,15 +52,14 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingVertical="@dimen/padding_small"
-                android:paddingStart="@dimen/margin_large"
-                android:paddingEnd="@dimen/margin_large">
+                android:paddingVertical="@dimen/padding_small">
 
                 <TextView
                     android:id="@+id/txtView_word_of_the_day_date"
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:background="@drawable/background_home_word"
                     android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor)),30)}"
                     android:ellipsize="marquee"
@@ -72,6 +76,7 @@
                     style="@style/AppTheme.Header1TextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:ellipsize="end"
                     android:paddingTop="@dimen/padding_small"
                     android:singleLine="true"
@@ -81,6 +86,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -120,18 +126,40 @@
                 </LinearLayout>
 
 
+                <com.facebook.ads.NativeAdLayout
+                    android:id="@+id/native_ad_container_1"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                    showAdWithSomeDelay="@{2000}"
+                    adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:layout_marginVertical="@dimen/margin_small" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/word_detailed_definations_recyclerview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
                     android:paddingVertical="@dimen/padding_small"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+                <com.facebook.ads.NativeAdLayout
+                    android:id="@+id/native_ad_container_2"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                    showAdWithSomeDelay="@{2000}"
+                    adId="@{AdsManager.NATIVE_BANNER_ID_2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:layout_marginVertical="@dimen/margin_small" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:orientation="vertical">
 
                     <TextView
@@ -151,9 +179,20 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
 
+                <com.facebook.ads.NativeAdLayout
+                    android:id="@+id/native_ad_container_3"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                    showAdWithSomeDelay="@{2000}"
+                    adId="@{AdsManager.NATIVE_BANNER_ID_3}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:layout_marginVertical="@dimen/margin_small" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_large"
                     android:orientation="vertical"
                     android:visibility="@{wordDetailedViewModel.wordOfTheDay.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}">
 
@@ -170,6 +209,7 @@
                         android:layout_height="wrap_content"
                         android:text="@{wordDetailedViewModel.wordOfTheDay.didYouKnow}" />
                 </LinearLayout>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -188,11 +228,11 @@
             app:icon="@drawable/ic_round_format_align_left_24"
             app:iconTint="?android:attr/windowBackground"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
-<!--
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="@{()->fabGotToMw.isShown()?fabGotToMw.hide():fabGotToMw.show()}" />-->
+        <!--
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{()->fabGotToMw.isShown()?fabGotToMw.hide():fabGotToMw.show()}" />-->
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"

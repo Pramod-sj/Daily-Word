@@ -64,7 +64,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 
-        <service android:name=".service.TodaysWordFirebaseMessageService">
+        <service android:name=".firebase.FBMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

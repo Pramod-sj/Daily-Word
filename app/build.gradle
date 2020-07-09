@@ -104,7 +104,7 @@ dependencies {
     //AutoStarter lib
     implementation 'com.github.judemanutd:autostarter:1.0.8'
 
-    //lottie
-    implementation 'com.airbnb.android:lottie:3.4.1'
+    /*//lottie
+    implementation 'com.airbnb.android:lottie:3.4.1'*/
 
 }
