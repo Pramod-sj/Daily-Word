@@ -33,7 +33,6 @@ class PastWordAdapter(
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.binding.wordOfTheDay = getItem(position)
         holder.binding.position = position
-        holder.setUpListener(position)
         holder.binding.executePendingBindings()
     }
 
@@ -41,12 +40,16 @@ class PastWordAdapter(
     inner class WordViewHolder(val binding: ItemPastWordLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun setUpListener(position: Int) {
+        init {
+            setUpListener()
+        }
+
+        private fun setUpListener() {
             binding.root.setOnClickListener {
                 if (canStartActivity) {
                     canStartActivity = false;
                     onItemClickCallback.invoke(
-                        position,
+                        bindingAdapterPosition,
                         getItem(position)
                     )
                 }

@@ -32,12 +32,12 @@ class WordListAdapter(
 
     inner class WordViewHolder(private val binding: ItemWordListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int, word: WordOfTheDay?) {
+        fun bind(word: WordOfTheDay?) {
             binding.wordOfTheDay = word
             binding.itemWordListCardView.setOnClickListener {
                 if (canStartActivity) {
                     canStartActivity = false;
-                    itemClickCallback?.invoke(position, word!!)
+                    itemClickCallback?.invoke(bindingAdapterPosition, word!!)
                 }
             }
             binding.executePendingBindings()
@@ -58,7 +58,7 @@ class WordListAdapter(
 
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.bind(position, getItem(position))
+        holder.bind(getItem(position))
     }
 
     companion object {
