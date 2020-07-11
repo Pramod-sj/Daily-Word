@@ -49,6 +49,7 @@ class AdsManager private constructor(private val context: Context) {
         const val NATIVE_BANNER_ID_1 = "2986832738063599_3127533043993567"
         const val NATIVE_BANNER_ID_2 = "2986832738063599_3129110357169169"
         const val NATIVE_BANNER_ID_3 = "2986832738063599_3129112467168958"
+        const val NATIVE_BANNER_ID_4 = "2986832738063599_3134035463343325"
         const val NATIVE_INTERSTITIAL_AD = "2986832738063599_2986834191396787"
         const val TAG = "AdsManager"
         fun newInstance(context: Context): AdsManager {
@@ -84,6 +85,7 @@ class AdsManager private constructor(private val context: Context) {
             )
             val builder = MaterialAlertDialogBuilder(context)
                 .setView(binding.root)
+                .setCancelable(false)
             val alertDialog = builder.create()
 
             binding.nativeAdCloseButton.setOnClickListener {

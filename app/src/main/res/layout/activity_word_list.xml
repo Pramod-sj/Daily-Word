@@ -34,7 +34,7 @@
             app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
 
             <com.facebook.ads.NativeAdLayout
-                adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                adId="@{AdsManager.NATIVE_BANNER_ID_4}"
                 showAdWithSomeDelay="@{1000}"
                 verticalAd="@{true}"
                 showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
