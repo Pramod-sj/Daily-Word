@@ -22,7 +22,7 @@
     <dimen name="text_large">20sp</dimen>
     <dimen name="text_medium">16sp</dimen>
     <dimen name="text_small">13sp</dimen>
-    <dimen name="text_tiny">10sp</dimen>
+    <dimen name="text_tiny">12sp</dimen>
 
 
     <!-- Button Style -->
@@ -51,4 +51,8 @@
     <!-- Appbar alpha -->
     <item name="appbar_alpha" format="float" type="dimen">0.95</item>
     <!--end-->
+
+
+    <dimen name="padding_word_list_right">60dp</dimen>
+    <dimen name="padding_no">0dp</dimen>
 </resources>

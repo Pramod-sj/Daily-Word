@@ -15,13 +15,36 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
+import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
 import java.util.*
 
+
+
+/*fun Context.showLottieDialog(fileName: String, title: String, body: String) {
+    val binding: DialogLottieTitleBodyLayoutBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(this),
+        R.layout.dialog_lottie_title_body_layout,
+        null,
+        false
+    )
+    val dialog = MaterialAlertDialogBuilder(this)
+        .setView(binding.root)
+        .setPositiveButton("Okay", null)
+        .create()
+
+    binding.lottieView.setAnimation(fileName)
+    binding.titleTextView.text = title
+    binding.bodyTextView.text = body
+
+    dialog.show()
+
+}*/
 
 fun AboutAppActivity.showLib() {
     val dialog = MaterialAlertDialogBuilder(this)

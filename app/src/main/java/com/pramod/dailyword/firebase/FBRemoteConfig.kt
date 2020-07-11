@@ -12,7 +12,6 @@ class FBRemoteConfig {
         setConfigSettingsAsync(remoteConfigSettings {
             //360 i.e. 1 hour
             minimumFetchIntervalInSeconds = 3600
-            setDeveloperModeEnabled(true)
         })
         setDefaultsAsync(R.xml.remote_config_defaults)
     }
@@ -26,7 +25,7 @@ class FBRemoteConfig {
     }
 
     init {
-        remoteConfig.fetch(0).addOnCompleteListener {
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.i(TAG, "Remote configs are fetched")
             } else {

@@ -9,6 +9,7 @@ import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
 import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityDonateBinding
 import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.ui.BaseActivity
@@ -64,11 +65,11 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
             }
 
             override fun onProductPurchased(productId: String, details: TransactionDetails?) {
-
+                mViewModel.setMessage(SnackbarMessage.init("Thank you so much :)"))
             }
 
             override fun onBillingError(errorCode: Int, error: Throwable?) {
-
+                mViewModel.setMessage(SnackbarMessage.init("Something went wrong! Please try again!"))
             }
 
         })
@@ -76,7 +77,11 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
-            billingProcessor.purchase(this, donateItem.itemPurchaseId)
+            if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
+                mViewModel.setMessage(SnackbarMessage.init("You have already donated that, Thank you so much :)"))
+            } else {
+                billingProcessor.purchase(this, donateItem.itemPurchaseId)
+            }
         }
         mBinding.donateRecyclerView.adapter = donateItemAdapter
         donateItemAdapter.submitList(mViewModel.donateItemList)
@@ -91,7 +96,8 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
                     0, insets.systemWindowInsetTop, 0, 0
                 )
 
-                val paddingTop = insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
+                val paddingTop =
+                    insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
                 val paddingBottom = insets.systemWindowInsetBottom
 
                 mBinding.donateRecyclerView.setPadding(

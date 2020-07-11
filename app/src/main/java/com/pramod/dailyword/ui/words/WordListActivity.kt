@@ -4,6 +4,7 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordListBinding
 import com.pramod.dailyword.db.model.Status
 import com.pramod.dailyword.db.model.WordOfTheDay
+import com.pramod.dailyword.helper.AdsManager
 import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
@@ -58,6 +60,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         setUpToolbar()
         initAdapter()
         arrangeViewsAccordingToEdgeToEdge()
+        showNativeAdDialogWithDelay()
     }
 
     override fun onResume() {
@@ -121,7 +124,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
-
     private fun arrangeViewsAccordingToEdgeToEdge() {
         if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
@@ -152,4 +154,9 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
 
     }
 
+    private fun showNativeAdDialogWithDelay() {
+        Handler().postDelayed({
+            AdsManager.incrementCountAndShowNativeAdDialog(this)
+        }, 1000)
+    }
 }

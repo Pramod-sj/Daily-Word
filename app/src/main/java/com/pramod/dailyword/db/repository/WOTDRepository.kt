@@ -20,6 +20,7 @@ import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import retrofit2.Call
@@ -115,18 +116,16 @@ class WOTDRepository(private val context: Context) {
         }.asLiveData()
     }
 
-/*
 
-    @ExperimentalPagingApi
-    fun getAllWords(pageSize: Int): Pager<Int, WordOfTheDay> {
+    /*@ExperimentalPagingApi
+    fun getAllWords(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
         return Pager(
             config = PagingConfig(pageSize = pageSize),
             remoteMediator = WordPaginationRemoteMediator(this)
         ) {
             localDb.getWordOfTheDayDao().pagingSourceWords()
-        }
-    }
-*/
+        }.flow
+    }*/
 
 
     suspend fun getWords(startFrom: String?, limit: Int): Resource<List<WordOfTheDay>?> {

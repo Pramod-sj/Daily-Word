@@ -3,6 +3,7 @@ package com.pramod.dailyword.util
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -13,9 +14,12 @@ import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import java.util.*
@@ -227,6 +231,97 @@ class CommonUtils {
 
         }
 
+
+        fun showViewSlide(view: View, duration: Long = 1000) {
+            view.isVisible = true
+            val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+                view, PropertyValuesHolder.ofFloat(View.TRANSLATION_X, 0f, view.width * 1.0f)
+            )
+            objectAnimator.duration = duration
+            objectAnimator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+            })
+            objectAnimator.start()
+        }
+
+        fun hideViewSlide(view: View, duration: Long = 1000) {
+            val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+                view, PropertyValuesHolder.ofFloat(View.TRANSLATION_X, view.width * 1.0f, 0f)
+            )
+            objectAnimator.duration = duration
+            objectAnimator.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    view.isVisible = false
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+            })
+            objectAnimator.start()
+        }
+
+
+        fun showViewAlphaAnimation(view: View, duration: Long = 500) {
+            view.isVisible = true
+            val alphaAnimation: AlphaAnimation = AlphaAnimation(0f, 1f)
+            alphaAnimation.duration = duration
+            alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            view.startAnimation(alphaAnimation)
+        }
+
+        fun hideViewAlphaAnimation(view: View, duration: Long = 500) {
+            val alphaAnimation: AlphaAnimation = AlphaAnimation(1f, 0f)
+            alphaAnimation.duration = duration
+            alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    view.isVisible = false
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+
+                }
+
+            })
+            view.startAnimation(alphaAnimation)
+        }
+
+
     }
+
 
 }

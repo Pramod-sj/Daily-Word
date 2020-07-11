@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -21,8 +22,8 @@
                 android:paddingHorizontal="@dimen/padding_small" />
 
             <TextView
-                style="@style/AppTheme.SmallTextStyle"
                 android:id="@+id/native_ad_sponsered_label"
+                style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -34,18 +35,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.facebook.ads.AdIconView
-                android:id="@+id/native_ad_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="@dimen/margin_small" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/native_ad_icon_card"
+                app:cardCornerRadius="@dimen/card_radius"
+                app:cardElevation="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_small">
+
+                <com.facebook.ads.AdIconView
+                    android:id="@+id/native_ad_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/margin_small" />
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:id="@+id/ad_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/native_ad_button"
-                android:layout_toEndOf="@id/native_ad_icon"
+                android:layout_toEndOf="@id/native_ad_icon_card"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_small">
 
@@ -81,7 +92,7 @@
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:paddingVertical="@dimen/padding_medium"
                 android:text="Download"
-                android:textColor="@color/white" />
+                android:textColor="?android:attr/windowBackground" />
 
         </RelativeLayout>
     </LinearLayout>

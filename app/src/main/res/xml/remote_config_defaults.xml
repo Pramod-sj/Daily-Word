@@ -2,6 +2,6 @@
 <defaultsMap>
     <entry>
         <key>ads</key>
-        <value>true</value>
+        <value>false</value>
     </entry>
 </defaultsMap>

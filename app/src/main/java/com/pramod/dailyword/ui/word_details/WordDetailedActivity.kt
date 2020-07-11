@@ -2,6 +2,7 @@ package com.pramod.dailyword.ui.word_details
 
 import com.pramod.dailyword.BR
 import android.os.Bundle
+import android.os.Handler
 import android.transition.ArcMotion
 import android.util.Log
 import android.view.Menu
@@ -49,6 +50,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         setNestedScrollListener()
         setNavigateMW()
         arrangeViewsAccordingToEdgeToEdge()
+        showNativeAdDialogWithDelay()
     }
 
     private fun setUpToolbar() {
@@ -174,21 +176,13 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
     }
 
-    private val adsManager: AdsManager = AdsManager.newInstance(this)
 
-    private fun showInterstitialAd() {
-
+    private fun showNativeAdDialogWithDelay() {
+        Handler().postDelayed({
+            AdsManager.incrementCountAndShowNativeAdDialog(this)
+        }, 1000)
     }
 
-    private fun showBannerAd() {
-        val showing = adsManager.showBannerAdInCoordinateLayout(coordinatorLayout)
-        if (showing) {
-            //if ads are shown than increase the padding of the recyclerview by banner ad size
-            ViewCompat.setOnApplyWindowInsetsListener(coordinatorLayout) { view: View, windowInsetsCompat: WindowInsetsCompat ->
-                windowInsetsCompat
-            }
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.word_detail_menu, menu)
@@ -200,12 +194,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             R.id.menu_share_word -> shareApp()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-
-    override fun onDestroy() {
-        adsManager.destroyAdsIfActive()
-        super.onDestroy()
     }
 
 }

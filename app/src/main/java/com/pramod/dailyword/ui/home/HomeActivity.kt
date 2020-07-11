@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.transition.Fade
 import android.util.Log
 import android.view.Menu
@@ -67,7 +68,10 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         arrangeViewsAccordingToEdgeToEdge()
         //showDummyNotification()
         promptAutoStart()
+        //showDummyLotttieDialog()
+        showNativeAdDialogWithDelay()
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -316,6 +320,12 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 )
             }
         }
+    }
+
+    private fun showNativeAdDialogWithDelay() {
+        Handler().postDelayed({
+            AdsManager.incrementCountAndShowNativeAdDialog(this)
+        }, 1000)
     }
 
 
