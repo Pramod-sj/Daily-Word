@@ -120,4 +120,7 @@
 
 
     <color name="scroll_thumb_color">#4D6200EE</color>
+
+
+    <color name="splash_wave_color">#FFFFFF</color>
 </resources>

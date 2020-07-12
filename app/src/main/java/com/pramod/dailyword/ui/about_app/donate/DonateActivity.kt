@@ -11,7 +11,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityDonateBinding
-import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 
 class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
@@ -88,7 +88,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->

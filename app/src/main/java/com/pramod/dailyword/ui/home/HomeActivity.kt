@@ -27,6 +27,7 @@ import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityMainBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.*
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
@@ -79,7 +80,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->
@@ -196,7 +197,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun edgeToEdgeSettingChanged() {
-        WindowPreferencesManager.newInstance(this).getLiveData().observe(this, Observer<Boolean> {
+        WindowPrefManager.newInstance(this).getLiveData().observe(this, Observer<Boolean> {
             if (it) {
 
             }

@@ -5,11 +5,10 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.BR
-import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityCustomCrashBinding
-import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.helper.openGmail
 import com.pramod.dailyword.helper.restartApp
 import com.pramod.dailyword.ui.BaseActivity
@@ -45,7 +44,7 @@ class CustomCrashActivity :
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->

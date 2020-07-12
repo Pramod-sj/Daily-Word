@@ -6,18 +6,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.util.CommonUtils
 
 
@@ -57,7 +54,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     }
 
     private fun shouldApplyEdgeToEdge() {
-        val pref = WindowPreferencesManager.newInstance(this)
+        val pref = WindowPrefManager.newInstance(this)
         pref.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
     }
 

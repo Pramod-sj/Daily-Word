@@ -12,6 +12,7 @@ import com.pramod.dailyword.ui.BaseActivity
 
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.helper.*
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
 
 class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingViewModel>() {
@@ -44,7 +45,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
 
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->

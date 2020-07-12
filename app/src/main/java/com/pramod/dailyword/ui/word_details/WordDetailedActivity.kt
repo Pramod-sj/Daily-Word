@@ -7,7 +7,6 @@ import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.os.Handler
 import android.transition.ArcMotion
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,9 +22,9 @@ import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.R
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.*
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
-import kotlinx.android.synthetic.main.activity_word_detailed.*
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -104,7 +103,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->

@@ -9,9 +9,7 @@ import android.util.Log
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.gson.Gson
@@ -21,7 +19,7 @@ import com.pramod.dailyword.databinding.ActivityWordListBinding
 import com.pramod.dailyword.db.model.Status
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.AdsManager
-import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.util.CommonUtils
@@ -121,7 +119,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->

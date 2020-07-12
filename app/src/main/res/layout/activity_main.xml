@@ -104,16 +104,16 @@
                                 android:id="@+id/toolbar_title"
                                 style="@style/ToolbarTitleTextStyle"
                                 android:layout_width="wrap_content"
-                                android:textColor="@color/white"
                                 android:layout_height="wrap_content"
-                                android:text="Hi, There!" />
+                                android:text="Hi, There!"
+                                android:textColor="@color/white" />
 
                             <TextView
                                 style="@style/AppTheme.Header5TextStyle"
                                 switchingText="@{mainViewModel.title()}"
                                 android:layout_width="match_parent"
-                                android:textColor="@color/white"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white" />
 
                         </LinearLayout>
                     </RelativeLayout>
@@ -153,10 +153,10 @@
                     android:transitionGroup="true"
                     android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
 
-<!--
-                    copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                    rootLayout="@{coordinatorLayout}"
--->
+                    <!--
+                                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                                        rootLayout="@{coordinatorLayout}"
+                    -->
 
 
                     <TextView
@@ -266,7 +266,7 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:onClick="@{()->mainViewModel.learnAll()}"
                     android:text="@string/learn_all"
-                    android:visibility="@{(mainViewModel.wordsExceptToday.size()>=6)?View.VISIBLE:View.GONE}" />
+                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pramod.dailyword.helper.*
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.Event
 
 class AppSettingViewModel(application: Application) : BaseViewModel(application) {
     private val prefManager = PrefManager.getInstance(application)
 
-    val windowPrefManager = WindowPreferencesManager.newInstance(application)
+    val windowPrefManager = WindowPrefManager.newInstance(application)
 
     val notificationPrefManager = NotificationPrefManager.newInstance(application)
 

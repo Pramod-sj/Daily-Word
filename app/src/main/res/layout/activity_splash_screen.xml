@@ -20,35 +20,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.splash_screen.SplashScreenActivity">
 
-        <!-- <ImageView
+         <ImageView
              android:layout_width="wrap_content"
-             android:layout_height="100dp"
+             android:layout_height="150dp"
              android:layout_gravity="top"
              android:scaleType="fitXY"
              android:src="@drawable/ic_wave"
-             android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />-->
+             android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
-        <ImageView
-            android:layout_width="400dp"
-            android:layout_height="250dp"
-            android:layout_gravity="top"
-            android:rotation="180"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_blob"
-            android:translationX="-100dp"
-            android:translationY="-120dp"
-            android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
-
-
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="bottom|end"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_blob"
-            android:translationX="120dp"
-            android:translationY="120dp"
-            android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
         <LinearLayout
             android:layout_width="wrap_content"

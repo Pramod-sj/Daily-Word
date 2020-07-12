@@ -13,8 +13,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
+import com.pramod.dailyword.helper.SPrefBooleanLiveData
 
-class WindowPreferencesManager private constructor(private val context: Context) {
+class WindowPrefManager private constructor(private val context: Context) {
 
 
     private val sharedPreferences =
@@ -37,7 +38,10 @@ class WindowPreferencesManager private constructor(private val context: Context)
             ) > 0.5
         }
 
-        fun newInstance(context: Context) = WindowPreferencesManager(context)
+        fun newInstance(context: Context) =
+            WindowPrefManager(
+                context
+            )
     }
 
 
@@ -62,15 +66,18 @@ class WindowPreferencesManager private constructor(private val context: Context)
     fun applyEdgeToEdgePreference(window: Window, shouldApply: Boolean) {
         val statusBarColor = getStatusBarColor(isEdgeToEdgeEnabled())
         val navbarColor = getNavBarColor(isEdgeToEdgeEnabled())
-        val lightBackground = isColorLight(
-            MaterialColors.getColor(
-                context,
-                R.attr.colorBackground,
-                Color.BLACK
+        val lightBackground =
+            isColorLight(
+                MaterialColors.getColor(
+                    context,
+                    R.attr.colorBackground,
+                    Color.BLACK
+                )
             )
-        )
         val lightNavbar =
-            isColorLight(navbarColor)
+            isColorLight(
+                navbarColor
+            )
         val showDarkNavbarIcons =
             lightNavbar || navbarColor == Color.TRANSPARENT && lightBackground
         val decorView = window.decorView
@@ -132,7 +139,11 @@ class WindowPreferencesManager private constructor(private val context: Context)
     }
 
     fun getLiveData(): SPrefBooleanLiveData {
-        return SPrefBooleanLiveData(sharedPreferences, KEY_EDGE_TO_EDGE_ENABLED, false)
+        return SPrefBooleanLiveData(
+            sharedPreferences,
+            KEY_EDGE_TO_EDGE_ENABLED,
+            false
+        )
     }
 
 }

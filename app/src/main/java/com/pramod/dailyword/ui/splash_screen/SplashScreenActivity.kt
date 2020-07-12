@@ -1,7 +1,6 @@
 package com.pramod.dailyword.ui.splash_screen
 
 import android.os.Bundle
-import android.transition.Fade
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -10,9 +9,6 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
 import com.pramod.dailyword.db.remote.EndPoints
-import com.pramod.dailyword.helper.PrefManager
-import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.helper.WindowPreferencesManager
 import com.pramod.dailyword.helper.showWebViewDialog
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.home.HomeActivity
