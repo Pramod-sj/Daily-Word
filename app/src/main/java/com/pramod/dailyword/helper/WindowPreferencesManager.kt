@@ -54,8 +54,12 @@ class WindowPreferencesManager private constructor(private val context: Context)
         false
     )
 
-    fun applyEdgeToEdgePreference(window: Window) {
-        val edgeToEdgeEnabled = isEdgeToEdgeEnabled()
+    fun applyEdgeToEdgeIfEnabled(window: Window, forceApply: Boolean = false) {
+        val edgeToEdgeEnabled = if (forceApply) true else isEdgeToEdgeEnabled()
+        applyEdgeToEdgePreference(window, edgeToEdgeEnabled)
+    }
+
+    fun applyEdgeToEdgePreference(window: Window, shouldApply: Boolean) {
         val statusBarColor = getStatusBarColor(isEdgeToEdgeEnabled())
         val navbarColor = getNavBarColor(isEdgeToEdgeEnabled())
         val lightBackground = isColorLight(
@@ -77,7 +81,7 @@ class WindowPreferencesManager private constructor(private val context: Context)
         window.navigationBarColor = navbarColor
         window.statusBarColor = statusBarColor
         val systemUiVisibility =
-            ((if (edgeToEdgeEnabled) EDGE_TO_EDGE_FLAGS else View.SYSTEM_UI_FLAG_VISIBLE)
+            ((if (shouldApply) EDGE_TO_EDGE_FLAGS else View.SYSTEM_UI_FLAG_VISIBLE)
                     or currentStatusBar
                     or currentNavBar)
         decorView.systemUiVisibility = systemUiVisibility

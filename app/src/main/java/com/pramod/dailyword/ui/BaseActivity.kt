@@ -30,6 +30,11 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     abstract fun getViewModel(): V
     abstract fun getBindingVariable(): Int
 
+    private var forceEdgeToEdge = false
+    fun forceEdgeToEdge(forceEdgeToEdge: Boolean) {
+        this.forceEdgeToEdge = forceEdgeToEdge
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         shouldApplyEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -53,7 +58,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
 
     private fun shouldApplyEdgeToEdge() {
         val pref = WindowPreferencesManager.newInstance(this)
-        pref.applyEdgeToEdgePreference(window)
+        pref.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
     }
 
     private fun setSnackBarObserver() {

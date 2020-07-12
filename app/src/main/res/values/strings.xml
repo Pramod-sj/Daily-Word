@@ -86,4 +86,9 @@
         <item>@string/lib_room</item>
     </string-array>
     <!--end-->
+
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="term_and_condition">Term &amp; Condition</string>
+    <string name="accept_text">By continuing you agree with our %1$s and %2$s</string>
+    <string name="splash_screen_get_started">Get Started</string>
 </resources>

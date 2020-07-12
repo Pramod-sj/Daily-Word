@@ -2,16 +2,23 @@ package com.pramod.dailyword.ui.splash_screen
 
 import android.os.Bundle
 import android.transition.Fade
+import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
+import com.pramod.dailyword.db.remote.EndPoints
+import com.pramod.dailyword.helper.PrefManager
+import com.pramod.dailyword.helper.ThemeManager
 import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.showWebViewDialog
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.home.HomeActivity
 import com.pramod.dailyword.util.CommonUtils
+import com.pramod.dailyword.util.showLinks
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 
 class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>() {
 
@@ -22,28 +29,28 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     override fun getBindingVariable(): Int = BR.splashScreenViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        forceEdgeToEdge(true)
         super.onCreate(savedInstanceState)
         animateAppIcon()
         navigateToHomePage()
         arrangeViewsAccordingToEdgeToEdge()
+        setUpAcceptLinks()
     }
 
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPreferencesManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                val paddingBottom = insets.systemWindowInsetBottom
+        ViewCompat.setOnApplyWindowInsetsListener(
+            mBinding.root
+        ) { v, insets ->
+            val paddingBottom = insets.systemWindowInsetBottom
 
-                mBinding.btnGetStarted.setPadding(
-                    0,
-                    0,
-                    0,
-                    paddingBottom
-                )
-                insets
-            }
+            mBinding.splashScreenBottomLayout.setPadding(
+                0,
+                0,
+                0,
+                paddingBottom
+            )
+            insets
         }
     }
 
@@ -81,6 +88,24 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
                 mViewModel.showSplashText()
             }
         })
+    }
+
+    private fun setUpAcceptLinks() {
+        val termsAndConditionLink = Pair(
+            resources.getString(R.string.term_and_condition),
+            View.OnClickListener {
+                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+            }
+        )
+
+        val privacyPolicyLink = Pair(
+            resources.getString(R.string.privacy_policy),
+            View.OnClickListener {
+                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+            }
+        )
+
+        accept_condition_textView.showLinks(termsAndConditionLink, privacyPolicyLink)
     }
 
 }

@@ -21,7 +21,7 @@
             android:name=".ui.about_app.donate.DonateActivity"
             android:screenOrientation="nosensor" />
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.SplashScreenActivity"
             android:name=".ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor">
             <intent-filter>
