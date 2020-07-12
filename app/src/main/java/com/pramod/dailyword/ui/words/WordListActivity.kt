@@ -93,11 +93,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 view!!,
                 "CONTAINER"
             )
-            val intent = Intent(this@WordListActivity, WordDetailedActivity::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable("WORD", wordOfTheDay)
-            intent.putExtras(bundle)
-            startActivity(intent, option.toBundle())
+            WordDetailedActivity.openActivity(this, wordOfTheDay, option)
         }
         concatAdapter.addAdapter(adapter)
         mViewModel.networkState.observe(this, Observer {

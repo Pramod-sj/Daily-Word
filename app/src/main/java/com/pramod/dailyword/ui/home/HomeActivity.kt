@@ -192,11 +192,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             view,
             "CONTAINER"
         )
-        val intent = Intent(this@HomeActivity, WordDetailedActivity::class.java)
-        val bundle = Bundle()
-        bundle.putSerializable("WORD", word)
-        intent.putExtras(bundle)
-        startActivity(intent, option.toBundle())
+        WordDetailedActivity.openActivity(this, word, option)
     }
 
     private fun edgeToEdgeSettingChanged() {

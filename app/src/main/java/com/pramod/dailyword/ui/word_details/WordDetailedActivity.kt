@@ -1,5 +1,8 @@
 package com.pramod.dailyword.ui.word_details
 
+import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
 import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.os.Handler
@@ -19,15 +22,27 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.R
 import com.pramod.dailyword.db.model.WordOfTheDay
-import com.pramod.dailyword.helper.AdsManager
-import com.pramod.dailyword.helper.WindowPreferencesManager
-import com.pramod.dailyword.helper.openWebsite
-import com.pramod.dailyword.helper.shareApp
+import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_detailed.*
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
+
+
+    companion object {
+        fun openActivity(context: Context, word: WordOfTheDay, option: ActivityOptions) {
+            val intent = Intent(context, WordDetailedActivity::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable("WORD", word)
+            intent.putExtras(bundle)
+            if (WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()) {
+                context.startActivity(intent, option.toBundle())
+            } else {
+                context.startActivity(intent)
+            }
+        }
+    }
 
     override fun getLayoutId(): Int = R.layout.activity_word_detailed
 

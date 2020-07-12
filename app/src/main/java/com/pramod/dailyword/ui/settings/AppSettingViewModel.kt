@@ -3,10 +3,7 @@ package com.pramod.dailyword.ui.settings
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pramod.dailyword.helper.NotificationPrefManager
-import com.pramod.dailyword.helper.PrefManager
-import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.helper.WindowPreferencesManager
+import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.Event
 
@@ -18,6 +15,8 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
     val notificationPrefManager = NotificationPrefManager.newInstance(application)
 
     val themeManager = ThemeManager.newInstance(application)
+
+    val windowAnimationPrefManager = WindowAnimationPrefManager.newInstance(application)
 
     private val showThemeSelector = MutableLiveData<Event<ThemeManager.Options>>()
 
@@ -46,6 +45,10 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
 
     fun toggleNotification() {
         notificationPrefManager.toggleNotificationEnabled()
+    }
+
+    fun toggleWindowAnimation() {
+        windowAnimationPrefManager.toggleWindowAnimationEnabled()
     }
 
     fun goToAbout() {

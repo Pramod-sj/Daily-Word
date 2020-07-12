@@ -6,10 +6,11 @@
 
     <color name="app_logo_tint">@color/white</color>
 
-    <color name="app_theme_icon_tint">#a5d6a7</color>
-    <color name="navigation_bar_icon_tint">#90caf9</color>
-    <color name="notification_icon_tint">#ffab91</color>
-    <color name="about_icon_tint">#ce93d8</color>
+    <color name="app_theme_icon_tint">@color/green_200</color>
+    <color name="app_animation_icon_tint">@color/orange_200</color>
+    <color name="navigation_bar_icon_tint">@color/blue_200</color>
+    <color name="notification_icon_tint">@color/red_200</color>
+    <color name="about_icon_tint">@color/purple_200</color>
 
 
     <color name="app_icon_tint">@color/grey_extra_light</color>

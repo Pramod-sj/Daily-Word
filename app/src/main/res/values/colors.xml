@@ -80,10 +80,12 @@
     <color name="yellow_600">#FBC02D</color>
 
 
-    <color name="app_theme_icon_tint">#43a047</color>
-    <color name="navigation_bar_icon_tint">#1e88e5</color>
-    <color name="notification_icon_tint">#f4511e</color>
-    <color name="about_icon_tint">#8e24aa</color>
+
+    <color name="app_theme_icon_tint">@color/green_600</color>
+    <color name="app_animation_icon_tint">@color/orange_600</color>
+    <color name="navigation_bar_icon_tint">@color/blue_600</color>
+    <color name="notification_icon_tint">@color/red_600</color>
+    <color name="about_icon_tint">@color/purple_600</color>
 
 
     <!--Text Colors-->

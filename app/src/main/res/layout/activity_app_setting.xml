@@ -50,6 +50,19 @@
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{()->appSettingViewModel.toggleWindowAnimation()}"
+                    app:checked="@{appSettingViewModel.windowAnimationPrefManager.liveData()}"
+                    app:icon="@drawable/ic_animation_outline"
+                    app:iconColorTint="@color/app_animation_icon_tint"
+                    app:showIconBackground="true"
+                    app:showRadioButton="true"
+                    app:subTitle="Animate when switching from one window to another"
+                    app:title="Window Animation"
+                    app:titlePaddingStart="@dimen/margin_small" />
+
+                <com.pramod.dailyword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.toggleEdgeToEdge()}"
                     app:checked="@{appSettingViewModel.windowPrefManager.liveData}"
                     app:icon="@drawable/ic_baseline_fullscreen_24"
