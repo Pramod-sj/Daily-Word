@@ -78,7 +78,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
             if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
-                mViewModel.setMessage(SnackbarMessage.init("You have already donated that, Thank you so much :)"))
+                mViewModel.setMessage(SnackbarMessage.init("You have already donated a ${donateItem.title}, Thank you so much :)"))
             } else {
                 billingProcessor.purchase(this, donateItem.itemPurchaseId)
             }

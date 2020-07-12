@@ -80,7 +80,6 @@
     <color name="yellow_600">#FBC02D</color>
 
 
-
     <color name="app_theme_icon_tint">@color/green_600</color>
     <color name="app_animation_icon_tint">@color/orange_600</color>
     <color name="navigation_bar_icon_tint">@color/blue_600</color>
@@ -122,5 +121,5 @@
     <color name="scroll_thumb_color">#4D6200EE</color>
 
 
-    <color name="splash_wave_color">#FFFFFF</color>
+    <color name="splash_wave_color">@color/colorPrimary</color>
 </resources>

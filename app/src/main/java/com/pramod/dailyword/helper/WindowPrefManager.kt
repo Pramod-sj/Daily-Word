@@ -13,7 +13,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
-import com.pramod.dailyword.helper.SPrefBooleanLiveData
 
 class WindowPrefManager private constructor(private val context: Context) {
 

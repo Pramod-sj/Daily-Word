@@ -15,6 +15,9 @@ import com.pramod.dailyword.ui.home.HomeActivity
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.showLinks
 import kotlinx.android.synthetic.main.activity_splash_screen.*
+import com.pramod.dailyword.helper.ThemeManager
+import com.pramod.dailyword.helper.PrefManager
+
 
 class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>() {
 
@@ -26,6 +29,10 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         forceEdgeToEdge(true)
+        lightStatusBar(
+            if (PrefManager.getInstance(this).isNewUser()) ThemeManager.isNightModeActive(this)
+            else !ThemeManager.isNightModeActive(this)
+        )
         super.onCreate(savedInstanceState)
         animateAppIcon()
         navigateToHomePage()
