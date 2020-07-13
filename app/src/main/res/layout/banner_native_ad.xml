@@ -13,6 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content">
 
             <RelativeLayout
@@ -23,12 +24,12 @@
 
             <TextView
                 android:id="@+id/native_ad_sponsered_label"
-                style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/grey_dark" />
+                android:textColor="@color/grey_dark"
+                android:textSize="@dimen/text_tiny" />
         </LinearLayout>
 
         <RelativeLayout
@@ -37,17 +38,17 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/native_ad_icon_card"
-                app:cardCornerRadius="@dimen/card_radius"
-                app:cardElevation="0dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_margin="@dimen/margin_small">
+                android:layout_margin="@dimen/margin_small"
+                app:cardCornerRadius="@dimen/card_radius"
+                app:cardElevation="0dp">
 
                 <com.facebook.ads.AdIconView
                     android:id="@+id/native_ad_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"/>
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
@@ -61,7 +62,7 @@
 
                 <TextView
                     android:id="@+id/native_ad_title"
-                    style="@style/AppTheme.SubTitleTextStyle"
+                    style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -71,12 +72,12 @@
 
                 <TextView
                     android:id="@+id/native_ad_social_context"
-                    style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="Ad Desc" />
+                    android:text="Ad Desc"
+                    android:textSize="@dimen/text_tiny" />
 
             </LinearLayout>
 
@@ -85,13 +86,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_margin="@dimen/padding_small"
                 android:background="@drawable/background_curve"
                 android:backgroundTint="@color/colorPrimary"
-                android:paddingHorizontal="@dimen/padding_medium"
-                android:paddingVertical="@dimen/padding_medium"
+                android:paddingHorizontal="@dimen/margin_medium"
+                android:paddingVertical="@dimen/padding_small"
                 android:text="Download"
-                android:textColor="?android:attr/windowBackground" />
+                android:textColor="?android:attr/windowBackground"
+                android:textSize="@dimen/text_tiny" />
 
         </RelativeLayout>
     </LinearLayout>

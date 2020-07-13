@@ -25,8 +25,9 @@ class FBRemoteConfig {
     }
 
     init {
-        remoteConfig.fetchAndActivate().addOnCompleteListener {
+        remoteConfig.fetch(0).addOnCompleteListener {
             if (it.isSuccessful) {
+                remoteConfig.activate()
                 Log.i(TAG, "Remote configs are fetched")
             } else {
                 Log.i(TAG, "Remote configs are not fetch : Error ${it.exception.toString()}")

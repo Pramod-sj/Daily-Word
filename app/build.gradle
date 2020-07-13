@@ -12,7 +12,7 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 202007121
+        versionCode 202007131
         versionName "1.0-STABLE"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -91,15 +91,15 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     //firebase libs
-    implementation 'com.google.firebase:firebase-messaging:20.2.1'
-    implementation 'com.google.firebase:firebase-config-ktx:19.1.4'
-    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.3'
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
+    implementation 'com.google.firebase:firebase-config-ktx:19.2.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.4'
 
     //paging lib
     implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha02'
 
     //FAN lib
-    implementation 'com.facebook.android:audience-network-sdk:5.10.0'
+    implementation 'com.facebook.android:audience-network-sdk:5.5.0'
 
     //AutoStarter lib
     implementation 'com.github.judemanutd:autostarter:1.0.8'

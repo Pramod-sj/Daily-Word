@@ -60,8 +60,12 @@ class AdsManager private constructor(private val context: Context) {
             context: Context,
             closeClickCallback: (() -> Unit)? = null
         ) {
-            newInstance(context).incrementAdActivityCount()
-            showNativeAdDialog(context, closeClickCallback)
+            val adManager = newInstance(context)
+            //only increament count when ad are enabled
+            if (adManager.fbRemoteConfig.isAdsEnabled()) {
+                adManager.incrementAdActivityCount()
+                showNativeAdDialog(context, closeClickCallback)
+            }
         }
 
         fun showNativeAdDialog(
