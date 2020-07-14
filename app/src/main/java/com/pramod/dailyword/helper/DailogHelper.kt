@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -23,7 +24,6 @@ import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
 import java.util.*
-
 
 
 /*fun Context.showLottieDialog(fileName: String, title: String, body: String) {
@@ -52,13 +52,27 @@ fun AboutAppActivity.showLib() {
         .setItems(R.array.libraries_name, null)
         .create()
     dialog.setOnShowListener {
-        Log.i("DIALOG", "dialog")
-        for (i in 0 until dialog.listView.count) {
-            val textView: TextView = dialog.listView[i].findViewById(android.R.id.text1)
-            textView.linksClickable = true
-            textView.movementMethod = LinkMovementMethod.getInstance()
-            textView.background = null
-        }
+
+        dialog.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScroll(
+                view: AbsListView?,
+                firstVisibleItem: Int,
+                visibleItemCount: Int,
+                totalItemCount: Int
+            ) {
+                for (i in 0 until visibleItemCount) {
+                    val textView: TextView = dialog.listView[i].findViewById(android.R.id.text1)
+                    textView.linksClickable = true
+                    textView.movementMethod = LinkMovementMethod.getInstance()
+                    textView.background = null
+                }
+            }
+
+            override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {
+
+            }
+
+        })
     }
     dialog.show()
 

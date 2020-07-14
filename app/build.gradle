@@ -12,7 +12,7 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 202007131
+        versionCode 202007132
         versionName "1.0-STABLE"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

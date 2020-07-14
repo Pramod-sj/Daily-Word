@@ -30,7 +30,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     override fun onCreate(savedInstanceState: Bundle?) {
         forceEdgeToEdge(true)
         lightStatusBar(
-            if (PrefManager.getInstance(this).isNewUser()) ThemeManager.isNightModeActive(this)
+            if (PrefManager.getInstance(this).isNewUser()) false
             else !ThemeManager.isNightModeActive(this)
         )
         super.onCreate(savedInstanceState)
