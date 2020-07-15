@@ -121,7 +121,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     paddingBottom
                 )
 
-                val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
+                /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
                 val layoutParam: CoordinatorLayout.LayoutParams =
                     mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
                 layoutParam.setMargins(
@@ -131,7 +131,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     fabMarginBottom
                 )
                 mBinding.fabGotToMw.layoutParams = layoutParam
-
+*/
                 insets
             }
         }

@@ -81,12 +81,12 @@ fun AboutAppActivity.showLib() {
 fun Context.showBasicDialog(
     title: String,
     message: String,
-    positiveText: String?,
-    positiveClickCallback: (() -> Unit)?,
-    negativeText: String?,
-    negativeClickCallback: (() -> Unit)?,
-    neutralText: String?,
-    neutralClickCallback: (() -> Unit)?
+    positiveText: String? = null,
+    positiveClickCallback: (() -> Unit)? = null,
+    negativeText: String? = null,
+    negativeClickCallback: (() -> Unit)? = null,
+    neutralText: String? = null,
+    neutralClickCallback: (() -> Unit)? = null
 ) {
     val builder = MaterialAlertDialogBuilder(this)
         .setTitle(title)
@@ -110,7 +110,8 @@ fun Context.showBasicDialog(
             neutralClickCallback?.invoke()
         }
     }
-    builder.create().show()
+    val dialog = builder.create()
+    dialog.show()
 }
 
 fun Context.showWebViewDialog(url: String) {
@@ -177,7 +178,8 @@ fun Context.showStaticPageDialog(
             neutralClickCallback?.invoke()
         }
     }
-    builder.show()
+    val dialog = builder.create()
+    dialog.show()
 }
 
 

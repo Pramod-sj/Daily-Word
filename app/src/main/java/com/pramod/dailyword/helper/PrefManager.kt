@@ -10,15 +10,19 @@ class PrefManager(context: Context) {
 
     companion object {
         private const val IS_NEW_USER = "IS_NEW_USER"
-        private const val THEME_OPTION = "THEME_OPTION"
-        private const val COLORED_NAV_BAR = "COLORED_NAV_BAR"
-        private const val ENABLE_NOTIFICATION = "ENABLE_NOTIFICATION"
         private const val APP_LAUNCH_COUNT = "APP_LAUNCH_COUNT"
         private const val NEVER_SHOW_RATING = "NEVER_SHOW_RATING"
+        private const val SHOW_INITIAL_CREDIT_DIALOG = "show_initial_credit_dialog"
 
         @JvmStatic
         fun getInstance(context: Context): PrefManager = PrefManager(context)
     }
+
+    fun changeShowInitialCreditDialogStatus(status: Boolean) {
+        editor.putBoolean(SHOW_INITIAL_CREDIT_DIALOG, status).commit()
+    }
+
+    fun getShowInitailCreditDialogStatus() = sPref.getBoolean(SHOW_INITIAL_CREDIT_DIALOG, true)
 
     fun isNewUser(): Boolean = sPref.getBoolean(IS_NEW_USER, true)
 

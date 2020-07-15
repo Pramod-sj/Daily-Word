@@ -13,7 +13,7 @@ class WindowAnimationPrefManager private constructor(private val context: Contex
         private const val PREFERENCES_NAME = "window_animation_preferences"
         private const val KEY_ANIMATION_ENABLED = "animation_enabled"
 
-        private fun isAtLeastO() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        private fun isAtLeastP() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
         fun newInstance(context: Context) = WindowAnimationPrefManager(context)
     }
@@ -27,11 +27,11 @@ class WindowAnimationPrefManager private constructor(private val context: Contex
 
     fun isWindowAnimationEnabled() = sharedPreferences.getBoolean(
         KEY_ANIMATION_ENABLED,
-        isAtLeastO()
+        isAtLeastP()
     )
 
 
-    fun liveData() = SPrefBooleanLiveData(sharedPreferences, KEY_ANIMATION_ENABLED, isAtLeastO())
+    fun liveData() = SPrefBooleanLiveData(sharedPreferences, KEY_ANIMATION_ENABLED, isAtLeastP())
 
 
 }

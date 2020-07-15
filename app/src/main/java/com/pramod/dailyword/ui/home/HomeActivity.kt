@@ -71,12 +71,29 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         promptAutoStart()
         //showDummyLotttieDialog()
         showNativeAdDialogWithDelay()
+        shouldShowCreditDialog()
     }
 
 
     override fun onResume() {
         super.onResume()
-        pastWordAdapter?.setCanStartActivity(true)
+        pastWordAdapter.setCanStartActivity(true)
+    }
+
+    private fun shouldShowCreditDialog() {
+        val prefManager = PrefManager.getInstance(this)
+        if (prefManager.getShowInitailCreditDialogStatus()) {
+            prefManager.changeShowInitialCreditDialogStatus(false)
+            showBasicDialog(
+                "App Content Credit",
+                resources.getString(R.string.merriam_webster_credit_text),
+                positiveText = "Go to Merriam-Webster",
+                positiveClickCallback = {
+                    openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
+                },
+                negativeText = "Close"
+            )
+        }
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {

@@ -271,7 +271,7 @@
                             app:noIconColorTint="true"
                             android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
                             app:icon="@drawable/merriam_webster_logo"
-                            app:subTitle="Words are picked from Merriam Webster"
+                            app:subTitle="@{@string/merriam_webster_credit_text}"
                             app:title="Merriam Webster" />
 
                     </LinearLayout>

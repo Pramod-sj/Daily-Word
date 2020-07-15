@@ -128,9 +128,9 @@
 
                 <com.facebook.ads.NativeAdLayout
                     android:id="@+id/native_ad_container_1"
-                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                    showAdWithSomeDelay="@{2000}"
                     adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                    showAdWithSomeDelay="@{2000}"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_medium"
@@ -148,9 +148,9 @@
 
                 <com.facebook.ads.NativeAdLayout
                     android:id="@+id/native_ad_container_2"
-                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                    showAdWithSomeDelay="@{2000}"
                     adId="@{AdsManager.NATIVE_BANNER_ID_2}"
+                    showAdWithSomeDelay="@{2000}"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_medium"
@@ -181,9 +181,9 @@
 
                 <com.facebook.ads.NativeAdLayout
                     android:id="@+id/native_ad_container_3"
-                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                    showAdWithSomeDelay="@{2000}"
                     adId="@{AdsManager.NATIVE_BANNER_ID_3}"
+                    showAdWithSomeDelay="@{2000}"
+                    showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_medium"
@@ -210,10 +210,21 @@
                         android:text="@{wordDetailedViewModel.wordOfTheDay.didYouKnow}" />
                 </LinearLayout>
 
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_gravity="end"
+                    app:iconGravity="end"
+                    android:layout_margin="@dimen/margin_large"
+                    app:icon="@drawable/ic_round_arrow_forward_24"
+                    android:text="@string/go_to_merriam_webster"
+                    android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
+<!--
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_got_to_mw"
             android:layout_width="wrap_content"
@@ -228,6 +239,7 @@
             app:icon="@drawable/ic_round_format_align_left_24"
             app:iconTint="?android:attr/windowBackground"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+-->
         <!--
                 <View
                     android:layout_width="match_parent"

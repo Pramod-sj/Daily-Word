@@ -61,7 +61,7 @@
     <string name="google_app_url">https://play.google.com/store/apps/details?id=com.pramod.dailyword</string>
     <string name="rating_title">Liked Daily Word?</string>
     <string name="rating_message">If you liked my app, please take a moment to rate it on Google play store.</string>
-    <string name="go_to_merriam_webster">Read more</string>
+    <string name="go_to_merriam_webster">Go to Merriam-Webster</string>
 
 
     <!--libraries names-->
@@ -91,4 +91,7 @@
     <string name="term_and_condition">Term &amp; Condition</string>
     <string name="accept_text">By continuing you agree with our %1$s and %2$s</string>
     <string name="splash_screen_get_started">Get Started</string>
+
+
+    <string name="merriam_webster_credit_text">All the content/data of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content/data.</string>
 </resources>
