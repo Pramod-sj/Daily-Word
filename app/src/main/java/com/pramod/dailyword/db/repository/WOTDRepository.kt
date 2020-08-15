@@ -1,6 +1,7 @@
 package com.pramod.dailyword.db.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -105,7 +106,33 @@ class WOTDRepository(private val context: Context) {
                     calendar,
                     CalenderUtil.DATE_FORMAT
                 )
-                return remoteApiService.getWordsExcept(startFrom, count)
+                return remoteApiService.getWords(startFrom, count)
+            }
+
+            override suspend fun saveCallResult(items: List<WordOfTheDay>?) {
+                items?.let {
+                    addAllWord(it)
+                }
+            }
+        }.asLiveData()
+    }
+
+
+    fun getWords(count: Int = 7): LiveData<Resource<List<WordOfTheDay>?>> {
+        return object : NetworkBoundedResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
+            override fun loadLocalData(): LiveData<List<WordOfTheDay>?> {
+                return localDb.getWordOfTheDayDao().getFewFromTop(count)
+            }
+
+            override fun shouldFetch(data: List<WordOfTheDay>?): Boolean {
+                return data == null || data.isEmpty() || (!data.isEmpty() && data[0].date != CalenderUtil.convertCalenderToString(
+                    Calendar.getInstance(),
+                    CalenderUtil.DATE_FORMAT
+                ))
+            }
+
+            override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? {
+                return remoteApiService.getWords(limit = count)
             }
 
             override suspend fun saveCallResult(items: List<WordOfTheDay>?) {
@@ -198,6 +225,8 @@ class WOTDRepository(private val context: Context) {
         )
     }
 
+    fun getWord(word: String): LiveData<WordOfTheDay> =
+        localDb.getWordOfTheDayDao().getWord(word)
 
     suspend fun getJustTopOneNonLive(): WordOfTheDay? =
         localDb.getWordOfTheDayDao().getJustTopOneNonLive()

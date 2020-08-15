@@ -42,8 +42,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     init {
         wordOfTheDayLoading.value = Event.init(true)
-        val todaysWordResourceLiveData = wordOfTheDayRepo.getTodaysWordOfTheDay()
-        wordOfTheDayLiveData = Transformations.map(todaysWordResourceLiveData) {
+        val wordResourceLiveData = wordOfTheDayRepo.getWords()
+        wordOfTheDayLiveData = Transformations.map(wordResourceLiveData) {
             wordOfTheDayLoading.value = Event.init(it.status == Resource.Status.LOADING)
             if (it.status != Resource.Status.LOADING) {
                 Handler().postDelayed({
@@ -57,18 +57,13 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
                     setMessage(SnackbarMessage.init(message))
                 }
             }
-            return@map it.data
+            return@map if (it.data != null && !it.data.isEmpty()) it.data[0] else null
         }
 
-        //getting past words
-        val previousWordResourceLiveData = wordOfTheDayRepo.getWordOfTheDayExceptTopOne(6)
-        wordsExceptTodayLiveData = Transformations.map(previousWordResourceLiveData) {
-            if (it.status == Resource.Status.ERROR) {
-                it.message?.let { message ->
-                    setMessage(SnackbarMessage.init(message))
-                }
-            }
-            return@map it.data
+        wordsExceptTodayLiveData = Transformations.map(wordResourceLiveData) {
+            val list = it.data?.toMutableList()
+            list?.removeAt(0)
+            return@map list
         }
 
         /*wordOfTheDayRepo.initGetWordOfTheDayWorker()

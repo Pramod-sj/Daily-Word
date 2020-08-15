@@ -29,6 +29,7 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
+import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
@@ -157,7 +158,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             getViewModel().navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
         }
         mBinding.pastWordAdapter = pastWordAdapter
-        mBinding.mainRecyclerviewPastWords.setItemViewCacheSize(7)
     }
 
     private fun initLearnAllEvent() {
@@ -170,7 +170,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     private fun setObservers() {
         mViewModel.getTodaysWordOfTheDay().observe(this, Observer {
-            Log.i("TODAYS WORD", Gson().toJson(it))
             it?.let {
                 if (!it.isSeen) {
                     it.isSeen = true
@@ -182,6 +181,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         mViewModel.getWordsExceptToday().observe(this, Observer {
             it?.let { words ->
                 pastWordAdapter.submitList(words)
+                mBinding.mainRecyclerviewPastWords.scrollToPosition(0)
             }
         })
         mViewModel.observeNavigateToWordDetailedEvent().observe(this, Observer {
@@ -240,8 +240,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_setting -> AppSettingActivity.openActivity(this@HomeActivity)
-
+            R.id.menu_setting -> AppSettingActivity.openActivity(this)
+            R.id.menu_bookmarked_words -> FavoriteWordsActivity.openActivity(this)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -294,7 +294,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         appUpdateHelper = AppUpdateHelper(applicationContext)
         appUpdateHelper?.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
             override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
-                Log.i("HomeActivity", "Update avaible")
+                Log.i("HomeActivity", "Update available")
                 appUpdateHelper?.startImmediateUpdate(appUpdateInfo) {
                     mViewModel.setMessage(SnackbarMessage.init(it))
                 }

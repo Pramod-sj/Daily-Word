@@ -32,7 +32,6 @@ class PastWordAdapter(
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.binding.wordOfTheDay = getItem(position)
-        holder.binding.position = position
         holder.binding.executePendingBindings()
     }
 
@@ -67,7 +66,7 @@ class PastWordAdapter(
                     oldItem: WordOfTheDay,
                     newItem: WordOfTheDay
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem.word == newItem.word
                 }
 
                 override fun areContentsTheSame(

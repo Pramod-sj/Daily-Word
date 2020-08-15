@@ -11,13 +11,6 @@ interface WOTDApiService {
     @GET(EndPoints.GET_WORD_OF_THE_DAY)
     suspend fun getWordOfTheDay(): ApiResponse<WordOfTheDay?>?
 
-
-    @GET(EndPoints.GET_WORDS)
-    suspend fun getWordsExcept(
-        @Query("startFrom") startFrom: String? = null,
-        @Query("limit") limit: Int
-    ): ApiResponse<List<WordOfTheDay>?>?
-
     @GET(EndPoints.GET_WORDS)
     suspend fun getWords(
         @Query("startFrom") startFrom: String? = null,

@@ -10,32 +10,38 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 @Dao
 interface WordOfTheDayDao {
 
-    @Query("SELECT * FROM WordOfTheDay WHERE date=:date")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date=:date")
     fun getJust(date: String): LiveData<WordOfTheDay?>
 
-    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE WordOfTheDay.word=:word")
+    fun getWord(word: String): LiveData<WordOfTheDay>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
     fun getJustTopOne(): LiveData<WordOfTheDay?>
 
-    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC LIMIT :count OFFSET 1")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT :count OFFSET 1")
     fun getFewExceptTopOne(count: Int): LiveData<List<WordOfTheDay>?>
 
-    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT :count")
+    fun getFewFromTop(count: Int): LiveData<List<WordOfTheDay>?>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
     fun pagingSourceWords(): PagingSource<Int, WordOfTheDay>
 
-    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
     fun dataSourceWords(): DataSource.Factory<Int, WordOfTheDay>
 
-    @Query("SELECT * FROM WordOfTheDay WHERE date!=:date")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date!=:date")
     fun getAllExcept(date: String): LiveData<List<WordOfTheDay>?>
 
-    @Query("SELECT * FROM WordOfTheDay WHERE date!=:date LIMIT :count")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date!=:date LIMIT :count")
     fun getFewExcept(date: String, count: Int): LiveData<List<WordOfTheDay>?>
 
     //nonLiveFunction
-    @Query("SELECT * FROM WordOfTheDay WHERE date=:date")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date=:date")
     suspend fun getJustNonLive(date: String): WordOfTheDay?
 
-    @Query("SELECT * FROM WordOfTheDay ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
     suspend fun getJustTopOneNonLive(): WordOfTheDay?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -51,6 +57,6 @@ interface WordOfTheDayDao {
     suspend fun delete(word: String): Int
 
     @Query("DELETE FROM WordOfTheDay")
-    suspend fun deleteAll() : Int
+    suspend fun deleteAll(): Int
 
 }
