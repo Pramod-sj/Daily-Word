@@ -4,19 +4,22 @@ import androidx.annotation.Keep
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.pramod.dailyword.R
 import java.io.Serializable
 
 @Keep
 @Entity
 class WordOfTheDay : Serializable {
-    @PrimaryKey
-    @NonNull
+    /*
     @SerializedName("GID")
     @ColumnInfo(name = "id")
-    var id: Long? = null
+    var id: Long? = null*/
 
+    @PrimaryKey
+    @NonNull
     @SerializedName("WORD")
     @ColumnInfo(name = "word")
     var word: String? = null
@@ -59,10 +62,15 @@ class WordOfTheDay : Serializable {
     var seenAtTimeInMillis: Long? = null
 
     @ColumnInfo(name = "wordColor")
-    var wordColor: Int? = -1
+    var wordColor: Int = -1
 
     @ColumnInfo(name = "wordDesaturatedColor")
-    var wordDesaturatedColor: Int? = -1
+    var wordDesaturatedColor: Int = -1
+
+    var bookmarkedAt: Long = 0
+
+    @Ignore
+    fun isBookmarked(): Boolean = bookmarkedAt != 0L
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -70,7 +78,7 @@ class WordOfTheDay : Serializable {
 
         other as WordOfTheDay
 
-        if (id != other.id) return false
+        //if (id != other.id) return false
         if (word != other.word) return false
         if (pronounce != other.pronounce) return false
         if (pronounceAudio != other.pronounceAudio) return false
@@ -82,6 +90,7 @@ class WordOfTheDay : Serializable {
         if (isSeen != other.isSeen) return false
         if (didYouKnow != other.didYouKnow) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
+        if (bookmarkedAt != other.bookmarkedAt) return false
 
         return true
     }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <variable
+            name="favoriteWordsViewModel"
+            type="com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_words"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="?attr/actionBarSize"
+            android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
+            android:scrollbars="vertical"
+            android:splitMotionEvents="false"
+            android:visibility="@{favoriteWordsViewModel.showPlaceHolderLiveData?View.GONE:View.VISIBLE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <include
+            layout="@layout/list_placeholder_layout"
+            app:placeHolderImage="@{@drawable/ic_round_bookmarks_24}"
+            app:placeHolderText="@{`Hey its look like you don't have any bookmarks yet`}"
+            app:show="@{favoriteWordsViewModel.showPlaceHolderLiveData}" />
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="@dimen/appbar_alpha"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/recyclerview_words">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_round_back_arrow">
+
+                <TextView
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bookmarked_words" />
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

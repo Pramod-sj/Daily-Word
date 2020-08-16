@@ -10,11 +10,21 @@ import com.pramod.dailyword.databinding.ItemWordDefinationLayoutBinding
 import com.pramod.dailyword.databinding.ItemWordExampleLayoutBinding
 
 class DefinationAdapter(
-    private val definationList: List<String>?,
-    private val colorResId: Int?,
-    private val desaturatedColorResId: Int?
+    private var definationList: List<String>? = null,
+    private var colorResId: Int? = null,
+    private var desaturatedColorResId: Int? = null
 ) :
     RecyclerView.Adapter<DefinationAdapter.DefinationViewHolder>() {
+    fun setDefinations(
+        definationList: List<String>?,
+        colorResId: Int?,
+        desaturatedColorResId: Int?
+    ) {
+        this.definationList = definationList
+        this.colorResId = colorResId;
+        this.desaturatedColorResId = desaturatedColorResId;
+        notifyDataSetChanged()
+    }
 
 
     class DefinationViewHolder(val binding: ItemWordDefinationLayoutBinding) :

@@ -18,7 +18,10 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun convertStringToCalender(dateString: String, dateFormat: String): Calendar? {
+        fun convertStringToCalender(dateString: String?, dateFormat: String): Calendar? {
+            if (dateString == null) {
+                return null;
+            }
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
@@ -31,10 +34,13 @@ class CalenderUtil {
 
         @JvmStatic
         fun convertDateStringToSpecifiedDateString(
-            dateString: String,
+            dateString: String?,
             dateFormat: String = DATE_FORMAT,
             requiredDateFormat: String = DATE_FORMAT_DISPLAY
         ): String? {
+            if (dateString == null) {
+                return null;
+            }
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
@@ -45,14 +51,20 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun isYesterday(dateString: String, dateFormat: String = DATE_FORMAT): Boolean {
+        fun isYesterday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
+            if (dateString == null) {
+                return false;
+            }
             val cal: Calendar = Calendar.getInstance(Locale.US)
             cal.roll(Calendar.DATE, false)
             return convertCalenderToString(cal, dateFormat) == dateString
         }
 
         @JvmStatic
-        fun isToday(dateString: String, dateFormat: String = DATE_FORMAT): Boolean {
+        fun isToday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
+            if (dateString == null) {
+                return false;
+            }
             val cal: Calendar = Calendar.getInstance(Locale.US)
             return convertCalenderToString(cal, dateFormat) == dateString
         }
@@ -68,7 +80,10 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun getDayFromDateString(date: String, format: String): String {
+        fun getDayFromDateString(date: String?, format: String): String? {
+            if (date == null) {
+                return null;
+            }
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
                 return SimpleDateFormat("dd", Locale.US).format(calendar.time)

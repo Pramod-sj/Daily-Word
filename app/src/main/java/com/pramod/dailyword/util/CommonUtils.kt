@@ -11,6 +11,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -186,7 +187,20 @@ class CommonUtils {
 
         @JvmStatic
         fun changeAlpha(context: Context, color: Int, alpha: Int) =
-            ColorUtils.setAlphaComponent(ContextCompat.getColor(context, color), alpha)
+            ColorUtils.setAlphaComponent(
+                getColor(context, color), alpha
+            )
+
+        @JvmStatic
+        fun getColor(context: Context, color: Int): Int {
+            Log.i("COLOR RES ID", color.toString())
+            return ContextCompat.getColor(
+                context,
+                if (color == -1 || color == 0) android.R.color.transparent else color
+            )
+
+        }
+
 
         @JvmStatic
         fun pixelToSp(context: Context, pixel: Float): Float =

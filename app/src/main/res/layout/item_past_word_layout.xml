@@ -11,9 +11,6 @@
 
         <import type="com.pramod.dailyword.ui.home.SelectedItem" />
 
-        <variable
-            name="position"
-            type="Integer" />
 
         <variable
             name="wordOfTheDay"

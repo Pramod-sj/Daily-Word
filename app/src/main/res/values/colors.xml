@@ -3,6 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3D01C3</color>
     <color name="colorAccent">#6200EE</color>
+    <color name="colorPrimaryDesaturated">#BB86FC</color>
 
     <color name="app_logo_tint">@color/black</color>
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="placeHolderImage"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="placeHolderText"
+            type="String" />
+
+        <variable
+            name="show"
+            type="Boolean" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="@{show?View.VISIBLE:View.GONE}">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="@dimen/margin_medium"
+                android:src="@{placeHolderImage}"
+                android:tint="@color/app_icon_tint"
+                android:visibility="@{placeHolderImage==null?View.GONE:View.VISIBLE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{placeHolderText}"
+                android:textSize="@dimen/text_sub_title" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

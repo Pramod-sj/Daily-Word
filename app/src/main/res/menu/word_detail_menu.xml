@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_bookmark"
+        android:icon="@drawable/ic_baseline_bookmark_border_24"
+        android:title="@string/bookmark"
+        app:iconTint="@color/app_icon_tint"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_share_word"
         android:icon="@drawable/ic_outline_share_24"

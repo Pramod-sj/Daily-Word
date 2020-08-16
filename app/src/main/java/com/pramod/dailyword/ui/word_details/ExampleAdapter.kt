@@ -9,12 +9,18 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemWordExampleLayoutBinding
 
 class ExampleAdapter(
-    private val examples: List<String>?,
-    private val colorResId: Int?,
-    private val desaturatedColorResId: Int?
+    private var examples: List<String>? = null,
+    private var colorResId: Int? = null,
+    private var desaturatedColorResId: Int? = null
 ) :
     RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder>() {
 
+    fun setExamples(examples: List<String>?, colorResId: Int?, desaturatedColorResId: Int?) {
+        this.examples = examples
+        this.colorResId = colorResId;
+        this.desaturatedColorResId = desaturatedColorResId;
+        notifyDataSetChanged()
+    }
 
     class ExampleViewHolder(val binding: ItemWordExampleLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)

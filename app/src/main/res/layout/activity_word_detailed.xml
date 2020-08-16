@@ -61,13 +61,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_large"
                     android:background="@drawable/background_home_word"
-                    android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor)),30)}"
+                    android:backgroundTint="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor),30)}"
                     android:ellipsize="marquee"
                     android:paddingHorizontal="@dimen/padding_medium"
                     android:paddingVertical="@dimen/padding_small"
                     android:singleLine="true"
                     android:text="@{CalenderUtil.convertDateStringToSpecifiedDateString(wordDetailedViewModel.wordOfTheDay.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+` - Merriam Webster Word`}"
-                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}"
+                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}"
                     android:textStyle="bold"
                     app:selected="@{true}" />
 
@@ -117,11 +117,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/padding_medium"
                         android:background="@drawable/background_circle_ripple"
-                        android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor)),30)}"
+                        android:backgroundTint="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor),30)}"
                         android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDay.pronounceAudio)}"
                         android:padding="@dimen/padding_medium"
                         android:src="@drawable/ic_volume_up_black_24dp"
-                        android:tint="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}" />
+                        android:tint="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDay.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDay.wordColor))}" />
 
                 </LinearLayout>
 
@@ -212,34 +212,34 @@
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_gravity="end"
-                    app:iconGravity="end"
-                    android:layout_margin="@dimen/margin_large"
-                    app:icon="@drawable/ic_round_arrow_forward_24"
-                    android:text="@string/go_to_merriam_webster"
-                    android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="@dimen/margin_large"
+                    android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
+                    android:text="@string/go_to_merriam_webster"
+                    app:icon="@drawable/ic_round_arrow_forward_24"
+                    app:iconGravity="end" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-<!--
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_got_to_mw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_margin="@dimen/margin_large"
-            android:height="56dp"
-            android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
-            android:text="@string/go_to_merriam_webster"
-            android:textColor="?android:attr/windowBackground"
-            app:backgroundTint="@color/colorPrimary"
-            app:icon="@drawable/ic_round_format_align_left_24"
-            app:iconTint="?android:attr/windowBackground"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
--->
+        <!--
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_got_to_mw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_margin="@dimen/margin_large"
+                    android:height="56dp"
+                    android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDay.date)}"
+                    android:text="@string/go_to_merriam_webster"
+                    android:textColor="?android:attr/windowBackground"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:icon="@drawable/ic_round_format_align_left_24"
+                    app:iconTint="?android:attr/windowBackground"
+                    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+        -->
         <!--
                 <View
                     android:layout_width="match_parent"

@@ -68,7 +68,7 @@ class WordListAdapter(
                     oldItem: WordOfTheDay,
                     newItem: WordOfTheDay
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem.word == newItem.word
                 }
 
                 override fun areContentsTheSame(

@@ -7,12 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.pramod.dailyword.db.local.dao.BookmarkDao
 import com.pramod.dailyword.db.local.dao.WordOfTheDayDao
+import com.pramod.dailyword.db.model.Bookmark
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.util.ListConverter
 
 @TypeConverters(ListConverter::class)
-@Database(entities = [WordOfTheDay::class], version = 5, exportSchema = false)
+@Database(entities = [WordOfTheDay::class, Bookmark::class], version = 6, exportSchema = false)
 abstract class AppDB : RoomDatabase() {
 
     companion object {
@@ -29,13 +31,13 @@ abstract class AppDB : RoomDatabase() {
                         AppDB::class.java,
                         APP_DB_NAME
 
-                    ).fallbackToDestructiveMigration()/*.addMigrations(migration_1_2)
+                    ).fallbackToDestructiveMigration()/*.addMigrations(migration_5_6)
                         .addCallback(object : Callback() {
                             override fun onCreate(db: SupportSQLiteDatabase) {
                                 super.onCreate(db)
                             }
-                        })
-                     */   .build()
+                        })*/
+                        .build()
                     return INSTANCE!!
                 }
             }
@@ -55,9 +57,25 @@ abstract class AppDB : RoomDatabase() {
                 database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN DID_YOU_KNOW TEXT")
             }
         }
+
+
+        private object migration_5_6 : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                database.beginTransaction()
+                database.execSQL("ALTER TABLE WordOfTheDay RENAME TO old_WordOfTheDay")
+                database.execSQL("CREATE TABLE WordOfTheDay (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,isSeen INTEGER DEFAULT 0 NOT NULL,seenAtTimeInMillis INTEGER,wordColor INTEGER,wordDesaturatedColor INTEGER)")
+                database.execSQL("INSERT INTO WordOfTheDay SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,examples,date,dateTimeInMillis,isSeen,seenAtTimeInMillis,wordColor,wordDesaturatedColor FROM old_WordOfTheDay")
+                database.endTransaction()
+
+                database.execSQL("CREATE TABLE Favorite(favoriteWord TEXT,favoriteCreatedAt LONG)")
+            }
+        }
     }
 
 
     abstract fun getWordOfTheDayDao(): WordOfTheDayDao
+
+    abstract fun getBookmarkDao(): BookmarkDao
 
 }

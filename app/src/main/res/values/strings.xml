@@ -94,4 +94,7 @@
 
 
     <string name="merriam_webster_credit_text">All the content/data of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content/data.</string>
+    <string name="favorite">Favorite</string>
+    <string name="bookmark">bookmark</string>
+    <string name="bookmarked_words">Bookmarks</string>
 </resources>
