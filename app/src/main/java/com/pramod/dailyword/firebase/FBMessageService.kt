@@ -44,16 +44,18 @@ class FBMessageService : FirebaseMessagingService() {
 
             val repo = WOTDRepository(applicationContext)
             GlobalScope.launch {
-                val wordOfTheDay = repo.getJustNonLive(
-                    CalenderUtil.convertCalenderToString(
-                        Calendar.getInstance(),
-                        CalenderUtil.DATE_FORMAT
-                    )
-                )
                 var notification: Notification? = null
-                if (wordOfTheDay != null && payload.noitificationType == NOTIFICATION_REMINDER) {
+                if (payload.noitificationType == NOTIFICATION_REMINDER) {
+
+                    val wordOfTheDay = repo.getJustNonLive(
+                        CalenderUtil.convertCalenderToString(
+                            Calendar.getInstance(),
+                            CalenderUtil.DATE_FORMAT
+                        )
+                    )
+
                     //checking whether word seen or not
-                    if (!wordOfTheDay.isSeen) {
+                    if (wordOfTheDay == null || !wordOfTheDay.isSeen) {
                         notification = notificationHelper
                             .createNotification(
                                 title = payload.title,
@@ -62,13 +64,6 @@ class FBMessageService : FirebaseMessagingService() {
                             )
                     }
 
-                } else if (wordOfTheDay != null && payload.noitificationType == NOTIFICATION_NEW_WORD) {
-                    notification = notificationHelper
-                        .createNotification(
-                            title = payload.title,
-                            body = payload.body,
-                            pendingIntent = pendingIntent
-                        )
                 } else {
                     //if no word in db or something diff notification type
                     notification = notificationHelper
