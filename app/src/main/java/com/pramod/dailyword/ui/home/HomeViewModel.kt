@@ -57,12 +57,14 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
                     setMessage(SnackbarMessage.init(message))
                 }
             }
-            return@map if (it.data != null && !it.data.isEmpty()) it.data[0] else null
+            return@map if (it.data != null && it.data.isNotEmpty()) it.data[0] else null
         }
 
         wordsExceptTodayLiveData = Transformations.map(wordResourceLiveData) {
             val list = it.data?.toMutableList()
-            list?.removeAt(0)
+            if (list != null && list.isNotEmpty()) {
+                list.removeAt(0)
+            }
             return@map list
         }
 
