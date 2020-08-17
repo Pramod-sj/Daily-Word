@@ -14,9 +14,11 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_SOUND
 import androidx.core.app.NotificationCompat.DEFAULT_VIBRATE
+import androidx.core.content.ContextCompat
 import com.pramod.dailyword.R
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -82,6 +84,7 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         )
         builder.setSmallIcon(R.drawable.ic_notification)
         builder.setContentTitle(title)
+        builder.color = ContextCompat.getColor(applicationContext, R.color.colorPrimaryDesaturated)
         builder.setDefaults(DEFAULT_SOUND + DEFAULT_VIBRATE)
         builder.setContentText(body)
         builder.setAutoCancel(cancelable)

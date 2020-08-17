@@ -1,6 +1,7 @@
 package com.pramod.dailyword.ui.home
 
 import android.app.ActivityOptions
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -68,7 +69,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         shouldShowRatingDialog()
         //edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
-        //showDummyNotification()
         promptAutoStart()
         //showDummyLotttieDialog()
         showNativeAdDialogWithDelay()
@@ -142,15 +142,23 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
-    private fun showDummyNotification() {
+    private fun showNotification(word: WordOfTheDay) {
         val notificationHelper = NotificationHelper(this@HomeActivity)
         val notification = notificationHelper.createNotification(
-            title = "Here's your Today's Word",
-            body = "Hello world", cancelable = true
+            title = "Welcome to Daily Word!",
+            body = "Your first word of the day is '${word.word}'",
+            cancelable = true,
+            pendingIntent = PendingIntent.getActivity(
+                applicationContext,
+                998,
+                Intent(this, HomeActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
         )
         notificationHelper.makeNotification(
             notification = notification
         )
+
     }
 
     private fun setUpRecyclerViewAdapter() {
@@ -175,6 +183,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     it.isSeen = true
                     it.seenAtTimeInMillis = Calendar.getInstance().timeInMillis
                     mViewModel.updateWordSeenStatus(it)
+                    if (PrefManager.getInstance(this).getAppLaunchCount() == 1) {
+                        showNotification(it)
+                    }
                 }
             }
         })
