@@ -72,6 +72,22 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".ui.widget.WidgetActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <receiver android:name=".ui.widget.OnPlayAudioClick">
+            <intent-filter>
+                <action android:name="play_audio_from_widget"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
