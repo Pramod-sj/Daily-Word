@@ -101,11 +101,14 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         notification: Notification,
         notificationId: Int = generateUniqueNotificationId()
     ) {
+/*
         if (NotificationPrefManager.newInstance(context).isNotificationEnabled()) {
             notificationManager.notify(notificationId, notification)
         } else {
             Log.i(TAG, "Notification are disabled, enable it from settings")
         }
+*/
+        notificationManager.notify(notificationId, notification)
     }
 
     fun cancelNotification(notificationId: Int) {
