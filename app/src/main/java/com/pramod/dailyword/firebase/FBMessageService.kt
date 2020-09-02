@@ -33,6 +33,7 @@ class FBMessageService : FirebaseMessagingService() {
         p0.let {
             val payload: MessagePayload =
                 Gson().fromJson(Gson().toJson(p0.data), MessagePayload::class.java)
+            //Log.i(TAG, Gson().toJson(payload))
             val notificationHelper = NotificationHelper(applicationContext)
             val intentToMainActivity = Intent(applicationContext, HomeActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
@@ -53,6 +54,7 @@ class FBMessageService : FirebaseMessagingService() {
                             CalenderUtil.DATE_FORMAT
                         )
                     )
+                    //Log.i(TAG, Gson().toJson(wordOfTheDay))
 
                     //checking whether word seen or not
                     if (wordOfTheDay == null || !wordOfTheDay.isSeen) {

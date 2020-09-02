@@ -32,9 +32,19 @@
             android:paddingTop="?actionBarSize">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65dp"
+                    android:padding="@dimen/padding_medium"
+                    android:text="Personalize"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -58,7 +68,8 @@
                     app:showRadioButton="true"
                     app:subTitle="Animate when switching from one window to another"
                     app:title="Window Animation"
-                    app:titlePaddingStart="@dimen/margin_small" />
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleTextSize="@dimen/text_sub_title" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -71,20 +82,45 @@
                     app:showRadioButton="true"
                     app:subTitle="Use full screen"
                     app:title="Edge to Edge"
-                    app:titlePaddingStart="@dimen/margin_small" />
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleTextSize="@dimen/text_sub_title" />
+
+                <TextView
+                    android:textAllCaps="true"
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:padding="@dimen/padding_medium"
+                    android:text="Notification"
+                    android:textColor="@color/colorPrimary" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="@{appSettingViewModel.toggleNotificationClickableLiveData()}"
                     android:onClick="@{()->appSettingViewModel.toggleNotification()}"
                     app:checked="@{appSettingViewModel.notificationPrefManager.liveData}"
                     app:icon="@drawable/ic_notifications_none_black_24dp"
                     app:iconColorTint="@color/notification_icon_tint"
                     app:showIconBackground="true"
                     app:showRadioButton="true"
-                    app:subTitle="@{appSettingViewModel.notificationPrefManager.liveData?`Notifications is enabled`:`Notifications is disabled`}"
-                    app:title="Notification"
-                    app:titlePaddingStart="@dimen/margin_small" />
+                    app:subTitle="@{appSettingViewModel.toggleNotificationMessageLiveData()}"
+                    app:title="Daily Notification"
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleTextSize="@dimen/text_sub_title" />
+
+                <TextView
+                    android:textAllCaps="true"
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:padding="@dimen/padding_medium"
+                    android:text="Other"
+                    android:textColor="@color/colorPrimary" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -96,7 +132,8 @@
                     app:showRadioButton="false"
                     app:subTitle="Links, developer, license, others"
                     app:title="About"
-                    app:titlePaddingStart="@dimen/margin_small" />
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleTextSize="@dimen/text_sub_title" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

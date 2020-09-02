@@ -9,6 +9,8 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
 import com.pramod.dailyword.db.remote.EndPoints
+import com.pramod.dailyword.firebase.FBTopicSubscriber
+import com.pramod.dailyword.helper.NotificationPrefManager
 import com.pramod.dailyword.helper.showWebViewDialog
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.home.HomeActivity
@@ -34,6 +36,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
             else !ThemeManager.isNightModeActive(this)
         )
         super.onCreate(savedInstanceState)
+        registerTopics()
         animateAppIcon()
         navigateToHomePage()
         arrangeViewsAccordingToEdgeToEdge()
@@ -111,4 +114,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
         accept_condition_textView.showLinks(termsAndConditionLink, privacyPolicyLink)
     }
 
+    private fun registerTopics() {
+        if (NotificationPrefManager.newInstance(this).isNotificationEnabled()) {
+            FBTopicSubscriber.startReceivingDailyWordNotification()
+        }
+    }
 }

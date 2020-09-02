@@ -2,6 +2,7 @@ package com.pramod.dailyword.helper
 
 import android.content.Context
 import android.util.Log
+import com.pramod.dailyword.firebase.FBTopicSubscriber
 
 class NotificationPrefManager private constructor(private val context: Context) {
 
@@ -18,13 +19,22 @@ class NotificationPrefManager private constructor(private val context: Context) 
     }
 
 
-    fun toggleNotificationEnabled() {
+    fun toggleNotificationEnabled(listener: ((String, FBTopicSubscriber.OperationStatus) -> Unit)? = null) {
         Log.i("Notification TOGGLE", (!isNotificationEnabled()).toString())
-        editor.putBoolean(
-            KEY_NOTIFICATION_ENABLED,
-            !isNotificationEnabled()
-        ).commit()
+        FBTopicSubscriber.toggleReceivingDailyWordNotification(this) { s: String, operationStatus: FBTopicSubscriber.OperationStatus ->
+            if (operationStatus == FBTopicSubscriber.OperationStatus.SUCCESS) {
+                editor.putBoolean(
+                    KEY_NOTIFICATION_ENABLED,
+                    !isNotificationEnabled()
+                ).commit()
+                listener?.invoke(s, FBTopicSubscriber.OperationStatus.SUCCESS)
+            } else {
+                listener?.invoke(s, FBTopicSubscriber.OperationStatus.FAILED)
+            }
+        }
+
     }
+
 
     fun isNotificationEnabled() = sharedPreferences.getBoolean(
         KEY_NOTIFICATION_ENABLED,
