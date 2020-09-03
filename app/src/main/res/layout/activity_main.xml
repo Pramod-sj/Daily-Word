@@ -266,7 +266,8 @@
                     android:layout_marginEnd="@dimen/margin_large"
                     android:onClick="@{()->mainViewModel.learnAll()}"
                     android:text="@string/learn_all"
-                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}" />
+                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"
+                    app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
