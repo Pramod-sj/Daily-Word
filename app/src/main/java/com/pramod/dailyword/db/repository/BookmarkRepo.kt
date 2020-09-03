@@ -24,7 +24,7 @@ class BookmarkRepo(private val context: Context) {
         ).build()
     }
 
-    suspend fun bookmark(word: String): Boolean {
+    suspend fun bookmarkToggle(word: String): Boolean {
         val data = dao.get(word)
         return if (data == null) {
             addToBookmark(word) > -1

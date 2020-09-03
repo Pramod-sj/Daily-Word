@@ -66,7 +66,7 @@ class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTh
 
     fun bookmark() {
         GlobalScope.launch(Dispatchers.Main) {
-            bookmarkRepo.bookmark(wordOfTheDay.word!!)
+            bookmarkRepo.bookmarkToggle(wordOfTheDay.word!!)
         }
     }
 

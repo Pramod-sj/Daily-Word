@@ -12,7 +12,7 @@ class CalenderUtil {
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
 
         @JvmStatic
-        fun convertCalenderToString(calender: Calendar, dateFormat: String): String {
+        fun convertCalenderToString(calender: Calendar, dateFormat: String = DATE_FORMAT): String {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             return simpleDateFormat.format(calender.time)
         }
