@@ -1,5 +1,6 @@
-{
-  "1.1.1": {
+[
+  {
+    "version": "1.1.1",
     "release_name": "\uD83D\uDC1E Major bug fix update \uD83D\uDC1E",
     "date": "02 Sep 2020",
     "changes": [
@@ -7,7 +8,8 @@
       "Added sections in Settings Page"
     ]
   },
-  "1.1.0": {
+  {
+    "version": "1.1.0",
     "release_name": "\uD83C\uDF89Feature update\uD83C\uDF89",
     "date": "16 Aug 2020",
     "changes": [
@@ -15,14 +17,16 @@
       "Reminding notification only when user didn't read word"
     ]
   },
-  "1.0.1": {
+  {
+    "version": "1.0.1",
     "release_name": "Minor bug fix update",
     "date": "15 Jul 2020",
     "changes": [
       "Hot fixes"
     ]
   },
-  "1.0.0": {
+  {
+    "version": "1.0.0",
     "release_name": "Initial Release",
     "date": "15 Jul 2020",
     "changes": [
@@ -34,4 +38,4 @@
       "List of all words till date (From date of App release)"
     ]
   }
-}
+]
