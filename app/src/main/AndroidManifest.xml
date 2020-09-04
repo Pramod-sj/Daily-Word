@@ -81,7 +81,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET" />
                 <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET" />
-                <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
+                <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
                 <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
@@ -89,6 +89,23 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
+        </receiver>
+
+
+        <receiver
+            android:name=".widget.SmallWordWidgetProvider"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET" />
+                <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_small_info" />
         </receiver>
 
         <service

@@ -35,6 +35,8 @@ class WidgetDataLoadService : JobService() {
 
             try {
                 val widgetComponent = ComponentName(baseContext, WordWidgetProvider::class.java)
+                val widgetComponentSmall =
+                    ComponentName(baseContext, SmallWordWidgetProvider::class.java)
 
 
                 val wotdRepository = WOTDRepository(baseContext)
@@ -43,6 +45,14 @@ class WidgetDataLoadService : JobService() {
                 appWidgetManager.updateAppWidget(
                     widgetComponent,
                     WidgetViewHelper.createLoadingWidget(
+                        baseContext
+                    )
+                )
+
+                //show progress loader for small widget
+                appWidgetManager.updateAppWidget(
+                    widgetComponentSmall,
+                    WidgetViewHelper.createLoadingWidgetSmall(
                         baseContext
                     )
                 )
@@ -76,10 +86,30 @@ class WidgetDataLoadService : JobService() {
                                 widgetComponent,
                                 WidgetViewHelper.createWordOfTheDayWidget(baseContext, localWord)
                             )
+
+                            //updating small widget view
+                            appWidgetManager.updateAppWidget(
+                                widgetComponentSmall,
+                                WidgetViewHelper.createWordOfTheDayWidgetSmall(
+                                    baseContext,
+                                    localWord
+                                )
+                            )
                         } else {
                             appWidgetManager.updateAppWidget(
                                 widgetComponent,
                                 WidgetViewHelper.createPlaceHolderWidget(
+                                    baseContext,
+                                    R.drawable.ic_vocabulary,
+                                    "No word of the day found!"
+                                )
+                            )
+
+
+                            //updating small widget view
+                            appWidgetManager.updateAppWidget(
+                                widgetComponentSmall,
+                                WidgetViewHelper.createPlaceHolderWidgetSmall(
                                     baseContext,
                                     R.drawable.ic_vocabulary,
                                     "No word of the day found!"
@@ -95,12 +125,28 @@ class WidgetDataLoadService : JobService() {
                                 resource.message ?: "Something went wrong! try again."
                             )
                         )
+
+                        //updating small widget view
+                        appWidgetManager.updateAppWidget(
+                            widgetComponentSmall,
+                            WidgetViewHelper.createPlaceHolderWidgetSmall(
+                                baseContext,
+                                R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
+                                resource.message ?: "Something went wrong! try again."
+                            )
+                        )
                     }
 
                 } else {
                     appWidgetManager.updateAppWidget(
                         widgetComponent,
                         WidgetViewHelper.createWordOfTheDayWidget(baseContext, localWord)
+                    )
+
+                    //update small widget
+                    appWidgetManager.updateAppWidget(
+                        widgetComponentSmall,
+                        WidgetViewHelper.createWordOfTheDayWidgetSmall(baseContext, localWord)
                     )
                 }
 
