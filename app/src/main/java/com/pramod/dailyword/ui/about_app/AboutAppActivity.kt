@@ -14,6 +14,7 @@ import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.about_app.donate.DonateActivity
+import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 
 class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel>() {
 
@@ -76,94 +77,95 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     }
 
     private fun setAppLink() {
-        mViewModel.navigateToAppGithubLinkLiveData().observe(this, Observer {
-            it?.let {
+
+        mBinding.setVariable(BR.appLinkNavigate, object : AppLinkNavigate {
+            override fun navigateToForkProject() {
                 openWebsite(resources.getString(R.string.app_git_url))
             }
-        })
-        mViewModel.navigateToGooglePlayReviewLiveData().observe(this, Observer {
-            it?.let {
+
+            override fun openGooglePlayReview() {
                 openGoogleReviewPage()
             }
-        })
 
-        mViewModel.navigateToDonatePageLiveData().observe(this, Observer {
-            it?.let {
-                DonateActivity.openActivity(this)
+            override fun openDonatePage() {
+                DonateActivity.openActivity(this@AboutAppActivity)
             }
-        })
 
-        mViewModel.shareAppLiveData().observe(this, Observer {
-            it?.let {
+            override fun shareAppWithFriends() {
                 shareApp()
             }
+
+            override fun openChangelogActivity() {
+                ChangelogActivity.openActivity(this@AboutAppActivity)
+            }
+
         })
+
+
     }
 
     private fun setOthersLink() {
-        mViewModel.showOpenSourceLibsLiveData().observe(this, Observer {
-            it?.let {
-                showLib()
-            }
-        })
-        mViewModel.showPrivacyPolicyLiveData().observe(this, Observer {
-            it?.let {
-                showWebViewDialog(EndPoints.PRIVACY_POLICY)
-            }
-        })
-        mViewModel.showTermAndConditionLiveData().observe(this, Observer {
-            it?.let {
+
+        mBinding.setVariable(BR.otherLinkNavigate, object : OtherLinkNavigate {
+            override fun showTermsAndService() {
                 showWebViewDialog(EndPoints.TERM_AND_CONDITION)
             }
+
+            override fun showPrivacyPolicy() {
+                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+            }
+
+            override fun showOpenSourceLibs() {
+                showLib()
+            }
+
         })
+
     }
 
     private fun setDeveloperLink() {
-        mViewModel.navigateToDevFacebookLiveData().observe(this, Observer {
-            it?.let {
-                openWebsite(resources.getString(R.string.dev_facebook_url))
-            }
-        })
-        mViewModel.navigateToDevGithubLiveData().observe(this, Observer {
-            it?.let {
+
+        mBinding.setVariable(BR.developerLinkNavigate, object : DeveloperLinkNavigate {
+            override fun navigateToGithub() {
                 openWebsite(resources.getString(R.string.dev_github_url))
             }
-        })
-        mViewModel.navigateToDevInstagramLiveData().observe(this, Observer {
-            it?.let {
-                openWebsite(resources.getString(R.string.dev_instagram_url))
+
+            override fun navigateToFacebook() {
+                openWebsite(resources.getString(R.string.dev_facebook_url))
             }
-        })
-        mViewModel.navigateToDevGmailLiveData().observe(this, Observer {
-            it?.let {
+
+            override fun navigateToGmail() {
                 openGmail(
                     arrayOf(resources.getString(R.string.dev_email)),
-                    "What's your title?",
+                    "Daily Word Query",
                     "Hello Pramod,"
                 )
             }
+
+            override fun navigateToInstagram() {
+                openWebsite(resources.getString(R.string.dev_instagram_url))
+            }
+
         })
 
     }
 
     private fun setCreditLink() {
-        mViewModel.navigateToFreepikLiveData().observe(this, Observer {
-            it?.let {
+        mBinding.setVariable(BR.creditLinkNavigate, object : CreditLinkNavigate {
+            override fun navigateToFreePikWebsite() {
                 openWebsite(resources.getString(R.string.app_credit_freepik_url))
             }
-        })
 
-
-        mViewModel.navigateToMaterialIconLiveData().observe(this, Observer {
-            it?.let {
+            override fun navigateToMaterialDesignIcon() {
                 openWebsite(resources.getString(R.string.app_credit_material_icon_url))
             }
-        })
-        mViewModel.navigateToMerriamWebsterLiveData().observe(this, Observer {
-            it?.let {
+
+            override fun navigateToMerriamWebster() {
                 openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
             }
+
         })
+
 
     }
 

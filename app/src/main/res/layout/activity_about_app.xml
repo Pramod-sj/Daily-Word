@@ -7,6 +7,30 @@
 
         <import type="com.pramod.dailyword.BuildConfig" />
 
+        <import type="com.pramod.dailyword.ui.about_app.AppLinkNavigate" />
+
+        <import type="com.pramod.dailyword.ui.about_app.CreditLinkNavigate" />
+
+        <import type="com.pramod.dailyword.ui.about_app.DeveloperLinkNavigate" />
+
+        <import type="com.pramod.dailyword.ui.about_app.OtherLinkNavigate" />
+
+        <variable
+            name="appLinkNavigate"
+            type="AppLinkNavigate" />
+
+        <variable
+            name="creditLinkNavigate"
+            type="CreditLinkNavigate" />
+
+        <variable
+            name="developerLinkNavigate"
+            type="DeveloperLinkNavigate" />
+
+        <variable
+            name="otherLinkNavigate"
+            type="OtherLinkNavigate" />
+
         <variable
             name="aboutAppViewModel"
             type="com.pramod.dailyword.ui.about_app.AboutAppViewModel" />
@@ -92,7 +116,18 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToForkProject()}"
+                            android:layout_marginTop="@dimen/margin_small"
+                            app:icon="@drawable/ic_round_change_log_24"
+                            app:showRadioButton="false"
+                            app:subTitle="Checkout what's new in this version"
+                            app:title="Changelog"
+                            android:onClick="@{()->appLinkNavigate.openChangelogActivity()}"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <com.pramod.dailyword.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appLinkNavigate.navigateToForkProject()}"
                             app:icon="@drawable/ic_source_fork"
                             app:showRadioButton="false"
                             app:subTitle="View source code or fork on github"
@@ -102,7 +137,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.openDonatePage()}"
+                            android:onClick="@{()->appLinkNavigate.openDonatePage()}"
                             app:icon="@drawable/ic_baseline_card_giftcard_24"
                             app:showRadioButton="false"
                             app:subTitle="Liked my work?"
@@ -112,20 +147,20 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.shareApp()}"
+                            android:onClick="@{()->appLinkNavigate.shareAppWithFriends()}"
                             app:icon="@drawable/ic_outline_share_24"
                             app:showRadioButton="false"
-                            app:subTitle="Share with your family, friends and colleague learn a word together"
+                            app:subTitle="Share with your family, friends and colleague, and learn new words together"
                             app:title="Share"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.openGooglePlayReview()}"
+                            android:onClick="@{()->appLinkNavigate.openGooglePlayReview()}"
                             app:icon="@drawable/ic_outline_rate_review_24"
                             app:showRadioButton="false"
-                            app:subTitle="Take a moment to rate my app on Google playstore"
+                            app:subTitle="Take a moment to rate my app on Google play store"
                             app:title="Rate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
@@ -182,7 +217,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
-                            android:onClick="@{()->aboutAppViewModel.navigateToGithub()}"
+                            android:onClick="@{()->developerLinkNavigate.navigateToGithub()}"
                             app:icon="@drawable/ic_github"
                             app:showRadioButton="false"
                             app:subTitle="Follow me on github for more projects"
@@ -192,7 +227,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToGmail()}"
+                            android:onClick="@{()->developerLinkNavigate.navigateToGmail()}"
                             app:icon="@drawable/ic_gmail"
                             app:showRadioButton="false"
                             app:subTitle="Have query drop a mail"
@@ -202,7 +237,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToInstagram()}"
+                            android:onClick="@{()->developerLinkNavigate.navigateToInstagram()}"
                             app:icon="@drawable/ic_instagram"
                             app:showRadioButton="false"
                             app:subTitle="Follow me on instagram"
@@ -212,7 +247,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToFacebook()}"
+                            android:onClick="@{()->developerLinkNavigate.navigateToFacebook()}"
                             app:icon="@drawable/ic_facebook"
                             app:showRadioButton="false"
                             app:subTitle="Follow me on facebook"
@@ -251,7 +286,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToFreePikWebsite()}"
+                            android:onClick="@{()->creditLinkNavigate.navigateToFreePikWebsite()}"
                             app:icon="@drawable/ic_freepik"
                             app:subTitle="App icon/logo made by Freepik from flaticon"
                             app:title="App Logo" />
@@ -260,7 +295,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.navigateToMaterialDesignIcon()}"
+                            android:onClick="@{()->creditLinkNavigate.navigateToMaterialDesignIcon()}"
                             app:icon="@drawable/ic_vector_square"
                             app:subTitle="All material designed icons are used from this website"
                             app:title="Material Design Icons" />
@@ -268,9 +303,9 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:noIconColorTint="true"
-                            android:onClick="@{()->aboutAppViewModel.navigateToMerriamWebster()}"
+                            android:onClick="@{()->creditLinkNavigate.navigateToMerriamWebster()}"
                             app:icon="@drawable/merriam_webster_logo"
+                            app:noIconColorTint="true"
                             app:subTitle="@{@string/merriam_webster_credit_text}"
                             app:title="Merriam Webster" />
 
@@ -307,7 +342,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.showOpenSourceLibs()}"
+                            android:onClick="@{()->otherLinkNavigate.showOpenSourceLibs()}"
                             app:icon="@drawable/ic_open_source_license"
                             app:showRadioButton="false"
                             app:subTitle="All used libraries details"
@@ -317,7 +352,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.showTermsAndService()}"
+                            android:onClick="@{()->otherLinkNavigate.showTermsAndService()}"
                             app:icon="@drawable/ic_terms_and_conditions"
                             app:showRadioButton="false"
                             app:title="Terms &amp; Services"
@@ -326,7 +361,7 @@
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->aboutAppViewModel.showPrivacyPolicy()}"
+                            android:onClick="@{()->otherLinkNavigate.showPrivacyPolicy()}"
                             app:icon="@drawable/ic_privacy_policy_black_24dp"
                             app:showRadioButton="false"
                             app:title="Privacy Policies"
@@ -345,7 +380,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
