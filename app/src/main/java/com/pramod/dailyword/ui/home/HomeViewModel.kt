@@ -6,10 +6,12 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.*
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.repository.WOTDRepository
 import com.pramod.dailyword.db.model.WordOfTheDay
+import com.pramod.dailyword.helper.PrefManager
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.Event
@@ -134,4 +136,13 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         return learnAll
     }
 
+    val showChangelogActivity: LiveData<Event<Boolean>> = MutableLiveData<Event<Boolean>>().apply {
+        val prefManager = PrefManager(application)
+        value = if (prefManager.getLastAppVersion() < BuildConfig.VERSION_CODE) {
+            prefManager.updateAppVersion()
+            Event.init(true)
+        } else {
+            Event.init(false)
+        }
+    }
 }

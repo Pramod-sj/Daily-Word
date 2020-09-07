@@ -1,5 +1,6 @@
 package com.pramod.dailyword.ui.home
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Context
@@ -23,6 +24,7 @@ import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityMainBinding
@@ -31,6 +33,7 @@ import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
+import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
@@ -41,9 +44,22 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
 
     companion object {
+
         @JvmStatic
         fun openActivity(context: Context) {
             val intent = Intent(context, HomeActivity::class.java)
+            context.startActivity(intent)
+        }
+
+        @JvmStatic
+        fun openActivityWithFade(context: Context) {
+            val intent = Intent(context, HomeActivity::class.java)
+            if (context is Activity) {
+                context.overridePendingTransition(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+            }
             context.startActivity(intent)
         }
 
@@ -60,6 +76,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         initEnterTransition()
         initExitTransition()
         super.onCreate(savedInstanceState)
+        showChangelogActivity()
         initAppUpdate()
         initToolbar()
         initBottomMenu()
@@ -79,6 +96,16 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+    }
+
+    private fun showChangelogActivity() {
+        mViewModel.showChangelogActivity.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                if (it) {
+                    ChangelogActivity.openActivity(this, true)
+                }
+            }
+        })
     }
 
     private fun shouldShowCreditDialog() {

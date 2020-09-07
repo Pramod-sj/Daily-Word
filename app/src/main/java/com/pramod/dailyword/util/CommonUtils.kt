@@ -23,6 +23,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
+import com.pramod.dailyword.ui.BaseViewModel
 import java.util.*
 import kotlin.collections.map as map1
 
@@ -334,6 +335,18 @@ class CommonUtils {
             view.startAnimation(alphaAnimation)
         }
 
+
+        fun loadJsonFromAsset(context: Context, fileName: String): String? {
+            var json: String? = null
+            try {
+                val inputStream = context.assets.open(fileName)
+                json = String(inputStream.readBytes())
+            } catch (e: Exception) {
+                Log.e("loadJsonFromAssest", "loadJsonFromAssest: ", e)
+                return json
+            }
+            return json
+        }
 
     }
 

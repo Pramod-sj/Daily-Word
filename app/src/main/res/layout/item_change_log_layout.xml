@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.text.Html" />
+
+        <variable
+            name="changes"
+            type="com.pramod.dailyword.db.model.Changes" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="@dimen/padding_small">
+
+        <TextView
+            style="@style/AppTheme.SubTitleTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`v`+changes.version+` (`+changes.date+`) `}"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/AppTheme.SubTitleTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{changes.releaseName}" />
+
+        <TextView
+            style="@style/AppTheme.SubTitleTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{changes.getFormattedChanges(@string/unicode_bullet)}" />
+    </LinearLayout>
+</layout>

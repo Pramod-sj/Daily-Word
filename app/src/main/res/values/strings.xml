@@ -97,4 +97,6 @@
     <string name="favorite">Favorite</string>
     <string name="bookmark">bookmark</string>
     <string name="bookmarked_words">Bookmarks</string>
+    <string name="what_s_new">What\'s new?</string>
+
 </resources>

@@ -66,8 +66,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
                     //val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this)
-                    HomeActivity.openActivity(this)
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    HomeActivity.openActivityWithFade(this)
                     finish()
                     //ActivityCompat.finishAfterTransition(this)
                 }

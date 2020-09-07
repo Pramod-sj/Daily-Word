@@ -13,6 +13,7 @@
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
+        <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
     </style>
 
     <style name="AppTheme.HomeActivity" parent="AppTheme">

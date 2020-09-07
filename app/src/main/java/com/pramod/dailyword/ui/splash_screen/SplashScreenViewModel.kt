@@ -22,6 +22,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
     private val navigateToHomePage = MutableLiveData<Event<Boolean>>()
 
     init {
+
         splashScreenTextVisible.observeForever(object : Observer<Boolean> {
             override fun onChanged(t: Boolean?) {
                 splashScreenTextVisible.removeObserver(this)

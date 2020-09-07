@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="showContinueButton"
+            type="Boolean" />
+
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
+
+        <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <import type="com.pramod.dailyword.helper.PrefManager" />
+
+        <variable
+            name="changelogCallbacks"
+            type="com.pramod.dailyword.ui.change_logs.ChangelogCallbacks" />
+
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.change_logs.ChangelogActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_change_logs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingTop="?attr/actionBarSize"
+            android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
+            android:scrollbars="vertical"
+            android:splitMotionEvents="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fab_continue_learning_words"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:height="60dp"
+            app:cornerRadius="30dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/margin_large"
+            android:onClick="@{()->changelogCallbacks.onContinueLearningWordsClick()}"
+            android:text="Continue"
+            android:visibility="@{showContinueButton?View.VISIBLE:View.GONE}"
+            app:icon="@drawable/ic_round_arrow_forward_24"
+            app:iconGravity="end"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="@dimen/appbar_alpha"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/windowBackground">
+
+                <TextView
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/what_s_new" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
