@@ -81,7 +81,7 @@ class WidgetViewHelper {
                     )
                 )
                 bookmarkIntent.action =
-                    WordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
+                    BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
 
                 val pendingIntentBookmark = PendingIntent.getBroadcast(
                     context,
@@ -100,7 +100,7 @@ class WidgetViewHelper {
 
             val tryAgainIntent = Intent(context, WordWidgetProvider::class.java)
             tryAgainIntent.action =
-                WordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+                BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
 
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,
@@ -179,7 +179,7 @@ class WidgetViewHelper {
                     )
                 )
                 bookmarkIntent.action =
-                    WordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
+                    BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
 
                 val pendingIntentBookmark = PendingIntent.getBroadcast(
                     context,
@@ -198,7 +198,7 @@ class WidgetViewHelper {
 
             val tryAgainIntent = Intent(context, WordWidgetProvider::class.java)
             tryAgainIntent.action =
-                WordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+                BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
 
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,

@@ -15,11 +15,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
-            android:drawablePadding="@dimen/padding_small"
+            android:drawablePadding="3dp"
             android:ellipsize="end"
             android:background="@drawable/background_widget_small_title"
             android:gravity="center_vertical"
-            android:padding="@dimen/padding_small"
+            android:padding="3dp"
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/dark_textColor_highEmphasis"
@@ -31,22 +31,22 @@
             android:layout_gravity="end|center_vertical"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="end|center_vertical"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_bookmark_border_24"
                 android:tint="@color/white" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_retry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="end|center_vertical"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_round_refresh_24"
                 android:tint="@color/white" />
