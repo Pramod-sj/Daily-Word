@@ -3,7 +3,7 @@
     android:initialLayout="@layout/widget_word_layout_small"
     android:minWidth="150dp"
     android:minHeight="100dp"
-    android:previewImage="@drawable/ic_vocabulary"
+    android:previewImage="@drawable/widget_small"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen">
