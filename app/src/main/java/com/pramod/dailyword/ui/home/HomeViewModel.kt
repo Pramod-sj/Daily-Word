@@ -31,8 +31,11 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     private val learnAll: MutableLiveData<Event<Boolean>> = MutableLiveData()
 
-    private lateinit var wordOfTheDayLiveData: LiveData<WordOfTheDay?>
-    private lateinit var wordsExceptTodayLiveData: LiveData<List<WordOfTheDay>?>
+    private val refreshDataSourceLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    fun refreshDataSourceLiveData(): LiveData<Event<Boolean>> = refreshDataSourceLiveData
+
+    private var wordOfTheDayLiveData: LiveData<WordOfTheDay?>
+    private var wordsExceptTodayLiveData: LiveData<List<WordOfTheDay>?>
 
 
     private val navigateToWordDetailedActivity: MutableLiveData<Event<SelectedItem<WordOfTheDay>>> =
@@ -41,10 +44,15 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     private val navigateToWordDetailedActivityFromTodaysCard: MutableLiveData<Event<WordOfTheDay>> =
         MutableLiveData()
 
+    public var wordResourceLiveData: LiveData<Resource<List<WordOfTheDay>?>>
 
     init {
         wordOfTheDayLoading.value = Event.init(true)
-        val wordResourceLiveData = wordOfTheDayRepo.getWords()
+        wordResourceLiveData = Transformations.switchMap(refreshDataSourceLiveData) {
+            return@switchMap it.getContentIfNotHandled()?.let {
+                wordOfTheDayRepo.getWords()
+            }
+        }
         wordOfTheDayLiveData = Transformations.map(wordResourceLiveData) {
             wordOfTheDayLoading.value = Event.init(it.status == Resource.Status.LOADING)
             if (it.status != Resource.Status.LOADING) {
@@ -77,6 +85,9 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         newWordReminderWorkerLiveData = wordOfTheDayRepo.getRemindWordOfTheDay()*/
     }
 
+    fun refreshDataSource() {
+        refreshDataSourceLiveData.value = Event.init(true)
+    }
 
     fun getTodaysWordOfTheDay(): LiveData<WordOfTheDay?> {
         return wordOfTheDayLiveData

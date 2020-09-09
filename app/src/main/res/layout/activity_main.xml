@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.pramod.dailyword.db.Resource.Status" />
+
         <import type="androidx.core.content.ContextCompat" />
 
         <import type="com.pramod.dailyword.util.CalenderUtil" />
@@ -59,7 +61,7 @@
             android:background="@android:color/transparent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/padding_medium"
+            android:layout_marginBottom="@dimen/padding_medium"
             app:elevation="0dp">
 
             <com.google.android.material.card.MaterialCardView
@@ -109,7 +111,8 @@
                                 android:textColor="@color/white" />
 
                             <TextView
-                                style="@style/AppTheme.Header5TextStyle"
+                                android:singleLine="true"
+                                style="@style/AppTheme.TitleTextStyle"
                                 switchingText="@{mainViewModel.title()}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -123,154 +126,161 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScroll"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-10dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:fillViewport="true"
-            android:isScrollContainer="true"
-            android:scrollbars="vertical"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:onRefreshListener="@{()->mainViewModel.refreshDataSource()}"
+            app:refreshing="@{mainViewModel.wordResourceLiveData.status==Status.LOADING}">
 
-
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/padding_small">
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:isScrollContainer="true"
+                android:scrollbars="vertical">
+
 
                 <LinearLayout
-                    android:id="@+id/main_linearLayout_wotd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->pastWordAdapter.canStart()?mainViewModel.navigateToWordDetailedFromTodaysWord(mainViewModel.todaysWordOfTheDay):null}"
                     android:orientation="vertical"
-                    android:paddingHorizontal="@dimen/padding_large"
-                    android:paddingVertical="@dimen/padding_small"
-                    android:transitionGroup="true"
-                    android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
-
-                    <!--
-                                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                                        rootLayout="@{coordinatorLayout}"
-                    -->
-
-
-                    <TextView
-                        android:id="@+id/txtView_word_of_the_day"
-                        style="@style/AppTheme.Header1TextStyle.Bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:text="@{mainViewModel.todaysWordOfTheDay.word}" />
+                    android:paddingTop="@dimen/padding_small">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:id="@+id/main_linearLayout_wotd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->pastWordAdapter.canStart()?mainViewModel.navigateToWordDetailedFromTodaysWord(mainViewModel.todaysWordOfTheDay):null}"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/padding_large"
+                        android:paddingVertical="@dimen/padding_small"
+                        android:transitionGroup="true"
+                        android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
+
+                        <!--
+                                            copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                                            rootLayout="@{coordinatorLayout}"
+                        -->
+
+
+                        <TextView
+                            android:id="@+id/txtView_word_of_the_day"
+                            style="@style/AppTheme.Header1TextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="@{mainViewModel.todaysWordOfTheDay.word}" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{mainViewModel.todaysWordOfTheDay.attribute}"
+                                android:textStyle="italic" />
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/padding_small"
+                                android:text="@string/unicode_bullet" />
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
+
+                            <ImageButton
+                                android:id="@+id/main_card_view_pronounce"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/padding_medium"
+                                android:background="@drawable/background_circle_ripple"
+                                android:backgroundTint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)),30):@color/colorPrimary}"
+                                android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
+                                android:padding="@dimen/padding_medium"
+                                android:src="@drawable/ic_volume_up_black_24dp"
+                                android:tint="@{mainViewModel.todaysWordOfTheDay!=null?ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)):@color/colorPrimary}" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/AppTheme.TitleTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:text="@{mainViewModel.todaysWordOfTheDay.meanings[0]}" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/AppTheme.SubTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{`How to use `+mainViewModel.todaysWordOfTheDay.word}"
+                                android:textSize="@dimen/text_sub_title"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                style="@style/AppTheme.SubTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/main_recyclerview_past_words"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:paddingVertical="@dimen/padding_large"
+                        android:splitMotionEvents="false"
+                        app:adapter="@{pastWordAdapter}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                        <TextView
-                            style="@style/AppTheme.TitleTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.attribute}"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            style="@style/AppTheme.TitleTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:paddingHorizontal="@dimen/padding_small"
-                            android:text="@string/unicode_bullet" />
-
-                        <TextView
-                            style="@style/AppTheme.TitleTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
-
-                        <ImageButton
-                            android:id="@+id/main_card_view_pronounce"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/padding_medium"
-                            android:background="@drawable/background_circle_ripple"
-                            android:backgroundTint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)),30):@color/colorPrimary}"
-                            android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
-                            android:padding="@dimen/padding_medium"
-                            android:src="@drawable/ic_volume_up_black_24dp"
-                            android:tint="@{mainViewModel.todaysWordOfTheDay!=null?ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)):@color/colorPrimary}" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        style="@style/AppTheme.TitleTextStyle"
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        android:text="@{mainViewModel.todaysWordOfTheDay.meanings[0]}" />
+                        android:layout_gravity="end"
+                        android:layout_marginTop="-10dp"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:onClick="@{()->mainViewModel.learnAll()}"
+                        android:text="@string/learn_all"
+                        android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/AppTheme.SubTitleTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{`How to use `+mainViewModel.todaysWordOfTheDay.word}"
-                            android:textSize="@dimen/text_sub_title"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/AppTheme.SubTitleTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}" />
-                    </LinearLayout>
                 </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/main_recyclerview_past_words"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:overScrollMode="never"
-                    android:paddingHorizontal="@dimen/padding_small"
-                    android:paddingVertical="@dimen/padding_large"
-                    android:splitMotionEvents="false"
-                    app:adapter="@{pastWordAdapter}"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="-10dp"
-                    android:layout_marginEnd="@dimen/margin_large"
-                    android:onClick="@{()->mainViewModel.learnAll()}"
-                    android:text="@string/learn_all"
-                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

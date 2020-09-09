@@ -37,6 +37,7 @@ import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
+import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
 
@@ -133,6 +134,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     0, insets.systemWindowInsetTop, 0, mBinding.homeCardToolbar.contentPaddingBottom
                 )
 
+
                 val paddingBottom = insets.systemWindowInsetBottom
 
                 mBinding.homeImageViewBuildings.setPadding(
@@ -141,6 +143,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     0,
                     paddingBottom
                 )
+
+
                 insets
             }
         }
@@ -189,21 +193,12 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun setUpRecyclerViewAdapter() {
+
         pastWordAdapter = PastWordAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
-            getViewModel().navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
+            mViewModel.navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
         }
         mBinding.pastWordAdapter = pastWordAdapter
-    }
 
-    private fun initLearnAllEvent() {
-        mViewModel.getLearnAllLiveData().observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                WordListActivity.openActivity(this)
-            }
-        })
-    }
-
-    private fun setObservers() {
         mViewModel.getTodaysWordOfTheDay().observe(this, Observer {
             it?.let {
                 if (!it.isSeen) {
@@ -222,6 +217,19 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 mBinding.mainRecyclerviewPastWords.scrollToPosition(0)
             }
         })
+
+        mViewModel.refreshDataSource()
+    }
+
+    private fun initLearnAllEvent() {
+        mViewModel.getLearnAllLiveData().observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                WordListActivity.openActivity(this)
+            }
+        })
+    }
+
+    private fun setObservers() {
         mViewModel.observeNavigateToWordDetailedEvent().observe(this, Observer {
             val selectedItemEvent = it.getContentIfNotHandled()
             selectedItemEvent?.let { selectedItem ->
