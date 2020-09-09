@@ -8,6 +8,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -346,6 +347,26 @@ class CommonUtils {
                 return json
             }
             return json
+        }
+
+
+        fun getCountryCodeFromTelephoneManager(context: Context): String? {
+
+            val telephonyManager: TelephonyManager =
+                context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+            return when {
+                telephonyManager.simCountryIso != null -> {
+                    telephonyManager.simCountryIso
+                }
+                telephonyManager.networkCountryIso != null -> {
+                    telephonyManager.networkCountryIso
+                }
+                else -> {
+                    null
+                }
+            }
+
         }
 
     }

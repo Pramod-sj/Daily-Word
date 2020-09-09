@@ -115,7 +115,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
 
     private fun registerTopics() {
         if (NotificationPrefManager.newInstance(this).isNotificationEnabled()) {
-            FBTopicSubscriber.startReceivingDailyWordNotification()
+            FBTopicSubscriber.subscribeToDailyWordNotification()
         }
+        FBTopicSubscriber.subscribeToCountry(this)
     }
 }

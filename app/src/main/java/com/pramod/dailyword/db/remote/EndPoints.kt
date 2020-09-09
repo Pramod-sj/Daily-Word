@@ -11,5 +11,8 @@ class EndPoints {
 
         const val PRIVACY_POLICY = "${WOTD_BASE_URL}etc/privacy_policy.html"
         const val TERM_AND_CONDITION = "${WOTD_BASE_URL}etc/term_and_condition.html"
+
+        const val GET_PUBLIC_IP = "https://www.trackip.net/ip"
+        const val GET_IP_DETAILS = "http://www.ip-api.com/json/{public_ip}"
     }
 }

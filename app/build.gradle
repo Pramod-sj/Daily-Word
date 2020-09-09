@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     def room_version = "2.3.0-alpha01"
     def lifecycle_version = "2.3.0-alpha05"
 

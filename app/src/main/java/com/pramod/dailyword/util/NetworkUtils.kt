@@ -6,9 +6,11 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import com.pramod.dailyword.db.remote.WOTDApiService
 import com.pramod.dailyword.db.remote.EndPoints
+import com.pramod.dailyword.db.remote.IPService
 import com.pramod.dailyword.db.remote.TimeApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class NetworkUtils {
     companion object {
@@ -27,6 +29,15 @@ class NetworkUtils {
                 .build()
 
             return client.create(TimeApiService::class.java)
+        }
+
+        fun getIPService(): IPService {
+            val client = Retrofit.Builder()
+                .baseUrl(EndPoints.WOTD_API_BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return client.create(IPService::class.java)
         }
 
         fun isNetworkActive(context: Context): Boolean {
@@ -55,6 +66,32 @@ class NetworkUtils {
                 return activeNetworkInfo != null && activeNetworkInfo.isConnected
             }
             return false
+        }
+
+
+        fun isVPNActive(context: Context): Boolean {
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val capabilities =
+                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                if (capabilities != null) {
+                    return when {
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
+                        else -> false
+                    }
+                }
+                return false
+            } else {
+                val networks = connectivityManager.allNetworkInfo
+                for (n in networks) {
+                    if (n.isConnectedOrConnecting && n.type == ConnectivityManager.TYPE_VPN) {
+                        return true
+                    }
+                }
+                return false
+            }
+
         }
     }
 }
