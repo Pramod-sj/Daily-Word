@@ -12,6 +12,7 @@ import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.repository.WOTDRepository
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.PrefManager
+import com.pramod.dailyword.helper.PronounceHelper
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.Event
@@ -100,20 +101,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     fun pronounceWord(url: String) {
         Log.d("AUDIO URL", url)
-        try {
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.setAudioAttributes(
-                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
-            )
-            mediaPlayer.setOnPreparedListener {
-                it.start()
-            }
-            mediaPlayer.prepareAsync()
-
-        } catch (e: Exception) {
-            Log.d("AUDIO ERROR", e.toString())
-        }
+        PronounceHelper.playAudio(url)
     }
 
 

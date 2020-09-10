@@ -92,7 +92,12 @@
     <color name="textColor_highEmphasis">#B3000000</color>
     <color name="textColor_mediumEmphasis">#99000000</color>
     <color name="textColor_disabled">#61000000</color>
+    <!--Text Colors for Dark-->
 
+    <!--Text Colors-->
+    <color name="dark_textColor_highEmphasis">#DEFFFFFF</color>
+    <color name="dark_textColor_mediumEmphasis">#99FFFFFF</color>
+    <color name="dark_textColor_disabled">#61FFFFFF</color>
 
     <!--days colors-->
     <color name="color_sun">@color/blue_600</color>
@@ -123,4 +128,7 @@
 
 
     <color name="splash_wave_color">@color/colorPrimary</color>
+
+
+    <color name="widget_background">#70000000</color>
 </resources>

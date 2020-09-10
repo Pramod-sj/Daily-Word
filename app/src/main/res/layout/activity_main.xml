@@ -162,10 +162,10 @@
                         android:transitionGroup="true"
                         android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
 
-                        <!--
-                                            copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                                            rootLayout="@{coordinatorLayout}"
-                        -->
+                    <!--
+                                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                                        rootLayout="@{coordinatorLayout}"
+                    -->
 
 
                         <TextView
@@ -265,17 +265,18 @@
                         app:adapter="@{pastWordAdapter}"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="-10dp"
-                        android:layout_marginEnd="@dimen/margin_large"
-                        android:onClick="@{()->mainViewModel.learnAll()}"
-                        android:text="@string/learn_all"
-                        android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}" />
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginEnd="@dimen/margin_large"
+                    android:onClick="@{()->mainViewModel.learnAll()}"
+                    android:text="@string/learn_all"
+                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"
+                    app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

@@ -17,9 +17,9 @@
 
 
     <!--Text Colors-->
-    <color name="textColor_highEmphasis">#DEFFFFFF</color>
-    <color name="textColor_mediumEmphasis">#99FFFFFF</color>
-    <color name="textColor_disabled">#61FFFFFF</color>
+    <color name="textColor_highEmphasis">@color/dark_textColor_highEmphasis</color>
+    <color name="textColor_mediumEmphasis">@color/dark_textColor_mediumEmphasis</color>
+    <color name="textColor_disabled">@color/dark_textColor_disabled</color>
 
     <color name="home_past_word_color">#282828</color>
 

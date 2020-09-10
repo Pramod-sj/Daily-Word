@@ -16,6 +16,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
+    <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light"/>
+
     <style name="AppTheme.HomeActivity" parent="AppTheme">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
