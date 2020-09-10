@@ -5,8 +5,6 @@
 
         <import type="com.pramod.dailyword.helper.ThemeManager" />
 
-        <import type="androidx.core.content.ContextCompat" />
-
         <import type="com.pramod.dailyword.util.CommonUtils" />
 
         <variable
@@ -39,10 +37,10 @@
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:background="@drawable/background_curve"
-            android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?desaturatedColorResId:colorResId)),30)}"
+            android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?desaturatedColorResId:colorResId)),30)}"
             android:gravity="center"
             android:text="@{String.valueOf(srNo)}"
-            android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}" />
+            android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}" />
 
         <TextView
             style="@style/AppTheme.SubTitleTextStyle"

@@ -6,8 +6,6 @@
 
         <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
 
-        <import type="androidx.core.content.ContextCompat" />
-
         <import type="com.pramod.dailyword.helper.ThemeManager" />
 
         <import type="com.pramod.dailyword.util.CommonUtils" />
@@ -41,7 +39,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/background_word_list_date"
-                android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor)),30)}"
+                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor)),30)}"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_small">
@@ -51,14 +49,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{CalenderUtil.getDayFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
+                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{CalenderUtil.getMonthFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
+                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
 

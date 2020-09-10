@@ -21,16 +21,16 @@ object ButtonBA {
     fun setButtonTextColor(button: MaterialButton, wordOfTheDay: WordOfTheDay?) {
         if (wordOfTheDay != null) {
             val color = if (!ThemeManager.isNightModeActive(button.context)) {
-                ContextCompat.getColor(button.context, wordOfTheDay.wordDesaturatedColor)
+                CommonUtils.getColor(button.context, wordOfTheDay.wordColor)
             } else {
-                ContextCompat.getColor(button.context, wordOfTheDay.wordDesaturatedColor)
+                CommonUtils.getColor(button.context, wordOfTheDay.wordDesaturatedColor)
             }
             setButtonColor(
                 button,
                 color
             )
         } else {
-            val color = ContextCompat.getColor(button.context, R.color.colorPrimary)
+            val color = CommonUtils.getColor(button.context, R.color.colorPrimary)
             setButtonColor(
                 button,
                 color

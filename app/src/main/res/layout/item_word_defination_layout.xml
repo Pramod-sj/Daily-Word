@@ -5,8 +5,6 @@
 
         <import type="com.pramod.dailyword.helper.ThemeManager" />
 
-        <import type="androidx.core.content.ContextCompat" />
-
         <import type="com.pramod.dailyword.util.CommonUtils" />
 
         <variable
@@ -31,19 +29,6 @@
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/padding_small">
 
-        <!--
-                <TextView
-                    android:id="@+id/word_example_sr_no"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:background="@drawable/background_curve"
-                    android:backgroundTint="@{CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?desaturatedColorResId:colorResId)),30)}"
-                    android:gravity="center"
-                    android:text="@{String.valueOf(srNo)}"
-                    android:textColor="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}" />
-        -->
 
         <View
             android:id="@+id/word_example_dot"
@@ -51,7 +36,7 @@
             android:layout_height="10dp"
             android:layout_centerVertical="true"
             android:background="@drawable/background_circle"
-            android:backgroundTint="@{ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}"
+            android:backgroundTint="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}"
             android:layout_marginHorizontal="@dimen/padding_medium" />
 
         <TextView

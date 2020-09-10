@@ -5,8 +5,6 @@
 
         <import type="com.pramod.dailyword.db.Resource.Status" />
 
-        <import type="androidx.core.content.ContextCompat" />
-
         <import type="com.pramod.dailyword.util.CalenderUtil" />
 
         <import type="android.view.View" />
@@ -212,11 +210,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/padding_medium"
                                 android:background="@drawable/background_circle_ripple"
-                                android:backgroundTint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.changeAlpha(ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)?mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)),30):@color/colorPrimary}"
+                                android:backgroundTint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)),30):@color/colorPrimary}"
                                 android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
                                 android:padding="@dimen/padding_medium"
                                 android:src="@drawable/ic_volume_up_black_24dp"
-                                android:tint="@{mainViewModel.todaysWordOfTheDay!=null?ContextCompat.getColor(context,(ThemeManager.isNightModeActive(context)? mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)):@color/colorPrimary}" />
+                                android:tint="@{mainViewModel.todaysWordOfTheDay!=null?CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? mainViewModel.todaysWordOfTheDay.wordDesaturatedColor:mainViewModel.todaysWordOfTheDay.wordColor)):@color/colorPrimary}" />
 
                         </LinearLayout>
 

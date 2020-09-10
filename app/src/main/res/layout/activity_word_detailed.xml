@@ -18,8 +18,6 @@
 
         <import type="com.pramod.dailyword.helper.ThemeManager" />
 
-        <import type="androidx.core.content.ContextCompat" />
-
         <variable
             name="wordDetailedViewModel"
             type="com.pramod.dailyword.ui.word_details.WordDetailedViewModel" />

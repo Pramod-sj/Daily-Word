@@ -24,6 +24,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
+import com.pramod.dailyword.helper.ThemeManager
 import com.pramod.dailyword.ui.BaseViewModel
 import java.util.*
 import kotlin.collections.map as map1
@@ -194,11 +195,16 @@ class CommonUtils {
             )
 
         @JvmStatic
-        fun getColor(context: Context, color: Int): Int {
+        fun getColor(context: Context, colorResId: Int): Int {
             Log.i("COLOR RES ID", color.toString())
             return ContextCompat.getColor(
                 context,
-                if (color == -1 || color == 0) android.R.color.transparent else color
+                if (color == -1 || color == 0)
+                    if (ThemeManager.isNightModeActive(context))
+                        R.color.colorPrimaryDesaturated
+                    else
+                        R.color.colorPrimary
+                else color
             )
 
         }
