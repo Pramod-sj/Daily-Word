@@ -189,22 +189,21 @@ class CommonUtils {
         fun changeAlpha(color: Int, alpha: Int) = ColorUtils.setAlphaComponent(color, alpha)
 
         @JvmStatic
-        fun changeAlpha(context: Context, color: Int, alpha: Int) =
+        fun changeAlpha(context: Context, colorResId: Int, alpha: Int) =
             ColorUtils.setAlphaComponent(
-                getColor(context, color), alpha
+                getColor(context, colorResId), alpha
             )
 
         @JvmStatic
         fun getColor(context: Context, colorResId: Int): Int {
-            Log.i("COLOR RES ID", color.toString())
             return ContextCompat.getColor(
                 context,
-                if (color == -1 || color == 0)
+                if (colorResId == -1 || colorResId == 0)
                     if (ThemeManager.isNightModeActive(context))
                         R.color.colorPrimaryDesaturated
                     else
                         R.color.colorPrimary
-                else color
+                else colorResId
             )
 
         }

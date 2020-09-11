@@ -15,7 +15,7 @@ class WOTDApp : Application() {
     override fun onCreate() {
         super.onCreate()
         ThemeManager.newInstance(this).applyTheme()
-        setUpCustomCrashHandler()
+        //setUpCustomCrashHandler()
         initAds()
         PrefManager.getInstance(this).incrementAppLaunchCount()
     }

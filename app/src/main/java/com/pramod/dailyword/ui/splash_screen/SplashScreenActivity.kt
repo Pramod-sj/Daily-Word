@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
