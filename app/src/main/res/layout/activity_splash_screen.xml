@@ -45,7 +45,7 @@
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/margin_medium"
                 android:src="@drawable/ic_vocabulary"
-                android:tint="@color/app_logo_tint" />
+                app:tint="@color/app_logo_tint" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

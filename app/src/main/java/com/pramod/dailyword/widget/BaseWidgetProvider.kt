@@ -1,10 +1,13 @@
 package com.pramod.dailyword.widget
 
+import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.pramod.dailyword.db.repository.BookmarkRepo
+import com.pramod.dailyword.db.repository.WOTDRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,7 +27,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            Log.i(TAG, "onReceive: "+it.action)
+            Log.i(TAG, "onReceive: " + it.action)
             when (it.action) {
                 Intent.ACTION_TIME_CHANGED -> {
                     context?.let { context ->
@@ -80,4 +83,17 @@ open class BaseWidgetProvider : AppWidgetProvider() {
         }
         super.onDisabled(context)
     }
+
+    override fun onUpdate(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetIds: IntArray?
+    ) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        context?.let { context1 ->
+            runTodayWordFetchJob(context1)
+        }
+        Log.i(TAG, "onUpdate: function executed")
+    }
+
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -36,7 +36,7 @@
                 android:layout_height="100dp"
                 android:layout_margin="@dimen/margin_medium"
                 android:src="@{placeHolderImage}"
-                android:tint="@color/app_icon_tint"
+                app:tint="@color/app_icon_tint"
                 android:visibility="@{placeHolderImage==null?View.GONE:View.VISIBLE}" />
 
             <TextView

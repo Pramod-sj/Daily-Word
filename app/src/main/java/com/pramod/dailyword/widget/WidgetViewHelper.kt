@@ -16,7 +16,7 @@ class WidgetViewHelper {
 
         fun createWordOfTheDayWidget(context: Context, word: WordOfTheDay?): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_todays_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_content, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -124,7 +124,7 @@ class WidgetViewHelper {
 
         fun createPlaceHolderWidget(context: Context, resId: Int, message: String): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_todays_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -137,7 +137,7 @@ class WidgetViewHelper {
 
         fun createLoadingWidget(context: Context): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_todays_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.VISIBLE)

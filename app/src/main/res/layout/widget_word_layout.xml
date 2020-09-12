@@ -42,7 +42,7 @@
                 android:layout_marginEnd="@dimen/margin_medium"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_bookmark_border_24"
-                android:tint="@color/white" />
+                app:tint="@color/white" />
 
             <ImageButton
                 android:id="@+id/widget_retry"
@@ -53,7 +53,7 @@
                 android:layout_marginEnd="@dimen/margin_large"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_round_refresh_24"
-                android:tint="@color/white" />
+                app:tint="@color/white" />
 
 
         </LinearLayout>
@@ -77,7 +77,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="@dimen/margin_medium"
-                android:tint="@color/dark_textColor_highEmphasis" />
+                app:tint="@color/dark_textColor_highEmphasis" />
 
             <TextView
                 android:id="@+id/widget_placeHolder_imageView_message"
@@ -103,7 +103,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:singleLine="true"
                 android:text="Testing"
                 android:textColor="@color/dark_textColor_highEmphasis" />
 
