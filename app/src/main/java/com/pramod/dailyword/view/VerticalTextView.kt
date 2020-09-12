@@ -7,7 +7,7 @@ import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
 
 class VerticalTextView(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet?
 ) : AppCompatTextView(context, attrs) {
     var topDown = false
