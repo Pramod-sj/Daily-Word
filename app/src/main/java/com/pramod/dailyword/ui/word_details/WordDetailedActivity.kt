@@ -32,12 +32,14 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
 
     companion object {
-        fun openActivity(context: Context, word: WordOfTheDay, option: ActivityOptions) {
+        fun openActivity(context: Context, word: WordOfTheDay, option: ActivityOptions?) {
             val intent = Intent(context, WordDetailedActivity::class.java)
             val bundle = Bundle()
             bundle.putSerializable("WORD", word)
             intent.putExtras(bundle)
-            if (WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()) {
+            if (option != null &&
+                WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()
+            ) {
                 context.startActivity(intent, option.toBundle())
             } else {
                 context.startActivity(intent)

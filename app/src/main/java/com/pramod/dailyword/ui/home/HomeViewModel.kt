@@ -30,7 +30,6 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     private val wordOfTheDayLoading: MutableLiveData<Event<Boolean>> = MutableLiveData()
 
-    private val learnAll: MutableLiveData<Event<Boolean>> = MutableLiveData()
 
     private val refreshDataSourceLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
     fun refreshDataSourceLiveData(): LiveData<Event<Boolean>> = refreshDataSourceLiveData
@@ -38,14 +37,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     private var wordOfTheDayLiveData: LiveData<WordOfTheDay?>
     private var wordsExceptTodayLiveData: LiveData<List<WordOfTheDay>?>
 
-
-    private val navigateToWordDetailedActivity: MutableLiveData<Event<SelectedItem<WordOfTheDay>>> =
-        MutableLiveData()
-
-    private val navigateToWordDetailedActivityFromTodaysCard: MutableLiveData<Event<WordOfTheDay>> =
-        MutableLiveData()
-
-    public var wordResourceLiveData: LiveData<Resource<List<WordOfTheDay>?>>
+    var wordResourceLiveData: LiveData<Resource<List<WordOfTheDay>?>>
 
     init {
         wordOfTheDayLoading.value = Event.init(true)
@@ -104,35 +96,10 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         PronounceHelper.playAudio(url)
     }
 
-
-    fun navigateToWordDetailed(selectedItem: SelectedItem<WordOfTheDay>) {
-        navigateToWordDetailedActivity.value = Event.init(selectedItem)
-    }
-
-
-    fun navigateToWordDetailedFromTodaysWord(word: WordOfTheDay) {
-        navigateToWordDetailedActivityFromTodaysCard.value = Event.init(word)
-    }
-
-    fun observeNavigateToWordDetailedEvent(): LiveData<Event<SelectedItem<WordOfTheDay>>> =
-        navigateToWordDetailedActivity
-
-    fun observeNavigateToWordDetailedEventFromTodaysCard(): LiveData<Event<WordOfTheDay>> =
-        navigateToWordDetailedActivityFromTodaysCard
-
-
     fun updateWordSeenStatus(word: WordOfTheDay) {
         viewModelScope.launch {
             wordOfTheDayRepo.updateWord(word)
         }
-    }
-
-    fun learnAll() {
-        learnAll.value = Event.init(true)
-    }
-
-    fun getLearnAllLiveData(): LiveData<Event<Boolean>> {
-        return learnAll
     }
 
     val showChangelogActivity: LiveData<Event<Boolean>> = MutableLiveData<Event<Boolean>>().apply {

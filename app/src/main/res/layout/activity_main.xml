@@ -22,6 +22,10 @@
             type="com.pramod.dailyword.ui.home.PastWordAdapter" />
 
         <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <variable
+            name="viewCallbacks"
+            type="com.pramod.dailyword.ui.home.ViewCallbacks" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -55,11 +59,11 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium"
             android:alpha="0.9"
             android:background="@android:color/transparent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_marginBottom="@dimen/padding_medium"
             app:elevation="0dp">
 
             <com.google.android.material.card.MaterialCardView
@@ -109,11 +113,11 @@
                                 android:textColor="@color/white" />
 
                             <TextView
-                                android:singleLine="true"
                                 style="@style/AppTheme.TitleTextStyle"
                                 switchingText="@{mainViewModel.title()}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:singleLine="true"
                                 android:textColor="@color/white" />
 
                         </LinearLayout>
@@ -153,17 +157,17 @@
                         android:id="@+id/main_linearLayout_wotd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{()->pastWordAdapter.canStart()?mainViewModel.navigateToWordDetailedFromTodaysWord(mainViewModel.todaysWordOfTheDay):null}"
+                        android:onClick="@{(v)->viewCallbacks.readMore(v,mainViewModel.todaysWordOfTheDay)}"
                         android:orientation="vertical"
                         android:paddingHorizontal="@dimen/padding_large"
                         android:paddingVertical="@dimen/padding_small"
                         android:transitionGroup="true"
                         android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
 
-                    <!--
-                                        copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
-                                        rootLayout="@{coordinatorLayout}"
-                    -->
+                        <!--
+                                            copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                                            rootLayout="@{coordinatorLayout}"
+                        -->
 
 
                         <TextView
@@ -219,6 +223,8 @@
                         </LinearLayout>
 
                         <TextView
+                            android:maxLines="3"
+                            android:ellipsize="end"
                             style="@style/AppTheme.TitleTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -244,8 +250,22 @@
                                 style="@style/AppTheme.SubTitleTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:maxLines="4"
                                 android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}" />
                         </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
+                            android:layout_width="wrap_content"
+                            android:textAllCaps="false"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:height="40dp"
+                            android:onClick="@{(v)->viewCallbacks.readMore(v,mainViewModel.todaysWordOfTheDay)}"
+                            android:text="@string/read_more"
+                            android:textSize="@dimen/text_small"
+                            app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -263,18 +283,21 @@
                         app:adapter="@{pastWordAdapter}"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="-10dp"
-                    android:layout_marginEnd="@dimen/margin_large"
-                    android:onClick="@{()->mainViewModel.learnAll()}"
-                    android:text="@string/learn_all"
-                    android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"
-                    app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="-10dp"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:ellipsize="end"
+                        android:onClick="@{(v)->viewCallbacks.learnAll(v)}"
+                        android:text="@string/learn_all"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/text_small"
+                        android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"
+                        app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

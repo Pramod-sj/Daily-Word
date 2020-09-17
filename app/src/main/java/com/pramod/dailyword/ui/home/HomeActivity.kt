@@ -77,13 +77,12 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         initEnterTransition()
         initExitTransition()
         super.onCreate(savedInstanceState)
+        setUpViewCallbacks()
         showChangelogActivity()
         initAppUpdate()
         initToolbar()
         initBottomMenu()
         setUpRecyclerViewAdapter()
-        setObservers()
-        initLearnAllEvent()
         shouldShowRatingDialog()
         //edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
@@ -97,6 +96,22 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+    }
+
+    private fun setUpViewCallbacks() {
+        mBinding.setVariable(BR.viewCallbacks, object : ViewCallbacks {
+            override fun readMore(v: View?, word: WordOfTheDay?) {
+                word?.let {
+                    val view = mBinding.mainLinearLayoutWotd
+                    intentToWordDetail(this@HomeActivity, view, word)
+                }
+            }
+
+            override fun learnAll(v: View?) {
+                WordListActivity.openActivity(this@HomeActivity)
+            }
+
+        })
     }
 
     private fun showChangelogActivity() {
@@ -193,12 +208,14 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun setUpRecyclerViewAdapter() {
-
         pastWordAdapter = PastWordAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
-            mViewModel.navigateToWordDetailed(SelectedItem.initWithPosition(i, wordOfTheDay))
+            val view = mBinding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
+            view?.let { nonNullView ->
+                intentToWordDetail(this, nonNullView, wordOfTheDay)
+            } ?: intentToWordDetail(activity = this, word = wordOfTheDay)
+
         }
         mBinding.pastWordAdapter = pastWordAdapter
-
         mViewModel.getTodaysWordOfTheDay().observe(this, Observer {
             it?.let {
                 if (!it.isSeen) {
@@ -217,45 +234,18 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 mBinding.mainRecyclerviewPastWords.scrollToPosition(0)
             }
         })
-
         mViewModel.refreshDataSource()
     }
 
-    private fun initLearnAllEvent() {
-        mViewModel.getLearnAllLiveData().observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                WordListActivity.openActivity(this)
-            }
-        })
-    }
 
-    private fun setObservers() {
-        mViewModel.observeNavigateToWordDetailedEvent().observe(this, Observer {
-            val selectedItemEvent = it.getContentIfNotHandled()
-            selectedItemEvent?.let { selectedItem ->
-                val view = mBinding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(
-                    selectedItem.position
-                )
-                intentToWordDetail(view!!, selectedItem.data)
-            }
-        })
-
-        mViewModel.observeNavigateToWordDetailedEventFromTodaysCard().observe(this, Observer {
-            val selectedItemEvent = it.getContentIfNotHandled()
-            selectedItemEvent?.let { word ->
-                val view = mBinding.mainLinearLayoutWotd
-                intentToWordDetail(view, word)
-            }
-        })
-
-    }
-
-    private fun intentToWordDetail(view: View, word: WordOfTheDay) {
-        val option = ActivityOptions.makeSceneTransitionAnimation(
-            this@HomeActivity,
-            view,
-            "CONTAINER"
-        )
+    private fun intentToWordDetail(activity: Activity, view: View? = null, word: WordOfTheDay) {
+        val option = view?.let {
+            ActivityOptions.makeSceneTransitionAnimation(
+                activity,
+                view,
+                "CONTAINER"
+            )
+        }
         WordDetailedActivity.openActivity(this, word, option)
     }
 
@@ -388,10 +378,14 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }, 1000)
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         appUpdateHelper?.onActivityResult(requestCode, resultCode, data)
     }
 
+}
+
+interface ViewCallbacks {
+    fun readMore(v: View?, word: WordOfTheDay?)
+    fun learnAll(v: View?)
 }
