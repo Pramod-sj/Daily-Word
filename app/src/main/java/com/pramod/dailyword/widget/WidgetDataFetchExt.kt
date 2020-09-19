@@ -15,7 +15,7 @@ fun BaseWidgetProvider.runTodayWordFetchJob(context: Context) {
     val jobInfo = JobInfo.Builder(
         Constants.JOB_ID_FETCH_DATA_FOR_WIDGET,
         ComponentName(context, WidgetDataLoadService::class.java)
-    ).build()
+    ).setOverrideDeadline(0).build()
 
     val jobScheduler: JobScheduler? =
         context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
