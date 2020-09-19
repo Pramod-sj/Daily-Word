@@ -119,5 +119,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
             FBTopicSubscriber.subscribeToDailyWordNotification()
         }
         FBTopicSubscriber.subscribeToCountry(this)
+        FBTopicSubscriber.subscribeToTestDevice(this)
     }
 }

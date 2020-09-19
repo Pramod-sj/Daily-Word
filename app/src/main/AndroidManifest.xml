@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name=".WOTDApp"
@@ -57,6 +58,7 @@
         <activity
             android:name=".ui.home.HomeActivity"
             android:screenOrientation="nosensor"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.HomeActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity

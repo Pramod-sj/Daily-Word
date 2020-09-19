@@ -4,10 +4,10 @@ import android.app.Application
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.google.gson.Gson
+import com.pramod.dailyword.SnackbarMessage
+import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.db.repository.BookmarkRepo
 import com.pramod.dailyword.db.repository.WOTDRepository
@@ -17,22 +17,63 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTheDay) :
+class WordDetailedViewModel(application: Application, private val wordOfTheDay: WordOfTheDay) :
     BaseViewModel(application) {
+
+    companion object {
+        val TAG = WordDetailedViewModel::class.simpleName
+    }
+
     private val bookmarkRepo = BookmarkRepo(application)
     private val wordOfTheDayRepo = WOTDRepository(application)
+
+    private val retryEventLiveData = MutableLiveData<Event<Boolean>>()
+
+    val loadingLiveData = MutableLiveData<Boolean>()
+    val showWord = MutableLiveData<Boolean>()
+
+    fun retry() {
+        retryEventLiveData.value = Event.init(true)
+    }
+
+    val wordOfTheDayLiveData: MediatorLiveData<WordOfTheDay> = MediatorLiveData()
+
+    init {
+        wordOfTheDayLiveData.value = wordOfTheDay
+        //fetch word and listen to changes
+        var resourceLiveData = wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
+
+        wordOfTheDayLiveData.addSource(retryEventLiveData) {
+            if (wordOfTheDay.word == null) {
+                wordOfTheDayLiveData.removeSource(resourceLiveData)
+                resourceLiveData = wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
+                wordOfTheDayLiveData.addSource(resourceLiveData) {
+                    loadingLiveData.value = it.status == Resource.Status.LOADING
+                    if (it.status == Resource.Status.ERROR) {
+                        it.message?.let { message ->
+                            setMessage(SnackbarMessage.init(message))
+                        }
+                    }
+                    showWord.value = it.data != null
+                    wordOfTheDayLiveData.value = it.data
+                }
+            } else {
+                showWord.value = true
+                wordOfTheDayLiveData.addSource(wordOfTheDayRepo.getWord(wordOfTheDay.date!!)) {
+                    loadingLiveData.value = it.status == Resource.Status.LOADING
+                    wordOfTheDayLiveData.value = it.data
+                }
+            }
+        }
+        retry()
+
+    }
 
     private val showTitle = MutableLiveData<Boolean>().apply {
         value = false
     }
 
     private val navigateToMerriamWebster = MutableLiveData<Event<String>>()
-
-    val wordOfTheDayLiveData: LiveData<WordOfTheDay>
-
-    init {
-        wordOfTheDayLiveData = wordOfTheDayRepo.getWord(wordOfTheDay.word!!)
-    }
 
 
     fun navigateToWordMW(url: String) {
@@ -66,7 +107,14 @@ class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTh
 
     fun bookmark() {
         GlobalScope.launch(Dispatchers.Main) {
-            bookmarkRepo.bookmarkToggle(wordOfTheDay.word!!)
+            val wordOfTheDay = wordOfTheDayLiveData.value
+            if (wordOfTheDay != null) {
+                bookmarkRepo.bookmarkToggle(wordOfTheDay.word!!)
+                Log.i(TAG, "bookmark: not null")
+            } else {
+                setMessage(SnackbarMessage.init("Word details is not loaded yet! Please wait..."))
+                Log.i(TAG, "bookmark: Word details is not loaded yet! Please wait...")
+            }
         }
     }
 
@@ -79,6 +127,10 @@ class WordDetailedViewModel(application: Application, val wordOfTheDay: WordOfTh
             return WordDetailedViewModel(application, word) as T
         }
 
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 
 }

@@ -32,6 +32,7 @@ class FBTopicSubscriber {
         private val TAG = FBTopicSubscriber::class.simpleName
         private val TOPIC_DAILY_WORD_NOTIFICATION = "daily_word_notification"
         private val TOPIC_COUNTRY_CODE = "country_code"
+        private val TOPIC_TEST_DEVICE = "test_device"
 
         fun toggleReceivingDailyWordNotification(
             notificationPrefManager: NotificationPrefManager,
@@ -119,6 +120,11 @@ class FBTopicSubscriber {
             }
 
 
+        }
+
+
+        fun subscribeToTestDevice(context: Context) {
+           subscribeTopic(TOPIC_TEST_DEVICE)
         }
 
 

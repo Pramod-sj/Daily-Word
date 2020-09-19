@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +30,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityMainBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
+import com.pramod.dailyword.firebase.FBMessageService
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
@@ -37,6 +39,7 @@ import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
+import com.pramod.dailyword.util.CalenderUtil
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -45,6 +48,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
 
     companion object {
+
+        val TAG = HomeActivity::class.simpleName
 
         @JvmStatic
         fun openActivity(context: Context) {
@@ -78,6 +83,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         initExitTransition()
         super.onCreate(savedInstanceState)
         setUpViewCallbacks()
+        deepLinkNotification()
         showChangelogActivity()
         initAppUpdate()
         initToolbar()
@@ -102,8 +108,11 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         mBinding.setVariable(BR.viewCallbacks, object : ViewCallbacks {
             override fun readMore(v: View?, word: WordOfTheDay?) {
                 word?.let {
-                    val view = mBinding.mainLinearLayoutWotd
-                    intentToWordDetail(this@HomeActivity, view, word)
+                    if (pastWordAdapter.canStart()) {
+                        pastWordAdapter.setCanStartActivity(false)
+                        val view = mBinding.mainLinearLayoutWotd
+                        intentToWordDetail(this@HomeActivity, view, word)
+                    }
                 }
             }
 
@@ -196,8 +205,19 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             cancelable = true,
             pendingIntent = PendingIntent.getActivity(
                 applicationContext,
-                998,
-                Intent(this, HomeActivity::class.java),
+                NotificationHelper.generateUniqueNotificationId(),
+                Intent(this, HomeActivity::class.java).apply {
+                    putExtra(
+                        FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
+                        Gson().toJson(
+                            FBMessageService.MessagePayload(
+                                date = word.date!!,
+                                deepLink = FBMessageService.DEEP_LINK_TO_WORD_DETAILED
+                            )
+                        )
+                    )
+                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                },
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -222,9 +242,11 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     it.isSeen = true
                     it.seenAtTimeInMillis = Calendar.getInstance().timeInMillis
                     mViewModel.updateWordSeenStatus(it)
-                    if (PrefManager.getInstance(this).getAppLaunchCount() == 1) {
-                        showNotification(it)
-                    }
+                    /*if (PrefManager.getInstance(this).getAppLaunchCount() == 1
+                        && CalenderUtil.isToday(it.date)
+                    ) {*/
+                    showNotification(it)
+                    //}
                 }
             }
         })
@@ -236,7 +258,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
         mViewModel.refreshDataSource()
     }
-
 
     private fun intentToWordDetail(activity: Activity, view: View? = null, word: WordOfTheDay) {
         val option = view?.let {
@@ -381,6 +402,34 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         appUpdateHelper?.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun deepLinkNotification() {
+        val messagePayload: FBMessageService.MessagePayload? =
+            Gson().fromJson(
+                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
+                FBMessageService.MessagePayload::class.java
+            )
+        Log.i(
+            TAG,
+            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
+        )
+        when (messagePayload?.deepLink) {
+            FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
+                WordDetailedActivity.openActivity(this, messagePayload.date)
+            }
+            FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
+                WordListActivity.openActivity(this)
+            }
+            else -> {
+
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        this.intent = intent
     }
 
 }

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
@@ -27,11 +28,22 @@ import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
+import kotlinx.android.synthetic.main.activity_word_list.*
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
 
     companion object {
+
+        fun openActivity(context: Context, wordDate: String) {
+            val intent = Intent(context, WordDetailedActivity::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable("WORD_DATE", wordDate)
+            intent.putExtras(bundle)
+            context.startActivity(intent)
+        }
+
+
         fun openActivity(context: Context, word: WordOfTheDay, option: ActivityOptions?) {
             val intent = Intent(context, WordDetailedActivity::class.java)
             val bundle = Bundle()
@@ -50,9 +62,12 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun getLayoutId(): Int = R.layout.activity_word_detailed
 
     override fun getViewModel(): WordDetailedViewModel {
-        val word = (intent.extras!!.getSerializable("WORD") as WordOfTheDay?)!!
-
-        return ViewModelProviders.of(this, WordDetailedViewModel.Factory(application, word))
+        val word = intent.extras?.getSerializable("WORD") as WordOfTheDay?
+        val wordDate = intent.extras?.getString("WORD_DATE")
+        return ViewModelProviders.of(
+            this,
+            WordDetailedViewModel.Factory(application, word ?: WordOfTheDay(wordDate))
+        )
             .get(WordDetailedViewModel::class.java)
     }
 
@@ -60,6 +75,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initEnterAndReturnTransition()
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setUpToolbar()
         setNestedScrollListener()
@@ -90,21 +106,27 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     }
 
     private fun setUpExampleRecyclerView() {
-        val adapter = ExampleAdapter(
-            mViewModel.wordOfTheDay.examples,
-            mViewModel.wordOfTheDay.wordColor,
-            mViewModel.wordOfTheDay.wordDesaturatedColor
-        )
+        val adapter = ExampleAdapter()
         mBinding.wordDetailedExamplesRecyclerview.adapter = adapter
+
+        mViewModel.wordOfTheDayLiveData.observe(this, Observer {
+            it?.let { word ->
+                adapter.setColors(word.wordColor, word.wordDesaturatedColor)
+                adapter.submitList(word.examples)
+            }
+        })
     }
 
     private fun setUpDefinationRecyclerView() {
-        val adapter = DefinationAdapter(
-            mViewModel.wordOfTheDay.meanings,
-            mViewModel.wordOfTheDay.wordColor,
-            mViewModel.wordOfTheDay.wordDesaturatedColor
-        )
+        val adapter = DefinationAdapter()
         mBinding.wordDetailedDefinationsRecyclerview.adapter = adapter
+
+        mViewModel.wordOfTheDayLiveData.observe(this, Observer {
+            it?.let { word ->
+                adapter.setColors(word.wordColor, word.wordDesaturatedColor)
+                adapter.submitList(word.meanings)
+            }
+        })
     }
 
     private fun setNavigateMW() {
@@ -134,6 +156,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     paddingBottom
                 )
 
+                mBinding.swipeRefreshLayout.setProgressViewOffset(true, paddingTop, 100 + paddingTop)
+
                 /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
                 val layoutParam: CoordinatorLayout.LayoutParams =
                     mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
@@ -148,6 +172,10 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                 insets
             }
         }
+
+        val actionBarSize = CommonUtils.calculateActionBarHeight(this)
+        mBinding.swipeRefreshLayout.setProgressViewOffset(true, actionBarSize, 100 + actionBarSize)
+
     }
 
     private fun initEnterAndReturnTransition() {

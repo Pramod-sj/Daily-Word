@@ -258,7 +258,6 @@
                             style="@style/Widget.MaterialComponents.Button.TextButton"
                             applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
                             android:layout_width="wrap_content"
-                            android:textAllCaps="false"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:height="40dp"
@@ -294,7 +293,6 @@
                         android:ellipsize="end"
                         android:onClick="@{(v)->viewCallbacks.learnAll(v)}"
                         android:text="@string/learn_all"
-                        android:textAllCaps="false"
                         android:textSize="@dimen/text_small"
                         android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"
                         app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />

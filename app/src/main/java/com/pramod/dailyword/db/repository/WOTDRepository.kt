@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.*
+import com.google.gson.Gson
 import com.pramod.dailyword.db.NetworkBoundedResource
 import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.local.AppDB
@@ -144,6 +145,37 @@ class WOTDRepository(private val context: Context) {
     }
 
 
+    fun getWord(date: String): LiveData<Resource<WordOfTheDay?>> {
+        return object : NetworkBoundedResource<List<WordOfTheDay>, WordOfTheDay>() {
+            override suspend fun saveCallResult(item: List<WordOfTheDay>?) {
+                if (!item.isNullOrEmpty()) {
+                    val it = item[0]
+                    it.date?.let { date ->
+                        val cal =
+                            CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
+                        it.dateTimeInMillis = cal?.timeInMillis
+                        val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                        it.wordColor = dayColor[0]
+                        it.wordDesaturatedColor = dayColor[1]
+                        localDb.getWordOfTheDayDao().add(it)
+                    }
+                }
+            }
+
+            override fun loadLocalData(): LiveData<WordOfTheDay?> =
+                localDb.getWordOfTheDayDao().getJust(date)
+
+            override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? =
+                remoteApiService.getWords(date, 1)
+
+            override fun shouldFetch(data: WordOfTheDay?): Boolean {
+                return data == null;
+            }
+
+        }.asLiveData()
+    }
+
+
     /*@ExperimentalPagingApi
     fun getAllWords(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
         return Pager(
@@ -208,8 +240,7 @@ class WOTDRepository(private val context: Context) {
         }
 
         val livePagedList = LivePagedListBuilder(
-            localDb.getWordOfTheDayDao().dataSourceWords()
-            , pagedListConfig
+            localDb.getWordOfTheDayDao().dataSourceWords(), pagedListConfig
         ).setBoundaryCallback(boundaryCallback).build()
         return Listing(
             pagedList = livePagedList,
@@ -225,7 +256,7 @@ class WOTDRepository(private val context: Context) {
         )
     }
 
-    fun getWord(word: String): LiveData<WordOfTheDay> =
+    fun getWordLocally(word: String): LiveData<WordOfTheDay> =
         localDb.getWordOfTheDayDao().getWord(word)
 
     suspend fun getJustTopOneNonLive(): WordOfTheDay? =

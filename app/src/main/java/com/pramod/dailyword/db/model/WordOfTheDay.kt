@@ -18,6 +18,7 @@ class WordOfTheDay : Serializable {
     @ColumnInfo(name = "id")
     var id: Long? = null*/
 
+
     @PrimaryKey
     @NonNull
     @SerializedName("WORD")
@@ -68,6 +69,10 @@ class WordOfTheDay : Serializable {
     var wordDesaturatedColor: Int = -1
 
     var bookmarkedAt: Long = 0
+
+    constructor(date: String?) {
+        this.date = date
+    }
 
     @Ignore
     fun isBookmarked(): Boolean = bookmarkedAt != 0L
