@@ -34,9 +34,6 @@ class WOTDApp : Application() {
     }
 
     private fun initAds() {
-        if (AudienceNetworkAds.isInAdsProcess(this)) {
-            return
-        }
         AdSettings.addTestDevice("5a37c734-2349-4af8-a1ae-151b335e3243")
         AudienceNetworkAds.initialize(this)
     }

@@ -121,8 +121,7 @@ class AdsManager private constructor(private val context: Context) {
             return false
         }
         interstitialAdView = InterstitialAd(context, null).also {
-            it.loadAd()
-            it.setAdListener(object : AbstractAdListener() {
+            it.loadAd(it.buildLoadAdConfig().withAdListener(object : AbstractAdListener() {
                 override fun onAdLoaded(ad: Ad?) {
                     super.onAdLoaded(ad)
                     Log.i(TAG, "Interstitial Ad Load")
@@ -145,9 +144,9 @@ class AdsManager private constructor(private val context: Context) {
 
                 override fun onError(ad: Ad?, error: AdError?) {
                     super.onError(ad, error)
-                    Log.i(TAG, "Interstitial Ad Error: ${error.toString()}")
+                    Log.i(TAG, "Interstitial Ad Error: ${error?.errorMessage}")
                 }
-            })
+            }).build())
         }
         return true
     }
@@ -163,14 +162,13 @@ class AdsManager private constructor(private val context: Context) {
         }
         bannerAdView = AdView(context, null, AdSize.BANNER_HEIGHT_50)
             .also {
-                it.loadAd()
-                it.setAdListener(object : AdListener {
+                it.loadAd(it.buildLoadAdConfig().withAdListener(object : AdListener {
                     override fun onAdClicked(p0: Ad?) {
                         Log.i(TAG, "Banner Ad clicked")
                     }
 
                     override fun onError(p0: Ad?, p1: AdError?) {
-                        Log.i(TAG, "Banner Ad ${p1.toString()}")
+                        Log.i(TAG, "Banner Ad ${p1?.errorMessage}")
                     }
 
                     override fun onAdLoaded(p0: Ad?) {
@@ -181,7 +179,7 @@ class AdsManager private constructor(private val context: Context) {
                         Log.i(TAG, "Banner Ad logging impression")
                     }
 
-                })
+                }).build())
             }
         val layoutParams: CoordinatorLayout.LayoutParams =
             layout.layoutParams as CoordinatorLayout.LayoutParams
@@ -204,8 +202,7 @@ class AdsManager private constructor(private val context: Context) {
         }
 
         NativeBannerAd(context, adId).also {
-            it.loadAd()
-            it.setAdListener(object : NativeAdListener {
+            it.loadAd(it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
                 override fun onAdClicked(p0: Ad?) {
 
                     Log.i(TAG, "Native ad clicked")
@@ -217,7 +214,7 @@ class AdsManager private constructor(private val context: Context) {
                 }
 
                 override fun onError(p0: Ad?, p1: AdError?) {
-                    Log.i(TAG, "Native ad Error: ${p1.toString()}")
+                    Log.i(TAG, "Native ad Error: ${p1?.errorMessage}")
                 }
 
                 override fun onAdLoaded(p0: Ad?) {
@@ -240,7 +237,7 @@ class AdsManager private constructor(private val context: Context) {
 
                 }
 
-            })
+            }).build())
         }
 
         return true;
@@ -338,43 +335,45 @@ class AdsManager private constructor(private val context: Context) {
             return false
         }
         NativeAd(context, NATIVE_AD_ID).also {
-            it.loadAd(NativeAdBase.MediaCacheFlag.ALL)
-            it.setAdListener(object : NativeAdListener {
-                override fun onAdClicked(p0: Ad?) {
-                    Log.i(TAG, "Native Ad clicked")
-                }
-
-                override fun onMediaDownloaded(p0: Ad?) {
-                    Log.i(TAG, "Native Ad media downloaded")
-                    if (p0 == null || p0 != it) {
-                        Log.i(TAG, "Native Ad media downloaded is null")
-                        onAdFailureCallback?.invoke("Native Ad media downloaded is null")
-                        return
+            it.loadAd(
+                it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
+                    override fun onAdClicked(p0: Ad?) {
+                        Log.i(TAG, "Native Ad clicked")
                     }
-                    inflateNativeAdDialogView(binding, it)
-                    onAdCompletelyLoadedCallback?.invoke()
-                }
 
-                override fun onError(p0: Ad?, p1: AdError?) {
-                    Log.i(TAG, "Native Ad error ${p1.toString()}")
-                    onAdFailureCallback?.invoke(p1.toString())
-                }
-
-                override fun onAdLoaded(p0: Ad?) {
-                    Log.i(TAG, "Native Ad loaded")
-                    if (p0 == null || p0 != it) {
-                        Log.i(TAG, "Native Ad media loaded is null")
-                        onAdFailureCallback?.invoke("Native Ad media loaded is null")
-                        return
+                    override fun onMediaDownloaded(p0: Ad?) {
+                        Log.i(TAG, "Native Ad media downloaded")
+                        if (p0 == null || p0 != it) {
+                            Log.i(TAG, "Native Ad media downloaded is null")
+                            onAdFailureCallback?.invoke("Native Ad media downloaded is null")
+                            return
+                        }
+                        inflateNativeAdDialogView(binding, it)
+                        onAdCompletelyLoadedCallback?.invoke()
                     }
-                    it.downloadMedia()
-                }
 
-                override fun onLoggingImpression(p0: Ad?) {
-                    Log.i(TAG, "Native Ad logging impression")
-                }
+                    override fun onError(p0: Ad?, p1: AdError?) {
+                        Log.i(TAG, "Native Ad error ${p1.toString()}")
+                        onAdFailureCallback?.invoke(p1.toString())
+                    }
 
-            })
+                    override fun onAdLoaded(p0: Ad?) {
+                        Log.i(TAG, "Native Ad loaded")
+                        if (p0 == null || p0 != it) {
+                            Log.i(TAG, "Native Ad media loaded is null")
+                            onAdFailureCallback?.invoke("Native Ad media loaded is null")
+                            return
+                        }
+                        it.downloadMedia()
+                    }
+
+                    override fun onLoggingImpression(p0: Ad?) {
+                        Log.i(TAG, "Native Ad logging impression")
+                    }
+
+                })
+                    .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL).build()
+            )
         }
         return true;
     }

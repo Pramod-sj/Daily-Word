@@ -38,7 +38,7 @@
                         app:cardCornerRadius="@dimen/card_radius"
                         app:cardElevation="0dp">
 
-                        <com.facebook.ads.AdIconView
+                        <com.facebook.ads.MediaView
                             android:id="@+id/native_ad_icon"
                             android:layout_width="40dp"
                             android:layout_height="40dp" />

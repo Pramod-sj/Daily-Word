@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.change_logs.ChangelogActivity">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_change_logs"
             android:layout_width="match_parent"

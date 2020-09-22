@@ -102,7 +102,7 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha02'
 
     //FAN lib
-    implementation 'com.facebook.android:audience-network-sdk:5.5.0'
+    implementation 'com.facebook.android:audience-network-sdk:6.+'
 
     //AutoStarter lib
     implementation 'com.github.judemanutd:autostarter:1.0.8'

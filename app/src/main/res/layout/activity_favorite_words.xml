@@ -12,6 +12,11 @@
         <variable
             name="favoriteWordsViewModel"
             type="com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsViewModel" />
+
+        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+
+        <import type="com.pramod.dailyword.helper.AdsManager" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -19,7 +24,23 @@
         android:layout_height="match_parent"
         tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
 
+            <com.facebook.ads.NativeAdLayout
+                adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                showAdWithSomeDelay="@{1000}"
+                verticalAd="@{true}"
+                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.card.MaterialCardView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
             android:layout_width="match_parent"

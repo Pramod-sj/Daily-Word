@@ -132,17 +132,6 @@
 
                     </LinearLayout>
 
-
-                    <com.facebook.ads.NativeAdLayout
-                        android:id="@+id/native_ad_container_1"
-                        adId="@{AdsManager.NATIVE_BANNER_ID_1}"
-                        showAdWithSomeDelay="@{2000}"
-                        showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_medium"
-                        android:layout_marginVertical="@dimen/margin_small" />
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/word_detailed_definations_recyclerview"
                         android:layout_width="match_parent"
