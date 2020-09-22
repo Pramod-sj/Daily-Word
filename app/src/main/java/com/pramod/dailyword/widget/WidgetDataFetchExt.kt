@@ -7,6 +7,7 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.NetworkRequest
 import com.pramod.dailyword.Constants
 import java.util.*
 
@@ -15,7 +16,8 @@ fun BaseWidgetProvider.runTodayWordFetchJob(context: Context) {
     val jobInfo = JobInfo.Builder(
         Constants.JOB_ID_FETCH_DATA_FOR_WIDGET,
         ComponentName(context, WidgetDataLoadService::class.java)
-    ).setOverrideDeadline(0).build()
+    ).setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+        .setRequiresCharging(false).build()
 
     val jobScheduler: JobScheduler? =
         context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler

@@ -242,11 +242,12 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     it.isSeen = true
                     it.seenAtTimeInMillis = Calendar.getInstance().timeInMillis
                     mViewModel.updateWordSeenStatus(it)
-                    /*if (PrefManager.getInstance(this).getAppLaunchCount() == 1
-                        && CalenderUtil.isToday(it.date)
-                    ) {*/
-                    showNotification(it)
-                    //}
+                    if (PrefManager.getInstance(this).getAppLaunchCount() == 1
+                        && !mViewModel.firstNotificationShown
+                    ) {
+                        mViewModel.firstNotificationShown = true
+                        showNotification(it)
+                    }
                 }
             }
         })

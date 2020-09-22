@@ -39,6 +39,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     var wordResourceLiveData: LiveData<Resource<List<WordOfTheDay>?>>
 
+    var firstNotificationShown = false
+
     init {
         wordOfTheDayLoading.value = Event.init(true)
         wordResourceLiveData = Transformations.switchMap(refreshDataSourceLiveData) {

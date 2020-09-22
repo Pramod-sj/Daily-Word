@@ -126,10 +126,7 @@ class WOTDRepository(private val context: Context) {
             }
 
             override fun shouldFetch(data: List<WordOfTheDay>?): Boolean {
-                return data == null || data.isEmpty() || (!data.isEmpty() && data[0].date != CalenderUtil.convertCalenderToString(
-                    Calendar.getInstance(),
-                    CalenderUtil.DATE_FORMAT
-                ))
+                return true
             }
 
             override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? {
@@ -273,6 +270,7 @@ class WOTDRepository(private val context: Context) {
     suspend fun addWord(word: WordOfTheDay): Long = localDb.getWordOfTheDayDao().add(word)
 
     suspend fun addAllWord(words: List<WordOfTheDay>) {
+        Log.i("WOTDRepository", "addAllWord: ${Gson().toJson(words)}")
         for (i: WordOfTheDay in words) {
             i.date?.let { date ->
                 val cal =

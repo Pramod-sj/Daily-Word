@@ -39,6 +39,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
                     }, 2000)
                 } else {
                     Handler().postDelayed({
+
                         goToHomePage()
                     }, 1000)
                 }

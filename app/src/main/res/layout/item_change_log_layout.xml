@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingHorizontal="@dimen/padding_large"
         android:paddingVertical="@dimen/padding_small">
 
         <TextView
@@ -22,16 +22,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{`v`+changes.version+` (`+changes.date+`) `}"
+            android:textColor="@color/textColor_highEmphasis"
             android:textStyle="bold" />
 
         <TextView
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{changes.releaseName}" />
+            android:text="@{changes.releaseName}"
+            android:textColor="@color/textColor_highEmphasis" />
 
         <TextView
             style="@style/AppTheme.SubTitleTextStyle"
+            android:textColor="@color/textColor_mediumEmphasis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{changes.getFormattedChanges(@string/unicode_bullet)}" />

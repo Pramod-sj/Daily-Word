@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.2.0",
+    "release_name": "\uD83C\uDF89 Feature update 2 \uD83C\uDF89",
+    "date": "22 Sep 2020",
+    "changes": [
+      "Welcome widgets! - 2 widget option (2x2 and 5x3)",
+      "Change log page - checkout what's new!",
+      "Read more button",
+      "Minor bug fixes"
+    ]
+  },
+  {
     "version": "1.1.1",
     "release_name": "\uD83D\uDC1E Major bug fix update \uD83D\uDC1E",
     "date": "02 Sep 2020",

@@ -83,6 +83,7 @@ class WidgetViewHelper {
                 bookmarkIntent.action =
                     BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
 
+
                 val pendingIntentBookmark = PendingIntent.getBroadcast(
                     context,
                     Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_BOOKMARK,

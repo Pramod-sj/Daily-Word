@@ -53,13 +53,17 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
         supportActionBar?.let {
             it.title = null
         }
-        mBinding.toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp)
+        mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_close_24)
         mBinding.toolbar.setNavigationOnClickListener {
             finish()
-            overridePendingTransition(
-                0,
-                android.R.anim.fade_out
-            )
+            if(intent.getBooleanExtra(
+                    EXTRA_SHOW_CONTINUE_BUTTON, false
+                )) {
+                overridePendingTransition(
+                    0,
+                    android.R.anim.fade_out
+                )
+            }
         }
     }
 

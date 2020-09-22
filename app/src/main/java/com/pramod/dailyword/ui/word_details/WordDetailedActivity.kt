@@ -112,7 +112,9 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         mViewModel.wordOfTheDayLiveData.observe(this, Observer {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
-                adapter.submitList(word.examples)
+                if (word.meanings != null) {
+                    adapter.submitList(word.examples)
+                }
             }
         })
     }
@@ -124,7 +126,9 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         mViewModel.wordOfTheDayLiveData.observe(this, Observer {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
-                adapter.submitList(word.meanings)
+                if (word.meanings != null) {
+                    adapter.submitList(word.meanings)
+                }
             }
         })
     }
@@ -156,7 +160,11 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     paddingBottom
                 )
 
-                mBinding.swipeRefreshLayout.setProgressViewOffset(true, paddingTop, 100 + paddingTop)
+                mBinding.swipeRefreshLayout.setProgressViewOffset(
+                    true,
+                    paddingTop,
+                    100 + paddingTop
+                )
 
                 /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
                 val layoutParam: CoordinatorLayout.LayoutParams =
