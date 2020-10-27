@@ -14,13 +14,16 @@ class PronounceHelper {
                 val mediaPlayer = MediaPlayer()
                 mediaPlayer.setDataSource(url)
                 mediaPlayer.setAudioAttributes(
-                    AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+                    AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
                 )
+                mediaPlayer.setOnCompletionListener {
+                    mediaPlayer.release()
+                }
                 mediaPlayer.setOnPreparedListener {
                     it.start()
                 }
                 mediaPlayer.prepareAsync()
-
             } catch (e: Exception) {
                 Log.d("AUDIO ERROR", e.toString())
             }
