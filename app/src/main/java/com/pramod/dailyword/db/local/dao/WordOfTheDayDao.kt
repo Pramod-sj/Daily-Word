@@ -47,7 +47,7 @@ interface WordOfTheDayDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAll(word: List<WordOfTheDay>): List<Long>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(wordOfTheDay: WordOfTheDay): Long
 
     @Update

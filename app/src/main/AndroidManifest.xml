@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".WOTDApp"
@@ -14,12 +14,14 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.change_logs.ChangelogActivity"
+        <activity
+            android:name=".ui.change_logs.ChangelogActivity"
             android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.bookmarked_words.FavoriteWordsActivity"
             android:screenOrientation="nosensor"
@@ -57,8 +59,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.home.HomeActivity"
-            android:screenOrientation="nosensor"
             android:launchMode="singleTop"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.HomeActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
