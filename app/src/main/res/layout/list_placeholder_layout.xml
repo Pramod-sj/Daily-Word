@@ -15,6 +15,10 @@
             type="String" />
 
         <variable
+            name="placeHolderTitle"
+            type="String" />
+
+        <variable
             name="show"
             type="Boolean" />
     </data>
@@ -32,16 +36,25 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="@dimen/margin_medium"
                 android:src="@{placeHolderImage}"
-                app:tint="@color/app_icon_tint"
-                android:visibility="@{placeHolderImage==null?View.GONE:View.VISIBLE}" />
+                android:visibility="@{placeHolderImage==null?View.GONE:View.VISIBLE}"
+                app:tint="@color/app_icon_tint" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{placeHolderTitle}"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold"
+                android:visibility="@{placeHolderTitle.isEmpty()?View.GONE:View.VISIBLE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_small"
                 android:text="@{placeHolderText}"
                 android:textSize="@dimen/text_sub_title" />
         </LinearLayout>

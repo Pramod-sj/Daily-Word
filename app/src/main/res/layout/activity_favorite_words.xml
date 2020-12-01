@@ -22,6 +22,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
 
         <com.google.android.material.card.MaterialCardView
@@ -35,12 +36,13 @@
             <com.facebook.ads.NativeAdLayout
                 adId="@{AdsManager.NATIVE_BANNER_ID_1}"
                 showAdWithSomeDelay="@{1000}"
-                verticalAd="@{true}"
                 showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                verticalAd="@{true}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </com.google.android.material.card.MaterialCardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
             android:layout_width="match_parent"
@@ -58,6 +60,7 @@
             layout="@layout/list_placeholder_layout"
             app:placeHolderImage="@{@drawable/ic_round_bookmarks_24}"
             app:placeHolderText="@{`Hey its look like you don't have any bookmarks yet`}"
+            app:placeHolderTitle="@{`Nothing bookmarked yet!`}"
             app:show="@{favoriteWordsViewModel.showPlaceHolderLiveData}" />
 
 
