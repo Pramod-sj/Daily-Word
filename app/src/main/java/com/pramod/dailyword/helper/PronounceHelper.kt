@@ -7,7 +7,7 @@ import android.util.Log
 class PronounceHelper {
     companion object {
         @JvmStatic
-        fun playAudio(url: String) {
+        fun playAudio(url: String, completionCallback: (() -> Unit)? = null) {
 
             Log.d("AUDIO URL", url)
             try {
@@ -19,6 +19,7 @@ class PronounceHelper {
                 )
                 mediaPlayer.setOnCompletionListener {
                     mediaPlayer.release()
+                    completionCallback?.invoke()
                 }
                 mediaPlayer.setOnPreparedListener {
                     it.start()

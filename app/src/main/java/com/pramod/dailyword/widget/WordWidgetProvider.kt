@@ -29,16 +29,21 @@ class WordWidgetProvider : BaseWidgetProvider() {
         const val EXTRA_BOOKMARKED_WORD = "bookmarked_word"
     }
 
-
+    private var isWordPronounced = true
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         Log.i(TAG, "onReceive: ${intent?.action}")
         intent?.let {
             when (it.action) {
                 ACTION_PLAY_AUDIO_FROM_WIDGET -> {
-                    Log.i(TAG, "onReceive: Playing")
-                    it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
-                        PronounceHelper.playAudio(audioUrl)
+                    if (isWordPronounced) {
+                        Log.i(TAG, "onReceive: Playing")
+                        it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
+                            isWordPronounced = false
+                            PronounceHelper.playAudio(audioUrl) {
+                                isWordPronounced = true
+                            }
+                        }
                     }
                 }
                 else -> {

@@ -93,9 +93,15 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         return wordsExceptTodayLiveData
     }
 
+    private var isWordPronounced = true
     fun pronounceWord(url: String) {
         Log.d("AUDIO URL", url)
-        PronounceHelper.playAudio(url)
+        if (isWordPronounced) {
+            isWordPronounced = false
+            PronounceHelper.playAudio(url) {
+                isWordPronounced = true
+            }
+        }
     }
 
     fun updateWordSeenStatus(word: WordOfTheDay) {

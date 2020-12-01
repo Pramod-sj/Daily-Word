@@ -11,6 +11,7 @@ import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.db.repository.BookmarkRepo
 import com.pramod.dailyword.db.repository.WOTDRepository
+import com.pramod.dailyword.helper.PronounceHelper
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.Event
 import kotlinx.coroutines.Dispatchers
@@ -86,20 +87,14 @@ class WordDetailedViewModel(application: Application, private val wordOfTheDay: 
 
     fun showTitle(): LiveData<Boolean> = showTitle
 
+    private var isWordPronounced = true
     fun pronounceWord(url: String) {
-        try {
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.setAudioAttributes(
-                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
-            )
-            mediaPlayer.setOnPreparedListener {
-                it.start()
+        Log.d("AUDIO URL", url)
+        if (isWordPronounced) {
+            isWordPronounced = false
+            PronounceHelper.playAudio(url) {
+                isWordPronounced = true
             }
-            mediaPlayer.prepareAsync()
-        } catch (e: Exception) {
-            Log.d("AUDIO URL", url)
-            Log.d("AUDIO ERROR", e.toString())
         }
     }
 
