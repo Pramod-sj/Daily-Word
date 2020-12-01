@@ -34,7 +34,7 @@ class FBTopicSubscriber {
         private val TOPIC_COUNTRY_CODE = "country_code"
         private val TOPIC_TEST_DEVICE = "test_device"
 
-        fun toggleReceivingDailyWordNotification(
+        /*fun toggleReceivingDailyWordNotification(
             notificationPrefManager: NotificationPrefManager,
             listener: ((String, OperationStatus) -> Unit)? = null
         ) {
@@ -47,7 +47,7 @@ class FBTopicSubscriber {
                     listener?.invoke(s, operationStatus)
                 }
             }
-        }
+        }*/
 
         fun subscribeToDailyWordNotification() {
             subscribeTopic(TOPIC_DAILY_WORD_NOTIFICATION)

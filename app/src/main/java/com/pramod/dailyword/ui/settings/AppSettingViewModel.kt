@@ -46,42 +46,6 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
         recreate()
     }
 
-    private val toggleNotificationMessageLiveData = MutableLiveData<String>().apply {
-        value =
-            if (notificationPrefManager.isNotificationEnabled())
-                "You'll be receiving daily notifications"
-            else "You have paused daily notifications"
-    }
-
-    fun toggleNotificationMessageLiveData(): LiveData<String> =
-        toggleNotificationMessageLiveData
-
-    private val toggleNotificationClickableLiveData = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-
-    fun toggleNotificationClickableLiveData(): LiveData<Boolean> =
-        toggleNotificationClickableLiveData
-
-    fun toggleNotification() {
-        if (NetworkUtils.isNetworkActive(getApplication())) {
-            toggleNotificationClickableLiveData.value = false
-            toggleNotificationMessageLiveData.value = "Please wait..."
-            notificationPrefManager.toggleNotificationEnabled { s, operationStatus ->
-                if (operationStatus == FBTopicSubscriber.OperationStatus.FAILED) {
-                    setMessage(SnackbarMessage.init(s))
-                }
-                toggleNotificationClickableLiveData.value = true
-                toggleNotificationMessageLiveData.value =
-                    if (notificationPrefManager.isNotificationEnabled())
-                        "You'll be receiving daily notifications"
-                    else "You have paused daily notifications"
-            }
-        } else {
-            setMessage(SnackbarMessage.init("Please enable your internet!"))
-        }
-    }
-
 
     fun toggleWindowAnimation() {
         windowAnimationPrefManager.toggleWindowAnimationEnabled()

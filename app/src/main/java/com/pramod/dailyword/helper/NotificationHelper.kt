@@ -97,7 +97,7 @@ class NotificationHelper(val context: Context) : ContextWrapper(context) {
         return builder.build()
     }
 
-    fun makeNotification(
+    fun showNotification(
         notification: Notification,
         notificationId: Int = generateUniqueNotificationId()
     ) {

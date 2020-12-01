@@ -13,39 +13,53 @@ class NotificationPrefManager private constructor(private val context: Context) 
 
     companion object {
         private const val PREFERENCES_NAME = "notification_preferences"
-        private const val KEY_NOTIFICATION_ENABLED = "notification_enabled"
+        private const val KEY_DAILY_WORD_NOTIFICATION_ENABLED = "daily_word_notification_enabled"
+        private const val KEY_REMINDER_NOTIFICATION_ENABLED = "reminder_notification_enabled"
 
         fun newInstance(context: Context) = NotificationPrefManager(context)
     }
 
 
-    fun toggleNotificationEnabled(listener: ((String, FBTopicSubscriber.OperationStatus) -> Unit)? = null) {
-        Log.i("Notification TOGGLE", (!isNotificationEnabled()).toString())
-        FBTopicSubscriber.toggleReceivingDailyWordNotification(this) { s: String, operationStatus: FBTopicSubscriber.OperationStatus ->
-            if (operationStatus == FBTopicSubscriber.OperationStatus.SUCCESS) {
-                editor.putBoolean(
-                    KEY_NOTIFICATION_ENABLED,
-                    !isNotificationEnabled()
-                ).commit()
-                listener?.invoke(s, FBTopicSubscriber.OperationStatus.SUCCESS)
-            } else {
-                listener?.invoke(s, FBTopicSubscriber.OperationStatus.FAILED)
-            }
-        }
-
+    fun toggleDailyWordNotification() {
+        editor.putBoolean(
+            KEY_DAILY_WORD_NOTIFICATION_ENABLED,
+            !isDailyWordNotificationEnabled()
+        ).commit()
     }
 
 
-    fun isNotificationEnabled() = sharedPreferences.getBoolean(
-        KEY_NOTIFICATION_ENABLED,
+    fun isDailyWordNotificationEnabled() = sharedPreferences.getBoolean(
+        KEY_DAILY_WORD_NOTIFICATION_ENABLED,
         true
     )
 
 
-    fun getLiveData(): SPrefBooleanLiveData {
+    fun getDailyWordNotificationEnabledLiveData(): SPrefBooleanLiveData {
         return SPrefBooleanLiveData(
             sharedPreferences,
-            KEY_NOTIFICATION_ENABLED, true
+            KEY_DAILY_WORD_NOTIFICATION_ENABLED, true
+        )
+    }
+
+
+    fun toggleReminderNotification() {
+        editor.putBoolean(
+            KEY_REMINDER_NOTIFICATION_ENABLED,
+            !isReminderNotificationEnabled()
+        ).commit()
+    }
+
+
+    fun isReminderNotificationEnabled() = sharedPreferences.getBoolean(
+        KEY_REMINDER_NOTIFICATION_ENABLED,
+        true
+    )
+
+
+    fun getReminderNotificationEnabledLiveData(): SPrefBooleanLiveData {
+        return SPrefBooleanLiveData(
+            sharedPreferences,
+            KEY_REMINDER_NOTIFICATION_ENABLED, true
         )
     }
 

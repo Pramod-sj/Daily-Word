@@ -1,11 +1,14 @@
 package com.pramod.dailyword.ui.settings
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.ui.BaseActivity
@@ -42,7 +45,6 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
         edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
     }
-
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
         if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
@@ -101,7 +103,9 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
         mViewModel.navigateToAbout().observe(this, Observer {
             it.getContentIfNotHandled()?.let { navigate ->
                 if (navigate) {
-                    AboutAppActivity.openActivity(this)
+                    AboutAppActivity.openActivity(
+                        this
+                    )
                 }
             }
         })
