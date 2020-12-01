@@ -7,11 +7,13 @@ import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.os.Handler
 import android.transition.ArcMotion
+import android.transition.Fade
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.LinearInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
@@ -20,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.gson.Gson
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.R
@@ -67,20 +70,20 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         return ViewModelProviders.of(
             this,
             WordDetailedViewModel.Factory(application, word ?: WordOfTheDay(wordDate))
-        )
-            .get(WordDetailedViewModel::class.java)
+        ).get(WordDetailedViewModel::class.java)
     }
 
     override fun getBindingVariable(): Int = BR.wordDetailedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //initTransitionAxis()
         initEnterAndReturnTransition()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setUpToolbar()
+        arrangeViewsAccordingToEdgeToEdge()
         setNestedScrollListener()
         setNavigateMW()
-        arrangeViewsAccordingToEdgeToEdge()
         showNativeAdDialogWithDelay()
         setUpWordOfTheDay()
     }
@@ -97,7 +100,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun setUpWordOfTheDay() {
         setUpExampleRecyclerView()
         setUpDefinationRecyclerView()
-        mViewModel.wordOfTheDayLiveData.observe(this, Observer {
+        mViewModel.wordOfTheDayLiveData.observe(this, {
             if (it != null) {
                 Log.i("WORD OF THE DAY", Gson().toJson(it))
                 invalidateOptionsMenu()
@@ -186,6 +189,13 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     }
 
+    private fun initTransitionAxis() {
+        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        window.allowEnterTransitionOverlap = true
+        window.allowReturnTransitionOverlap = true
+    }
+
     private fun initEnterAndReturnTransition() {
 
         val enterTransition = MaterialContainerTransform().apply {
@@ -201,13 +211,18 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     this@WordDetailedActivity,
                     android.R.attr.windowBackground
                 )
+            scrimColor =
+                CommonUtils.resolveAttrToColor(
+                    this@WordDetailedActivity,
+                    android.R.attr.windowBackground
+                )
         }
 
         val returnTransition = MaterialContainerTransform().apply {
             addTarget(android.R.id.content)
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
-            duration = 250
+            duration = 200
             pathMotion = ArcMotion()
             fadeMode = MaterialContainerTransform.FADE_MODE_IN
             interpolator = FastOutSlowInInterpolator()
@@ -216,13 +231,19 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     this@WordDetailedActivity,
                     android.R.attr.windowBackground
                 )
+
+            scrimColor =
+                CommonUtils.resolveAttrToColor(
+                    this@WordDetailedActivity,
+                    android.R.attr.windowBackground
+                )
         }
 
+        window.sharedElementsUseOverlay = false
 
         findViewById<View>(android.R.id.content).transitionName = "CONTAINER"
         window.sharedElementEnterTransition = enterTransition
         window.sharedElementReturnTransition = returnTransition
-        window.sharedElementsUseOverlay = false
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 

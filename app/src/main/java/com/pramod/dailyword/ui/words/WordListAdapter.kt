@@ -24,7 +24,7 @@ class WordListAdapter(
     val itemClickCallback: ((pos: Int, word: WordOfTheDay) -> Unit)? = null
 ) :
     PagedListAdapter<WordOfTheDay, WordListAdapter.WordViewHolder>(diffCallback) {
-    private var canStartActivity = false
+    private var canStartActivity = true
 
     fun setCanStartActivity(canStart: Boolean) {
         canStartActivity = canStart

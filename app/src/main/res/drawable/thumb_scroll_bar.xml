@@ -4,7 +4,7 @@
     <padding
         android:left="2dp"
         android:right="2dp" />
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/scrollBarColorPrimary" />
     <corners android:radius="@dimen/card_radius_max" />
 
 </shape>

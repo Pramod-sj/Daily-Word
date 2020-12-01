@@ -99,5 +99,8 @@
     <string name="bookmarked_words">Bookmarks</string>
     <string name="what_s_new">What\'s new?</string>
     <string name="read_more">Read more</string>
+    <string name="other">Other</string>
+    <string name="notification">Notification</string>
+    <string name="personalize">Personalize</string>
 
 </resources>

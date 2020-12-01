@@ -205,7 +205,7 @@ class ITSCustomLayout : LinearLayout {
             customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.VISIBLE
             shouldShowBackgroundTint()
         } else {
-            customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.GONE
+            customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.INVISIBLE
         }
         invalidate()
     }

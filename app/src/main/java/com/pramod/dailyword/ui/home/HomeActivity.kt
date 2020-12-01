@@ -14,32 +14,29 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
-import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.databinding.ActivityMainBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.firebase.FBMessageService
 import com.pramod.dailyword.helper.*
-import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
-import com.pramod.dailyword.util.CalenderUtil
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -60,13 +57,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         @JvmStatic
         fun openActivityWithFade(context: Context) {
             val intent = Intent(context, HomeActivity::class.java)
+            context.startActivity(intent)
             if (context is Activity) {
                 context.overridePendingTransition(
                     android.R.anim.fade_in,
                     android.R.anim.fade_out
                 )
             }
-            context.startActivity(intent)
         }
 
         @JvmStatic
@@ -79,7 +76,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     private lateinit var pastWordAdapter: PastWordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initEnterTransition()
         initExitTransition()
         super.onCreate(savedInstanceState)
         setUpViewCallbacks()
@@ -117,7 +113,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             }
 
             override fun learnAll(v: View?) {
-                WordListActivity.openActivity(this@HomeActivity)
+                WordListActivity.openActivity(
+                    this@HomeActivity
+                )
             }
 
         })
@@ -125,8 +123,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     private fun showChangelogActivity() {
         mViewModel.showChangelogActivity.observe(this, Observer {
-            it.getContentIfNotHandled()?.let {
-                if (it) {
+            it.getContentIfNotHandled()?.let { boolean ->
+                if (boolean) {
                     ChangelogActivity.openActivity(this, true)
                 }
             }
@@ -179,21 +177,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         supportActionBar?.let { title = null }
     }
 
-    private fun initEnterTransition() {
-        val fade = Fade()
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        fade.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-        window.enterTransition = fade
-    }
-
     private fun initExitTransition() {
-        /*val fade = Fade()
-        fade.duration = 150
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        window.exitTransition = fade*/
         window.sharedElementsUseOverlay = false
+        window.allowEnterTransitionOverlap = true
+        window.allowReturnTransitionOverlap = true
+        window.sharedElementsUseOverlay = true
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+        window.returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
@@ -221,7 +211,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
-        notificationHelper.makeNotification(
+        notificationHelper.showNotification(
             notification = notification
         )
 

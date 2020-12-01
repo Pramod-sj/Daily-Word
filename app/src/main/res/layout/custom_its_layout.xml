@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:id="@+id/linearLayout_custom"
@@ -60,6 +61,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:paddingStart="@dimen/padding_medium"
             android:id="@+id/its_frame_layout_tail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,6 +73,8 @@
                 android:id="@+id/its_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:thumb="@drawable/switch_custom_thumb"
+                app:track="@drawable/switch_custom_track"
                 android:background="@null"
                 android:clickable="false"
                 android:focusable="false"

@@ -197,22 +197,22 @@ class DailogHelper {
             val items = context.resources.getStringArray(arrayResId)
             var selectedItemIndex = -1
             items.forEachIndexed { i: Int, s: String ->
-                if (s.toLowerCase(Locale.getDefault())
-                    == selectedItem.toLowerCase(Locale.getDefault())
+                if (s.equals(selectedItem, ignoreCase = true)
                 ) {
                     selectedItemIndex = i
                 }
             }
 
-            val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
-                .setTitle(title)
-                .setSingleChoiceItems(
-                    items,
-                    selectedItemIndex
-                )
-                { dialogInterface: DialogInterface, i: Int ->
-                    selectedItemIndex = i
-                }
+            val dialog: MaterialAlertDialogBuilder =
+                MaterialAlertDialogBuilder(context)
+                    .setTitle(title)
+                    .setSingleChoiceItems(
+                        items,
+                        selectedItemIndex
+                    )
+                    { dialogInterface: DialogInterface, i: Int ->
+                        selectedItemIndex = i
+                    }
             positionText?.let {
                 dialog.setPositiveButton(it) { dialogInterface: DialogInterface, i: Int ->
                     dialogInterface.dismiss()

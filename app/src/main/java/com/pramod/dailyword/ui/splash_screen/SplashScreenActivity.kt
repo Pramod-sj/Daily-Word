@@ -63,7 +63,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
 
 
     private fun navigateToHomePage() {
-        mViewModel.navigateToHomePage().observe(this, Observer {
+        mViewModel.navigateToHomePage().observe(this, {
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
                     //val activityOptions = ActivityOptions.makeSceneTransitionAnimation(this)
@@ -115,9 +115,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     }
 
     private fun registerTopics() {
-        if (NotificationPrefManager.newInstance(this).isNotificationEnabled()) {
+        /*if (NotificationPrefManager.newInstance(this).isNotificationEnabled()) {
             FBTopicSubscriber.subscribeToDailyWordNotification()
-        }
+        }*/
         FBTopicSubscriber.subscribeToCountry(this)
     }
 }

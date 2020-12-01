@@ -30,6 +30,7 @@
     <dimen name="button_height">60dp</dimen>
 
     <!--Card Style-->
+    <dimen name="dialog_corner_radius">12dp</dimen>
     <dimen name="card_radius_max">10dp</dimen>
     <dimen name="card_elevation_max">5dp</dimen>
 

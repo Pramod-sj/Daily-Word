@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAboutAppBinding
@@ -24,6 +25,12 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
             val intent = Intent(context, AboutAppActivity::class.java)
             context.startActivity(intent)
         }
+
+        @JvmStatic
+        fun openActivity(context: Context, bundle: Bundle) {
+            val intent = Intent(context, AboutAppActivity::class.java)
+            context.startActivity(intent, bundle)
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_about_app
@@ -35,6 +42,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     override fun getBindingVariable(): Int = BR.aboutAppViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
         arrangeViewsAccordingToEdgeToEdge()
@@ -42,6 +50,13 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         setDeveloperLink()
         setCreditLink()
         setOthersLink()
+    }
+
+    private fun initTransition() {
+        window.allowEnterTransitionOverlap = true
+        window.allowReturnTransitionOverlap = true
+        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {

@@ -4,11 +4,14 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
@@ -26,6 +29,12 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
             val intent = Intent(context, FavoriteWordsActivity::class.java)
             context.startActivity(intent)
         }
+
+        @JvmStatic
+        fun openActivity(context: Context, bundle: Bundle) {
+            val intent = Intent(context, FavoriteWordsActivity::class.java)
+            context.startActivity(intent, bundle)
+        }
     }
 
     override fun getLayoutId(): Int = R.layout.activity_favorite_words
@@ -39,12 +48,21 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
         super.onCreate(savedInstanceState)
         setUpToolbar()
         arrangeViewsAccordingToEdgeToEdge()
-        initAdapter()
+        findViewById<View>(android.R.id.content).postDelayed({
+            initAdapter()
+        }, 150)
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.setCanStartActivity(true)
+        adapter?.setCanStartActivity(true)
+    }
+
+
+    private fun initTransition() {
+        window.sharedElementsUseOverlay = false
+        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
     }
 
     private fun setUpToolbar() {
@@ -82,7 +100,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
     }
 
 
-    private lateinit var adapter: WordListAdapter
+    private var adapter: WordListAdapter? = null
 
     private fun initAdapter() {
         adapter = WordListAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
@@ -94,9 +112,9 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
             )
             WordDetailedActivity.openActivity(this, wordOfTheDay, option)
         }
-        mViewModel.getBookmarkedWords().observe(this, Observer {
+        mViewModel.getBookmarkedWords().observe(this, {
             mViewModel.showPlaceHolderLiveData.value = it.size == 0
-            adapter.submitList(it)
+            adapter?.submitList(it)
         })
         recyclerview_words.adapter = adapter
     }

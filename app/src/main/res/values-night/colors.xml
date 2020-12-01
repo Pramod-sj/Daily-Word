@@ -6,6 +6,8 @@
 
     <color name="app_logo_tint">@color/white</color>
 
+    <color name="scrollBarColorPrimary">#40BB86FC</color>
+
     <color name="app_theme_icon_tint">@color/green_200</color>
     <color name="app_animation_icon_tint">@color/orange_200</color>
     <color name="navigation_bar_icon_tint">@color/blue_200</color>

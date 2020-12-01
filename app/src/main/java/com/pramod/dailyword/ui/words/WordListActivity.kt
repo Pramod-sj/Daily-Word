@@ -5,13 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.whenResumed
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.ConcatAdapter
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
@@ -24,7 +28,10 @@ import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel>() {
 
@@ -34,6 +41,14 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
             val intent = Intent(context, WordListActivity::class.java)
             context.startActivity(intent)
         }
+
+        @JvmStatic
+        fun openActivity(context: Context, bundle: Bundle) {
+            val intent = Intent(context, WordListActivity::class.java)
+            context.startActivity(intent, bundle)
+        }
+
+        val TAG = WordListActivity::class.java.simpleName
     }
 
     override fun getLayoutId(): Int {
@@ -54,16 +69,20 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         lightStatusBar()
         initExitTransition()
+        initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        initAdapter()
         arrangeViewsAccordingToEdgeToEdge()
-        showNativeAdDialogWithDelay()
+        findViewById<View>(android.R.id.content).postDelayed({
+            initAdapter()
+            showNativeAdDialogWithDelay()
+        }, 150)
+
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.setCanStartActivity(true)
+        adapter?.setCanStartActivity(true)
     }
 
     private fun setUpToolbar() {
@@ -76,15 +95,17 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
 
-    private lateinit var adapter: WordListAdapter
+    private var adapter: WordListAdapter? = null
     private var networkStateAdapter: NetworkStateAdapter? = null
 
     @ExperimentalCoroutinesApi
     @ExperimentalPagingApi
     private fun initAdapter() {
+
         val concatAdapter = ConcatAdapter()
 
         adapter = WordListAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
+            Log.i(TAG, "initAdapter: ")
             val view = recyclerview_words.layoutManager!!.findViewByPosition(i)
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this@WordListActivity,
@@ -93,7 +114,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
             )
             WordDetailedActivity.openActivity(this, wordOfTheDay, option)
         }
-        concatAdapter.addAdapter(adapter)
+        concatAdapter.addAdapter(adapter!!)
         mViewModel.networkState.observe(this, Observer {
             Log.i("NETWORK STATE", Gson().toJson(it))
             networkStateAdapter?.let { adapter ->
@@ -107,10 +128,22 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 }
             }
         })
+
         mViewModel.words.observe(this, Observer {
-            adapter.submitList(it)
+            adapter?.submitList(it)
         })
+
         recyclerview_words.adapter = concatAdapter
+    }
+
+    private fun initTransition() {
+        window.allowEnterTransitionOverlap = true
+        window.allowReturnTransitionOverlap = true
+        window.sharedElementsUseOverlay = true
+        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+        window.returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
     }
 
     private fun initExitTransition() {

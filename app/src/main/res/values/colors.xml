@@ -5,6 +5,8 @@
     <color name="colorAccent">#6200EE</color>
     <color name="colorPrimaryDesaturated">#BB86FC</color>
 
+    <color name="scrollBarColorPrimary">#406200EE</color>
+
     <color name="app_logo_tint">@color/black</color>
 
     <color name="app_icon_tint">@color/grey_very_extra_dark</color>

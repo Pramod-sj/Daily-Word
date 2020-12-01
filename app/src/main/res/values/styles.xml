@@ -16,7 +16,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light"/>
+    <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />
 
     <style name="AppTheme.HomeActivity" parent="AppTheme">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -36,7 +36,7 @@
 
     <style name="MaterialAlertDialog.App.ShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/card_radius_max</item>
+        <item name="cornerSize">@dimen/dialog_corner_radius</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -179,6 +179,6 @@
         <item name="cornerSizeTopRight">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">@dimen/card_radius_max</item>
-
     </style>
+
 </resources>

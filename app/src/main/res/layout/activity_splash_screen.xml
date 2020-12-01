@@ -20,13 +20,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.splash_screen.SplashScreenActivity">
 
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="150dp"
-             android:layout_gravity="top"
-             android:scaleType="fitXY"
-             android:src="@drawable/ic_wave"
-             android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_gravity="top"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_wave"
+            android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
 
         <LinearLayout
@@ -78,10 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginHorizontal="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}">
+            android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_get_started"
@@ -90,7 +89,8 @@
                 android:layout_margin="@dimen/margin_small"
                 android:enabled="@{splashScreenViewModel.enableStartButton()}"
                 android:onClick="@{()->splashScreenViewModel.goToHomePage()}"
-                android:text="@string/splash_screen_get_started" />
+                android:text="@string/splash_screen_get_started"
+                android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
             <TextView
                 android:id="@+id/accept_condition_textView"
@@ -98,8 +98,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:text="@{String.format(@string/accept_text,@string/term_and_condition,@string/privacy_policy)}"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:text="@string/made_in"
+                android:textColor="@color/textColor_highEmphasis"
+                android:textStyle="bold" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
