@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="65dp"
                     android:padding="@dimen/padding_medium"
-                    android:text="Personalize"
+                    android:text="@string/personalize"
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
@@ -51,8 +51,8 @@
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.showThemeSelector()}"
                     app:icon="@drawable/ic_outline_theme_24"
-                    app:iconColorTint="@color/app_theme_icon_tint"
-                    app:showIconBackground="true"
+                    app:iconColorTint="@color/app_icon_tint"
+                    app:showIconBackground="false"
                     app:subTitle="@{CommonUtils.capitalizeFirstLetter(ThemeManager.getThemeNameFromOrdinal(appSettingViewModel.themeManager.liveData))}"
                     app:title="Theme"
                     app:titlePaddingStart="@dimen/margin_small" />
@@ -63,11 +63,11 @@
                     android:onClick="@{()->appSettingViewModel.toggleWindowAnimation()}"
                     app:checked="@{appSettingViewModel.windowAnimationPrefManager.liveData()}"
                     app:icon="@drawable/ic_animation_outline"
-                    app:iconColorTint="@color/app_animation_icon_tint"
-                    app:showIconBackground="true"
+                    app:iconColorTint="@color/app_icon_tint"
+                    app:showIconBackground="false"
                     app:showRadioButton="true"
                     app:subTitle="Animate when switching from one window to another"
-                    app:title="Window Animation"
+                    app:title="Window Animation (Beta)"
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 
@@ -77,49 +77,61 @@
                     android:onClick="@{()->appSettingViewModel.toggleEdgeToEdge()}"
                     app:checked="@{appSettingViewModel.windowPrefManager.liveData}"
                     app:icon="@drawable/ic_baseline_fullscreen_24"
-                    app:iconColorTint="@color/navigation_bar_icon_tint"
-                    app:showIconBackground="true"
+                    app:iconColorTint="@color/app_icon_tint"
+                    app:showIconBackground="false"
                     app:showRadioButton="true"
-                    app:subTitle="Use full screen"
-                    app:title="Edge to Edge"
+                    app:subTitle="Immersive mode"
+                    app:title="Full Screen (Edge to Edge)"
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <TextView
-                    android:textAllCaps="true"
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="65dp"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:padding="@dimen/padding_medium"
-                    android:text="Notification"
+                    android:text="@string/notification"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="@{appSettingViewModel.toggleNotificationClickableLiveData()}"
-                    android:onClick="@{()->appSettingViewModel.toggleNotification()}"
-                    app:checked="@{appSettingViewModel.notificationPrefManager.liveData}"
+                    android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleDailyWordNotification()}"
+                    app:checked="@{appSettingViewModel.notificationPrefManager.dailyWordNotificationEnabledLiveData}"
                     app:icon="@drawable/ic_notifications_none_black_24dp"
-                    app:iconColorTint="@color/notification_icon_tint"
-                    app:showIconBackground="true"
+                    app:iconColorTint="@color/app_icon_tint"
                     app:showRadioButton="true"
-                    app:subTitle="@{appSettingViewModel.toggleNotificationMessageLiveData()}"
-                    app:title="Daily Notification"
+                    app:subTitle="Receive notification when word of the day is available"
+                    app:title="Daily word notification"
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleTextSize="@dimen/text_sub_title" />
+
+
+                <com.pramod.dailyword.view.ITSCustomLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
+                    app:checked="@{appSettingViewModel.notificationPrefManager.reminderNotificationEnabledLiveData}"
+                    app:icon="@drawable/ic_outline_notifications_active_24"
+                    app:iconColorTint="@color/app_icon_tint"
+                    app:showRadioButton="true"
+                    app:subTitle="Receive a reminding notification"
+                    app:title="Reminder notification"
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <TextView
-                    android:textAllCaps="true"
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="65dp"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:padding="@dimen/padding_medium"
-                    android:text="Other"
+                    android:text="@string/other"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
                 <com.pramod.dailyword.view.ITSCustomLayout
@@ -127,8 +139,8 @@
                     android:layout_height="wrap_content"
                     android:onClick="@{()->appSettingViewModel.goToAbout()}"
                     app:icon="@drawable/ic_info_outline_black_24dp"
-                    app:iconColorTint="@color/about_icon_tint"
-                    app:showIconBackground="true"
+                    app:iconColorTint="@color/app_icon_tint"
+                    app:showIconBackground="false"
                     app:showRadioButton="false"
                     app:subTitle="Links, developer, license, others"
                     app:title="About"
