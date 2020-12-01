@@ -17,6 +17,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
+import dev.doubledot.doki.ui.DokiActivity
 
 class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingViewModel>() {
 
@@ -40,10 +41,11 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        initThemeSelector()
-        navigateToAbout()
         edgeToEdgeSettingChanged()
         arrangeViewsAccordingToEdgeToEdge()
+        initThemeSelector()
+        navigateToAbout()
+        navigateToDokiActivity()
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {
@@ -100,7 +102,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     }
 
     private fun navigateToAbout() {
-        mViewModel.navigateToAbout().observe(this, Observer {
+        mViewModel.navigateToAbout().observe(this) {
             it.getContentIfNotHandled()?.let { navigate ->
                 if (navigate) {
                     AboutAppActivity.openActivity(
@@ -108,7 +110,19 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                     )
                 }
             }
-        })
+        }
+    }
+
+    private fun navigateToDokiActivity() {
+        mViewModel.navigateToDokiActivity().observe(this) {
+            it.getContentIfNotHandled()?.let { navigate ->
+                if (navigate) {
+                    DokiActivity.start(
+                        this@AppSettingActivity
+                    )
+                }
+            }
+        }
     }
 
     private fun edgeToEdgeSettingChanged() {

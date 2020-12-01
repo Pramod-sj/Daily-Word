@@ -28,6 +28,8 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
 
     private val recreateActivity = MutableLiveData<Event<Boolean>>()
 
+    private val navigateToDokiActivity = MutableLiveData<Event<Boolean>>()
+
     fun showThemeSelector() {
         showThemeSelector.value = Event.init(themeManager.getDefaultThemeModeOption())
     }
@@ -59,7 +61,12 @@ class AppSettingViewModel(application: Application) : BaseViewModel(application)
         recreateActivity.value = Event.init(true)
     }
 
+    fun goToDokiActivity() {
+        navigateToDokiActivity.value = Event.init(true)
+    }
+
     fun getShowThemeSelector(): LiveData<Event<ThemeManager.Options>> = showThemeSelector
     fun navigateToAbout(): LiveData<Event<Boolean>> = navigateToAbout
     fun recreateActivity(): LiveData<Event<Boolean>> = recreateActivity
+    fun navigateToDokiActivity(): LiveData<Event<Boolean>> = navigateToDokiActivity
 }

@@ -110,4 +110,8 @@ dependencies {
     /*//lottie
     implementation 'com.airbnb.android:lottie:3.4.1'*/
 
+    implementation('dev.doubledot.doki:library:0.0.1@aar') {
+        transitive = true
+    }
+
 }
