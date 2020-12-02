@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:gravity="center"
@@ -56,7 +57,7 @@
                 android:visibility="@{splashScreenViewModel.splashScreenTextVisible()?View.VISIBLE:View.INVISIBLE}">
 
                 <TextView
-                    style="@style/AppTheme.Header4TextStyle"
+                    style="@style/AppTheme.Header5TextStyle"
                     switchText="@{splashScreenViewModel.splashScreenText()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,11 +65,11 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    style="@style/AppTheme.Header5TextStyle"
+                    style="@style/AppTheme.TitleTextStyle"
                     switchText="@{splashScreenViewModel.splashScreenSubText()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_medium" />
+                    android:padding="@dimen/margin_small" />
             </LinearLayout>
         </LinearLayout>
 

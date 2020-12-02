@@ -69,7 +69,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         lightStatusBar()
         initExitTransition()
-        initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
         arrangeViewsAccordingToEdgeToEdge()
@@ -136,19 +135,19 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         recyclerview_words.adapter = concatAdapter
     }
 
-    private fun initTransition() {
-        window.allowEnterTransitionOverlap = true
-        window.allowReturnTransitionOverlap = true
+    /*private fun initTransition() {
         window.sharedElementsUseOverlay = true
         window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
         window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
         window.returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
         window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-    }
+    }*/
 
     private fun initExitTransition() {
         window.sharedElementsUseOverlay = false
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.allowEnterTransitionOverlap = true
+        window.allowReturnTransitionOverlap = true
     }
 
     private fun arrangeViewsAccordingToEdgeToEdge() {

@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
@@ -45,6 +46,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
     override fun getBindingVariable(): Int = BR.favoriteWordsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
         arrangeViewsAccordingToEdgeToEdge()
@@ -61,8 +63,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
 
     private fun initTransition() {
         window.sharedElementsUseOverlay = false
-        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
     private fun setUpToolbar() {

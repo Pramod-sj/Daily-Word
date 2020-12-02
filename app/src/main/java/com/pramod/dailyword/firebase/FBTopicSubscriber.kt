@@ -62,8 +62,12 @@ class FBTopicSubscriber {
 
                 //two letters
                 val countryCode: String? = if (NetworkUtils.isVPNActive(context)) {
-
-                    val publicIP = ipService.getPublicIp()
+                    var publicIP: String? = null
+                    try {
+                        publicIP = ipService.getPublicIp()
+                    } catch (e: Exception) {
+                        Log.i(TAG, "subscribeToCountry: $e")
+                    }
 
                     val isVPNActive = NetworkUtils.isVPNActive(context)
                     Log.i(TAG, "subscribeToCountry: isVPNActive: $isVPNActive")
@@ -124,7 +128,7 @@ class FBTopicSubscriber {
 
 
         fun subscribeToTestDevice(context: Context) {
-           subscribeTopic(TOPIC_TEST_DEVICE)
+            subscribeTopic(TOPIC_TEST_DEVICE)
         }
 
 

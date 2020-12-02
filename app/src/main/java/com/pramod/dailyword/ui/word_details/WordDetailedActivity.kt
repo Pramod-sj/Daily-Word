@@ -3,6 +3,7 @@ package com.pramod.dailyword.ui.word_details
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
@@ -20,6 +23,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.material.transition.platform.MaterialSharedAxis
@@ -189,62 +193,38 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     }
 
-    private fun initTransitionAxis() {
-        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
-        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
-        window.allowEnterTransitionOverlap = true
-        window.allowReturnTransitionOverlap = true
-    }
-
     private fun initEnterAndReturnTransition() {
 
+        findViewById<View>(android.R.id.content).transitionName = "CONTAINER"
+        window.sharedElementsUseOverlay = false
+        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+
         val enterTransition = MaterialContainerTransform().apply {
+            setAllContainerColors(
+                MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
+            )
             addTarget(android.R.id.content)
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
             duration = 300
-            fadeMode = MaterialContainerTransform.FADE_MODE_OUT
             pathMotion = ArcMotion()
             interpolator = FastOutSlowInInterpolator()
-            containerColor =
-                CommonUtils.resolveAttrToColor(
-                    this@WordDetailedActivity,
-                    android.R.attr.windowBackground
-                )
-            scrimColor =
-                CommonUtils.resolveAttrToColor(
-                    this@WordDetailedActivity,
-                    android.R.attr.windowBackground
-                )
         }
 
         val returnTransition = MaterialContainerTransform().apply {
+            setAllContainerColors(
+                MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
+            )
             addTarget(android.R.id.content)
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
-            duration = 200
+            duration = 260
             pathMotion = ArcMotion()
-            fadeMode = MaterialContainerTransform.FADE_MODE_IN
             interpolator = FastOutSlowInInterpolator()
-            containerColor =
-                CommonUtils.resolveAttrToColor(
-                    this@WordDetailedActivity,
-                    android.R.attr.windowBackground
-                )
-
-            scrimColor =
-                CommonUtils.resolveAttrToColor(
-                    this@WordDetailedActivity,
-                    android.R.attr.windowBackground
-                )
         }
 
-        window.sharedElementsUseOverlay = false
-
-        findViewById<View>(android.R.id.content).transitionName = "CONTAINER"
         window.sharedElementEnterTransition = enterTransition
         window.sharedElementReturnTransition = returnTransition
-        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
     private fun setNestedScrollListener() {

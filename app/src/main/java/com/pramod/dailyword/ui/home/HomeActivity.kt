@@ -178,12 +178,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun initExitTransition() {
-        window.sharedElementsUseOverlay = false
         window.allowEnterTransitionOverlap = true
         window.allowReturnTransitionOverlap = true
-        window.sharedElementsUseOverlay = true
-        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        window.returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        window.sharedElementsUseOverlay = false
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
     }
 
@@ -368,7 +365,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                         "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
                     positiveText = "Setting",
                     positiveClickCallback = {
-                        autoStartPermissionHelper.getAutoStartPermission(this)
+                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                            mViewModel.setMessage(SnackbarMessage.init("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                        }
                         autoStartPrefManager.clickedOnSetting()
                     },
                     negativeText = "Cancel",
