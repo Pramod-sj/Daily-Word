@@ -29,7 +29,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
                 if (prefManager.isNewUser()) {
                     splashScreenText.value = "Hi, There!"
                     Handler().postDelayed({
-                        splashScreenText.postValue("Welcome to DailyWord")
+                        splashScreenText.postValue("Welcome to Daily Word")
                         Handler().postDelayed(
                             {
                                 splashScreenSubText.postValue("Learn a new word every day!")

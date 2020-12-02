@@ -109,7 +109,7 @@
                             android:layout_marginTop="@dimen/margin_small"
                             app:icon="@drawable/ic_info_outline_black_24dp"
                             app:showRadioButton="false"
-                            app:subTitle="@{BuildConfig.VERSION_NAME}"
+                            app:subTitle="@{BuildConfig.VERSION_NAME+`(`+BuildConfig.VERSION_CODE+`)`}"
                             app:title="Version"
                             app:titleTextSize="@dimen/text_sub_title" />
 
@@ -117,11 +117,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
+                            android:onClick="@{()->appLinkNavigate.openChangelogActivity()}"
                             app:icon="@drawable/ic_round_change_log_24"
                             app:showRadioButton="false"
                             app:subTitle="Checkout what's new in this version"
                             app:title="Changelogs"
-                            android:onClick="@{()->appLinkNavigate.openChangelogActivity()}"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.view.ITSCustomLayout
