@@ -120,7 +120,7 @@
                             app:icon="@drawable/ic_round_change_log_24"
                             app:showRadioButton="false"
                             app:subTitle="Checkout what's new in this version"
-                            app:title="Changelog"
+                            app:title="Changelogs"
                             android:onClick="@{()->appLinkNavigate.openChangelogActivity()}"
                             app:titleTextSize="@dimen/text_sub_title" />
 
