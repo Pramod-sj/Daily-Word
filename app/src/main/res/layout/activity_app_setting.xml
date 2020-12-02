@@ -143,7 +143,7 @@
                     app:showIconBackground="false"
                     app:onLongClick="@{()->appSettingViewModel.copyFirebaseTokenId()}"
                     app:showRadioButton="false"
-                    app:subTitle="Not receiving notifications, fix it yourself."
+                    app:subTitle="Not receiving notifications, fix it yourself"
                     app:title="Facing Notification Issue?"
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
