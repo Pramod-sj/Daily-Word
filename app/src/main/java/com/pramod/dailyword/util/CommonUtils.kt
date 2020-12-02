@@ -88,9 +88,12 @@ class CommonUtils {
         ) {
             val clipboard: ClipboardManager =
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboard.addPrimaryClipChangedListener(listener)
+            if (listener != null) {
+                clipboard.addPrimaryClipChangedListener(listener)
+            }
             val clip = ClipData.newPlainText("label", text)
             clipboard.setPrimaryClip(clip)
+
         }
 
         @JvmStatic

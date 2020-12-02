@@ -119,4 +119,9 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
             Event.init(false)
         }
     }
+
+    fun copyWordToClipboard(word: String) {
+        CommonUtils.copyToClipboard(getApplication(), word)
+        setMessage(SnackbarMessage.init("Copied"))
+    }
 }

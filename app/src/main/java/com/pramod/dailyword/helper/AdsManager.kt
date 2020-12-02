@@ -73,7 +73,7 @@ class AdsManager private constructor(private val context: Context) {
             closeClickCallback: (() -> Unit)? = null
         ) {
             val adsManager = newInstance(context)
-            if (adsManager.getAdActivityCount() % 5 != 0) {
+            if (adsManager.getAdActivityCount() % 8 != 0) {
                 Log.i(
                     TAG,
                     "Show Ad dialog condition doesn't matches ${adsManager.getAdActivityCount()}"

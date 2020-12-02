@@ -141,6 +141,7 @@
                     android:onClick="@{()->appSettingViewModel.goToDokiActivity()}"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
+                    app:onLongClick="@{()->appSettingViewModel.copyFirebaseTokenId()}"
                     app:showRadioButton="false"
                     app:subTitle="Not receiving notifications, fix it yourself."
                     app:title="Facing Notification Issue?"

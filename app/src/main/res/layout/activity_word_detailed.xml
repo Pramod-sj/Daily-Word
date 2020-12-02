@@ -78,17 +78,23 @@
                         android:textStyle="bold"
                         app:selected="@{true}" />
 
-                    <TextView
+
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/txtView_word_of_the_day"
-                        style="@style/AppTheme.Header1TextStyle"
+                        style="@style/AppTheme.Header1TextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_large"
-                        android:ellipsize="end"
                         android:paddingTop="@dimen/padding_small"
+                        android:layout_marginHorizontal="@dimen/margin_large"
+                        android:drawablePadding="@dimen/padding_medium"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
                         android:singleLine="true"
                         android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.word}"
-                        android:textStyle="bold" />
+                        app:drawableRightCompat="@drawable/ic_round_content_copy_24"
+                        app:drawableTint="@color/app_icon_tint"
+                        app:onRightDrawableClick="@{()->wordDetailedViewModel.copyWordToClipboard(wordDetailedViewModel.wordOfTheDayLiveData.word)}" />
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"

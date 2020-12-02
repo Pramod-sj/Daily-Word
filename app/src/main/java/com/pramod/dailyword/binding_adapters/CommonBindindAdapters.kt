@@ -3,11 +3,13 @@ package com.pramod.dailyword.binding_adapters
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.ClipboardManager
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.util.Log
 import android.view.HapticFeedbackConstants
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -20,6 +22,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.databinding.BindingAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.R
+import com.pramod.dailyword.helper.RightDrawableOnTouchListener
 import com.pramod.dailyword.util.CommonUtils
 
 object CommonBindindAdapters {
@@ -143,8 +146,9 @@ object CommonBindindAdapters {
         textFadeOut.start()
     }
 
+    @JvmStatic
     @BindingAdapter("hapticVibrate")
-    fun hapticVibrate(view: View, vibrate: Boolean) {
+    public fun hapticVibrate(view: View, vibrate: Boolean) {
         if (vibrate) view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
     }
 
@@ -169,14 +173,49 @@ object CommonBindindAdapters {
         textView.setOnLongClickListener {
             CommonUtils.copyToClipboard(
                 textView.context,
-                copyToClipBoardText!!,
-                ClipboardManager.OnPrimaryClipChangedListener {
-                    Snackbar.make(rootLayout, "Copied to clipboard", Snackbar.LENGTH_SHORT)
-                        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                        .show()
-                })
+                copyToClipBoardText!!
+            ) {
+                Snackbar.make(rootLayout, "Copied to clipboard", Snackbar.LENGTH_SHORT)
+                    .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                    .show()
+            }
             return@setOnLongClickListener true
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:onLongClick", requireAll = false)
+    fun onLongClick(view: View, onLongClickListener: OnLongClickListener?) {
+        view.setOnLongClickListener { it ->
+            onLongClickListener?.onLongClick()
+            true
+        }
+    }
+
+    interface OnLongClickListener {
+        fun onLongClick()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @JvmStatic
+    @BindingAdapter("app:onRightDrawableClick")
+    fun onRightDrawableClick(
+        textView: TextView,
+        onTextDrawableClickListener: OnTextDrawableClickListener?
+    ) {
+        textView.setOnTouchListener(object : RightDrawableOnTouchListener(textView) {
+            override fun onDrawableTouch(event: MotionEvent?): Boolean {
+                onTextDrawableClickListener?.onRightDrawableClick()
+                hapticVibrate(textView, true)
+                event?.action = MotionEvent.ACTION_CANCEL;
+                return false
+            }
+        })
+    }
+
+
+    interface OnTextDrawableClickListener {
+        fun onRightDrawableClick()
     }
 }
 

@@ -13,6 +13,7 @@ import com.pramod.dailyword.db.repository.BookmarkRepo
 import com.pramod.dailyword.db.repository.WOTDRepository
 import com.pramod.dailyword.helper.PronounceHelper
 import com.pramod.dailyword.ui.BaseViewModel
+import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -124,8 +125,8 @@ class WordDetailedViewModel(application: Application, private val wordOfTheDay: 
 
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun copyWordToClipboard(word: String) {
+        CommonUtils.copyToClipboard(getApplication(), word)
+        setMessage(SnackbarMessage.init("Copied"))
     }
-
 }
