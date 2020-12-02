@@ -102,5 +102,6 @@
     <string name="other">Other</string>
     <string name="notification">Notification</string>
     <string name="personalize">Personalize</string>
+    <string name="words_till_date">Words till date</string>
 
 </resources>

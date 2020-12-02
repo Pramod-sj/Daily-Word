@@ -99,7 +99,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.0'
 
     //paging lib
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha02'
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha09'
 
     //FAN lib
     implementation 'com.facebook.android:audience-network-sdk:6.+'
