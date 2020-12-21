@@ -51,6 +51,8 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
+                android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
+                android:scrollbars="vertical"
                 android:visibility="@{wordDetailedViewModel.showWord?View.VISIBLE:View.GONE}">
 
                 <LinearLayout
@@ -84,11 +86,11 @@
                         style="@style/AppTheme.Header1TextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/padding_small"
                         android:layout_marginHorizontal="@dimen/margin_large"
                         android:drawablePadding="@dimen/padding_medium"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/padding_small"
                         android:singleLine="true"
                         android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.word}"
                         app:drawableRightCompat="@drawable/ic_round_content_copy_24"
@@ -138,6 +140,7 @@
 
                     </LinearLayout>
 
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/word_detailed_definations_recyclerview"
                         android:layout_width="match_parent"
@@ -147,6 +150,96 @@
                         android:overScrollMode="never"
                         android:paddingVertical="@dimen/padding_small"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/margin_large">
+
+                        <TextView
+                            style="@style/AppTheme.TitleTextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/synonyms"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            style="@style/Widget.MaterialComponents.ChipGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:selectionRequired="false"
+                            app:singleSelection="false">
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Please"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Use"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daily word"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+                        </com.google.android.material.chip.ChipGroup>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/margin_large">
+
+                        <TextView
+                            style="@style/AppTheme.TitleTextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/antonyms"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hello"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="World"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+
+                            <com.google.android.material.chip.Chip
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daily word"
+                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
+                        </com.google.android.material.chip.ChipGroup>
+
+                    </LinearLayout>
 
                     <com.facebook.ads.NativeAdLayout
                         android:id="@+id/native_ad_container_2"
@@ -162,6 +255,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_large"
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:orientation="vertical">
 
                         <TextView
@@ -192,6 +286,7 @@
                         android:layout_marginVertical="@dimen/margin_small" />
 
                     <LinearLayout
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_large"
