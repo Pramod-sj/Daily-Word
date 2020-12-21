@@ -18,6 +18,9 @@ class FBRemoteConfig {
 
     companion object {
         const val TAG = "FBRemoteConfig"
+
+        const val REMOTE_CONFIG_KEY_BASE_URL = "base_url"
+
         const val REMOTE_CONFIG_KEY_ADS = "ads"
 
         @JvmStatic
@@ -37,5 +40,7 @@ class FBRemoteConfig {
 
 
     fun isAdsEnabled(): Boolean = remoteConfig.getBoolean(REMOTE_CONFIG_KEY_ADS)
+
+    fun baseUrl() = remoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)
 
 }
