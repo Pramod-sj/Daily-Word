@@ -3,7 +3,9 @@ package com.pramod.dailyword.ui.about_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialSharedAxis
@@ -45,7 +47,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        arrangeViewsAccordingToEdgeToEdge()
         setAppLink()
         setDeveloperLink()
         setCreditLink()
@@ -57,29 +58,6 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         window.allowReturnTransitionOverlap = true
         window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
         window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
-    }
-
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                mBinding.nestedScrollView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-                insets
-            }
-        }
     }
 
     private fun setUpToolbar() {
@@ -182,6 +160,22 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         })
 
 
+    }
+
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        mBinding.appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0, 0
+        )
+
+        val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
+        val paddingBottom = insets.systemWindowInsetBottom
+
+        mBinding.nestedScrollView.setPadding(
+            0,
+            paddingTop,
+            0,
+            paddingBottom
+        )
     }
 
 

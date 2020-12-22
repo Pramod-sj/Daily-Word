@@ -3,7 +3,9 @@ package com.pramod.dailyword.ui.about_app.donate
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProviders
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
@@ -39,7 +41,6 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         setUpToolbar()
         setUpBilling()
         setUpDonateItemRecyclerView()
-        arrangeViewsAccordingToEdgeToEdge()
     }
 
 
@@ -87,31 +88,6 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         donateItemAdapter.submitList(mViewModel.donateItemList)
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop =
-                    insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                mBinding.donateRecyclerView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-                insets
-            }
-        }
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (!billingProcessor.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data)
@@ -121,5 +97,22 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     override fun onDestroy() {
         billingProcessor.release()
         super.onDestroy()
+    }
+
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        mBinding.appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0, 0
+        )
+
+        val paddingTop =
+            insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
+        val paddingBottom = insets.systemWindowInsetBottom
+
+        mBinding.donateRecyclerView.setPadding(
+            0,
+            paddingTop,
+            0,
+            paddingBottom
+        )
     }
 }

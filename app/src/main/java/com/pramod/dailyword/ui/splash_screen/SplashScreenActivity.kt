@@ -3,6 +3,7 @@ package com.pramod.dailyword.ui.splash_screen
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -40,27 +41,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
         registerTopics()
         animateAppIcon()
         navigateToHomePage()
-        arrangeViewsAccordingToEdgeToEdge()
         setUpAcceptLinks()
     }
-
-
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        ViewCompat.setOnApplyWindowInsetsListener(
-            mBinding.root
-        ) { v, insets ->
-            val paddingBottom = insets.systemWindowInsetBottom
-
-            mBinding.splashScreenBottomLayout.setPadding(
-                0,
-                0,
-                0,
-                paddingBottom
-            )
-            insets
-        }
-    }
-
 
     private fun navigateToHomePage() {
         mViewModel.navigateToHomePage().observe(this, {
@@ -117,5 +99,16 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     private fun registerTopics() {
         FBTopicSubscriber.subscribeToDailyWordNotification()
         FBTopicSubscriber.subscribeToCountry(this)
+    }
+
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        val paddingBottom = insets.systemWindowInsetBottom
+
+        mBinding.splashScreenBottomLayout.setPadding(
+            0,
+            0,
+            0,
+            paddingBottom
+        )
     }
 }

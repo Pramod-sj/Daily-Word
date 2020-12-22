@@ -148,54 +148,57 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         })
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        mBinding.appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0, 0
+        )
 
-                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
+        val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
+        val paddingBottom = insets.systemWindowInsetBottom
 
-                mBinding.nestedScrollView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
+        mBinding.nestedScrollView.setPadding(
+            0,
+            paddingTop,
+            0,
+            paddingBottom
+        )
 
-                mBinding.swipeRefreshLayout.setProgressViewOffset(
-                    true,
-                    paddingTop,
-                    100 + paddingTop
-                )
+        mBinding.swipeRefreshLayout.setProgressViewOffset(
+            true,
+            paddingTop,
+            100 + paddingTop
+        )
 
-                /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
-                val layoutParam: CoordinatorLayout.LayoutParams =
-                    mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
-                layoutParam.setMargins(
-                    mBinding.fabGotToMw.marginLeft,
-                    mBinding.fabGotToMw.marginTop,
-                    mBinding.fabGotToMw.marginRight,
-                    fabMarginBottom
-                )
-                mBinding.fabGotToMw.layoutParams = layoutParam
+        /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
+        val layoutParam: CoordinatorLayout.LayoutParams =
+            mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParam.setMargins(
+            mBinding.fabGotToMw.marginLeft,
+            mBinding.fabGotToMw.marginTop,
+            mBinding.fabGotToMw.marginRight,
+            fabMarginBottom
+        )
+        mBinding.fabGotToMw.layoutParams = layoutParam
 */
-                insets
-            }
+    }
+
+    private fun arrangeViewsAccordingToEdgeToEdge() {
+        if (!WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            val actionBarSize = CommonUtils.calculateActionBarHeight(this)
+            mBinding.swipeRefreshLayout.setProgressViewOffset(
+                true,
+                actionBarSize,
+                100 + actionBarSize
+            )
         }
 
-        val actionBarSize = CommonUtils.calculateActionBarHeight(this)
-        mBinding.swipeRefreshLayout.setProgressViewOffset(true, actionBarSize, 100 + actionBarSize)
 
     }
 
     private fun initEnterAndReturnTransition() {
 
-        findViewById<View>(android.R.id.content).transitionName = "CONTAINER"
+        findViewById<View>(android.R.id.content).transitionName =
+            resources.getString(R.string.card_transition_name)
         window.sharedElementsUseOverlay = false
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 

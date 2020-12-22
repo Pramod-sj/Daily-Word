@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -87,7 +88,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
         //edgeToEdgeSettingChanged()
-        arrangeViewsAccordingToEdgeToEdge()
         promptAutoStart()
         //showDummyLotttieDialog()
         showNativeAdDialogWithDelay()
@@ -147,29 +147,22 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.homeCardToolbar.setContentPadding(
-                    0, insets.systemWindowInsetTop, 0, mBinding.homeCardToolbar.contentPaddingBottom
-                )
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        mBinding.appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0,0
+        )
 
 
-                val paddingBottom = insets.systemWindowInsetBottom
+        val paddingBottom = insets.systemWindowInsetBottom
 
-                mBinding.homeImageViewBuildings.setPadding(
-                    0,
-                    0,
-                    0,
-                    paddingBottom
-                )
+        mBinding.homeImageViewBuildings.setPadding(
+            0,
+            0,
+            0,
+            paddingBottom
+        )
 
 
-                insets
-            }
-        }
     }
 
     private fun initToolbar() {

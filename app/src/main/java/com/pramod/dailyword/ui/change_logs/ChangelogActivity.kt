@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil.setContentView
@@ -41,10 +42,38 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
                 EXTRA_SHOW_CONTINUE_BUTTON, false
             )
         )
-        arrangeViewsAccordingToEdgeToEdge()
         setUpToolbar()
         initChangelogAdapter()
         setUpCallbacks()
+    }
+
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0, 0
+        )
+
+        val paddingTop = insets.systemWindowInsetTop + recyclerview_change_logs.paddingTop
+        val paddingBottom = insets.systemWindowInsetBottom
+
+        recyclerview_change_logs.setPadding(
+            0,
+            paddingTop,
+            0,
+            paddingBottom
+        )
+
+
+        val fabMarginBottom = mBinding.fabContinueLearningWords.marginBottom + paddingBottom
+        val layoutParam: CoordinatorLayout.LayoutParams =
+            mBinding.fabContinueLearningWords.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParam.setMargins(
+            mBinding.fabContinueLearningWords.marginLeft,
+            mBinding.fabContinueLearningWords.marginTop,
+            mBinding.fabContinueLearningWords.marginRight,
+            fabMarginBottom
+        )
+        mBinding.fabContinueLearningWords.layoutParams = layoutParam
+
     }
 
 
@@ -87,44 +116,6 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
             }
 
         })
-    }
-
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop = insets.systemWindowInsetTop + recyclerview_change_logs.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                recyclerview_change_logs.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-
-
-                val fabMarginBottom = mBinding.fabContinueLearningWords.marginBottom + paddingBottom
-                val layoutParam: CoordinatorLayout.LayoutParams =
-                    mBinding.fabContinueLearningWords.layoutParams as CoordinatorLayout.LayoutParams
-                layoutParam.setMargins(
-                    mBinding.fabContinueLearningWords.marginLeft,
-                    mBinding.fabContinueLearningWords.marginTop,
-                    mBinding.fabContinueLearningWords.marginRight,
-                    fabMarginBottom
-                )
-                mBinding.fabContinueLearningWords.layoutParams = layoutParam
-
-
-                insets
-            }
-        }
-
     }
 
     companion object {

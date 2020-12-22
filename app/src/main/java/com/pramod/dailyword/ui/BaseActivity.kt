@@ -1,6 +1,7 @@
 package com.pramod.dailyword.ui
 
 import android.R
+import android.graphics.Insets
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
@@ -40,6 +44,15 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
         mBinding.lifecycleOwner = this
         mBinding.setVariable(getBindingVariable(), mViewModel)
         mBinding.executePendingBindings()
+        //adjusting views based onn inset
+        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                arrangeViewsForEdgeToEdge(v, insets)
+                insets
+            }
+        }
         setSnackBarObserver()
     }
 
@@ -113,5 +126,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
             window.statusBarColor = resources.getColor(com.pramod.dailyword.R.color.black)
         }
     }
+
+    abstract fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat)
 
 }

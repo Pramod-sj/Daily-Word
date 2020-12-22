@@ -1,7 +1,9 @@
 package com.pramod.dailyword.ui.crash_handler
 
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.BR
@@ -40,21 +42,14 @@ class CustomCrashActivity :
         initCloseActivity()
         initRestartApp()
         initSendMail()
-        arrangeViewsAccordingToEdgeToEdge()
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.relativeParentLayotu.setPadding(
-                    0, insets.systemWindowInsetTop, 0, insets.systemWindowInsetBottom
-                )
-                insets
-            }
-        }
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        mBinding.relativeParentLayotu.setPadding(
+            0, insets.systemWindowInsetTop, 0, insets.systemWindowInsetBottom
+        )
     }
+
 
     private fun initCloseActivity() {
         mViewModel.closeActivityLiveData().observe(this, Observer {

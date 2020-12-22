@@ -8,6 +8,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
@@ -49,10 +50,26 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
         initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        arrangeViewsAccordingToEdgeToEdge()
         findViewById<View>(android.R.id.content).postDelayed({
             initAdapter()
         }, 150)
+    }
+
+    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
+        appBar.setPadding(
+            0, insets.systemWindowInsetTop, 0, 0
+        )
+
+        val paddingTop = insets.systemWindowInsetTop + recyclerview_words.paddingTop
+        val paddingBottom = insets.systemWindowInsetBottom
+
+        recyclerview_words.setPadding(
+            0,
+            paddingTop,
+            0,
+            paddingBottom
+        )
+
     }
 
     override fun onResume() {
@@ -73,31 +90,6 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
         }
         toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
         toolbar.setNavigationOnClickListener { onBackPressed() }
-    }
-
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop = insets.systemWindowInsetTop + recyclerview_words.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                recyclerview_words.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-
-                insets
-            }
-        }
-
     }
 
 
