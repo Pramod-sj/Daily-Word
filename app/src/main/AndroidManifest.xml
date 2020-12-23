@@ -19,6 +19,11 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.recapwords.RecapWordsActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".ui.change_logs.ChangelogActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
@@ -34,6 +39,7 @@
             android:name=".ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.SplashScreenActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +67,7 @@
             android:name=".ui.home.HomeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme.HomeActivity"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".ui.crash_handler.CustomCrashActivity"
@@ -91,14 +97,13 @@
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
-
-
         <receiver
             android:name=".widget.SmallWordWidgetProvider"
             android:enabled="true">
@@ -108,8 +113,9 @@
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_small_info" />
@@ -118,9 +124,7 @@
         <service
             android:name=".widget.WidgetDataLoadService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 
 </manifest>

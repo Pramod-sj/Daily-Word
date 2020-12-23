@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <import type="com.pramod.dailyword.ui.recapwords.RecapWordsViewModel" />
+
+        <variable
+            name="recapWordsViewModel"
+            type="RecapWordsViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.recapwords.RecapWordsActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_recap_words"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingTop="?actionBarSize"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2" />
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:alpha="@dimen/appbar_alpha"
+            android:animateLayoutChanges="true"
+            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:animateLayoutChanges="true"
+                android:gravity="center_vertical"
+                app:contentInsetStart="0dp"
+                app:navigationIcon="@drawable/ic_round_back_arrow">
+
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:animateLayoutChanges="true"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/margin_medium"
+                                        android:layout_marginEnd="@dimen/margin_medium"
+                                        android:src="@drawable/ic_close_black_24dp"
+                                        app:backgroundTint="?android:attr/windowBackground"
+                                        app:fabSize="mini"
+                                        app:elevation="@dimen/card_elevation_min"
+                                        app:tint="@android:color/darker_gray"
+                                        app:useCompatPadding="true" />
+
+                                </LinearLayout>
+                -->
+
+
+                <TextView
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_recap" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/AppTheme.SubTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/margin_medium"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/padding_large"
+                android:paddingVertical="@dimen/padding_medium"
+                android:text="List of last 7 days words"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
+                app:drawableTint="@color/app_icon_tint" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

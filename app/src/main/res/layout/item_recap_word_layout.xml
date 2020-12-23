@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+
+        <import type="com.pramod.dailyword.helper.ThemeManager" />
+
+        <import type="com.pramod.dailyword.util.CommonUtils" />
+
+        <import type="com.pramod.dailyword.util.CalenderUtil" />
+
+        <variable
+            name="wordOfTheDay"
+            type="com.pramod.dailyword.db.model.WordOfTheDay" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item_word_list_cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        app:cardCornerRadius="@dimen/card_radius_max"
+        app:cardElevation="@dimen/card_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/item_word_list_date"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <TextView
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{CalenderUtil.isYesterday(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)?`Yesterday`:CalenderUtil.convertDateStringToSpecifiedDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_FORMAT_DISPLAY)}" />
+
+            <TextView
+                style="@style/AppTheme.Header5TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@{wordOfTheDay.word}" />
+
+            <TextView
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{wordOfTheDay.meanings.get(0)}" />
+
+            <TextView
+                android:textStyle="italic"
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{wordOfTheDay.examples.get(0)}" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

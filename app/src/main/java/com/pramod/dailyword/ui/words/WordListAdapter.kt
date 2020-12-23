@@ -21,9 +21,9 @@ import java.lang.IllegalArgumentException
 
 
 class WordListAdapter(
-    val itemClickCallback: ((pos: Int, word: WordOfTheDay) -> Unit)? = null
+    val itemClickCallback: ((pos: Int, word: WordOfTheDay) -> Unit)? = null,
 ) :
-    PagedListAdapter<WordOfTheDay, WordListAdapter.WordViewHolder>(diffCallback) {
+    PagedListAdapter<WordOfTheDay, WordListAdapter.WordViewHolder>(diffCallback = WordDiffCallback) {
     private var canStartActivity = true
 
     fun setCanStartActivity(canStart: Boolean) {
@@ -59,47 +59,6 @@ class WordListAdapter(
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    companion object {
-        private val diffCallback =
-            object : DiffUtil.ItemCallback<WordOfTheDay>() {
-                override fun areItemsTheSame(
-                    oldItem: WordOfTheDay,
-                    newItem: WordOfTheDay
-                ): Boolean {
-                    return oldItem.word == newItem.word
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: WordOfTheDay,
-                    newItem: WordOfTheDay
-                ): Boolean {
-                    return oldItem == newItem
-                }
-
-                override fun getChangePayload(oldItem: WordOfTheDay, newItem: WordOfTheDay): Any? {
-                    val bundle = Bundle()
-                    if (oldItem.date != newItem.date) {
-                        bundle.putString("DATE", newItem.date)
-                    }
-                    if (oldItem.word != newItem.word) {
-                        bundle.putString("WORD", newItem.word)
-                    }
-                    if (Gson().toJson(oldItem.meanings) != Gson().toJson(newItem.meanings)) {
-                        val array = arrayListOf<String>()
-                        newItem.meanings?.let {
-                            array.addAll(it.toMutableList())
-                        }
-                        bundle.putStringArrayList(
-                            "DEFINATION",
-                            array
-                        )
-                    }
-                    return bundle
-                }
-
-            }
     }
 
 
