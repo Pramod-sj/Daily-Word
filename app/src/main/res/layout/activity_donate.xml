@@ -27,7 +27,7 @@
             android:paddingStart="@dimen/padding_medium"
             android:paddingTop="?actionBarSize"
             android:paddingEnd="@dimen/padding_medium"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2" />
 
         <com.google.android.material.appbar.AppBarLayout
