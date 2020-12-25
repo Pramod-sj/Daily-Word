@@ -8,20 +8,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.transition.Fade
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.core.app.ActivityCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -33,11 +28,14 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.firebase.FBMessageService
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
+import com.pramod.dailyword.ui.about_app.donate.DonateActivity
 import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
+import com.pramod.dailyword.ui.recapwords.RecapWordsActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
+import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -84,7 +82,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         showChangelogActivity()
         initAppUpdate()
         initToolbar()
-        initBottomMenu()
+        initBottomSheetMenu()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
         //edgeToEdgeSettingChanged()
@@ -118,6 +116,18 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 )
             }
 
+            override fun gotoBookmark(v: View?) {
+                FavoriteWordsActivity.openActivity(this@HomeActivity)
+            }
+
+            override fun gotoRecap(v: View?) {
+                RecapWordsActivity.openActivity(this@HomeActivity)
+            }
+
+            override fun gotoRandomWord(v: View?) {
+                WordDetailedActivity.openActivity(this@HomeActivity, true)
+            }
+
         })
     }
 
@@ -149,7 +159,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
         mBinding.appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0,0
+            0, insets.systemWindowInsetTop, 0, 0
         )
 
 
@@ -245,7 +255,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             ActivityOptions.makeSceneTransitionAnimation(
                 activity,
                 view,
-                "CONTAINER"
+                resources.getString(R.string.card_transition_name)
             )
         }
         WordDetailedActivity.openActivity(this, word, option)
@@ -278,33 +288,35 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_setting -> AppSettingActivity.openActivity(this)
-            R.id.menu_bookmarked_words -> FavoriteWordsActivity.openActivity(this)
+            R.id.menu_more -> {
+                item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                bottomSheetDialog?.show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private lateinit var bottomSheetDialog: BottomSheetDialog
-    private fun initBottomMenu() {
-        val navigationView = NavigationView(this)
-        navigationView.inflateMenu(R.menu.home_more_menu)
-        navigationView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menu_rate -> {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=$packageName")
-                    )
-                    startActivity(intent)
-                }
-            }
-            bottomSheetDialog.dismiss()
-            false
-        }
-        bottomSheetDialog = BottomSheetDialog(this@HomeActivity)
-        bottomSheetDialog.setContentView(navigationView)
-    }
-
+    /*   private lateinit var bottomSheetDialog: BottomSheetDialog
+       private fun initBottomMenu() {
+           val navigationView = NavigationView(this)
+           navigationView.inflateMenu(R.menu.home_more_menu)
+           navigationView.setNavigationItemSelectedListener { item ->
+               when (item.itemId) {
+                   R.id.menu_rate -> {
+                       val intent = Intent(
+                           Intent.ACTION_VIEW,
+                           Uri.parse("market://details?id=$packageName")
+                       )
+                       startActivity(intent)
+                   }
+               }
+               bottomSheetDialog.dismiss()
+               false
+           }
+           bottomSheetDialog = BottomSheetDialog(this@HomeActivity)
+           bottomSheetDialog.setContentView(navigationView)
+       }
+   */
     private fun shouldShowRatingDialog() {
         if (PrefManager.getInstance(this)
                 .shouldShowRateNowDialog()
@@ -415,9 +427,34 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         this.intent = intent
     }
 
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
+    private fun initBottomSheetMenu() {
+        bottomSheetDialog = BottomSheetDialog(this)
+        val navigationView = NavigationView(this)
+        navigationView.inflateMenu(R.menu.home_more_menu)
+        navigationView.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.menu_settings) {
+                AppSettingActivity.openActivity(this)
+            } else if (it.itemId == R.id.menu_donate) {
+                DonateActivity.openActivity(this)
+            }
+            bottomSheetDialog?.dismiss()
+            false
+        }
+        val l = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        bottomSheetDialog?.setContentView(navigationView, l)
+    }
+
 }
 
 interface ViewCallbacks {
     fun readMore(v: View?, word: WordOfTheDay?)
     fun learnAll(v: View?)
+    fun gotoBookmark(v: View?)
+    fun gotoRecap(v: View?)
+    fun gotoRandomWord(v: View?)
 }

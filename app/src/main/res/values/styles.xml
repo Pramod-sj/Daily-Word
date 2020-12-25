@@ -14,12 +14,13 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
         <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheetStyle</item>
     </style>
 
     <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />
 
     <style name="AppTheme.HomeActivity" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
     </style>
 
     <style name="AppTheme.SplashScreenActivity" parent="AppTheme">
@@ -180,5 +181,29 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">@dimen/card_radius_max</item>
     </style>
+
+
+    <style name="AppTheme.HomeWordCardBottomSheetShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+
+    <style name="AppTheme.RoundedBottomSheetModel" parent="Widget.Design.BottomSheet.Modal">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+    </style>
+
+    <style name="AppTheme.BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppTheme.RoundedBottomSheetModel</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 
 </resources>

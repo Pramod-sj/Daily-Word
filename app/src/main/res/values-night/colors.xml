@@ -29,4 +29,7 @@
 
     <color name="splash_wave_color">#303030</color>
 
+
+    <color name="home_appbar_color">#323232</color>
+
 </resources>

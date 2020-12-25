@@ -133,4 +133,7 @@
 
 
     <color name="widget_background">#70000000</color>
+
+    <color name="home_appbar_color">@color/colorPrimary</color>
+
 </resources>

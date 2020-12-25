@@ -24,10 +24,10 @@
             android:id="@+id/recyclerView_recap_words"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/padding_small"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/padding_medium"
             android:paddingTop="?actionBarSize"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2" />

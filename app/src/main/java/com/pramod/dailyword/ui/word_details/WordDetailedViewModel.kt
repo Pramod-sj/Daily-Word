@@ -15,11 +15,13 @@ import com.pramod.dailyword.helper.PronounceHelper
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class WordDetailedViewModel(application: Application, private val wordOfTheDay: WordOfTheDay) :
+class WordDetailedViewModel(
+    application: Application,
+    private val wordOfTheDay: WordOfTheDay,
+    private val showRandomWord: Boolean
+) :
     BaseViewModel(application) {
 
     companion object {
@@ -43,12 +45,16 @@ class WordDetailedViewModel(application: Application, private val wordOfTheDay: 
     init {
         wordOfTheDayLiveData.value = wordOfTheDay
         //fetch word and listen to changes
-        var resourceLiveData = wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
+        var resourceLiveData =
+            if (showRandomWord) wordOfTheDayRepo.getRandomWord()
+            else wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
 
         wordOfTheDayLiveData.addSource(retryEventLiveData) {
             if (wordOfTheDay.word == null) {
                 wordOfTheDayLiveData.removeSource(resourceLiveData)
-                resourceLiveData = wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
+                resourceLiveData =
+                    if (showRandomWord) wordOfTheDayRepo.getRandomWord()
+                    else wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
                 wordOfTheDayLiveData.addSource(resourceLiveData) {
                     loadingLiveData.value = it.status == Resource.Status.LOADING
                     if (it.status == Resource.Status.ERROR) {
@@ -102,7 +108,7 @@ class WordDetailedViewModel(application: Application, private val wordOfTheDay: 
     fun navigateToMerriamWebster(): LiveData<Event<String>> = navigateToMerriamWebster
 
     fun bookmark() {
-        GlobalScope.launch(Dispatchers.Main) {
+        getCoroutineScope().launch(Dispatchers.Main) {
             val wordOfTheDay = wordOfTheDayLiveData.value
             if (wordOfTheDay != null) {
                 bookmarkRepo.bookmarkToggle(wordOfTheDay.word!!)
@@ -116,11 +122,12 @@ class WordDetailedViewModel(application: Application, private val wordOfTheDay: 
 
     class Factory(
         private val application: Application,
-        private val word: WordOfTheDay
+        private val word: WordOfTheDay,
+        private val showRandomWord: Boolean
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return WordDetailedViewModel(application, word) as T
+            return WordDetailedViewModel(application, word, showRandomWord) as T
         }
 
     }

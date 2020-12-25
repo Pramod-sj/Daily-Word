@@ -92,7 +92,6 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
                 showWebViewDialog(EndPoints.PRIVACY_POLICY)
             }
         )
-
         accept_condition_textView.showLinks(termsAndConditionLink, privacyPolicyLink)
     }
 

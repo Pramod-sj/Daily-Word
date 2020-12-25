@@ -6,6 +6,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.pramod.dailyword.db.model.WordOfTheDay
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordOfTheDayDao {
@@ -15,6 +16,9 @@ interface WordOfTheDayDao {
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE WordOfTheDay.word=:word")
     fun getWord(word: String): LiveData<WordOfTheDay>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE WordOfTheDay.word=:word")
+    fun getWordFlow(word: String): Flow<WordOfTheDay>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
     fun getJustTopOne(): LiveData<WordOfTheDay?>

@@ -105,5 +105,9 @@
     <string name="notification">Notification</string>
     <string name="personalize">Personalize</string>
     <string name="words_till_date">Words till date</string>
+    <string name="quick_recap">Quick Recap</string>
 
+    <string name="card_transition_name">container</string>
+    <string name="previous_words">Previous Words</string>
+    <string name="random_word">Random word</string>
 </resources>

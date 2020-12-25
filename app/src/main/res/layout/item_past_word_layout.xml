@@ -29,8 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/padding_large"
-            android:paddingVertical="@dimen/padding_large">
+            android:padding="@dimen/padding_large">
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"

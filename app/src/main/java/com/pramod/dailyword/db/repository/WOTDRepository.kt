@@ -2,9 +2,8 @@ package com.pramod.dailyword.db.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.paging.*
 import com.google.gson.Gson
 import com.pramod.dailyword.db.NetworkBoundedResource
@@ -20,9 +19,13 @@ import com.pramod.dailyword.ui.words.NETWORK_PAGE_SIZE
 import com.pramod.dailyword.util.CalenderUtil
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.NetworkUtils
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 import retrofit2.Call
@@ -118,7 +121,6 @@ class WOTDRepository(private val context: Context) {
         }.asLiveData()
     }
 
-
     fun getWords(count: Int = 7): LiveData<Resource<List<WordOfTheDay>?>> {
         return object : NetworkBoundedResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
             override fun loadLocalData(): LiveData<List<WordOfTheDay>?> {
@@ -140,7 +142,6 @@ class WOTDRepository(private val context: Context) {
             }
         }.asLiveData()
     }
-
 
     fun getWord(date: String): LiveData<Resource<WordOfTheDay?>> {
         return object : NetworkBoundedResource<List<WordOfTheDay>, WordOfTheDay>() {
@@ -172,6 +173,45 @@ class WOTDRepository(private val context: Context) {
         }.asLiveData()
     }
 
+    fun getRandomWord(): LiveData<Resource<out WordOfTheDay?>> {
+
+        return flow {
+            try {
+                emit(Resource.loading(null))
+                val apiResponse = remoteApiService.getRandomWord()
+                if (apiResponse != null) {
+                    if (apiResponse.code == "200") {
+                        if (apiResponse.data != null) {
+                            localDb.getWordOfTheDayDao().add(apiResponse.data!!)
+                            emitAll(
+                                localDb.getWordOfTheDayDao().getWordFlow(apiResponse.data!!.word!!)
+                                    .map {
+                                        handleApiSuccess(it)
+                                    }
+                            )
+                        } else {
+                            emit(
+                                handleApiFailure<WordOfTheDay?>(null, "No word found")
+                            )
+                        }
+
+                    } else {
+                        emit(
+                            handleApiFailure<WordOfTheDay?>(null, apiResponse.message)
+                        )
+                    }
+                } else {
+                    emit(
+                        handleApiFailure<WordOfTheDay?>(null, "No response from server")
+                    )
+                }
+            } catch (e: java.lang.Exception) {
+                emit(handleNetworkException<WordOfTheDay?>(null, e))
+            }
+
+        }.asLiveData(Dispatchers.IO)
+    }
+
 
     /*@ExperimentalPagingApi
     fun getAllWords(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
@@ -192,7 +232,7 @@ class WOTDRepository(private val context: Context) {
                 if (apiResponse.code == "200") {
                     handleApiSuccess(apiResponse.data)
                 } else {
-                    handleApiFailure<List<WordOfTheDay>>(null, apiResponse.message)
+                    handleApiFailure(null, apiResponse.message)
                 }
             } else {
                 handleApiFailure(null, "No response from server")

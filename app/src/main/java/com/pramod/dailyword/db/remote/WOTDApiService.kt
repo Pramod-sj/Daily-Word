@@ -16,4 +16,7 @@ interface WOTDApiService {
         @Query("startFrom") startFrom: String? = null,
         @Query("limit") limit: Int
     ): ApiResponse<List<WordOfTheDay>?>?
+
+    @GET(EndPoints.GET_RANDOM_WORD)
+    suspend fun getRandomWord(): ApiResponse<WordOfTheDay?>?
 }

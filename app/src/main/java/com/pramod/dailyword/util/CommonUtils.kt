@@ -12,9 +12,11 @@ import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -22,15 +24,42 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
-import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.ui.BaseViewModel
 import java.util.*
 import kotlin.collections.map as map1
 
+
 class CommonUtils {
     companion object {
+
+        fun getDisplayMetrics(windowManager: WindowManager): DisplayMetrics {
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            return displayMetrics
+        }
+
+        fun getNavBarHeight(context: Context): Int {
+            var navigationBarHeight = 0
+            val resourceId =
+                context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                navigationBarHeight = context.resources.getDimensionPixelSize(resourceId)
+            }
+            return navigationBarHeight
+        }
+
+        fun getStatusBarHeight(context: Context): Int {
+            var navigationBarHeight = 0
+            val resourceId =
+                context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                navigationBarHeight = context.resources.getDimensionPixelSize(resourceId)
+            }
+            return navigationBarHeight
+        }
+
+
         @JvmStatic
         fun formatString(list: List<String>, delimiter: String): String {
             val stringBuilder: StringBuilder = StringBuilder()
@@ -237,6 +266,7 @@ class CommonUtils {
             }
             return 0
         }
+
 
         @JvmStatic
         fun getColorBasedOnDay(cal: Calendar?): List<Int> {

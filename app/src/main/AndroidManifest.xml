@@ -18,6 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="no" />
+
         <activity
             android:name=".ui.recapwords.RecapWordsActivity"
             android:screenOrientation="nosensor"

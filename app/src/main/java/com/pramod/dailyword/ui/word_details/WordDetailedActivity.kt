@@ -42,6 +42,15 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     companion object {
 
+
+        fun openActivity(context: Context, showRandomWord: Boolean) {
+            val intent = Intent(context, WordDetailedActivity::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("SHOW_RANDOM_WORD", showRandomWord)
+            intent.putExtras(bundle)
+            context.startActivity(intent)
+        }
+
         fun openActivity(context: Context, wordDate: String) {
             val intent = Intent(context, WordDetailedActivity::class.java)
             val bundle = Bundle()
@@ -71,9 +80,14 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun getViewModel(): WordDetailedViewModel {
         val word = intent.extras?.getSerializable("WORD") as WordOfTheDay?
         val wordDate = intent.extras?.getString("WORD_DATE")
+        val showRandomWord = intent.extras?.getBoolean("SHOW_RANDOM_WORD") ?: false
         return ViewModelProviders.of(
             this,
-            WordDetailedViewModel.Factory(application, word ?: WordOfTheDay(wordDate))
+            WordDetailedViewModel.Factory(
+                application,
+                word ?: WordOfTheDay(wordDate),
+                showRandomWord
+            )
         ).get(WordDetailedViewModel::class.java)
     }
 
@@ -90,6 +104,9 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         setNavigateMW()
         showNativeAdDialogWithDelay()
         setUpWordOfTheDay()
+        mViewModel.loadingLiveData.observe(this) {
+            Log.i(TAG, "onCreate: $it")
+        }
     }
 
     private fun setUpToolbar() {

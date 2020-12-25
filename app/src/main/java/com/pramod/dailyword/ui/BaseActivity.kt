@@ -32,6 +32,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     abstract fun getBindingVariable(): Int
 
     private var forceEdgeToEdge = false
+    private var isInsetApplied = false
+
+
     fun forceEdgeToEdge(forceEdgeToEdge: Boolean) {
         this.forceEdgeToEdge = forceEdgeToEdge
     }
@@ -49,7 +52,10 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
             ViewCompat.setOnApplyWindowInsetsListener(
                 mBinding.root
             ) { v, insets ->
-                arrangeViewsForEdgeToEdge(v, insets)
+                if (!isInsetApplied) {
+                    arrangeViewsForEdgeToEdge(v, insets)
+                    isInsetApplied = true
+                }
                 insets
             }
         }
@@ -72,7 +78,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     }
 
     private fun setSnackBarObserver() {
-        mViewModel.getMessage().observe(this, Observer {
+        mViewModel.getMessage().observe(this, {
             it.getContentIfNotHandled()?.let { snackbar ->
                 showSnackBar(snackbar)
             }
@@ -128,5 +134,10 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     }
 
     abstract fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat)
+
+
+    companion object {
+        val TAG = BaseActivity::class.java.simpleName
+    }
 
 }
