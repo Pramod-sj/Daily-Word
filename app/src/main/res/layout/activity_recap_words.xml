@@ -28,7 +28,10 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingTop="?actionBarSize"
+            app:appBarLayout="@{appBar}"
+            app:applyBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2" />
 
@@ -41,6 +44,7 @@
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 
@@ -89,12 +93,11 @@
                 style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_medium"
                 android:drawablePadding="@dimen/margin_medium"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_large"
-                android:paddingVertical="@dimen/padding_medium"
-                android:text="List of last 7 days words"
-                android:visibility="gone"
+                android:text="@string/weekly_recap_note"
                 app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
                 app:drawableTint="@color/app_icon_tint" />
 

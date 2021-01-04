@@ -21,6 +21,9 @@
             name="changelogCallbacks"
             type="com.pramod.dailyword.ui.change_logs.ChangelogCallbacks" />
 
+        <variable
+            name="changelogViewModel"
+            type="com.pramod.dailyword.ui.change_logs.ChangelogViewModel" />
 
     </data>
 
@@ -28,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.change_logs.ChangelogActivity">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_change_logs"
             android:layout_width="match_parent"
@@ -39,19 +43,22 @@
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
+            app:applyBottomPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fab_continue_learning_words"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:height="60dp"
-            app:cornerRadius="30dp"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/margin_large"
+            android:height="60dp"
             android:onClick="@{()->changelogCallbacks.onContinueLearningWordsClick()}"
-            android:text="Continue"
+            android:text="@string/value_continue"
             android:visibility="@{showContinueButton?View.VISIBLE:View.GONE}"
+            app:applyBottomMarginInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:cornerRadius="30dp"
             app:icon="@drawable/ic_round_arrow_forward_24"
             app:iconGravity="end"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
@@ -62,6 +69,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

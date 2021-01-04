@@ -19,9 +19,8 @@ class NetworkUtils {
         val TAG = NetworkUtils::class.java.simpleName
 
         fun getWOTDApiService(): WOTDApiService {
-            val baseUrl = FBRemoteConfig.getInstance().baseUrl()
             val client = Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(FBRemoteConfig.getInstance().baseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return client.create(WOTDApiService::class.java)

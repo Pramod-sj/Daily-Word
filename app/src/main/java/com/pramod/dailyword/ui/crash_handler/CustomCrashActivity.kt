@@ -44,13 +44,6 @@ class CustomCrashActivity :
         initSendMail()
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        mBinding.relativeParentLayotu.setPadding(
-            0, insets.systemWindowInsetTop, 0, insets.systemWindowInsetBottom
-        )
-    }
-
-
     private fun initCloseActivity() {
         mViewModel.closeActivityLiveData().observe(this, Observer {
             restartApp()

@@ -72,7 +72,7 @@ class CommonUtils {
 
         @JvmStatic
         fun getGreetMessage(): String {
-            val cal: Calendar = Calendar.getInstance()
+            val cal: Calendar = Calendar.getInstance(Locale.US)
             return when (cal.get(Calendar.HOUR_OF_DAY)) {
                 in 0..11 -> "Good Morning"
                 in 12..16 -> "Good Afternoon"
@@ -127,7 +127,7 @@ class CommonUtils {
 
         @JvmStatic
         fun getAutoTimeTheme(): Int {
-            val calendar = Calendar.getInstance()
+            val calendar = Calendar.getInstance(Locale.US)
             return when (calendar.get(Calendar.HOUR_OF_DAY)) {
                 in 0..5 -> AppCompatDelegate.MODE_NIGHT_YES
                 in 6..18 -> AppCompatDelegate.MODE_NIGHT_NO
@@ -157,11 +157,11 @@ class CommonUtils {
                 .setConstraints(contraints)
             scheduleAtCalendar?.let {
                 var initialDelay =
-                    scheduleAtCalendar.timeInMillis - Calendar.getInstance().timeInMillis
+                    scheduleAtCalendar.timeInMillis - Calendar.getInstance(Locale.US).timeInMillis
                 if (initialDelay < 0) {
                     scheduleAtCalendar.roll(Calendar.DATE, true)
                     initialDelay =
-                        scheduleAtCalendar.timeInMillis - Calendar.getInstance().timeInMillis
+                        scheduleAtCalendar.timeInMillis - Calendar.getInstance(Locale.US).timeInMillis
                 }
                 Log.i("INITITAL DELAY", initialDelay.toString())
                 oneTimeWorkRequestBuilder.setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
@@ -272,7 +272,7 @@ class CommonUtils {
         fun getColorBasedOnDay(cal: Calendar?): List<Int> {
 
             return when (cal?.get(Calendar.DAY_OF_WEEK)
-                ?: Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                ?: Calendar.getInstance(Locale.US).get(Calendar.DAY_OF_WEEK)) {
                 Calendar.MONDAY -> arrayListOf(R.color.color_mon, R.color.desaturated_color_mon)
                 Calendar.TUESDAY -> arrayListOf(R.color.color_tue, R.color.desaturated_color_tue)
                 Calendar.WEDNESDAY -> arrayListOf(R.color.color_wed, R.color.desaturated_color_wed)

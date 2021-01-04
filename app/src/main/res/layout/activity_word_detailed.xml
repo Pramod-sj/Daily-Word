@@ -27,7 +27,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:animateLayoutChanges="true"
         android:layout_height="match_parent"
         android:transitionGroup="true">
 
@@ -41,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
+            app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
+            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
             app:onRefreshListener="@{()->wordDetailedViewModel.retry()}"
             app:refreshing="@{wordDetailedViewModel.loadingLiveData}">
 
@@ -52,13 +53,15 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
-                android:visibility="@{wordDetailedViewModel.showWord?View.VISIBLE:View.GONE}">
+                android:visibility="@{wordDetailedViewModel.wordOfTheDayLiveData.date!=null?View.VISIBLE:View.GONE}"
+                app:applyBottomPaddingInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
+                app:applyTopPaddingInset="@{wordDetailedViewModel.edgeToEdgeEnabled}">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clipChildren="false"
                     android:animateLayoutChanges="true"
+                    android:clipChildren="false"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:paddingVertical="@dimen/padding_small">
@@ -86,13 +89,14 @@
                         style="@style/AppTheme.Header1TextStyle.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/padding_small"
                         android:layout_marginHorizontal="@dimen/margin_large"
                         android:drawablePadding="@dimen/padding_medium"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:paddingTop="@dimen/padding_small"
                         android:singleLine="true"
-                        android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.word}" />
+                        android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.word}"
+                        android:textIsSelectable="true" />
 
 
                     <LinearLayout
@@ -257,6 +261,7 @@
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

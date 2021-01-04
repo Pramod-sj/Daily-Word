@@ -34,6 +34,8 @@
         <variable
             name="aboutAppViewModel"
             type="com.pramod.dailyword.ui.about_app.AboutAppViewModel" />
+
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,7 +52,9 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingTop="?actionBarSize">
+            android:paddingTop="?actionBarSize"
+            app:applyBottomPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -388,6 +392,7 @@
             android:layout_gravity="top"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

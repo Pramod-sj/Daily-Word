@@ -25,18 +25,20 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingStart="@dimen/padding_medium"
-            android:paddingTop="?actionBarSize"
+            android:paddingTop="?attr/actionBarSize"
             android:paddingEnd="@dimen/padding_medium"
+            app:applyBottomPaddingInset="@{donateViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{donateViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2" />
 
         <com.google.android.material.appbar.AppBarLayout
-            android:alpha="@dimen/appbar_alpha"
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{donateViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

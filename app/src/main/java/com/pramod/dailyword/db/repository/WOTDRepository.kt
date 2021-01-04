@@ -3,10 +3,9 @@ package com.pramod.dailyword.db.repository
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
 import androidx.paging.*
 import com.google.gson.Gson
-import com.pramod.dailyword.db.NetworkBoundedResource
+import com.pramod.dailyword.db.NetworkBoundResource
 import com.pramod.dailyword.db.Resource
 import com.pramod.dailyword.db.local.AppDB
 import com.pramod.dailyword.db.model.ApiResponse
@@ -19,7 +18,6 @@ import com.pramod.dailyword.ui.words.NETWORK_PAGE_SIZE
 import com.pramod.dailyword.util.CalenderUtil
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.NetworkUtils
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -27,15 +25,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.*
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class WOTDRepository(private val context: Context) {
@@ -43,111 +33,141 @@ class WOTDRepository(private val context: Context) {
     val remoteApiService: WOTDApiService = NetworkUtils.getWOTDApiService()
 
     fun getTodaysWordOfTheDay(): LiveData<Resource<WordOfTheDay?>> {
-        return object : NetworkBoundedResource<WordOfTheDay, WordOfTheDay>() {
-            override fun loadLocalData(): LiveData<WordOfTheDay?> {
+
+        return object : NetworkBoundResource<WordOfTheDay, WordOfTheDay>() {
+            override suspend fun fetchFromCache(): Flow<WordOfTheDay?> {
                 return localDb.getWordOfTheDayDao().getJustTopOne()
             }
 
-            override fun shouldFetch(data: WordOfTheDay?): Boolean {
+            override fun shouldFetchFromNetwork(data: WordOfTheDay?): Boolean {
                 return data == null || data.date != CalenderUtil.convertCalenderToString(
-                    Calendar.getInstance(),
+                    Calendar.getInstance(Locale.US),
                     CalenderUtil.DATE_FORMAT
                 )
             }
 
-            override suspend fun callRequest(): ApiResponse<WordOfTheDay?>? {
+            override suspend fun saveIntoCache(data: WordOfTheDay) {
+                data.date?.let { date ->
+                    val cal =
+                        CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
+                    data.dateTimeInMillis =
+                        cal?.timeInMillis
+                    val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                    data.wordColor = dayColor[0]
+                    data.wordDesaturatedColor = dayColor[1]
+                    localDb.getWordOfTheDayDao().add(data)
+                }
+            }
+
+            override suspend fun fetchFromNetwork(): ApiResponse<WordOfTheDay> {
                 return remoteApiService.getWordOfTheDay()
             }
 
-            override suspend fun saveCallResult(item: WordOfTheDay?) {
-                item?.let {
-                    it.date?.let { date ->
-                        val cal =
-                            CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
-                        it.dateTimeInMillis =
-                            cal?.timeInMillis
-                        val dayColor = CommonUtils.getColorBasedOnDay(cal)
-                        it.wordColor = dayColor[0]
-                        it.wordDesaturatedColor = dayColor[1]
-                        localDb.getWordOfTheDayDao().add(it)
-                    }
-                }
-            }
-        }.asLiveData()
-    }
-
-    fun getWordOfTheDayExceptTopOne(count: Int): LiveData<Resource<List<WordOfTheDay>?>> {
-        var lastWotdDate: WordOfTheDay? = null
-        return object : NetworkBoundedResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
-            override fun loadLocalData(): LiveData<List<WordOfTheDay>?> {
-                return localDb.getWordOfTheDayDao().getFewExceptTopOne(count)
-            }
-
-            override fun shouldFetch(data: List<WordOfTheDay>?): Boolean {
-                data?.let {
-                    if (data.isNotEmpty()) {
-                        lastWotdDate = data[0]
-                    }
-                }
-
-                return data == null || data.isEmpty() || data[0].date != CalenderUtil.convertCalenderToString(
-                    Calendar.getInstance(),
-                    CalenderUtil.DATE_FORMAT
-                )
-            }
-
-            override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? {
-                val calendar: Calendar = if (lastWotdDate != null) {
-                    CalenderUtil.convertStringToCalender(
-                        lastWotdDate!!.date!!,
-                        CalenderUtil.DATE_FORMAT
-                    )!!
-                } else {
-                    Calendar.getInstance()
-                }
-                calendar.add(Calendar.DATE, -1)
-                val startFrom = CalenderUtil.convertCalenderToString(
-                    calendar,
-                    CalenderUtil.DATE_FORMAT
-                )
-                return remoteApiService.getWords(startFrom, count)
-            }
-
-            override suspend fun saveCallResult(items: List<WordOfTheDay>?) {
-                items?.let {
-                    addAllWord(it)
-                }
-            }
-        }.asLiveData()
+        }.asFlow().asLiveData(Dispatchers.IO)
     }
 
     fun getWords(count: Int = 7): LiveData<Resource<List<WordOfTheDay>?>> {
-        return object : NetworkBoundedResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
-            override fun loadLocalData(): LiveData<List<WordOfTheDay>?> {
-                return localDb.getWordOfTheDayDao().getFewFromTop(count)
+        return object : NetworkBoundResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
+            override suspend fun fetchFromCache(): Flow<List<WordOfTheDay>?> {
+                return localDb.getWordOfTheDayDao().getFewFromTopAsFlow(count)
             }
 
-            override fun shouldFetch(data: List<WordOfTheDay>?): Boolean {
+            override fun shouldFetchFromNetwork(data: List<WordOfTheDay>?): Boolean {
                 return true
             }
 
-            override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? {
+            override suspend fun saveIntoCache(data: List<WordOfTheDay>) {
+                addAllWord(data)
+            }
+
+            override suspend fun fetchFromNetwork(): ApiResponse<List<WordOfTheDay>> {
                 return remoteApiService.getWords(limit = count)
             }
 
-            override suspend fun saveCallResult(items: List<WordOfTheDay>?) {
-                items?.let {
-                    addAllWord(it)
-                }
-            }
-        }.asLiveData()
+        }.asFlow().asLiveData(Dispatchers.IO)
     }
 
-    fun getWord(date: String): LiveData<Resource<WordOfTheDay?>> {
-        return object : NetworkBoundedResource<List<WordOfTheDay>, WordOfTheDay>() {
-            override suspend fun saveCallResult(item: List<WordOfTheDay>?) {
-                if (!item.isNullOrEmpty()) {
-                    val it = item[0]
+    fun recapWords(count: Int = 7): LiveData<Resource<List<WordOfTheDay>?>> {
+        return object : NetworkBoundResource<List<WordOfTheDay>, List<WordOfTheDay>>() {
+
+            override suspend fun fetchFromCache(): Flow<List<WordOfTheDay>?> {
+
+                val calendarList = arrayListOf<Calendar>()
+                for (i in 0 downTo -6) {
+                    val today = CalenderUtil.getCalendarInstance(true)
+                    today.add(Calendar.DATE, i)
+                    calendarList.add(today)
+
+                }
+                Log.i(TAG, "loadLocalData: ${calendarList.size}")
+                //item in this list will be sun(21-may)->sat(20-may)->friday(19-may)->thus(18-may) sequence
+                val calendarsTillSunday = arrayListOf<Long>()
+
+                for ((index, cal) in calendarList.withIndex()) {
+
+                    calendarsTillSunday.add(cal.timeInMillis)
+                    Log.i(
+                        TAG,
+                        "loadLocalData: ${
+                            CalenderUtil.getDayName(
+                                cal.timeInMillis
+                            )
+                        } ${
+                            CalenderUtil.convertCalenderToString(
+                                cal.timeInMillis,
+                                CalenderUtil.DATE_TIME_FORMAT
+                            )
+                        }"
+                    )
+
+                    if (CalenderUtil.getDayNameBasedOnDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)) ==
+                        CalenderUtil.DAYS[1]
+                    ) {
+                        //if the first item was sunday than don't break and iterate for all items
+                        if (index != 0) {
+                            break
+                        }
+                    }
+                }
+
+                Log.i(
+                    TAG,
+                    "loadLocalData: ${
+                        CalenderUtil.convertCalenderToString(
+                            calendarsTillSunday.last(),
+                            CalenderUtil.DATE_TIME_FORMAT
+                        )
+                    }"
+                )
+
+                Log.i(TAG, "loadLocalData: last ${calendarsTillSunday.last()}")
+                return localDb.getWordOfTheDayDao()
+                    .getFewTillAsFlow(calendarsTillSunday.last(), count)
+            }
+
+            override fun shouldFetchFromNetwork(data: List<WordOfTheDay>?): Boolean = true
+
+
+            override suspend fun saveIntoCache(data: List<WordOfTheDay>) {
+                addAllWord(data)
+            }
+
+            override suspend fun fetchFromNetwork(): ApiResponse<List<WordOfTheDay>> {
+                return remoteApiService.getWords(limit = count)
+            }
+        }.asFlow().asLiveData(Dispatchers.IO)
+    }
+
+    fun getWord(date: String, forceRefresh: Boolean =false): LiveData<Resource<WordOfTheDay?>> {
+        return object : NetworkBoundResource<List<WordOfTheDay>, WordOfTheDay>() {
+
+            override suspend fun fetchFromCache(): Flow<WordOfTheDay?> =
+                localDb.getWordOfTheDayDao().getJustAsFlow(date)
+
+            override fun shouldFetchFromNetwork(data: WordOfTheDay?): Boolean = forceRefresh
+
+            override suspend fun saveIntoCache(data: List<WordOfTheDay>) {
+                data.firstOrNull()?.let {
                     it.date?.let { date ->
                         val cal =
                             CalenderUtil.convertStringToCalender(date, CalenderUtil.DATE_FORMAT)
@@ -160,31 +180,42 @@ class WOTDRepository(private val context: Context) {
                 }
             }
 
-            override fun loadLocalData(): LiveData<WordOfTheDay?> =
-                localDb.getWordOfTheDayDao().getJust(date)
-
-            override suspend fun callRequest(): ApiResponse<List<WordOfTheDay>?>? =
-                remoteApiService.getWords(date, 1)
-
-            override fun shouldFetch(data: WordOfTheDay?): Boolean {
-                return data == null;
+            override suspend fun fetchFromNetwork(): ApiResponse<List<WordOfTheDay>> {
+                return remoteApiService.getWords(date, 1)
             }
 
-        }.asLiveData()
+        }.asFlow().asLiveData(Dispatchers.IO)
     }
 
-    fun getRandomWord(): LiveData<Resource<out WordOfTheDay?>> {
+    companion object {
+        val TAG = WOTDRepository::class.java.simpleName
+    }
 
-        return flow {
+    fun getRandomWord(): LiveData<Resource<WordOfTheDay?>> {
+        return flow<Resource<WordOfTheDay?>> {
             try {
                 emit(Resource.loading(null))
                 val apiResponse = remoteApiService.getRandomWord()
+                Log.i(TAG, "getRandomWord: ${Gson().toJson(apiResponse)}")
                 if (apiResponse != null) {
                     if (apiResponse.code == "200") {
-                        if (apiResponse.data != null) {
-                            localDb.getWordOfTheDayDao().add(apiResponse.data!!)
+                        val word = apiResponse.data
+                        if (word != null) {
+                            word.date?.let { date ->
+                                val cal =
+                                    CalenderUtil.convertStringToCalender(
+                                        date,
+                                        CalenderUtil.DATE_FORMAT
+                                    )
+                                word.dateTimeInMillis = cal?.timeInMillis
+                                val dayColor = CommonUtils.getColorBasedOnDay(cal)
+                                word.wordColor = dayColor[0]
+                                word.wordDesaturatedColor = dayColor[1]
+                                localDb.getWordOfTheDayDao().add(word)
+                            }
+
                             emitAll(
-                                localDb.getWordOfTheDayDao().getWordFlow(apiResponse.data!!.word!!)
+                                localDb.getWordOfTheDayDao().getWordFlow(word.word!!)
                                     .map {
                                         handleApiSuccess(it)
                                     }
@@ -208,7 +239,6 @@ class WOTDRepository(private val context: Context) {
             } catch (e: java.lang.Exception) {
                 emit(handleNetworkException<WordOfTheDay?>(null, e))
             }
-
         }.asLiveData(Dispatchers.IO)
     }
 
@@ -226,16 +256,12 @@ class WOTDRepository(private val context: Context) {
 
     suspend fun getWords(startFrom: String?, limit: Int): Resource<List<WordOfTheDay>?> {
         return try {
-            val apiResponse: ApiResponse<List<WordOfTheDay>?>? =
+            val apiResponse: ApiResponse<List<WordOfTheDay>> =
                 remoteApiService.getWords(startFrom, limit)
-            if (apiResponse != null) {
-                if (apiResponse.code == "200") {
-                    handleApiSuccess(apiResponse.data)
-                } else {
-                    handleApiFailure(null, apiResponse.message)
-                }
+            if (apiResponse.code == "200") {
+                handleApiSuccess(apiResponse.data)
             } else {
-                handleApiFailure(null, "No response from server")
+                handleApiFailure(null, apiResponse.message)
             }
         } catch (e: Exception) {
             handleNetworkException(null, e)

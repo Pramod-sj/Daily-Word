@@ -3,9 +3,11 @@ package com.pramod.dailyword.firebase
 import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.pramod.dailyword.R
+import com.pramod.dailyword.db.remote.EndPoints
 
 class FBRemoteConfig {
     private val remoteConfig = Firebase.remoteConfig.apply {
@@ -41,6 +43,13 @@ class FBRemoteConfig {
 
     fun isAdsEnabled(): Boolean = remoteConfig.getBoolean(REMOTE_CONFIG_KEY_ADS)
 
-    fun baseUrl() = remoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)
+    fun baseUrl(): String {
+        val baseUrl = remoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)
+        if (baseUrl.isEmpty() || baseUrl.isBlank()) {
+            return EndPoints.WOTD_API_BASE_URL
+        }
+        return baseUrl
+    }
+
 
 }

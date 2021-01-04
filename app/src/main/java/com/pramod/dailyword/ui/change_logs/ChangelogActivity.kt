@@ -9,6 +9,7 @@ import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.*
 import androidx.databinding.DataBindingUtil.setContentView
+import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pramod.dailyword.BR
@@ -31,9 +32,9 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
 
     override fun getLayoutId() = R.layout.activity_changelog
 
-    override fun getViewModel() = BaseViewModel(application)
+    override fun getViewModel() = ViewModelProviders.of(this).get(ChangelogViewModel::class.java)
 
-    override fun getBindingVariable() = 0
+    override fun getBindingVariable() = BR.changelogViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,36 +48,6 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
         setUpCallbacks()
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-        val paddingTop = insets.systemWindowInsetTop + recyclerview_change_logs.paddingTop
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        recyclerview_change_logs.setPadding(
-            0,
-            paddingTop,
-            0,
-            paddingBottom
-        )
-
-
-        val fabMarginBottom = mBinding.fabContinueLearningWords.marginBottom + paddingBottom
-        val layoutParam: CoordinatorLayout.LayoutParams =
-            mBinding.fabContinueLearningWords.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParam.setMargins(
-            mBinding.fabContinueLearningWords.marginLeft,
-            mBinding.fabContinueLearningWords.marginTop,
-            mBinding.fabContinueLearningWords.marginRight,
-            fabMarginBottom
-        )
-        mBinding.fabContinueLearningWords.layoutParams = layoutParam
-
-    }
-
-
     private fun setUpToolbar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.let {
@@ -85,9 +56,10 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, BaseViewModel>(
         mBinding.toolbar.setNavigationIcon(R.drawable.ic_round_close_24)
         mBinding.toolbar.setNavigationOnClickListener {
             finish()
-            if(intent.getBooleanExtra(
+            if (intent.getBooleanExtra(
                     EXTRA_SHOW_CONTINUE_BUTTON, false
-                )) {
+                )
+            ) {
                 overridePendingTransition(
                     0,
                     android.R.anim.fade_out

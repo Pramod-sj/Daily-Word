@@ -29,7 +29,10 @@
 
     <color name="splash_wave_color">#303030</color>
 
-
     <color name="home_appbar_color">#323232</color>
+
+    <color name="bottomSheetDialogNavigationBarColor">#282828</color>
+
+    <color name="windowBackgroundColor">#232323</color>
 
 </resources>

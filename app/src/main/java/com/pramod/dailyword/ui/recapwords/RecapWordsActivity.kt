@@ -6,8 +6,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -30,26 +33,18 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
     override fun onCreate(savedInstanceState: Bundle?) {
         initExitTransition()
         super.onCreate(savedInstanceState)
+        setUpToolbar()
         initAdapter()
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-        val paddingTop =
-            appBar.height + insets.systemWindowInsetTop + mBinding.recyclerViewRecapWords.paddingTop
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        mBinding.recyclerViewRecapWords.setPadding(
-            0,
-            paddingTop,
-            0,
-            paddingBottom
-        )
+    private fun setUpToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.let {
+            it.title = null
+        }
+        toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
     }
-
 
     private fun initExitTransition() {
         window.sharedElementsUseOverlay = false
@@ -68,11 +63,19 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
                 resources.getString(R.string.card_transition_name)
             )
 
-            WordDetailedActivity.openActivity(this, word, option)
+            WordDetailedActivity.openActivity(this, word.date!!, option)
         }
         mBinding.recyclerViewRecapWords.adapter = adapter
         mViewModel.words.observe(this) {
             adapter.submitList(it)
+        }
+        mViewModel.words.observe(this) {
+            it?.let { data ->
+
+                for (d in data) {
+                    Log.i(TAG, "loadLocalData: ${d.date} ${d.dateTimeInMillis}")
+                }
+            }
         }
     }
 

@@ -111,7 +111,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 view!!,
                 resources.getString(R.string.card_transition_name)
             )
-            WordDetailedActivity.openActivity(this, wordOfTheDay, option)
+            WordDetailedActivity.openActivity(this, wordOfTheDay.date!!, option)
         }
         concatAdapter.addAdapter(adapter!!)
         mViewModel.networkState.observe(this, Observer {
@@ -150,24 +150,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         window.allowReturnTransitionOverlap = true
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-        val paddingTop = insets.systemWindowInsetTop + recyclerview_words.paddingTop
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        recyclerview_words.setPadding(
-            0,
-            paddingTop,
-            0,
-            paddingBottom
-        )
-
-        swipeToRefresh.setProgressViewOffset(true, paddingTop, 100 + paddingTop)
-
-    }
 
     private fun showNativeAdDialogWithDelay() {
         Handler().postDelayed({

@@ -136,4 +136,9 @@
 
     <color name="home_appbar_color">@color/colorPrimary</color>
 
+
+    <color name="bottomSheetDialogNavigationBarColor">#FFFFFF</color>
+
+
+    <color name="windowBackgroundColor">#FFFFFF</color>
 </resources>

@@ -36,7 +36,7 @@ class BookmarkRepo(private val context: Context) {
     suspend fun addToBookmark(word: String): Long {
         val bookmark = Bookmark()
         bookmark.bookmarkedWord = word
-        bookmark.bookmarkedAt = Calendar.getInstance().timeInMillis
+        bookmark.bookmarkedAt = Calendar.getInstance(Locale.US).timeInMillis
         return dao.insert(bookmark)
     }
 

@@ -100,24 +100,4 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         super.onDestroy()
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-
-        Log.i(TAG, "arrangeViewsForEdgeToEdge: ")
-
-        mBinding.appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-        val paddingTop =
-            insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        mBinding.donateRecyclerView.setPadding(
-            0,
-            paddingTop,
-            0,
-            paddingBottom
-        )
-    }
-
 }

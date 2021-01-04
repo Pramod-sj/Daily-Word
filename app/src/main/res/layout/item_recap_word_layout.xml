@@ -37,7 +37,7 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{CalenderUtil.isYesterday(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)?`Yesterday`:CalenderUtil.convertDateStringToSpecifiedDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_FORMAT_DISPLAY)}" />
+                android:text="@{CalenderUtil.getDayName(wordOfTheDay.dateTimeInMillis)+` (`+CalenderUtil.convertCalenderToString(wordOfTheDay.dateTimeInMillis,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+`)`}" />
 
             <TextView
                 style="@style/AppTheme.Header5TextStyle.Bold"
@@ -53,11 +53,11 @@
                 android:text="@{wordOfTheDay.meanings.get(0)}" />
 
             <TextView
-                android:textStyle="italic"
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wordOfTheDay.examples.get(0)}" />
+                android:text="@{wordOfTheDay.examples.get(0)}"
+                android:textStyle="italic" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

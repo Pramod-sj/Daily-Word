@@ -67,7 +67,7 @@ class FBMessageService : FirebaseMessagingService() {
 
                     val wordOfTheDay = repo.getJustNonLive(
                         CalenderUtil.convertCalenderToString(
-                            Calendar.getInstance(),
+                            Calendar.getInstance(Locale.US),
                             CalenderUtil.DATE_FORMAT
                         )
                     )
@@ -116,7 +116,7 @@ class FBMessageService : FirebaseMessagingService() {
         var title: String = "Title",
         var body: String = "Body",
         var noitificationType: String = NOTIFICATION_NEW_WORD,
-        var date: String = CalenderUtil.convertCalenderToString(Calendar.getInstance()),
+        var date: String = CalenderUtil.convertCalenderToString(Calendar.getInstance(Locale.US)),
         var deepLink: String = DEEP_LINK_TO_HOME_ACTIVITY
     )
 

@@ -37,8 +37,8 @@
             <com.facebook.ads.NativeAdLayout
                 adId="@{AdsManager.NATIVE_BANNER_ID_4}"
                 showAdWithSomeDelay="@{1000}"
-                verticalAd="@{true}"
                 showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                verticalAd="@{true}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -48,6 +48,8 @@
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
+            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordListViewModel.edgeToEdgeEnabled}"
             app:onRefreshListener="@{()->wordListViewModel.refresh()}"
             app:refreshing="@{wordListViewModel.refreshState.status==Status.RUNNING}">
 
@@ -61,6 +63,8 @@
                 android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
                 android:scrollbars="vertical"
                 android:splitMotionEvents="false"
+                app:applyBottomPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
+                app:applyTopPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -70,6 +74,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
 
@@ -83,7 +88,7 @@
                     style="@style/ToolbarTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Words till date" />
+                    android:text="@string/words_till_date" />
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 

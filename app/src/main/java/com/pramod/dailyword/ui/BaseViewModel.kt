@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pramod.dailyword.SnackbarMessage
+import com.pramod.dailyword.helper.SPrefBooleanLiveData
+import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.util.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +15,8 @@ import kotlin.coroutines.CoroutineContext
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     private val messageLiveData = MutableLiveData<Event<SnackbarMessage>>()
+
+    var edgeToEdgeEnabled: LiveData<Boolean>? = null
 
     fun setMessage(snackbarMessage: SnackbarMessage) {
         messageLiveData.value = Event.init(snackbarMessage)

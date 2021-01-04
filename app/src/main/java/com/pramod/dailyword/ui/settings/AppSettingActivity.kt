@@ -105,28 +105,11 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     }
 
     private fun edgeToEdgeSettingChanged() {
-        mViewModel.recreateActivity().observe(this, Observer {
+        mViewModel.recreateActivity().observe(this, {
             it?.let { recreate ->
                 restartActivity()
             }
         })
-    }
-
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        mBinding.appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-        val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        mBinding.nestedScrollView.setPadding(
-            0,
-            paddingTop,
-            0,
-            paddingBottom
-        )
-
     }
 
 }

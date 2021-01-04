@@ -60,7 +60,7 @@ class WidgetDataLoadService : JobService() {
 
                 var localWord = wotdRepository.getJustNonLive(
                     CalenderUtil.convertCalenderToString(
-                        Calendar.getInstance()
+                        Calendar.getInstance(Locale.US)
                     )
                 )
 
@@ -78,7 +78,7 @@ class WidgetDataLoadService : JobService() {
                             //get word with bookmark status
                             localWord = wotdRepository.getJustNonLive(
                                 resource.data[0].date ?: CalenderUtil.convertCalenderToString(
-                                    Calendar.getInstance()
+                                    Calendar.getInstance(Locale.US)
                                 )
                             )
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -12,19 +12,20 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
         <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.HomeActivity" parent="AppTheme">
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-    </style>
-
-
-    <style name="AppTheme.SplashScreenActivity" parent="AppTheme">
+    <style name="AppTheme.BottomSheetDialog" parent="@style/Theme.MaterialComponents.BottomSheetDialog">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowLightStatusBar">?isLightTheme</item>
+        <item name="android:windowLightNavigationBar">?isLightTheme</item>
+        <item name="android:navigationBarColor">@color/bottomSheetDialogNavigationBarColor</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
     </style>
-
 </resources>

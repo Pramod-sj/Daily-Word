@@ -1,5 +1,6 @@
 package com.pramod.dailyword.util
 
+import java.lang.Error
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -11,10 +12,61 @@ class CalenderUtil {
         const val DATE_FORMAT = "yyyy-MM-dd"
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
 
+        val DAYS = listOf(
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        )
+
+        fun getCalendarInstance(as12AM: Boolean = false): Calendar {
+            val calendar = Calendar.getInstance(Locale.US)
+            if (as12AM) {
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0);
+            }
+            return calendar
+        }
+
+        @JvmStatic
+        fun getDayNameBasedOnDayOfWeek(dayOfWeek: Int): String? {
+            return try {
+                DAYS[dayOfWeek - 1]
+            } catch (e: Error) {
+                null
+            }
+        }
+
+        @JvmStatic
+        fun getDayName(timeInMillis: Long): String? {
+            return getDayNameBasedOnDayOfWeek(
+                Calendar.getInstance(Locale.US).apply {
+                    this.timeInMillis = timeInMillis
+                }.get(Calendar.DAY_OF_WEEK)
+            )
+        }
+
+        fun getCalendar(timeInMillis: Long): Calendar {
+            return Calendar.getInstance(Locale.US).apply {
+                this.timeInMillis = timeInMillis
+            }
+        }
+
         @JvmStatic
         fun convertCalenderToString(calender: Calendar, dateFormat: String = DATE_FORMAT): String {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             return simpleDateFormat.format(calender.time)
+        }
+
+        @JvmStatic
+        fun convertCalenderToString(dateInMillis: Long, dateFormat: String = DATE_FORMAT): String {
+            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
+            return simpleDateFormat.format(dateInMillis)
         }
 
         @JvmStatic
@@ -69,7 +121,6 @@ class CalenderUtil {
             return convertCalenderToString(cal, dateFormat) == dateString
         }
 
-
         @JvmStatic
         fun createCalendarForHourOfDayAndMin(hourOfDay: Int, minute: Int = 0): Calendar {
             val calender = Calendar.getInstance(Locale.US)
@@ -113,7 +164,7 @@ class CalenderUtil {
                     DATE_FORMAT
                 )!!
             } else {
-                Calendar.getInstance()
+                Calendar.getInstance(Locale.US)
             }
             calendar.add(Calendar.DATE, -abs(howManyDays))
             return convertCalenderToString(

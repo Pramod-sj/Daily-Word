@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -157,24 +158,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        mBinding.appBar.setPadding(
-            0, insets.systemWindowInsetTop, 0, 0
-        )
-
-
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        mBinding.homeImageViewBuildings.setPadding(
-            0,
-            0,
-            0,
-            paddingBottom
-        )
-
-
-    }
-
     private fun initToolbar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.let { title = null }
@@ -258,13 +241,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 resources.getString(R.string.card_transition_name)
             )
         }
-        WordDetailedActivity.openActivity(this, word, option)
+        WordDetailedActivity.openActivity(this, word.date!!, option)
     }
 
     private fun edgeToEdgeSettingChanged() {
-        WindowPrefManager.newInstance(this).getLiveData().observe(this, Observer<Boolean> {
+        WindowPrefManager.newInstance(this).getLiveData().distinctUntilChanged().observe(this, {
             if (it) {
-
+                recreate()
             }
         })
     }
@@ -411,7 +394,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
-                WordDetailedActivity.openActivity(this, messagePayload.date)
+                WordDetailedActivity.openActivity(this, messagePayload.date, null)
             }
             FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
                 WordListActivity.openActivity(this)
@@ -430,7 +413,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
 
     private var bottomSheetDialog: BottomSheetDialog? = null
     private fun initBottomSheetMenu() {
-        bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView = NavigationView(this)
         navigationView.inflateMenu(R.menu.home_more_menu)
         navigationView.setNavigationItemSelectedListener {
@@ -438,6 +421,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 AppSettingActivity.openActivity(this)
             } else if (it.itemId == R.id.menu_donate) {
                 DonateActivity.openActivity(this)
+            } else if (it.itemId == R.id.menu_share) {
+                shareApp()
             }
             bottomSheetDialog?.dismiss()
             false

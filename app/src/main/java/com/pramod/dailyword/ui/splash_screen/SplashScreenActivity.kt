@@ -1,6 +1,7 @@
 package com.pramod.dailyword.ui.splash_screen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -100,14 +101,4 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
         FBTopicSubscriber.subscribeToCountry(this)
     }
 
-    override fun arrangeViewsForEdgeToEdge(view: View, insets: WindowInsetsCompat) {
-        val paddingBottom = insets.systemWindowInsetBottom
-
-        mBinding.splashScreenBottomLayout.setPadding(
-            0,
-            0,
-            0,
-            paddingBottom
-        )
-    }
 }

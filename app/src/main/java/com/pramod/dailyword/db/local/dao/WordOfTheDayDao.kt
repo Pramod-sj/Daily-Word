@@ -14,6 +14,9 @@ interface WordOfTheDayDao {
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date=:date")
     fun getJust(date: String): LiveData<WordOfTheDay?>
 
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date=:date")
+    fun getJustAsFlow(date: String): Flow<WordOfTheDay?>
+
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE WordOfTheDay.word=:word")
     fun getWord(word: String): LiveData<WordOfTheDay>
 
@@ -21,13 +24,22 @@ interface WordOfTheDayDao {
     fun getWordFlow(word: String): Flow<WordOfTheDay>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
-    fun getJustTopOne(): LiveData<WordOfTheDay?>
+    fun getJustTopOne(): Flow<WordOfTheDay?>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT :count OFFSET 1")
     fun getFewExceptTopOne(count: Int): LiveData<List<WordOfTheDay>?>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT :count")
     fun getFewFromTop(count: Int): LiveData<List<WordOfTheDay>?>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT :count")
+    fun getFewFromTopAsFlow(count: Int): Flow<List<WordOfTheDay>?>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE :tillDate <= dateTimeInMillis ORDER BY dateTimeInMillis DESC LIMIT :count")
+    fun getFewTill(tillDate: Long, count: Int): LiveData<List<WordOfTheDay>?>
+
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE :tillDate <= dateTimeInMillis ORDER BY dateTimeInMillis DESC LIMIT :count")
+    fun getFewTillAsFlow(tillDate: Long, count: Int): Flow<List<WordOfTheDay>?>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
     fun pagingSourceWords(): PagingSource<Int, WordOfTheDay>
@@ -45,7 +57,7 @@ interface WordOfTheDayDao {
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE date=:date")
     suspend fun getJustNonLive(date: String): WordOfTheDay?
 
-    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis ASC LIMIT 1 OFFSET 0")
     suspend fun getJustTopOneNonLive(): WordOfTheDay?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -19,10 +19,9 @@ import kotlinx.coroutines.*
 
 class WordDetailedViewModel(
     application: Application,
-    private val wordOfTheDay: WordOfTheDay,
+    private var wordDate: String?,
     private val showRandomWord: Boolean
-) :
-    BaseViewModel(application) {
+) : BaseViewModel(application) {
 
     companion object {
         val TAG = WordDetailedViewModel::class.simpleName
@@ -34,45 +33,37 @@ class WordDetailedViewModel(
     private val retryEventLiveData = MutableLiveData<Event<Boolean>>()
 
     val loadingLiveData = MutableLiveData<Boolean>()
-    val showWord = MutableLiveData<Boolean>()
 
     fun retry() {
         retryEventLiveData.value = Event.init(true)
     }
 
-    val wordOfTheDayLiveData: MediatorLiveData<WordOfTheDay> = MediatorLiveData()
+    var wordOfTheDayLiveData: LiveData<WordOfTheDay?> = MutableLiveData<WordOfTheDay?>()
 
     init {
-        wordOfTheDayLiveData.value = wordOfTheDay
-        //fetch word and listen to changes
-        var resourceLiveData =
-            if (showRandomWord) wordOfTheDayRepo.getRandomWord()
-            else wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
 
-        wordOfTheDayLiveData.addSource(retryEventLiveData) {
-            if (wordOfTheDay.word == null) {
-                wordOfTheDayLiveData.removeSource(resourceLiveData)
-                resourceLiveData =
-                    if (showRandomWord) wordOfTheDayRepo.getRandomWord()
-                    else wordOfTheDayRepo.getWord(wordOfTheDay.date!!)
-                wordOfTheDayLiveData.addSource(resourceLiveData) {
-                    loadingLiveData.value = it.status == Resource.Status.LOADING
-                    if (it.status == Resource.Status.ERROR) {
-                        it.message?.let { message ->
-                            setMessage(SnackbarMessage.init(message))
-                        }
-                    }
-                    showWord.value = it.data != null
-                    wordOfTheDayLiveData.value = it.data
+        val wordOfTheDayLiveDataResource: LiveData<Resource<WordOfTheDay?>> =
+            Transformations.switchMap(retryEventLiveData) {
+                if (it.getContentIfNotHandled() == true) {
+                    return@switchMap if (showRandomWord)
+                        wordOfTheDayLiveData.value?.let { word ->
+                            wordOfTheDayRepo.getWord(
+                                word.date!!, true
+                            )
+                        } ?: wordOfTheDayRepo.getRandomWord()
+                    else wordOfTheDayRepo.getWord(wordDate!!)
                 }
-            } else {
-                showWord.value = true
-                wordOfTheDayLiveData.addSource(wordOfTheDayRepo.getWord(wordOfTheDay.date!!)) {
-                    loadingLiveData.value = it.status == Resource.Status.LOADING
-                    wordOfTheDayLiveData.value = it.data
-                }
+                return@switchMap null
             }
+
+        wordOfTheDayLiveData = Transformations.map(wordOfTheDayLiveDataResource) { resource ->
+            loadingLiveData.value = resource.status == Resource.Status.LOADING
+            if (resource.status == Resource.Status.ERROR) {
+                setMessage(SnackbarMessage.init(resource.message ?: "Something went wrong!!"))
+            }
+            return@map resource.data
         }
+
         retry()
 
     }
@@ -96,7 +87,6 @@ class WordDetailedViewModel(
 
     private var isWordPronounced = true
     fun pronounceWord(url: String) {
-        Log.d("AUDIO URL", url)
         if (isWordPronounced) {
             isWordPronounced = false
             PronounceHelper.playAudio(url) {
@@ -122,12 +112,12 @@ class WordDetailedViewModel(
 
     class Factory(
         private val application: Application,
-        private val word: WordOfTheDay,
+        private val wordDate: String?,
         private val showRandomWord: Boolean
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return WordDetailedViewModel(application, word, showRandomWord) as T
+            return WordDetailedViewModel(application, wordDate, showRandomWord) as T
         }
 
     }

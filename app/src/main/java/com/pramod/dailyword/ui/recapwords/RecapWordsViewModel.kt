@@ -9,7 +9,5 @@ class RecapWordsViewModel(application: Application) :
     BaseViewModel(application) {
     private val wotdRepository: WOTDRepository = WOTDRepository(application)
 
-    val words = Transformations.map(wotdRepository.getWords(7)) {
-        it.data
-    }
+    val words = Transformations.map(wotdRepository.recapWords(7)) { it.data }
 }

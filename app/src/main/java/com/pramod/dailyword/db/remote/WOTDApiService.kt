@@ -9,14 +9,14 @@ import retrofit2.http.Query
 
 interface WOTDApiService {
     @GET(EndPoints.GET_WORD_OF_THE_DAY)
-    suspend fun getWordOfTheDay(): ApiResponse<WordOfTheDay?>?
+    suspend fun getWordOfTheDay(): ApiResponse<WordOfTheDay>
 
     @GET(EndPoints.GET_WORDS)
     suspend fun getWords(
         @Query("startFrom") startFrom: String? = null,
         @Query("limit") limit: Int
-    ): ApiResponse<List<WordOfTheDay>?>?
+    ): ApiResponse<List<WordOfTheDay>>
 
     @GET(EndPoints.GET_RANDOM_WORD)
-    suspend fun getRandomWord(): ApiResponse<WordOfTheDay?>?
+    suspend fun getRandomWord(): ApiResponse<WordOfTheDay>
 }
