@@ -11,8 +11,8 @@ import com.pramod.dailyword.ui.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-const val LOCAL_PAGE_SIZE = 20
-const val NETWORK_PAGE_SIZE = 20
+const val LOCAL_PAGE_SIZE = 40
+const val NETWORK_PAGE_SIZE = 40
 
 class WordListViewModel(application: Application) : BaseViewModel(application) {
 

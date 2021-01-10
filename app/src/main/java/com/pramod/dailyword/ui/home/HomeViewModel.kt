@@ -44,8 +44,11 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     init {
         wordOfTheDayLoading.value = Event.init(true)
         wordResourceLiveData = Transformations.switchMap(refreshDataSourceLiveData) {
-            return@switchMap it.getContentIfNotHandled()?.let {
-                wordOfTheDayRepo.getWords()
+            return@switchMap it.getContentIfNotHandled()?.let { refresh ->
+                if (refresh) {
+                    return@switchMap wordOfTheDayRepo.getWords()
+                }
+                return@switchMap null
             }
         }
         wordOfTheDayLiveData = Transformations.map(wordResourceLiveData) {

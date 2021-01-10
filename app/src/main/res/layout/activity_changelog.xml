@@ -43,8 +43,7 @@
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
-            app:applyBottomPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
-            app:applyTopPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.button.MaterialButton

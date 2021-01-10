@@ -29,9 +29,8 @@
             android:clipToPadding="false"
             android:orientation="vertical"
             app:appBarLayout="@{appBar}"
-            app:applyBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
             app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.edgeToEdgeEnabled}"
-            app:applyTopPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2" />
 

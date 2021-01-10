@@ -43,6 +43,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.about_app.AboutAppActivity">
 
         <androidx.core.widget.NestedScrollView
@@ -53,8 +54,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
-            app:applyBottomPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}"
-            app:applyTopPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}">
+            app:applyTopBottomPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,11 +187,10 @@
                             style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/margin_medium"
                             android:background="@drawable/background_about_titles_curve_edge"
                             android:backgroundTint="?colorPrimary"
                             android:padding="@dimen/margin_medium"
-                            android:text="Developer"
+                            android:text="@string/developer_string"
                             android:textAllCaps="true"
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
@@ -201,7 +200,9 @@
                             android:layout_height="80dp"
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/margin_medium"
-                            android:src="@drawable/dev_profile" />
+                            android:src="@drawable/dev_profile"
+                            app:civ_border_color="@color/app_icon_tint"
+                            app:civ_border_width="1dp" />
 
                         <TextView
                             style="@style/AppTheme.Header5TextStyle.Bold"
@@ -217,47 +218,79 @@
                             android:layout_gravity="center"
                             android:text="@string/dev_info" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_small"
-                            android:onClick="@{()->developerLinkNavigate.navigateToGithub()}"
-                            app:icon="@drawable/ic_github"
-                            app:showRadioButton="false"
-                            app:subTitle="Follow me on github for more projects"
-                            app:title="Github"
-                            app:titleTextSize="@dimen/text_sub_title" />
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginVertical="@dimen/margin_medium"
+                            android:layout_marginBottom="@dimen/margin_medium">
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="@{()->developerLinkNavigate.navigateToGmail()}"
-                            app:icon="@drawable/ic_gmail"
-                            app:showRadioButton="false"
-                            app:subTitle="Have query drop a mail"
-                            app:title="Gmail"
-                            app:titleTextSize="@dimen/text_sub_title" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_medium"
+                                android:background="@drawable/background_dev_social_app_circle_stroke">
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="@{()->developerLinkNavigate.navigateToInstagram()}"
-                            app:icon="@drawable/ic_instagram"
-                            app:showRadioButton="false"
-                            app:subTitle="Follow me on instagram"
-                            app:title="Instagram"
-                            app:titleTextSize="@dimen/text_sub_title" />
+                                <ImageButton
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_margin="@dimen/margin_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->developerLinkNavigate.navigateToGithub()}"
+                                    android:src="@drawable/ic_github"
+                                    android:tint="@color/app_icon_tint" />
+                            </FrameLayout>
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="@{()->developerLinkNavigate.navigateToFacebook()}"
-                            app:icon="@drawable/ic_facebook"
-                            app:showRadioButton="false"
-                            app:subTitle="Follow me on facebook"
-                            app:title="Facebook"
-                            app:titleTextSize="@dimen/text_sub_title" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_medium"
+                                android:background="@drawable/background_dev_social_app_circle_stroke">
 
+                                <ImageButton
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_margin="@dimen/margin_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->developerLinkNavigate.navigateToGmail()}"
+                                    android:src="@drawable/ic_gmail"
+                                    android:tint="@color/app_icon_tint" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_medium"
+                                android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                <ImageButton
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_margin="@dimen/margin_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->developerLinkNavigate.navigateToInstagram()}"
+                                    android:src="@drawable/ic_instagram"
+                                    android:tint="@color/app_icon_tint" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_medium"
+                                android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                <ImageButton
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_margin="@dimen/margin_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->developerLinkNavigate.navigateToFacebook()}"
+                                    android:src="@drawable/ic_facebook"
+                                    android:tint="@color/app_icon_tint" />
+                            </FrameLayout>
+
+
+                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

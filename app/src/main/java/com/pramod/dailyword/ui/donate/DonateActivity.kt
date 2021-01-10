@@ -1,4 +1,4 @@
-package com.pramod.dailyword.ui.about_app.donate
+package com.pramod.dailyword.ui.donate
 
 import android.content.Context
 import android.content.Intent

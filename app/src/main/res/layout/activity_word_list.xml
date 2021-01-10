@@ -63,8 +63,7 @@
                 android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
                 android:scrollbars="vertical"
                 android:splitMotionEvents="false"
-                app:applyBottomPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
-                app:applyTopPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
+                app:applyTopBottomPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

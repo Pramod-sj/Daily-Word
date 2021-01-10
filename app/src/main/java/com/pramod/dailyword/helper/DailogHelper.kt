@@ -1,5 +1,6 @@
 package com.pramod.dailyword.helper
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
@@ -18,8 +19,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
+import com.pramod.dailyword.databinding.BottomSheetDialogLayoutBinding
 import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
@@ -145,6 +148,43 @@ fun Context.showWebViewDialog(url: String) {
         ViewGroup.LayoutParams.MATCH_PARENT
     )
 
+
+}
+
+fun Activity.showBottomSheet(
+    title: String,
+    desc: String,
+    positiveText: String? = null,
+    positiveClickCallback: (() -> Unit)? = null,
+    negativeText: String? = null,
+    negativeClickCallback: (() -> Unit)? = null,
+    onDismissCallback: (() -> Unit)? = null
+) {
+
+    val bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
+    val binding: BottomSheetDialogLayoutBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(this),
+        R.layout.bottom_sheet_dialog_layout,
+        null,
+        false
+    )
+    bottomSheetDialog.setContentView(binding.root)
+    binding.bottomSheetTitle.text = title
+    binding.bottomSheetBody.text = desc
+    binding.bottomSheetBtnPositive.text = positiveText
+    binding.bottomSheetBtnNegative.text = negativeText
+    binding.bottomSheetBtnPositive.setOnClickListener {
+        bottomSheetDialog.dismiss()
+        positiveClickCallback?.invoke()
+    }
+    binding.bottomSheetBtnNegative.setOnClickListener {
+        bottomSheetDialog.dismiss()
+        negativeClickCallback?.invoke()
+    }
+    bottomSheetDialog.setOnDismissListener {
+        onDismissCallback?.invoke()
+    }
+    bottomSheetDialog.show()
 
 }
 

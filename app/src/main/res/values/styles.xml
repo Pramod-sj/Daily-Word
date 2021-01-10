@@ -14,6 +14,12 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
         <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- Navigation Drawer -->
+        <item name="colorNavigationItem">@color/navigation_item_color</item>
+        <item name="colorNavigationItemSelected">@color/navigation_item_color</item>
+        <item name="drawableNavigationItemBackground">@drawable/background_navigation_item_selector</item>
+
     </style>
 
     <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />
@@ -199,15 +205,22 @@
     </style>
 
     <style name="AppTheme.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/AppTheme.BottomSheetShape</item>
+        <!--<item name="shapeAppearanceOverlay">@style/AppTheme.BottomSheetShape</item>-->
+        <item name="backgroundTint">@color/bottomSheetDialogNavigationBarColor</item>
     </style>
 
-    <style name="AppTheme.BottomSheetShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+    <style name="AppTheme.BottomSheetShape" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="AppTheme.Widget.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">?attr/colorNavigationItem</item>
+        <item name="itemTextColor">?attr/colorNavigationItem</item>
+        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
 
 </resources>

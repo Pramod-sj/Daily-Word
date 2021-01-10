@@ -1,4 +1,4 @@
-package com.pramod.dailyword.ui.about_app.donate
+package com.pramod.dailyword.ui.donate
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
         val color = CommonUtils.getColor(holder.binding.root.context, donateItem.color)
         holder.binding.color = color
         val alphaAppliedColor =
-            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 10)
+            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 30)
         holder.binding.alphaColor = alphaAppliedColor
         holder.binding.executePendingBindings()
     }

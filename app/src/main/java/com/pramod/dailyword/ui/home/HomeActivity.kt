@@ -5,13 +5,14 @@ import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.distinctUntilChanged
@@ -19,6 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
@@ -29,14 +32,13 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.firebase.FBMessageService
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
-import com.pramod.dailyword.ui.about_app.donate.DonateActivity
+import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.ui.recapwords.RecapWordsActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
-import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -87,10 +89,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
         //edgeToEdgeSettingChanged()
-        promptAutoStart()
         //showDummyLotttieDialog()
         showNativeAdDialogWithDelay()
-        shouldShowCreditDialog()
+        handleShowingCreditAndAutoStartDialog()
     }
 
 
@@ -142,11 +143,12 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
     }
 
-    private fun shouldShowCreditDialog() {
+    private fun handleShowingCreditAndAutoStartDialog() {
         val prefManager = PrefManager.getInstance(this)
+
         if (prefManager.getShowInitailCreditDialogStatus()) {
             prefManager.changeShowInitialCreditDialogStatus(false)
-            showBasicDialog(
+            showBottomSheet(
                 "App Content Credit",
                 resources.getString(R.string.merriam_webster_credit_text),
                 positiveText = "Go to Merriam-Webster",
@@ -154,7 +156,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
                 },
                 negativeText = "Close"
-            )
+            ) {
+                //prompt for auto start settings when credit dialog is dimissed
+                promptAutoStart()
+            }
+        } else {
+            //prompt for auto start settings when credit dialog is already shown
+            promptAutoStart()
         }
     }
 
@@ -302,9 +310,31 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
    */
     private fun shouldShowRatingDialog() {
         if (PrefManager.getInstance(this)
-                .shouldShowRateNowDialog()
-        ) {
-            showStaticPageDialog(
+                .shouldShowRateNowDialog()) {
+
+            val manager = ReviewManagerFactory.create(this)
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val requestInfo = it.result
+                    val reviewFlow = manager.launchReviewFlow(this, requestInfo)
+                    reviewFlow.addOnCompleteListener { reviewFlowResult ->
+                        if (reviewFlowResult.isSuccessful) {
+                            Log.i(TAG, "shouldShowRatingDialog: succeed: done")
+                        } else {
+                            Log.i(
+                                TAG,
+                                "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
+                            )
+                        }
+                    }
+
+                } else {
+                    Log.i(TAG, "shouldShowRatingDialog: failed:" + it.exception.toString())
+                }
+            }
+
+            /*showStaticPageDialog(
                 R.layout.dialog_rate_app,
                 positiveText = "Rate Now",
                 positiveClickCallback = {
@@ -318,8 +348,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                     PrefManager.getInstance(this)
                         .setUserClickedNever()
                 }
-            )
+            )*/
         }
+
     }
 
     var appUpdateHelper: AppUpdateHelper? = null
@@ -414,7 +445,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     private var bottomSheetDialog: BottomSheetDialog? = null
     private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
-        val navigationView = NavigationView(this)
+        val navigationView =
+            NavigationView(this)
+        navigationView.updatePadding(top = 10, bottom = 15)
+        navigationView.overScrollMode = View.OVER_SCROLL_NEVER
+        navigationView.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
+        navigationView.elevation = 0f
         navigationView.inflateMenu(R.menu.home_more_menu)
         navigationView.setNavigationItemSelectedListener {
             if (it.itemId == R.id.menu_settings) {

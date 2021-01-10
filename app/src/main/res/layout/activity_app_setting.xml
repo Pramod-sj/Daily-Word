@@ -30,8 +30,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
-            app:applyBottomPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}"
-            app:applyTopPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}">
+            app:applyTopBottomPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"

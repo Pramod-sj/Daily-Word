@@ -10,6 +10,7 @@ import androidx.core.view.updatePadding
 
 fun View.applySystemBarPaddingInsets() {
     this.doOnApplyWindowInsets { view, insets, padding, _ ->
+        Log.i(TAG, "applySystemBarPaddingInsets: ")
         view.updatePadding(top = padding.top + insets.systemWindowInsetTop)
     }
 }

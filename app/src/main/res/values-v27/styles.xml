@@ -17,6 +17,11 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Navigation Drawer -->
+        <item name="colorNavigationItem">@color/navigation_item_color</item>
+        <item name="colorNavigationItemSelected">@color/navigation_item_color</item>
+        <item name="drawableNavigationItemBackground">@drawable/background_navigation_item_selector</item>
     </style>
 
     <style name="AppTheme.BottomSheetDialog" parent="@style/Theme.MaterialComponents.BottomSheetDialog">

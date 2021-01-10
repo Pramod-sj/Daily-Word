@@ -13,8 +13,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 202012021
-        versionName "1.3.0-Stable"
+        versionCode 202001051
+        versionName "1.4.0-Stable"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -74,7 +74,7 @@ dependencies {
 
     //preference library
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    
+
     //data binding
     kapt "com.android.databinding:compiler:3.6.1"
 

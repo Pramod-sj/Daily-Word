@@ -54,8 +54,7 @@
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
             android:visibility="@{favoriteWordsViewModel.showPlaceHolderLiveData?View.GONE:View.VISIBLE}"
-            app:applyBottomPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
-            app:applyTopPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <include
