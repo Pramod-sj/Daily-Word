@@ -22,4 +22,9 @@
         <attr name="civ_shadow_color" format="color" />
         <attr name="civ_shadow_radius" format="float" />
     </declare-styleable>
+
+    <attr name="colorNavigationItem" format="color" />
+    <attr name="colorNavigationItemSelected" format="color" />
+    <attr name="drawableNavigationItemBackground" format="reference" />
+
 </resources>

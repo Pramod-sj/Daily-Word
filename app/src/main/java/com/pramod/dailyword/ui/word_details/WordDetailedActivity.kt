@@ -33,12 +33,28 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     companion object {
 
-        fun openActivity(context: Context, wordDate: String) {
+
+        fun openActivity(context: Context, showRandomWord: Boolean) {
+            val intent = Intent(context, WordDetailedActivity::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("SHOW_RANDOM_WORD", showRandomWord)
+            intent.putExtras(bundle)
+            context.startActivity(intent)
+        }
+
+        fun openActivity(context: Context, wordDate: String, option: ActivityOptions?) {
             val intent = Intent(context, WordDetailedActivity::class.java)
             val bundle = Bundle()
             bundle.putSerializable("WORD_DATE", wordDate)
             intent.putExtras(bundle)
-            context.startActivity(intent)
+            intent.putExtras(bundle)
+            if (option != null &&
+                WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()
+            ) {
+                context.startActivity(intent, option.toBundle())
+            } else {
+                context.startActivity(intent)
+            }
         }
 
 
@@ -62,9 +78,14 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun getViewModel(): WordDetailedViewModel {
         val word = intent.extras?.getSerializable("WORD") as WordOfTheDay?
         val wordDate = intent.extras?.getString("WORD_DATE")
+        val showRandomWord = intent.extras?.getBoolean("SHOW_RANDOM_WORD") ?: false
         return ViewModelProviders.of(
             this,
-            WordDetailedViewModel.Factory(application, word ?: WordOfTheDay(wordDate))
+            WordDetailedViewModel.Factory(
+                application,
+                wordDate,
+                showRandomWord
+            )
         ).get(WordDetailedViewModel::class.java)
     }
 
@@ -76,11 +97,13 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        arrangeViewsAccordingToEdgeToEdge()
         setNestedScrollListener()
         setNavigateMW()
         showNativeAdDialogWithDelay()
         setUpWordOfTheDay()
+        mViewModel.loadingLiveData.observe(this) {
+            Log.i(TAG, "loading word of the day: $it")
+        }
     }
 
     private fun setUpToolbar() {
@@ -98,7 +121,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         setUpThesaurusAdapter()
         mViewModel.wordOfTheDayLiveData.observe(this, {
             if (it != null) {
-                Log.i("WORD OF THE DAY", Gson().toJson(it))
                 invalidateOptionsMenu()
             }
         })
@@ -122,7 +144,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         val adapter = DefinationAdapter()
         mBinding.wordDetailedDefinationsRecyclerview.adapter = adapter
 
-        mViewModel.wordOfTheDayLiveData.observe(this, Observer {
+        mViewModel.wordOfTheDayLiveData.observe(this, {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
@@ -157,54 +179,10 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         })
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                mBinding.nestedScrollView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-
-                mBinding.swipeRefreshLayout.setProgressViewOffset(
-                    true,
-                    paddingTop,
-                    100 + paddingTop
-                )
-
-                /*val fabMarginBottom = mBinding.fabGotToMw.marginBottom + paddingBottom
-                val layoutParam: CoordinatorLayout.LayoutParams =
-                    mBinding.fabGotToMw.layoutParams as CoordinatorLayout.LayoutParams
-                layoutParam.setMargins(
-                    mBinding.fabGotToMw.marginLeft,
-                    mBinding.fabGotToMw.marginTop,
-                    mBinding.fabGotToMw.marginRight,
-                    fabMarginBottom
-                )
-                mBinding.fabGotToMw.layoutParams = layoutParam
-*/
-                insets
-            }
-        }
-
-        val actionBarSize = CommonUtils.calculateActionBarHeight(this)
-        mBinding.swipeRefreshLayout.setProgressViewOffset(true, actionBarSize, 100 + actionBarSize)
-
-    }
-
     private fun initEnterAndReturnTransition() {
 
-        findViewById<View>(android.R.id.content).transitionName = "CONTAINER"
+        findViewById<View>(android.R.id.content).transitionName =
+            resources.getString(R.string.card_transition_name)
         window.sharedElementsUseOverlay = false
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
@@ -257,7 +235,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.word_detail_menu, menu)
-        Log.i("DATA", mViewModel.wordOfTheDayLiveData.value?.isBookmarked().toString())
         menu?.findItem(R.id.menu_bookmark)
             ?.setIcon(
                 if (mViewModel.wordOfTheDayLiveData.value?.isBookmarked() == true

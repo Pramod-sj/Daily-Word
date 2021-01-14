@@ -54,6 +54,7 @@
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
             android:visibility="@{favoriteWordsViewModel.showPlaceHolderLiveData?View.GONE:View.VISIBLE}"
+            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <include
@@ -70,6 +71,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
 

@@ -4,7 +4,9 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -42,35 +44,12 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
         super.onCreate(savedInstanceState)
         setUpToolbar()
         edgeToEdgeSettingChanged()
-        arrangeViewsAccordingToEdgeToEdge()
         initThemeSelector()
         navigateToAbout()
         navigateToDokiActivity()
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
 
-                val paddingTop = insets.systemWindowInsetTop + mBinding.nestedScrollView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                mBinding.nestedScrollView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-
-                insets
-            }
-        }
-    }
 
     private fun setUpToolbar() {
         setSupportActionBar(mBinding.toolbar)
@@ -126,7 +105,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     }
 
     private fun edgeToEdgeSettingChanged() {
-        mViewModel.recreateActivity().observe(this, Observer {
+        mViewModel.recreateActivity().observe(this, {
             it?.let { recreate ->
                 restartActivity()
             }

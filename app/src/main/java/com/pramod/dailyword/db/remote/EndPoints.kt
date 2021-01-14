@@ -8,6 +8,7 @@ class EndPoints {
         const val WORLD_TIME_BASE_URL = "https://www.worldtimeapi.org/api/"
         const val GET_WORD_OF_THE_DAY = "Wordoftheday/getTodaysWord"
         const val GET_WORDS = "Wordoftheday/getWords"
+        const val GET_RANDOM_WORD = "Wordoftheday/getRandomWord"
 
         const val PRIVACY_POLICY = "${WOTD_BASE_URL}etc/privacy_policy.html"
         const val TERM_AND_CONDITION = "${WOTD_BASE_URL}etc/term_and_condition.html"

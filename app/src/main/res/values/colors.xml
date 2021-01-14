@@ -133,4 +133,25 @@
 
 
     <color name="widget_background">#70000000</color>
+
+    <color name="home_appbar_color">@color/colorPrimary</color>
+
+
+    <color name="bottomSheetDialogNavigationBarColor">#FFFFFF</color>
+
+    <color name="windowBackgroundColor">#FFFFFF</color>
+
+    <!-- Start Donate Item Colors -->
+    <color name="color_cookie">@color/orange_600</color>
+    <color name="color_coffee">@color/green_600</color>
+    <color name="color_snacks">@color/purple_600</color>
+    <color name="color_gift">@color/pink_600</color>
+    <color name="color_server">@color/blue_600</color>
+    <color name="color_movie">@color/red_600</color>
+    <color name="color_meal">@color/deepOrange_600</color>
+    <!-- End Donate Item Colors -->
+
+    <color name="social_media_background_color">#30ACABAB</color>
+    <color name="social_media_stroke_color">#ACABAB</color>
+
 </resources>

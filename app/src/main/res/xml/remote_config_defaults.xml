@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
     <entry>
+        <key>base_url</key>
+        <value>http://23.111.167.173/~todayswo/ci/index.php/</value>
+    </entry>
+    <entry>
         <key>ads</key>
         <value>false</value>
     </entry>

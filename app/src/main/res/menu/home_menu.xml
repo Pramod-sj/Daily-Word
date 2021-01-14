@@ -2,16 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_bookmarked_words"
-        android:icon="@drawable/ic_round_bookmarks_24"
-        android:title="@string/bookmarked_words"
-        app:iconTint="@color/white"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menu_setting"
-        android:icon="@drawable/ic_settings_outline"
-        android:title="@string/menu_settings"
-        app:iconTint="@color/white"
+        android:id="@+id/menu_more"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:title="More"
+        app:iconTint="@color/app_icon_tint"
         app:showAsAction="always" />
 </menu>

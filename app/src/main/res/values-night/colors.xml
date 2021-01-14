@@ -29,4 +29,24 @@
 
     <color name="splash_wave_color">#303030</color>
 
+    <color name="home_appbar_color">#323232</color>
+
+    <color name="bottomSheetDialogNavigationBarColor">#282828</color>
+
+    <color name="windowBackgroundColor">#232323</color>
+
+
+    <!-- Start Donate Item Colors -->
+    <color name="color_cookie">@color/orange_200</color>
+    <color name="color_coffee">@color/green_200</color>
+    <color name="color_snacks">@color/purple_200</color>
+    <color name="color_gift">@color/pink_200</color>
+    <color name="color_server">@color/blue_200</color>
+    <color name="color_movie">@color/red_200</color>
+    <color name="color_meal">@color/deepOrange_200</color>
+    <!-- End Donate Item Colors -->
+
+
+    <color name="social_media_background_color">#30ACABAB</color>
+    <color name="social_media_stroke_color">#ACABAB</color>
 </resources>

@@ -43,11 +43,11 @@ fun BaseWidgetProvider.setRepeatingDailyAlarmToFetch(context: Context) {
         0
     )
 
-    val cal = Calendar.getInstance()
+    val cal = Calendar.getInstance(Locale.US)
     cal.set(Calendar.HOUR_OF_DAY, 16)
     cal.set(Calendar.MINUTE, 15)
 
-    if (cal.timeInMillis < Calendar.getInstance().timeInMillis) {
+    if (cal.timeInMillis < Calendar.getInstance(Locale.US).timeInMillis) {
         cal.add(Calendar.DAY_OF_YEAR, 1)
     }
 

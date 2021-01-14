@@ -4,19 +4,23 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import com.pramod.dailyword.db.remote.WOTDApiService
 import com.pramod.dailyword.db.remote.EndPoints
 import com.pramod.dailyword.db.remote.IPService
 import com.pramod.dailyword.db.remote.TimeApiService
+import com.pramod.dailyword.firebase.FBRemoteConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class NetworkUtils {
     companion object {
+        val TAG = NetworkUtils::class.java.simpleName
+
         fun getWOTDApiService(): WOTDApiService {
             val client = Retrofit.Builder()
-                .baseUrl(EndPoints.WOTD_API_BASE_URL)
+                .baseUrl(FBRemoteConfig.getInstance().baseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return client.create(WOTDApiService::class.java)

@@ -40,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
+            app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
+            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
             app:onRefreshListener="@{()->wordDetailedViewModel.retry()}"
             app:refreshing="@{wordDetailedViewModel.loadingLiveData}">
 
@@ -51,13 +53,13 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
-                android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
-                android:scrollbars="vertical"
-                android:visibility="@{wordDetailedViewModel.showWord?View.VISIBLE:View.GONE}">
+                android:visibility="@{wordDetailedViewModel.wordOfTheDayLiveData.date!=null?View.VISIBLE:View.GONE}"
+                app:applyTopBottomPaddingInset="@{wordDetailedViewModel.edgeToEdgeEnabled}">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:orientation="vertical"
@@ -93,9 +95,7 @@
                         android:paddingTop="@dimen/padding_small"
                         android:singleLine="true"
                         android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.word}"
-                        app:drawableRightCompat="@drawable/ic_round_content_copy_24"
-                        app:drawableTint="@color/app_icon_tint"
-                        app:onRightDrawableClick="@{()->wordDetailedViewModel.copyWordToClipboard(wordDetailedViewModel.wordOfTheDayLiveData.word)}" />
+                        android:textIsSelectable="true" />
 
 
                     <LinearLayout
@@ -131,12 +131,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/padding_medium"
-                            android:background="@drawable/background_circle_ripple"
-                            android:backgroundTint="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}"
+                            android:background="?actionBarItemBackground"
                             android:onClick="@{()->wordDetailedViewModel.pronounceWord(wordDetailedViewModel.wordOfTheDayLiveData.pronounceAudio)}"
                             android:padding="@dimen/padding_medium"
                             android:src="@drawable/ic_volume_up_black_24dp"
-                            android:tint="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}" />
+                            android:tint="@color/app_icon_tint" />
 
                     </LinearLayout>
 
@@ -363,6 +362,7 @@
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

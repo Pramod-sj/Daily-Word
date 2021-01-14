@@ -1,9 +1,12 @@
-package com.pramod.dailyword.ui.about_app.donate
+package com.pramod.dailyword.ui.donate
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProviders
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
@@ -18,6 +21,8 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
 
     companion object {
+        val TAG = DonateActivity::class.java.simpleName
+
         @JvmStatic
         fun openActivity(context: Context) {
             val intent = Intent(context, DonateActivity::class.java)
@@ -27,10 +32,8 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
     override fun getLayoutId(): Int = R.layout.activity_donate
 
-    override fun getViewModel(): DonateViewModel =
-        ViewModelProviders.of(this).get(
-            DonateViewModel::class.java
-        )
+    override fun getViewModel(): DonateViewModel = ViewModelProviders.of(this)
+        .get(DonateViewModel::class.java)
 
     override fun getBindingVariable(): Int = BR.donateViewModel
 
@@ -39,7 +42,6 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         setUpToolbar()
         setUpBilling()
         setUpDonateItemRecyclerView()
-        arrangeViewsAccordingToEdgeToEdge()
     }
 
 
@@ -78,7 +80,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
             if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
-                mViewModel.setMessage(SnackbarMessage.init("You have already donated a ${donateItem.title}, Thank you so much :)"))
+                mViewModel.setMessage(SnackbarMessage.init("You have already donated this item, Thank you so much :)"))
             } else {
                 billingProcessor.purchase(this, donateItem.itemPurchaseId)
             }
@@ -86,31 +88,6 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         mBinding.donateRecyclerView.adapter = donateItemAdapter
         donateItemAdapter.submitList(mViewModel.donateItemList)
     }
-
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                mBinding.appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop =
-                    insets.systemWindowInsetTop + mBinding.donateRecyclerView.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                mBinding.donateRecyclerView.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-                insets
-            }
-        }
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (!billingProcessor.handleActivityResult(requestCode, resultCode, data)) {
@@ -122,4 +99,5 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
         billingProcessor.release()
         super.onDestroy()
     }
+
 }

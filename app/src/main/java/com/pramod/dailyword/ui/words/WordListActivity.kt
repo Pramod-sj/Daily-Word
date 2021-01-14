@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.whenResumed
@@ -71,7 +72,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         initExitTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        arrangeViewsAccordingToEdgeToEdge()
         findViewById<View>(android.R.id.content).postDelayed({
             initAdapter()
             showNativeAdDialogWithDelay()
@@ -109,9 +109,9 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this@WordListActivity,
                 view!!,
-                "CONTAINER"
+                resources.getString(R.string.card_transition_name)
             )
-            WordDetailedActivity.openActivity(this, wordOfTheDay, option)
+            WordDetailedActivity.openActivity(this, wordOfTheDay.date!!, option)
         }
         concatAdapter.addAdapter(adapter!!)
         mViewModel.networkState.observe(this, Observer {
@@ -150,35 +150,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         window.allowReturnTransitionOverlap = true
     }
 
-    private fun arrangeViewsAccordingToEdgeToEdge() {
-        if (WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
-            ViewCompat.setOnApplyWindowInsetsListener(
-                mBinding.root
-            ) { v, insets ->
-                appBar.setPadding(
-                    0, insets.systemWindowInsetTop, 0, 0
-                )
-
-                val paddingTop = insets.systemWindowInsetTop + recyclerview_words.paddingTop
-                val paddingBottom = insets.systemWindowInsetBottom
-
-                recyclerview_words.setPadding(
-                    0,
-                    paddingTop,
-                    0,
-                    paddingBottom
-                )
-
-                swipeToRefresh.setProgressViewOffset(true, paddingTop, 100 + paddingTop)
-
-                insets
-            }
-        }
-
-        val actionBarSize = CommonUtils.calculateActionBarHeight(this)
-        swipeToRefresh.setProgressViewOffset(true, actionBarSize, 100 + actionBarSize)
-
-    }
 
     private fun showNativeAdDialogWithDelay() {
         Handler().postDelayed({

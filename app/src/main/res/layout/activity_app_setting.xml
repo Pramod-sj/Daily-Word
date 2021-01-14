@@ -29,7 +29,8 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingTop="?actionBarSize">
+            android:paddingTop="?actionBarSize"
+            app:applyTopBottomPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,11 +138,11 @@
                 <com.pramod.dailyword.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_round_report_problem_24"
                     android:onClick="@{()->appSettingViewModel.goToDokiActivity()}"
+                    app:icon="@drawable/ic_round_report_problem_24"
                     app:iconColorTint="@color/app_icon_tint"
-                    app:showIconBackground="false"
                     app:onLongClick="@{()->appSettingViewModel.copyFirebaseTokenId()}"
+                    app:showIconBackground="false"
                     app:showRadioButton="false"
                     app:subTitle="Not receiving notifications, fix it yourself"
                     app:title="Facing Notification Issue?"
@@ -171,6 +172,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

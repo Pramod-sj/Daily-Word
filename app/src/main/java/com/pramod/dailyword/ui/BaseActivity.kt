@@ -1,6 +1,7 @@
 package com.pramod.dailyword.ui
 
 import android.R
+import android.graphics.Insets
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +9,13 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.SnackbarMessage
 import com.pramod.dailyword.helper.ThemeManager
@@ -28,6 +33,11 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     abstract fun getBindingVariable(): Int
 
     private var forceEdgeToEdge = false
+    private var isInsetApplied = false
+
+    private var windowPrefManager: WindowPrefManager? = null
+
+
     fun forceEdgeToEdge(forceEdgeToEdge: Boolean) {
         this.forceEdgeToEdge = forceEdgeToEdge
     }
@@ -37,9 +47,27 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView<T>(this@BaseActivity, getLayoutId())
         mViewModel = getViewModel()
+        mViewModel.edgeToEdgeEnabled = windowPrefManager?.getLiveData()?.distinctUntilChanged()
         mBinding.lifecycleOwner = this
         mBinding.setVariable(getBindingVariable(), mViewModel)
         mBinding.executePendingBindings()
+        //adjusting views based onn inset
+        if (forceEdgeToEdge || WindowPrefManager.newInstance(this).isEdgeToEdgeEnabled()) {
+            ViewCompat.setOnApplyWindowInsetsListener(
+                mBinding.root
+            ) { v, insets ->
+                if (!isInsetApplied) {
+                    Log.i(TAG, "onCreate: setOnApplyWindowInsetsListener")
+              /*      arrangeViewsForEdgeToEdge(
+                        v, insets
+                    )*/
+                    isInsetApplied = true
+                }
+                insets
+            }
+        } else {
+            //arrangeView()
+        }
         setSnackBarObserver()
     }
 
@@ -54,12 +82,12 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
     }
 
     private fun shouldApplyEdgeToEdge() {
-        val pref = WindowPrefManager.newInstance(this)
-        pref.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
+        windowPrefManager = WindowPrefManager.newInstance(this)
+        windowPrefManager?.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
     }
 
     private fun setSnackBarObserver() {
-        mViewModel.getMessage().observe(this, Observer {
+        mViewModel.getMessage().observe(this, {
             it.getContentIfNotHandled()?.let { snackbar ->
                 showSnackBar(snackbar)
             }
@@ -112,6 +140,11 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> :
         } else {
             window.statusBarColor = resources.getColor(com.pramod.dailyword.R.color.black)
         }
+    }
+
+
+    companion object {
+        val TAG = BaseActivity::class.java.simpleName
     }
 
 }

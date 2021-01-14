@@ -16,6 +16,7 @@ import com.pramod.dailyword.helper.PronounceHelper
 import com.pramod.dailyword.ui.BaseViewModel
 import com.pramod.dailyword.util.CommonUtils
 import com.pramod.dailyword.util.Event
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(application: Application) : BaseViewModel(application) {
@@ -41,11 +42,14 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     var firstNotificationShown = false
 
+
     init {
-        wordOfTheDayLoading.value = Event.init(true)
         wordResourceLiveData = Transformations.switchMap(refreshDataSourceLiveData) {
-            return@switchMap it.getContentIfNotHandled()?.let {
-                wordOfTheDayRepo.getWords()
+            return@switchMap it.getContentIfNotHandled()?.let { refresh ->
+                if (refresh) {
+                    return@switchMap wordOfTheDayRepo.getWords()
+                }
+                return@switchMap null
             }
         }
         wordOfTheDayLiveData = Transformations.map(wordResourceLiveData) {
@@ -64,7 +68,6 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
             }
             return@map if (it.data != null && it.data.isNotEmpty()) it.data[0] else null
         }
-
         wordsExceptTodayLiveData = Transformations.map(wordResourceLiveData) {
             val list = it.data?.toMutableList()
             if (list != null && list.isNotEmpty()) {
@@ -78,6 +81,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
 
         wordOfTheDayRepo.initRemindWordOfTheDay()
         newWordReminderWorkerLiveData = wordOfTheDayRepo.getRemindWordOfTheDay()*/
+
+        refreshDataSource()
     }
 
     fun refreshDataSource() {

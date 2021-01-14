@@ -41,9 +41,9 @@ class PrefManager(context: Context) {
     fun getAppLaunchCount(): Int = sPref.getInt(APP_LAUNCH_COUNT, 1)
 
     //setting def value 1 because if appcount is not set this value must be greater than 0 else this will return true for 1st launch
-    //for every 7 launch show rating dialog
+    //for every 30 launch show rating dialog
     fun shouldShowRateNowDialog(): Boolean =
-        getAppLaunchCount() % 7 == 0 && isUserEverClickedOnNeverOrRateNow()
+        getAppLaunchCount() % 30 == 0 && isUserEverClickedOnNeverOrRateNow()
 
 
     fun setUserClickedNever() {
