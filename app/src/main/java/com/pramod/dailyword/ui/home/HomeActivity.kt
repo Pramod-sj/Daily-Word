@@ -238,7 +238,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 mBinding.mainRecyclerviewPastWords.scrollToPosition(0)
             }
         })
-        mViewModel.refreshDataSource()
     }
 
     private fun intentToWordDetail(activity: Activity, view: View? = null, word: WordOfTheDay) {
