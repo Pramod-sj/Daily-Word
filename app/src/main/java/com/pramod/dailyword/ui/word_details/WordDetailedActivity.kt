@@ -3,22 +3,15 @@ package com.pramod.dailyword.ui.word_details
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import com.pramod.dailyword.BR
 import android.os.Bundle
 import android.os.Handler
 import android.transition.ArcMotion
-import android.transition.Fade
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
@@ -26,16 +19,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.gson.Gson
-import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
+import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
+import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.*
-import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
-import kotlinx.android.synthetic.main.activity_word_list.*
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -104,6 +95,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun setUpWordOfTheDay() {
         setUpExampleRecyclerView()
         setUpDefinationRecyclerView()
+        setUpThesaurusAdapter()
         mViewModel.wordOfTheDayLiveData.observe(this, {
             if (it != null) {
                 Log.i("WORD OF THE DAY", Gson().toJson(it))
@@ -138,6 +130,23 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                 }
             }
         })
+    }
+
+    private fun setUpThesaurusAdapter() {
+        val synonymsAdapter = ThesaurusAdapter {
+
+        }
+        mBinding.recyclerViewWordDetailsSynonyms.adapter = synonymsAdapter
+
+        val antonymsAdapter = ThesaurusAdapter {
+
+        }
+        mBinding.recyclerViewWordDetailsAntonyms.adapter = antonymsAdapter
+
+        mViewModel.wordOfTheDayLiveData.observe(this) {
+            synonymsAdapter.submitList(it.synonyms)
+            antonymsAdapter.submitList(it.antonyms)
+        }
     }
 
     private fun setNavigateMW() {

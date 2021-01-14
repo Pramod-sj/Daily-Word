@@ -70,6 +70,14 @@ class WordOfTheDay : Serializable {
 
     var bookmarkedAt: Long = 0
 
+    @SerializedName("SYNONYMS")
+    @ColumnInfo(name = "synonyms")
+    var synonyms: List<String>? = null
+
+    @SerializedName("ANTONYMS")
+    @ColumnInfo(name = "antonyms")
+    var antonyms: List<String>? = null
+
     constructor(date: String?) {
         this.date = date
     }
@@ -96,6 +104,8 @@ class WordOfTheDay : Serializable {
         if (didYouKnow != other.didYouKnow) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
         if (bookmarkedAt != other.bookmarkedAt) return false
+        if (antonyms != other.antonyms) return false
+        if (synonyms != other.antonyms) return false
 
         return true
     }

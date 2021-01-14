@@ -105,7 +105,8 @@
     <string name="notification">Notification</string>
     <string name="personalize">Personalize</string>
     <string name="words_till_date">Words till date</string>
-    <string name="synonyms">Synonyms</string>
-    <string name="antonyms">Antonyms</string>
+    <string name="synonyms">Synonyms (Similar Words)</string>
+    <string name="antonyms">Antonyms (Opposite Words)</string>
+    <string name="thesaurus">Thesaurus</string>
 
 </resources>

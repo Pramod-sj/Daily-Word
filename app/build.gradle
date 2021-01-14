@@ -20,9 +20,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
     }
 
@@ -74,7 +78,7 @@ dependencies {
 
     //preference library
     implementation 'androidx.preference:preference-ktx:1.1.1'
-    
+
     //data binding
     kapt "com.android.databinding:compiler:3.6.1"
 
