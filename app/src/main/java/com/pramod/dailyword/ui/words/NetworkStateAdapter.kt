@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.paging.LoadState
-import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemNetworkStateLayoutBinding

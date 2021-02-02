@@ -11,8 +11,8 @@ import com.pramod.dailyword.ui.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-const val LOCAL_PAGE_SIZE = 40
-const val NETWORK_PAGE_SIZE = 40
+const val LOCAL_PAGE_SIZE = 10
+const val NETWORK_PAGE_SIZE = 10
 
 class WordListViewModel(application: Application) : BaseViewModel(application) {
 
@@ -38,6 +38,7 @@ class WordListViewModel(application: Application) : BaseViewModel(application) {
         words = resultResource.pagedList
         networkState = resultResource.networkState
         refreshState = resultResource.refreshState
+        retry()
     }
 
     fun refresh() {

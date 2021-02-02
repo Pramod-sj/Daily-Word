@@ -64,6 +64,7 @@
                     android:onClick="@{()->appSettingViewModel.toggleWindowAnimation()}"
                     app:checked="@{appSettingViewModel.windowAnimationPrefManager.liveData()}"
                     app:icon="@drawable/ic_animation_outline"
+                    android:visibility="gone"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
                     app:showRadioButton="true"

@@ -33,16 +33,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     companion object {
 
-
-        fun openActivity(context: Context, showRandomWord: Boolean) {
-            val intent = Intent(context, WordDetailedActivity::class.java)
-            val bundle = Bundle()
-            bundle.putBoolean("SHOW_RANDOM_WORD", showRandomWord)
-            intent.putExtras(bundle)
-            context.startActivity(intent)
-        }
-
-        fun openActivity(context: Context, wordDate: String, option: ActivityOptions?) {
+        fun openActivity(context: Context, wordDate: String?, option: ActivityOptions?) {
             val intent = Intent(context, WordDetailedActivity::class.java)
             val bundle = Bundle()
             bundle.putSerializable("WORD_DATE", wordDate)
@@ -78,13 +69,11 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun getViewModel(): WordDetailedViewModel {
         val word = intent.extras?.getSerializable("WORD") as WordOfTheDay?
         val wordDate = intent.extras?.getString("WORD_DATE")
-        val showRandomWord = intent.extras?.getBoolean("SHOW_RANDOM_WORD") ?: false
         return ViewModelProviders.of(
             this,
             WordDetailedViewModel.Factory(
                 application,
-                wordDate,
-                showRandomWord
+                wordDate
             )
         ).get(WordDetailedViewModel::class.java)
     }
@@ -103,6 +92,18 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         setUpWordOfTheDay()
         mViewModel.loadingLiveData.observe(this) {
             Log.i(TAG, "loading word of the day: $it")
+        }
+        handleRippleAnimationForAudioEffect()
+    }
+
+    private fun handleRippleAnimationForAudioEffect() {
+        mViewModel.isAudioPronouncing.observe(this) {
+            if (it) {
+                mBinding.rippleEffectAudio.startPulse()
+            } else {
+                mBinding.rippleEffectAudio.stopPulse()
+            }
+
         }
     }
 
@@ -166,8 +167,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         mBinding.recyclerViewWordDetailsAntonyms.adapter = antonymsAdapter
 
         mViewModel.wordOfTheDayLiveData.observe(this) {
-            synonymsAdapter.submitList(it.synonyms)
-            antonymsAdapter.submitList(it.antonyms)
+            synonymsAdapter.submitList(it?.synonyms)
+            antonymsAdapter.submitList(it?.antonyms)
         }
     }
 
@@ -187,25 +188,25 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
         val enterTransition = MaterialContainerTransform().apply {
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
             setAllContainerColors(
                 MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
             )
             addTarget(android.R.id.content)
-            excludeTarget(android.R.id.statusBarBackground, true)
-            excludeTarget(android.R.id.navigationBarBackground, true)
             duration = 300
             pathMotion = ArcMotion()
             interpolator = FastOutSlowInInterpolator()
         }
 
         val returnTransition = MaterialContainerTransform().apply {
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
             setAllContainerColors(
                 MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
             )
             addTarget(android.R.id.content)
-            excludeTarget(android.R.id.statusBarBackground, true)
-            excludeTarget(android.R.id.navigationBarBackground, true)
-            duration = 260
+            duration = 200
             pathMotion = ArcMotion()
             interpolator = FastOutSlowInInterpolator()
         }

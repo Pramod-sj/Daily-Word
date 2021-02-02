@@ -1,10 +1,10 @@
 package com.pramod.dailyword.db.repository
 
 import android.util.Log
-import androidx.paging.ExperimentalPagingApi
+/*import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
+import androidx.paging.RemoteMediator*/
 import androidx.room.withTransaction
 import com.google.gson.Gson
 import com.pramod.dailyword.db.Resource
@@ -17,12 +17,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+/*
 
 @ExperimentalPagingApi
 class WordPaginationRemoteMediator(
     private val wordRepository: WOTDRepository
-) :
-    RemoteMediator<Int, WordOfTheDay>() {
+) : RemoteMediator<Int, WordOfTheDay>() {
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, WordOfTheDay>
@@ -111,4 +111,4 @@ class WordPaginationRemoteMediator(
     }
 
 
-}
+}*/

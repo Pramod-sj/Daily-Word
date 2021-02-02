@@ -111,11 +111,18 @@
     <string name="thesaurus">Thesaurus</string>
 
     <string name="card_transition_name">container</string>
-    <string name="previous_words">Previous Words</string>
+    <string name="previous_words">Words</string>
     <string name="random_word">Random word</string>
     <string name="weekly_recap_note">Revise your word knowledge, these list include words of this week (Mon-Sun).</string>
     <string name="value_continue">Continue</string>
-    <string name="support_development">Hello My Dear User, \nThis project is solely handled by me along with my other works, thus adding new features takes weeks or a month. \nThis app is completely free, donating a small amount will encourage me, to keep this project alive.</string>
+    <string name="support_development">Hello My Dear User, \nThis project is solely handled by me along with my other works thus adding new features takes weeks or months. \nThis app is completely free, donating a small amount will encourage me to keep this project alive.</string>
     <string name="regards">Regards,</string>
     <string name="developer_string">Developer</string>
+
+    <string name="no_favorite_title_placeholder">Nothing bookmarked yet!</string>
+    <string name="no_favorite_text_placeholder">Hey it looks like you don\'t have any bookmarks yet</string>
+
+
+    <string name="no_recap_title_placeholder">No words for quick recap!</string>
+    <string name="no_recap_text_placeholder">There are no words to show for this week!</string>
 </resources>

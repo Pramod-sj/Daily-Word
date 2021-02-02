@@ -10,7 +10,7 @@ object WordDiffCallback : DiffUtil.ItemCallback<WordOfTheDay>() {
         oldItem: WordOfTheDay,
         newItem: WordOfTheDay
     ): Boolean {
-        return oldItem.word == newItem.word
+        return oldItem.date == newItem.date
     }
 
     override fun areContentsTheSame(

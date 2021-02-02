@@ -60,8 +60,8 @@
         <include
             layout="@layout/list_placeholder_layout"
             app:placeHolderImage="@{@drawable/ic_round_bookmarks_24}"
-            app:placeHolderText="@{`Hey its look like you don't have any bookmarks yet`}"
-            app:placeHolderTitle="@{`Nothing bookmarked yet!`}"
+            app:placeHolderText="@{@string/no_favorite_text_placeholder}"
+            app:placeHolderTitle="@{@string/no_favorite_title_placeholder}"
             app:show="@{favoriteWordsViewModel.showPlaceHolderLiveData}" />
 
 

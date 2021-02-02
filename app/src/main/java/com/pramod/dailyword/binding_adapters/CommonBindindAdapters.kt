@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.ClipboardManager
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.util.Log
@@ -25,6 +24,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.helper.RightDrawableOnTouchListener
 import com.pramod.dailyword.util.CommonUtils
 
+
 object CommonBindindAdapters {
     @JvmStatic
     @BindingAdapter("loadDrawable")
@@ -40,7 +40,7 @@ object CommonBindindAdapters {
 
     @JvmStatic
     @BindingAdapter("switchingText")
-    fun switchingText(textView: TextView, text: String?) {
+    fun switchingText(textView: TextView, text: SpannableString?) {
         text?.let {
             if (textView.text == text) {
                 textView.text = text
@@ -52,7 +52,7 @@ object CommonBindindAdapters {
             anim.repeatMode = Animation.REVERSE
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationRepeat(animation: Animation?) {
-                    Log.i("TEXT", it)
+                    //Log.i("TEXT", it)
                     textView.text = it
                 }
 
@@ -216,6 +216,21 @@ object CommonBindindAdapters {
 
     interface OnTextDrawableClickListener {
         fun onRightDrawableClick()
+    }
+
+
+    @BindingAdapter("app:textSwitcherSwitchText")
+    fun switchText(switcher: TextSwitcher, text: SpannableString?) {
+        if (text == null) return
+        val tag = switcher.getTag(R.id.animText_tag) as String?
+        if (tag == null || !equals(tag, text)) {
+            switcher.setText(text)
+            switcher.setTag(R.id.animText_tag, tag)
+        }
+    }
+
+    fun equals(a: Any?, b: Any?): Boolean {
+        return if (a == null) b == null else a == b
     }
 }
 

@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.text.SpannableString
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
@@ -20,7 +22,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.appupdate.AppUpdateInfo
-import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -32,13 +33,14 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.firebase.FBMessageService
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
-import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
+import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.ui.recapwords.RecapWordsActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
+import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -92,12 +94,23 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         //showDummyLotttieDialog()
         showNativeAdDialogWithDelay()
         handleShowingCreditAndAutoStartDialog()
+        handleRippleAnimationForAudioEffect()
     }
-
 
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+    }
+
+    private fun handleRippleAnimationForAudioEffect() {
+        mViewModel.isAudioPronouncing.observe(this) {
+            if (it) {
+                mBinding.rippleEffectAudio.startPulse()
+            } else {
+                mBinding.rippleEffectAudio.stopPulse()
+            }
+
+        }
     }
 
     private fun setUpViewCallbacks() {
@@ -127,7 +140,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             }
 
             override fun gotoRandomWord(v: View?) {
-                WordDetailedActivity.openActivity(this@HomeActivity, true)
+                intentToWordDetail(this@HomeActivity, null, null)
             }
 
         })
@@ -169,6 +182,10 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     private fun initToolbar() {
         setSupportActionBar(mBinding.toolbar)
         supportActionBar?.let { title = null }
+        mViewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
+        Handler(Looper.getMainLooper()).postDelayed({
+            mViewModel.setTitle(CommonUtils.getFancyAppName(this))
+        }, 2000)
     }
 
     private fun initExitTransition() {
@@ -240,7 +257,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         })
     }
 
-    private fun intentToWordDetail(activity: Activity, view: View? = null, word: WordOfTheDay) {
+    private fun intentToWordDetail(activity: Activity, view: View? = null, word: WordOfTheDay?) {
         val option = view?.let {
             ActivityOptions.makeSceneTransitionAnimation(
                 activity,
@@ -248,7 +265,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 resources.getString(R.string.card_transition_name)
             )
         }
-        WordDetailedActivity.openActivity(this, word.date!!, option)
+        WordDetailedActivity.openActivity(this, word?.let { it.date!! }, option)
     }
 
     private fun edgeToEdgeSettingChanged() {
@@ -309,7 +326,8 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
    */
     private fun shouldShowRatingDialog() {
         if (PrefManager.getInstance(this)
-                .shouldShowRateNowDialog()) {
+                .shouldShowRateNowDialog()
+        ) {
 
             val manager = ReviewManagerFactory.create(this)
             val request = manager.requestReviewFlow()

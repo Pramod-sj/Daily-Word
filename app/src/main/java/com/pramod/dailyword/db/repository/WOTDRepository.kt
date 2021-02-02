@@ -2,8 +2,12 @@ package com.pramod.dailyword.db.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
-import androidx.paging.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.asLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.google.gson.Gson
 import com.pramod.dailyword.db.NetworkBoundResource
 import com.pramod.dailyword.db.Resource
@@ -12,7 +16,10 @@ import com.pramod.dailyword.db.model.ApiResponse
 import com.pramod.dailyword.db.model.Listing
 import com.pramod.dailyword.db.model.NetworkState
 import com.pramod.dailyword.db.model.WordOfTheDay
-import com.pramod.dailyword.db.remote.*
+import com.pramod.dailyword.db.remote.WOTDApiService
+import com.pramod.dailyword.db.remote.handleApiFailure
+import com.pramod.dailyword.db.remote.handleApiSuccess
+import com.pramod.dailyword.db.remote.handleNetworkException
 import com.pramod.dailyword.ui.words.LOCAL_PAGE_SIZE
 import com.pramod.dailyword.ui.words.NETWORK_PAGE_SIZE
 import com.pramod.dailyword.util.CalenderUtil
@@ -100,12 +107,20 @@ class WOTDRepository(private val context: Context) {
 
                 }
                 Log.i(TAG, "loadLocalData: ${calendarList.size}")
-                //item in this list will be sun(21-may)->sat(20-may)->friday(19-may)->thus(18-may) sequence
-                val calendarsTillSunday = arrayListOf<Long>()
+                //item in this list will be sun(21-may)->sat(20-may)->friday(19-may)->thus(18-may) till mon
+                val calendarsTillMonday = arrayListOf<Long>()
 
                 for ((index, cal) in calendarList.withIndex()) {
+                    if (CalenderUtil.getDayNameBasedOnDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)) ==
+                        CalenderUtil.DAYS[0]
+                    ) {
+                        //if the first item was sunday than don't break and iterate for all items
+                        if (index != 0) {
+                            break
+                        }
+                    }
 
-                    calendarsTillSunday.add(cal.timeInMillis)
+                    calendarsTillMonday.add(cal.timeInMillis)
                     Log.i(
                         TAG,
                         "loadLocalData: ${
@@ -120,29 +135,25 @@ class WOTDRepository(private val context: Context) {
                         }"
                     )
 
-                    if (CalenderUtil.getDayNameBasedOnDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)) ==
-                        CalenderUtil.DAYS[1]
-                    ) {
-                        //if the first item was sunday than don't break and iterate for all items
-                        if (index != 0) {
-                            break
-                        }
-                    }
                 }
 
                 Log.i(
                     TAG,
                     "loadLocalData: ${
                         CalenderUtil.convertCalenderToString(
-                            calendarsTillSunday.last(),
+                            calendarsTillMonday.last(),
                             CalenderUtil.DATE_TIME_FORMAT
                         )
                     }"
                 )
 
-                Log.i(TAG, "loadLocalData: last ${calendarsTillSunday.last()}")
+                Log.i(TAG, "loadLocalData: last ${calendarsTillMonday.last()}")
                 return localDb.getWordOfTheDayDao()
-                    .getFewTillAsFlow(calendarsTillSunday.last(), count)
+                    .getFewTillAsFlow(
+                        fromDate = calendarsTillMonday.first(),
+                        tillDate = calendarsTillMonday.last(),
+                        count = count
+                    )
             }
 
             override fun shouldFetchFromNetwork(data: List<WordOfTheDay>?): Boolean = true
@@ -158,7 +169,7 @@ class WOTDRepository(private val context: Context) {
         }.asFlow().asLiveData(Dispatchers.IO)
     }
 
-    fun getWord(date: String, forceRefresh: Boolean =false): LiveData<Resource<WordOfTheDay?>> {
+    fun getWord(date: String, forceRefresh: Boolean = false): LiveData<Resource<WordOfTheDay?>> {
         return object : NetworkBoundResource<List<WordOfTheDay>, WordOfTheDay>() {
 
             override suspend fun fetchFromCache(): Flow<WordOfTheDay?> =
@@ -293,7 +304,8 @@ class WOTDRepository(private val context: Context) {
             .setEnablePlaceholders(false)
             .build()
         val boundaryCallback = WordBoundaryCallback(
-            this, Executors.newSingleThreadExecutor()
+            this,
+            Executors.newSingleThreadExecutor()
         )
 
         val refreshTrigger = MutableLiveData<Unit>()
@@ -303,7 +315,8 @@ class WOTDRepository(private val context: Context) {
         }
 
         val livePagedList = LivePagedListBuilder(
-            localDb.getWordOfTheDayDao().dataSourceWords(), pagedListConfig
+            localDb.getWordOfTheDayDao().dataSourceWords(),
+            pagedListConfig
         ).setBoundaryCallback(boundaryCallback).build()
         return Listing(
             pagedList = livePagedList,

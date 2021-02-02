@@ -1,5 +1,6 @@
 package com.pramod.dailyword.ui.home
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -74,6 +75,14 @@ class PastWordAdapter(
                     newItem: WordOfTheDay
                 ): Boolean {
                     return oldItem == newItem
+                }
+
+                override fun getChangePayload(oldItem: WordOfTheDay, newItem: WordOfTheDay): Any? {
+                    val bundle = Bundle()
+                    bundle.putSerializable("DATE",newItem.date)
+                    bundle.putSerializable("dateTimeInMillis",newItem.dateTimeInMillis)
+                    bundle.putSerializable("WORD",newItem.word)
+                    return bundle
                 }
 
             }

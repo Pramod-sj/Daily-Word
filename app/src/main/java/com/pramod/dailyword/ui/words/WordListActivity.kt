@@ -13,10 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.whenResumed
-import androidx.paging.ExperimentalPagingApi
+//import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.ConcatAdapter
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
@@ -66,7 +65,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
     @ExperimentalCoroutinesApi
-    @ExperimentalPagingApi
     override fun onCreate(savedInstanceState: Bundle?) {
         lightStatusBar()
         initExitTransition()
@@ -98,7 +96,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     private var networkStateAdapter: NetworkStateAdapter? = null
 
     @ExperimentalCoroutinesApi
-    @ExperimentalPagingApi
     private fun initAdapter() {
 
         val concatAdapter = ConcatAdapter()
@@ -111,7 +108,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 view!!,
                 resources.getString(R.string.card_transition_name)
             )
-            WordDetailedActivity.openActivity(this, wordOfTheDay.date!!, option)
+            WordDetailedActivity.openActivity(this, wordOfTheDay.date, option)
         }
         concatAdapter.addAdapter(adapter!!)
         mViewModel.networkState.observe(this, Observer {

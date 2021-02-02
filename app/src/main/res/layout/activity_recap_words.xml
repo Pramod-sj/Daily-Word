@@ -32,7 +32,16 @@
             app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.edgeToEdgeEnabled}"
             app:applyTopBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:isVisible="@{recapWordsViewModel.words.size()>0}"
             app:spanCount="2" />
+
+
+        <include
+            layout="@layout/list_placeholder_layout"
+            app:placeHolderImage="@{@drawable/ic_recap}"
+            app:placeHolderText="@{@string/no_recap_text_placeholder}"
+            app:placeHolderTitle="@{@string/no_recap_title_placeholder}"
+            app:show="@{recapWordsViewModel.words.size()==0}" />
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -93,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/padding_medium"
-                android:drawablePadding="@dimen/margin_medium"
+                android:drawablePadding="35dp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_large"
                 android:text="@string/weekly_recap_note"

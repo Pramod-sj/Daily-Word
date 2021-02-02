@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.pramod.dailyword.R
 import java.io.Serializable
@@ -95,17 +96,17 @@ class WordOfTheDay : Serializable {
         if (word != other.word) return false
         if (pronounce != other.pronounce) return false
         if (pronounceAudio != other.pronounceAudio) return false
-        if (meanings != other.meanings) return false
+        if (Gson().toJson(meanings) != Gson().toJson(other.meanings)) return false
         if (attribute != other.attribute) return false
-        if (examples != other.examples) return false
+        if (Gson().toJson(examples) != Gson().toJson(other.examples)) return false
         if (date != other.date) return false
         if (dateTimeInMillis != other.dateTimeInMillis) return false
         if (isSeen != other.isSeen) return false
-        if (didYouKnow != other.didYouKnow) return false
+        if (Gson().toJson(didYouKnow) != Gson().toJson(other.didYouKnow)) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
         if (bookmarkedAt != other.bookmarkedAt) return false
-        if (antonyms != other.antonyms) return false
-        if (synonyms != other.antonyms) return false
+        if (Gson().toJson(antonyms) != Gson().toJson(other.antonyms)) return false
+        if (Gson().toJson(synonyms) != Gson().toJson(other.synonyms)) return false
 
         return true
     }

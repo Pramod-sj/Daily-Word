@@ -86,7 +86,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
                 view!!,
                 resources.getString(R.string.card_transition_name)
             )
-            WordDetailedActivity.openActivity(this, wordOfTheDay.date!!, option)
+            WordDetailedActivity.openActivity(this, wordOfTheDay, option)
         }
         mViewModel.getBookmarkedWords().observe(this, {
             mViewModel.showPlaceHolderLiveData.value = it.size == 0

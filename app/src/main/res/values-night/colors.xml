@@ -16,6 +16,8 @@
 
 
     <color name="app_icon_tint">@color/grey_extra_light</color>
+    <color name="ripple_tint">#904C4B4B</color>
+
 
 
     <!--Text Colors-->

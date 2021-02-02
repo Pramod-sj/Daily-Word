@@ -5,7 +5,7 @@ import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.pramod.dailyword.helper.edgetoedge.doOnApplyWindowInsets
-import kotlinx.android.synthetic.main.activity_word_list.*
+import com.pramod.dailyword.util.CommonUtils
 
 class SwipeToRefreshBA {
     companion object {
@@ -26,7 +26,9 @@ class SwipeToRefreshBA {
                 override fun onGlobalLayout() {
                     appBarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                    val appBarHeight = appBarLayout.height
+                    val appBarHeight =
+                        CommonUtils.pixelToDp(appBarLayout.context, appBarLayout.height.toFloat())
+                            .toInt()
 
                     if (applyTopPaddingInset) {
                         swipeRefreshLayout.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
@@ -46,6 +48,17 @@ class SwipeToRefreshBA {
             })
 
 
+        }
+
+        @JvmStatic
+        @BindingAdapter("app:showSwipeToRefreshProgress")
+        fun showProgress(
+            swipeRefreshLayout: SwipeRefreshLayout,
+            showSwipeToRefreshProgress: Boolean
+        ) {
+            swipeRefreshLayout.post {
+                swipeRefreshLayout.isRefreshing = showSwipeToRefreshProgress
+            }
         }
     }
 }

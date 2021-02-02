@@ -30,6 +30,9 @@
         <variable
             name="viewCallbacks"
             type="com.pramod.dailyword.ui.home.ViewCallbacks" />
+
+        <import type="android.graphics.Color" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -52,23 +55,23 @@
 
         <ImageView
             android:id="@+id/home_imageView_buildings"
-            app:applyBottomPaddingInset="@{mainViewModel.edgeToEdgeEnabled}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/buildings"
-            app:alpha="@{(ThemeManager.isNightModeActive(context))?0.5f:1}" />
+            app:alpha="@{(ThemeManager.isNightModeActive(context))?0.5f:1}"
+            app:applyBottomPaddingInset="@{mainViewModel.edgeToEdgeEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:applyTopPaddingInset="@{mainViewModel.edgeToEdgeEnabled}"
             android:layout_marginBottom="@dimen/padding_medium"
             android:alpha="0.9"
             android:background="@android:color/transparent"
             android:clipChildren="false"
             android:clipToPadding="false"
+            app:applyTopPaddingInset="@{mainViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScroll">
 
@@ -76,6 +79,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin">
@@ -83,43 +87,28 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/margin_large"
-                    android:paddingVertical="@dimen/padding_medium">
+                    android:paddingHorizontal="@dimen/margin_large">
 
                     <ImageView
                         android:id="@+id/home_app_icon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/margin_small"
                         android:src="@drawable/ic_vocabulary_24dp"
                         android:tint="@color/app_icon_tint" />
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        style="@style/AppTheme.Header5TextStyle.Bold"
+                        switchingText="@{mainViewModel.title()}"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@id/home_app_icon"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="@dimen/margin_medium"
-                        android:paddingBottom="@dimen/padding_small">
+                        android:paddingHorizontal="@dimen/margin_medium" />
 
-                        <TextView
-                            android:id="@+id/toolbar_title"
-                            style="@style/AppTheme.Header5TextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hi, There!" />
-
-                        <TextView
-                            style="@style/AppTheme.TitleTextStyle"
-                            switchingText="@{mainViewModel.title()}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true" />
-
-                    </LinearLayout>
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
 
@@ -132,7 +121,7 @@
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             app:onRefreshListener="@{()->mainViewModel.refreshDataSource()}"
-            app:refreshing="@{mainViewModel.wordResourceLiveData.status==Status.LOADING}">
+            app:refreshing="@{mainViewModel.showLoading}">
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nestedScroll"
@@ -345,17 +334,30 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
 
-                            <ImageButton
-                                android:id="@+id/main_card_view_pronounce"
+                            <com.kuassivi.component.RipplePulseRelativeLayout
+                                android:id="@+id/rippleEffect_audio"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/padding_medium"
-                                android:background="?actionBarItemBackground"
-                                android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
-                                android:padding="@dimen/padding_medium"
-                                android:src="@drawable/ic_volume_up_black_24dp"
-                                android:tint="@color/app_icon_tint" />
+                                android:clipChildren="false"
+                                app:pulse_layout_PulseDuration="800"
+                                app:pulse_layout_PulseInterpolator="@android:interpolator/accelerate_decelerate"
+                                app:pulse_layout_PulseType="fill"
+                                app:pulse_layout_RippleColor="@color/ripple_tint"
+                                app:pulse_layout_RippleStartRadiusPercent="50">
 
+                                <ImageButton
+                                    android:id="@+id/main_card_view_pronounce"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:background="@android:color/transparent"
+                                    android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
+                                    android:padding="@dimen/padding_medium"
+                                    android:src="@drawable/ic_volume_up_black_24dp"
+                                    android:tint="@color/app_icon_tint" />
+
+
+                            </com.kuassivi.component.RipplePulseRelativeLayout>
                         </LinearLayout>
 
                         <TextView
