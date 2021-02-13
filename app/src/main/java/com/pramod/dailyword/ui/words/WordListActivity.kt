@@ -1,37 +1,29 @@
 package com.pramod.dailyword.ui.words
 
+//import androidx.paging.ExperimentalPagingApi
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.whenResumed
-//import androidx.paging.ExperimentalPagingApi
-import androidx.recyclerview.widget.ConcatAdapter
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordListBinding
-import com.pramod.dailyword.db.model.Status
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.AdsManager
-import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
-import com.pramod.dailyword.util.CommonUtils
 import kotlinx.android.synthetic.main.activity_word_list.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel>() {
 
@@ -64,14 +56,16 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         return BR.wordListViewModel
     }
 
+    @ExperimentalPagingApi
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         lightStatusBar()
         initExitTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
+        initAdapter()
+        setupSwipeToRefresh()
         findViewById<View>(android.R.id.content).postDelayed({
-            initAdapter()
             showNativeAdDialogWithDelay()
         }, 150)
 
@@ -92,15 +86,15 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     }
 
 
-    private var adapter: WordListAdapter? = null
-    private var networkStateAdapter: NetworkStateAdapter? = null
+    private var adapter: WordsAdapter? = null
 
+    @ExperimentalPagingApi
     @ExperimentalCoroutinesApi
     private fun initAdapter() {
 
-        val concatAdapter = ConcatAdapter()
+        //val concatAdapter = ConcatAdapter()
 
-        adapter = WordListAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
+        adapter = WordsAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
             Log.i(TAG, "initAdapter: ")
             val view = recyclerview_words.layoutManager!!.findViewByPosition(i)
             val option = ActivityOptions.makeSceneTransitionAnimation(
@@ -109,29 +103,32 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 resources.getString(R.string.card_transition_name)
             )
             WordDetailedActivity.openActivity(this, wordOfTheDay.date, option)
+        }.apply {
+            withLoadStateFooter(NetworkStateAdapter {
+                adapter?.retry()
+            })
         }
-        concatAdapter.addAdapter(adapter!!)
-        mViewModel.networkState.observe(this, Observer {
-            Log.i("NETWORK STATE", Gson().toJson(it))
-            networkStateAdapter?.let { adapter ->
-                concatAdapter.removeAdapter(adapter)
-            }
-            if (it.status != Status.SUCCESS) {
-                networkStateAdapter = NetworkStateAdapter(it) {
-                    mViewModel.retry()
-                }.also { adapter ->
-                    concatAdapter.addAdapter(adapter)
-                }
-            }
-        })
 
-        mViewModel.words.observe(this, Observer {
-            adapter?.submitList(it)
-        })
+        recyclerview_words.adapter = adapter
 
-        recyclerview_words.adapter = concatAdapter
+        //concatAdapter.addAdapter(adapter!!)
+
+        lifecycleScope.launchWhenCreated {
+            mViewModel.wordUIModelList.collectLatest {
+                adapter?.submitData(it)
+            }
+        }
+
     }
 
+    private fun setupSwipeToRefresh() {
+        mBinding.swipeToRefresh.setOnRefreshListener {
+            adapter?.refresh()
+        }
+        adapter?.addLoadStateListener {
+            mBinding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
+        }
+    }
     /*private fun initTransition() {
         window.sharedElementsUseOverlay = true
         window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)

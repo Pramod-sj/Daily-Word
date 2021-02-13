@@ -40,7 +40,7 @@ import com.pramod.dailyword.ui.recapwords.RecapWordsActivity
 import com.pramod.dailyword.ui.settings.AppSettingActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
 import com.pramod.dailyword.ui.words.WordListActivity
-import com.pramod.dailyword.util.CommonUtils
+import com.pramod.dailyword.util.*
 import kotlinx.android.synthetic.main.activity_word_list.*
 import java.util.*
 
@@ -82,6 +82,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         initExitTransition()
         super.onCreate(savedInstanceState)
+        //addGradientToAppIcon()
         setUpViewCallbacks()
         deepLinkNotification()
         showChangelogActivity()
@@ -90,9 +91,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         initBottomSheetMenu()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
-        //edgeToEdgeSettingChanged()
         //showDummyLotttieDialog()
-        showNativeAdDialogWithDelay()
         handleShowingCreditAndAutoStartDialog()
         handleRippleAnimationForAudioEffect()
     }
@@ -100,6 +99,28 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+    }
+
+
+    private fun addGradientToAppIcon() {
+        try {
+            mBinding.homeAppIcon.setImageBitmap(
+                GradientUtils.addGradient(
+                    CommonUtils.drawableToBitmap(
+                        getContextCompatDrawable(
+                            R.drawable.ic_vocabulary
+                        )!!
+                    )!!,
+                    getContextCompatColor(R.color.colorPrimaryDark),
+                    getContextCompatColor(R.color.colorPrimary)
+                )
+            )
+        } catch (e: Exception) {
+            //if exception occur fallback to normal icon
+            mBinding.homeAppIcon.setImageResource(R.drawable.ic_vocabulary)
+            mBinding.homeAppIcon.imageTintList =
+                ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
+        }
     }
 
     private fun handleRippleAnimationForAudioEffect() {
@@ -419,12 +440,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         }
     }
 
-    private fun showNativeAdDialogWithDelay() {
-        Handler().postDelayed({
-            AdsManager.incrementCountAndShowNativeAdDialog(this)
-        }, 1000)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         appUpdateHelper?.onActivityResult(requestCode, resultCode, data)
@@ -476,7 +491,9 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
             } else if (it.itemId == R.id.menu_donate) {
                 DonateActivity.openActivity(this)
             } else if (it.itemId == R.id.menu_share) {
-                shareApp()
+                CommonUtils.viewToBitmap(mBinding.coordinatorLayout)?.let { bitmap ->
+                    shareApp(bitmap = bitmap)
+                } ?: shareApp()
             }
             bottomSheetDialog?.dismiss()
             false

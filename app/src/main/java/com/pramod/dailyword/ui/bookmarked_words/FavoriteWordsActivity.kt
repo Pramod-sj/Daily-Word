@@ -4,25 +4,25 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.paging.PagedList
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
-import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.word_details.WordDetailedActivity
-import com.pramod.dailyword.ui.words.WordListAdapter
+import com.pramod.dailyword.ui.words.WordsAdapter
 import kotlinx.android.synthetic.main.activity_word_list.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, FavoriteWordsViewModel>() {
     companion object {
@@ -50,9 +50,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
         initTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
-        findViewById<View>(android.R.id.content).postDelayed({
-            initAdapter()
-        }, 150)
+        initAdapter()
     }
 
     override fun onResume() {
@@ -76,23 +74,39 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
     }
 
 
-    private var adapter: WordListAdapter? = null
+    private var adapter: WordsAdapter? = null
 
     private fun initAdapter() {
-        adapter = WordListAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
+        adapter = WordsAdapter { i: Int, wordOfTheDay: WordOfTheDay ->
             val view = recyclerview_words.layoutManager!!.findViewByPosition(i)
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this,
                 view!!,
                 resources.getString(R.string.card_transition_name)
             )
-            WordDetailedActivity.openActivity(this, wordOfTheDay, option)
+            WordDetailedActivity.openActivity(this, wordOfTheDay.date!!, option)
         }
-        mViewModel.getBookmarkedWords().observe(this, {
-            mViewModel.showPlaceHolderLiveData.value = it.size == 0
-            adapter?.submitList(it)
-        })
-        recyclerview_words.adapter = adapter
+        mBinding.recyclerviewWords.adapter = adapter
+        lifecycleScope.launch(Dispatchers.Main) {
+            mViewModel.getFavWords().collectLatest { pagingData ->
+                Log.i(TAG, "initAdapter: process")
+                adapter?.submitData(lifecycle, pagingData)
+                Log.i(TAG, "initAdapter: done" + adapter?.itemCount)
+            }
+
+            adapter?.loadStateFlow?.map { it.refresh }?.distinctUntilChanged()?.collect {
+                if (it is LoadState.NotLoading) {
+                    mViewModel.showPlaceHolderLiveData.value = adapter?.itemCount ?: 0 == 0
+                }
+            }
+        }
+
+
+        /*   mViewModel.getFavWords().observe(this,
+               {
+                   mViewModel.showPlaceHolderLiveData.value = it.size == 0
+                   adapter?.submitList(it)
+               })*/
     }
 
 }

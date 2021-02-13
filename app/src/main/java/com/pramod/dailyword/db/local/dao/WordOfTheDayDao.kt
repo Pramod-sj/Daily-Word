@@ -2,6 +2,7 @@ package com.pramod.dailyword.db.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
+import androidx.paging.PagingSource
 /*import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource*/
 import androidx.room.*
@@ -41,8 +42,8 @@ interface WordOfTheDayDao {
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord WHERE :tillDate <= dateTimeInMillis AND dateTimeInMillis<=:fromDate ORDER BY dateTimeInMillis DESC LIMIT :count")
     fun getFewTillAsFlow(fromDate: Long,tillDate: Long, count: Int): Flow<List<WordOfTheDay>?>
 
-/*    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
-    fun pagingSourceWords(): PagingSource<Int, WordOfTheDay>*/
+    @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
+    fun pagingSourceWords(): PagingSource<Int, WordOfTheDay>
 
     @Query("SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord ORDER BY dateTimeInMillis DESC")
     fun dataSourceWords(): DataSource.Factory<Int, WordOfTheDay>

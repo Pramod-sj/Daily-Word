@@ -14,10 +14,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/background_widget_small_title"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
             android:drawablePadding="3dp"
             android:ellipsize="end"
-            android:background="@drawable/background_widget_small_title"
             android:gravity="center_vertical"
             android:padding="7dp"
             android:singleLine="true"
@@ -35,11 +35,11 @@
                 android:id="@+id/widget_bookmark"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:visibility="gone"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_bookmark_border_24"
+                android:visibility="gone"
                 app:tint="@color/white" />
 
             <ImageView
@@ -94,7 +94,6 @@
             android:padding="@dimen/padding_medium"
             android:visibility="invisible">
 
-
             <TextView
                 android:id="@+id/widget_txtView_word_of_the_day"
                 style="@style/AppTheme.TitleTextStyle.Bold"
@@ -106,11 +105,59 @@
                 android:textColor="@color/dark_textColor_highEmphasis" />
 
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/widget_txtView_attribute"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attribute"
+                    android:textColor="@color/dark_textColor_highEmphasis"
+                    android:textStyle="italic" />
+
+                <TextView
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:text="@string/unicode_bullet"
+                    android:textColor="@color/dark_textColor_highEmphasis" />
+
+                <TextView
+                    android:id="@+id/widget_txtView_pronounce"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pronounce"
+                    android:textColor="@color/dark_textColor_highEmphasis" />
+
+                <ImageView
+                    android:id="@+id/widget_img_pronounce"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:src="@drawable/ic_volume_up_black_24dp"
+                    android:tint="@color/dark_textColor_highEmphasis" />
+
+            </LinearLayout>
+
+
             <TextView
                 android:id="@+id/widget_txtView_meanings"
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:ellipsize="end"
                 android:text="Meaning"

@@ -146,7 +146,6 @@ class WidgetViewHelper {
         }
 
 
-
         fun createWordOfTheDayWidgetSmall(context: Context, word: WordOfTheDay?): RemoteViews {
             val views =
                 RemoteViews(context.packageName, R.layout.widget_word_layout_small)
@@ -155,7 +154,11 @@ class WidgetViewHelper {
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
 
             if (word != null) {
+
                 views.setTextViewText(R.id.widget_txtView_word_of_the_day, word.word)
+                views.setTextViewText(R.id.widget_txtView_attribute, word.attribute)
+                views.setTextViewText(R.id.widget_txtView_pronounce, word.pronounce)
+
                 if (!word.meanings.isNullOrEmpty()) {
                     views.setTextViewText(R.id.widget_txtView_meanings, word.meanings?.get(0))
                 }
@@ -191,6 +194,27 @@ class WidgetViewHelper {
                 views.setOnClickPendingIntent(R.id.widget_bookmark, pendingIntentBookmark)
                 //end
 
+                //pronounce audio pending intent
+                val playAudioIntent = Intent(context, WordWidgetProvider::class.java)
+                playAudioIntent.action =
+                    WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
+                playAudioIntent.putExtras(
+                    bundleOf(
+                        Pair(
+                            WordWidgetProvider.EXTRA_AUDIO_URL,
+                            word.pronounceAudio
+                        )
+                    )
+                )
+
+                val pendingIntentPlayAudio = PendingIntent.getBroadcast(
+                    context,
+                    Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
+                    playAudioIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                views.setOnClickPendingIntent(R.id.widget_img_pronounce, pendingIntentPlayAudio)
+                //end
 
             } else {
                 views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)
@@ -221,7 +245,11 @@ class WidgetViewHelper {
             return views
         }
 
-        fun createPlaceHolderWidgetSmall(context: Context, resId: Int, message: String): RemoteViews {
+        fun createPlaceHolderWidgetSmall(
+            context: Context,
+            resId: Int,
+            message: String
+        ): RemoteViews {
             val views =
                 RemoteViews(context.packageName, R.layout.widget_word_layout_small)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)

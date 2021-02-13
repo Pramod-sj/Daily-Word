@@ -81,14 +81,14 @@
                             android:background="@drawable/background_about_titles_curve_edge"
                             android:backgroundTint="?colorPrimary"
                             android:padding="@dimen/margin_medium"
-                            android:text="App Info"
+                            android:text="@string/app_info_text"
                             android:textAllCaps="true"
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
                         <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_medium"
                             android:src="@drawable/ic_app_icon" />
@@ -127,6 +127,34 @@
                             app:subTitle="Checkout what's new in this version"
                             app:title="Changelogs"
                             app:titleTextSize="@dimen/text_sub_title" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_min">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:background="@drawable/background_about_titles_curve_edge"
+                            android:backgroundTint="?colorPrimary"
+                            android:padding="@dimen/margin_medium"
+                            android:text="@string/support_development_text"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/windowBackground"
+                            android:textStyle="bold" />
 
                         <com.pramod.dailyword.view.ITSCustomLayout
                             android:layout_width="match_parent"
@@ -167,7 +195,6 @@
                             app:subTitle="Take a moment to rate my app on Google play store"
                             app:title="Rate"
                             app:titleTextSize="@dimen/text_sub_title" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

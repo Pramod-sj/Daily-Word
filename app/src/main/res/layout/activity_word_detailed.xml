@@ -22,7 +22,16 @@
             name="wordDetailedViewModel"
             type="com.pramod.dailyword.ui.word_details.WordDetailedViewModel" />
 
+        <variable
+            name="cardElevation"
+            type="Integer" />
+
         <import type="android.graphics.Color" />
+
+        <variable
+            name="wordColor"
+            type="Integer" />
+
     </data>
 
 
@@ -41,7 +50,6 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
             app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
             app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordDetailedViewModel.edgeToEdgeEnabled}"
             app:onRefreshListener="@{()->wordDetailedViewModel.retry()}"
@@ -61,7 +69,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:orientation="vertical">
@@ -71,9 +78,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
-                        app:cardElevation="@{ThemeManager.isNightModeActive(context)?0f:@dimen/card_elevation}">
+                        app:cardElevation="@dimen/card_elevation_word_details">
 
                         <LinearLayout
+                            android:id="@+id/linearLayout_word_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -86,13 +94,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/margin_large"
                                 android:background="@drawable/background_home_word"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}"
+                                android:backgroundTint="@{CommonUtils.changeAlpha(wordColor,30)}"
                                 android:ellipsize="marquee"
+                                android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDayLiveData.date)}"
                                 android:paddingHorizontal="@dimen/padding_medium"
                                 android:paddingVertical="@dimen/padding_small"
                                 android:singleLine="true"
                                 android:text="@{CalenderUtil.convertDateStringToSpecifiedDateString(wordDetailedViewModel.wordOfTheDayLiveData.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+` - Merriam Webster Word`}"
-                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
+                                android:textColor="@{wordColor}"
                                 android:textStyle="bold"
                                 app:selected="@{true}" />
 
@@ -174,145 +183,67 @@
                                 android:paddingVertical="@dimen/padding_small"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                         </LinearLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
-                        app:cardElevation="@{ThemeManager.isNightModeActive(context)?0f:@dimen/card_elevation}"
-                        app:isGone="@{wordDetailedViewModel.wordOfTheDayLiveData.synonyms.size()==0 &amp;&amp; wordDetailedViewModel.wordOfTheDayLiveData.antonyms.size()==0}">
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{!FBRemoteConfig.getInstance().adsEnabled || wordColor==null}">
 
-                        <LinearLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipChildren="false"
-                            android:orientation="vertical"
-                            android:paddingVertical="@dimen/padding_medium">
+                            android:layout_height="match_parent">
+
+                            <com.facebook.ads.NativeAdLayout
+                                android:id="@+id/native_ad_container_2"
+                                adId="@{AdsManager.NATIVE_BANNER_ID_2}"
+                                showAdWithSomeDelay="@{2000}"
+                                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled &amp;&amp; wordColor!=null}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="@dimen/margin_medium"
+                                android:paddingVertical="@dimen/margin_small"
+                                app:adColorAccent="@{wordColor}"
+                                app:ad_onAdLoaded="@{()->txtViewAdLoading2.setVisibility(View.GONE)}"
+                                app:ad_onLoadAd="@{()->txtViewAdLoading2.setVisibility(View.VISIBLE)}"/>
 
                             <TextView
-                                style="@style/AppTheme.TitleTextStyle.Bold"
+                                android:id="@+id/txtView_ad_loading_2"
+                                style="@style/AppTheme.SubTitleTextStyle.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:paddingHorizontal="@dimen/margin_large"
-                                android:text="@string/thesaurus" />
+                                android:layout_gravity="center"
+                                android:text="Loading..." />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/margin_small"
-                                android:gravity="center_vertical"
-                                android:orientation="vertical"
-                                app:isGone="@{wordDetailedViewModel.wordOfTheDayLiveData.synonyms.size()==0}">
-
-                                <TextView
-                                    style="@style/AppTheme.SmallTextStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingHorizontal="@dimen/margin_large"
-                                    android:text="@string/synonyms"
-                                    android:textStyle="bold" />
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/recyclerView_word_details_synonyms"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:clipChildren="false"
-                                    android:clipToPadding="false"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="@dimen/margin_large"
-                                    android:paddingVertical="@dimen/padding_small"
-                                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                                    app:spanCount="2" />
-                                <!--
-                                                            <com.google.android.material.chip.Chip
-                                                                android:layout_width="wrap_content"
-                                                                android:layout_height="wrap_content"
-                                                                android:text="Please"
-                                                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
-                                                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
-
-                                                            <com.google.android.material.chip.Chip
-                                                                android:layout_width="wrap_content"
-                                                                android:layout_height="wrap_content"
-                                                                android:text="Use"
-                                                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
-                                                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
-
-                                                            <com.google.android.material.chip.Chip
-                                                                android:layout_width="wrap_content"
-                                                                android:layout_height="wrap_content"
-                                                                android:text="Daily word"
-                                                                android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor))}"
-                                                                app:chipBackgroundColor="@{CommonUtils.changeAlpha(context,(ThemeManager.isNightModeActive(context)?wordDetailedViewModel.wordOfTheDayLiveData.wordDesaturatedColor:wordDetailedViewModel.wordOfTheDayLiveData.wordColor),30)}" />
-                                -->
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/margin_small"
-                                android:gravity="center_vertical"
-                                android:orientation="vertical"
-                                app:isGone="@{wordDetailedViewModel.wordOfTheDayLiveData.antonyms.size()==0}">
-
-                                <TextView
-                                    style="@style/AppTheme.SmallTextStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:paddingHorizontal="@dimen/margin_large"
-                                    android:text="@string/antonyms"
-                                    android:textStyle="bold" />
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/recyclerView_word_details_antonyms"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:clipChildren="false"
-                                    android:clipToPadding="false"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="@dimen/margin_large"
-                                    android:paddingVertical="@dimen/padding_small"
-                                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                                    app:spanCount="2" />
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
+                        </FrameLayout>
                     </com.google.android.material.card.MaterialCardView>
-
-                    <com.facebook.ads.NativeAdLayout
-                        android:id="@+id/native_ad_container_2"
-                        adId="@{AdsManager.NATIVE_BANNER_ID_2}"
-                        showAdWithSomeDelay="@{2000}"
-                        showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_medium"
-                        android:layout_marginVertical="@dimen/margin_small" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
-                        app:cardElevation="@{ThemeManager.isNightModeActive(context)?0f:@dimen/card_elevation}">
+                        app:cardElevation="@dimen/card_elevation_word_details">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingHorizontal="@dimen/margin_large"
-                            android:paddingVertical="@dimen/padding_medium">
+                            android:paddingBottom="@dimen/padding_medium">
 
                             <TextView
-                                style="@style/AppTheme.TitleTextStyle.Bold"
+                                style="@style/AppTheme.SubTitleTextStyle.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingVertical="@dimen/padding_medium"
                                 android:text="@{`How to use `+wordDetailedViewModel.wordOfTheDayLiveData.word}"
+                                android:textColor="@color/textColor_highEmphasis"
                                 android:textStyle="bold" />
 
                             <androidx.recyclerview.widget.RecyclerView
@@ -326,36 +257,224 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <com.facebook.ads.NativeAdLayout
-                        android:id="@+id/native_ad_container_3"
-                        adId="@{AdsManager.NATIVE_BANNER_ID_3}"
-                        showAdWithSomeDelay="@{2000}"
-                        showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_medium"
-                        android:layout_marginVertical="@dimen/margin_small" />
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{!FBRemoteConfig.getInstance().adsEnabled || wordColor==null || (wordDetailedViewModel.wordOfTheDayLiveData.synonyms.size()==0 &amp;&amp; wordDetailedViewModel.wordOfTheDayLiveData.antonyms.size()==0)}">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.facebook.ads.NativeAdLayout
+                                android:id="@+id/native_ad_container_3"
+                                adId="@{AdsManager.NATIVE_BANNER_ID_3}"
+                                showAdWithSomeDelay="@{2000}"
+                                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled  &amp;&amp; wordColor!=null &amp;&amp; (wordDetailedViewModel.wordOfTheDayLiveData.synonyms.size()>0 || wordDetailedViewModel.wordOfTheDayLiveData.antonyms.size()>0)}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="@dimen/margin_medium"
+                                android:paddingVertical="@dimen/margin_small"
+                                app:adColorAccent="@{wordColor}"
+                                app:ad_onAdLoaded="@{()->txtViewAdLoading3.setVisibility(View.GONE)}"
+                                app:ad_onLoadAd="@{()->txtViewAdLoading3.setVisibility(View.VISIBLE)}" />
+
+
+                            <TextView
+                                android:id="@+id/txtView_ad_loading_3"
+                                style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Loading..." />
+
+                        </FrameLayout>
+                    </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
-                        app:cardElevation="@{ThemeManager.isNightModeActive(context)?0f:@dimen/card_elevation}">
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{wordDetailedViewModel.wordOfTheDayLiveData.synonyms.size()==0}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/padding_medium">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="@dimen/margin_large"
+                                android:paddingVertical="@dimen/padding_medium">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/synonyms"
+                                    android:textColor="@color/textColor_highEmphasis" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginHorizontal="@dimen/padding_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/syn_info)}"
+                                    android:src="@drawable/ic_info_outline_black_24dp"
+                                    android:tint="@color/app_icon_tint" />
+
+                            </LinearLayout>
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="@dimen/padding_large"
+                                android:paddingVertical="@dimen/padding_small"
+                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.wordOfTheDayLiveData.synonyms,6)}"
+                                app:chipShowViewMoreButton="@{true}"
+                                app:chipSpacingHorizontal="@dimen/padding_small"
+                                app:chipSpacingVertical="@dimen/padding_medium"
+                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
+                                app:onChipViewMoreClick="@{()->wordDetailedViewModel.navigator.navigateToShowSynonymsList(wordDetailedViewModel.wordOfTheDayLiveData.synonyms)}"
+                                app:selectionRequired="false" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{wordDetailedViewModel.wordOfTheDayLiveData.antonyms.size()==0}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/padding_medium">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="@dimen/margin_large"
+                                android:paddingVertical="@dimen/padding_medium">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/antonyms"
+                                    android:textColor="@color/textColor_highEmphasis" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginHorizontal="@dimen/padding_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/ant_info)}"
+                                    android:src="@drawable/ic_info_outline_black_24dp"
+                                    android:tint="@color/app_icon_tint" />
+
+                            </LinearLayout>
+
+                            <com.google.android.material.chip.ChipGroup
+                                style="@style/Widget.MaterialComponents.ChipGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:paddingHorizontal="@dimen/padding_large"
+                                android:paddingVertical="@dimen/padding_small"
+                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.wordOfTheDayLiveData.antonyms,6)}"
+                                app:chipShowViewMoreButton="@{true}"
+                                app:chipSpacingHorizontal="@dimen/padding_small"
+                                app:chipSpacingVertical="@dimen/padding_medium"
+                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
+                                app:onChipViewMoreClick="@{()->wordDetailedViewModel.navigator.navigateToShowAntonymsList(wordDetailedViewModel.wordOfTheDayLiveData.antonyms)}" />
+
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{!FBRemoteConfig.getInstance().adsEnabled || wordColor==null}">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.facebook.ads.NativeAdLayout
+                                android:id="@+id/native_ad_container_4"
+                                adId="@{AdsManager.NATIVE_BANNER_ID_4}"
+                                showAdWithSomeDelay="@{2000}"
+                                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled &amp;&amp; wordColor!=null}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="@dimen/margin_medium"
+                                android:paddingVertical="@dimen/margin_small"
+                                app:adColorAccent="@{wordColor}"
+                                app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
+                                app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
+
+
+                            <TextView
+                                android:id="@+id/txtView_ad_loading_4"
+                                style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Loading..." />
+
+                        </FrameLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="@dimen/card_elevation_word_details">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingHorizontal="@dimen/margin_large"
-                            android:paddingVertical="@dimen/padding_medium"
+                            android:paddingBottom="@dimen/padding_medium"
                             android:visibility="@{wordDetailedViewModel.wordOfTheDayLiveData.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}">
 
                             <TextView
-                                style="@style/AppTheme.TitleTextStyle.Bold"
+                                style="@style/AppTheme.SubTitleTextStyle.Bold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:paddingVertical="@dimen/padding_medium"
                                 android:text="@string/did_you_know"
+                                android:textColor="@color/textColor_highEmphasis"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -364,7 +483,6 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{wordDetailedViewModel.wordOfTheDayLiveData.didYouKnow}" />
                         </LinearLayout>
-
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.button.MaterialButton
@@ -373,7 +491,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_margin="@dimen/margin_large"
-                        android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDayLiveData.date)}"
+                        android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.wordOfTheDayLiveData.date)}"
                         android:text="@string/go_to_merriam_webster"
                         app:buttonTextColorBasedOnWord="@{wordDetailedViewModel.wordOfTheDayLiveData}"
                         app:icon="@drawable/ic_round_arrow_forward_24"

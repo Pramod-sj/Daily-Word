@@ -25,11 +25,10 @@ class WindowAnimationPrefManager private constructor(private val context: Contex
         ).commit()
     }
 
-    //disable for now
-    fun isWindowAnimationEnabled() = /*sharedPreferences.getBoolean(
+    fun isWindowAnimationEnabled() = sharedPreferences.getBoolean(
         KEY_ANIMATION_ENABLED,
         isAtLeastP()
-    )*/ false
+    ) /*false*/
 
 
     fun liveData() = SPrefBooleanLiveData(sharedPreferences, KEY_ANIMATION_ENABLED, isAtLeastP())

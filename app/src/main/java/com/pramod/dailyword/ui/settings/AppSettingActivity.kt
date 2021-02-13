@@ -75,7 +75,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                 }
             }
         })
-        mViewModel.themeManager.liveData().observe(this, Observer {
+        mViewModel.themeManager.liveData().observe(this, {
             mViewModel.applyTheme(ThemeManager.Options.values()[it])
         })
     }
@@ -106,7 +106,7 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
 
     private fun edgeToEdgeSettingChanged() {
         mViewModel.recreateActivity().observe(this, {
-            it?.let { recreate ->
+            it?.let {
                 restartActivity()
             }
         })

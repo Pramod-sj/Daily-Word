@@ -113,6 +113,12 @@
         <item name="android:textColor">@color/textColor_mediumEmphasis</item>
     </style>
 
+
+
+    <style name="AppTheme.SubTitleTextStyle.Bold" parent="AppTheme.SubTitleTextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="AppTheme.SmallTextStyle">
         <item name="android:textSize">@dimen/text_small</item>
         <item name="android:textColor">@color/textColor_mediumEmphasis</item>

@@ -1,27 +1,34 @@
 package com.pramod.dailyword.db.repository
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.pramod.dailyword.db.local.AppDB
 import com.pramod.dailyword.db.model.Bookmark
 import com.pramod.dailyword.db.model.WordOfTheDay
-import com.pramod.dailyword.ui.words.LOCAL_PAGE_SIZE
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 class BookmarkRepo(private val context: Context) {
     private val localDb: AppDB = AppDB.getInstance(context)
     private val dao = localDb.getBookmarkDao()
 
-    fun getBookmarks(): LiveData<PagedList<WordOfTheDay>> {
+    /*fun getBookmarks(): LiveData<PagedList<WordOfTheDay>> {
         return LivePagedListBuilder(
-            localDb.getBookmarkDao().getBookmarksPagingDataSource()
-            , PagedList.Config.Builder()
+            localDb.getBookmarkDao().getBookmarksPagingDataSource(), PagedList.Config.Builder()
                 .setPageSize(LOCAL_PAGE_SIZE)
                 .setEnablePlaceholders(false)
                 .build()
         ).build()
+    }*/
+
+    fun getBookmarkWords(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
+        return Pager(
+            config = PagingConfig(pageSize, enablePlaceholders = false)
+        ) {
+            localDb.getBookmarkDao().getBookmarksPagingDataSource()
+        }.flow
     }
 
     suspend fun bookmarkToggle(word: String): Boolean {

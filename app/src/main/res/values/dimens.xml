@@ -56,4 +56,12 @@
 
     <dimen name="padding_word_list_right">60dp</dimen>
     <dimen name="padding_no">0dp</dimen>
+
+
+    <dimen name="card_elevation_word_details">@dimen/card_elevation</dimen>
+
+    <item name="alpha_moon" format="float" type="integer">1</item>
+    <item name="alpha_mountains" format="float" type="integer">1</item>
+
+    <dimen name="card_elevation_word_item">@dimen/card_elevation</dimen>
 </resources>

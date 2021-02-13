@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.pramod.dailyword.helper.AdsManager" />
+
+        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="@dimen/margin_small"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation_word_item">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.facebook.ads.NativeAdLayout
+                adId="@{AdsManager.NATIVE_BANNER_ID_4}"
+                showAdWithSomeDelay="@{300}"
+                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/padding_large"
+                android:paddingVertical="@dimen/padding_small"
+                app:ad_onAdLoaded="@{()->txtViewAdLoading.setVisibility(View.GONE)}"
+                app:ad_onLoadAd="@{()->txtViewAdLoading.setVisibility(View.VISIBLE)}" />
+
+            <TextView
+                android:id="@+id/txtView_ad_loading"
+                style="@style/AppTheme.SubTitleTextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Loading..." />
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

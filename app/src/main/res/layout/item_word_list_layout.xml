@@ -22,9 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
-        app:cardBackgroundColor="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
         app:cardCornerRadius="0dp"
-        app:cardElevation="@{ThemeManager.isNightModeActive(context)?@dimen/card_no_elevation:@dimen/card_elevation_min}">
+        app:cardElevation="@dimen/card_elevation_word_item">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,9 +66,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/item_word_list_date"
                 android:orientation="vertical"
-                android:paddingVertical="@dimen/padding_small"
-                android:paddingStart="@dimen/padding_medium"
-                android:paddingEnd="@{FBRemoteConfig.getInstance().adsEnabled?@dimen/padding_word_list_right:@dimen/padding_medium}">
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/padding_small">
 
                 <TextView
                     style="@style/AppTheme.Header5TextStyle.Bold"

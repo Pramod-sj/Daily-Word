@@ -3,6 +3,11 @@ package com.pramod.dailyword.db
 import android.util.Log
 import com.pramod.dailyword.db.model.ApiResponse
 import kotlinx.coroutines.flow.*
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 abstract class NetworkBoundResource<RequestType, ResponseType> {
 
@@ -33,11 +38,25 @@ abstract class NetworkBoundResource<RequestType, ResponseType> {
                 }
 
             } catch (throwable: Throwable) {
+                throwable.printStackTrace()
                 Log.i(
                     TAG,
                     "asFlow: network call failed $throwable fetching from cache"
                 )
-                fetchFromCache().map { Resource.error(throwable.message, it) }
+                val message = when (throwable) {
+                    is SocketTimeoutException -> "Timeout! Please check your internet connection!"
+
+                    is IOException -> "You don't have an proper internet connection!"
+
+                    is HttpException -> "Something went wrong! Try again after sometime."
+
+                    is UnknownHostException -> "You don't have an proper internet connection!"
+
+                    is ConnectException -> "Unable to connect to our server"
+
+                    else -> "Something went wrong! Try again after sometime."
+                }
+                fetchFromCache().map { Resource.error(message, it) }
             }
         } else {
             Log.i(TAG, "asFlow: fetching from cache")

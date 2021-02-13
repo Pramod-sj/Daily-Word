@@ -41,13 +41,14 @@
             android:orientation="vertical"
             android:padding="30dp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/splash_app_icon"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/margin_medium"
                 android:src="@drawable/ic_vocabulary"
-                app:tint="@color/app_logo_tint" />
+                android:tint="@color/app_icon_tint"
+                app:tint="@color/app_icon_tint"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -78,12 +79,12 @@
             android:id="@+id/splash_screen_bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:applyBottomPaddingInset="@{true}"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginHorizontal="@dimen/margin_large"
             android:layout_marginBottom="@dimen/margin_small"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:applyBottomPaddingInset="@{true}">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_get_started"

@@ -19,7 +19,6 @@
     <color name="ripple_tint">#904C4B4B</color>
 
 
-
     <!--Text Colors-->
     <color name="textColor_highEmphasis">@color/dark_textColor_highEmphasis</color>
     <color name="textColor_mediumEmphasis">@color/dark_textColor_mediumEmphasis</color>
@@ -51,4 +50,6 @@
 
     <color name="social_media_background_color">#30ACABAB</color>
     <color name="social_media_stroke_color">#ACABAB</color>
+
+    <color name="stroke_color_word_details">#ACABAB</color>
 </resources>

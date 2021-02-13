@@ -7,26 +7,29 @@ import android.os.Bundle
 import android.os.Handler
 import android.transition.ArcMotion
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
-import androidx.core.view.ViewCompat
+import android.view.*
 import androidx.core.widget.NestedScrollView
+import androidx.databinding.DataBindingUtil
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.facebook.ads.NativeAdLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
+import com.pramod.dailyword.binding_adapters.OnChipClickListener
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
+import com.pramod.dailyword.databinding.BottomSheetChipLayoutBinding
 import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.helper.*
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.util.CommonUtils
+import com.pramod.dailyword.util.getContextCompatColor
+import com.pramod.dailyword.util.shareApp
 
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -81,19 +84,35 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override fun getBindingVariable(): Int = BR.wordDetailedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //initTransitionAxis()
         initEnterAndReturnTransition()
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        keepScreenOn()
         super.onCreate(savedInstanceState)
         setUpToolbar()
         setNestedScrollListener()
         setNavigateMW()
-        showNativeAdDialogWithDelay()
-        setUpWordOfTheDay()
-        mViewModel.loadingLiveData.observe(this) {
-            Log.i(TAG, "loading word of the day: $it")
-        }
+        invalidateOptionMenuWhenWordAvailable()
+        setWordColor()
+        setUpExampleRecyclerView()
+        setUpDefinationRecyclerView()
+        handleNavigator()
         handleRippleAnimationForAudioEffect()
+    }
+
+    private fun keepScreenOn(){
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+
+    private fun setWordColor() {
+        mViewModel.wordOfTheDayLiveData.observe(this) {
+            it?.let { word ->
+                mBinding.wordColor =
+                    getContextCompatColor(
+                        if (ThemeManager.isNightModeActive(this)) word.wordDesaturatedColor
+                        else word.wordColor
+                    )
+            }
+        }
     }
 
     private fun handleRippleAnimationForAudioEffect() {
@@ -116,10 +135,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         mBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
-    private fun setUpWordOfTheDay() {
-        setUpExampleRecyclerView()
-        setUpDefinationRecyclerView()
-        setUpThesaurusAdapter()
+    private fun invalidateOptionMenuWhenWordAvailable() {
         mViewModel.wordOfTheDayLiveData.observe(this, {
             if (it != null) {
                 invalidateOptionsMenu()
@@ -155,20 +171,28 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         })
     }
 
-    private fun setUpThesaurusAdapter() {
-        val synonymsAdapter = ThesaurusAdapter {
+    private fun handleNavigator() {
+        mViewModel.navigator = object : WordDetailNavigator {
+            override fun navigateToShowSynonymsList(list: List<String>?) {
+                list?.let {
+                    showBottomSheetListOfChips(resources.getString(R.string.synonyms), it)
+                }
+            }
 
-        }
-        mBinding.recyclerViewWordDetailsSynonyms.adapter = synonymsAdapter
+            override fun navigateToShowAntonymsList(list: List<String>?) {
+                list?.let {
+                    showBottomSheetListOfChips(resources.getString(R.string.antonyms), it)
+                }
+            }
 
-        val antonymsAdapter = ThesaurusAdapter {
+            override fun navigateToWeb(url: String) {
+                openWebsite(url)
+            }
 
-        }
-        mBinding.recyclerViewWordDetailsAntonyms.adapter = antonymsAdapter
+            override fun navigateToShowThesaurusInfo(title: String, desc: String) {
+                showBottomSheet(title, desc, positiveText = "Okay")
+            }
 
-        mViewModel.wordOfTheDayLiveData.observe(this) {
-            synonymsAdapter.submitList(it?.synonyms)
-            antonymsAdapter.submitList(it?.antonyms)
         }
     }
 
@@ -228,11 +252,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         }
     }
 
-    private fun showNativeAdDialogWithDelay() {
-        Handler().postDelayed({
-            AdsManager.incrementCountAndShowNativeAdDialog(this)
-        }, 1000)
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.word_detail_menu, menu)
@@ -246,10 +265,35 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_share_word -> shareApp()
+            R.id.menu_share_word -> {
+                CommonUtils.viewToBitmap(mBinding.linearLayoutWordInfo)?.let {
+                    shareApp(bitmap = it)
+                } ?: shareApp()
+            }
             R.id.menu_bookmark -> mViewModel.bookmark()
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showBottomSheetListOfChips(title: String, list: List<String>) {
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        val binding = DataBindingUtil.inflate<BottomSheetChipLayoutBinding>(
+            LayoutInflater.from(this),
+            R.layout.bottom_sheet_chip_layout,
+            null,
+            false
+        )
+        binding.title = title
+        binding.listData = list
+        binding.onChipClickListener = object : OnChipClickListener {
+            override fun onChipClick(text: String) {
+                val url = resources.getString(R.string.google_search_url) + text
+                mViewModel.navigator?.navigateToWeb(url)
+            }
+        }
+        binding.executePendingBindings()
+        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.show()
+    }
 }

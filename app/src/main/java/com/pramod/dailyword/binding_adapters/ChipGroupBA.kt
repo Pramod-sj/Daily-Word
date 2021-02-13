@@ -1,10 +1,11 @@
 package com.pramod.dailyword.binding_adapters
 
 import android.content.res.ColorStateList
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.BindingAdapter
@@ -14,14 +15,11 @@ import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemChipLayoutBinding
-import com.pramod.dailyword.exts.resolveAttrToColor
-import com.pramod.dailyword.exts.resolveAttrToDrawable
-import com.pramod.dailyword.util.CommonUtils
 
 object ChipGroupBA {
     @JvmStatic
     @BindingAdapter(
-        value = ["app:chipEntries", "app:chipColor", "app:chipShowViewMoreButton", "app:onChipViewMoreClick"],
+        value = ["app:chipEntries", "app:chipColor", "app:chipShowViewMoreButton", "app:onChipViewMoreClick", "app:onChipClick"],
         requireAll = false
     )
     fun addChips(
@@ -29,7 +27,8 @@ object ChipGroupBA {
         chipTextList: List<String>?,
         chipColor: Int?,
         chipShowViewMoreButton: Boolean = false,
-        onChipViewMoreClick: OnChipViewMoreClickListener?
+        onChipViewMoreClick: OnChipViewMoreClickListener?,
+        onChipClickListener: OnChipClickListener?
     ) {
         chipTextList?.let {
             Log.i("CHIP TEXT", Gson().toJson(it))
@@ -47,24 +46,31 @@ object ChipGroupBA {
                     val color = ColorUtils.setAlphaComponent(chipColor, 20)
                     binding.chip.chipBackgroundColor = ColorStateList.valueOf(color)
                 }
+                binding.chip.setOnClickListener { view ->
+                    onChipClickListener?.onChipClick((view as Chip).text.toString())
+                }
                 chipGroup.addView(binding.root)
             }
             if (chipShowViewMoreButton) {
+
                 val binding: ItemChipLayoutBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(chipGroup.context),
                     R.layout.item_chip_layout,
                     chipGroup,
                     false
                 )
-                binding.chip.text = "View More"
-                binding.chip.setTextColor(
-                    ContextCompat.getColor(
-                        chipGroup.context,
-                        R.color.colorPrimary
-                    )
-                )
+                binding.chip.text = SpannableString("more").also { string ->
+                    string.setSpan(UnderlineSpan(), 0, 4, SpannableString.SPAN_INCLUSIVE_INCLUSIVE)
+                }
+                binding.chip.textSize = 13f
                 binding.chip.chipBackgroundColor =
-                    ColorStateList.valueOf(chipGroup.context.resolveAttrToColor(android.R.attr.colorBackground))
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            chipGroup.context,
+                            android.R.color.transparent
+                        )
+                    )
+                binding.chip.background = null
                 binding.chip.setOnClickListener { view ->
                     onChipViewMoreClick?.onViewMoreClick(view)
                 }
@@ -74,6 +80,10 @@ object ChipGroupBA {
             }
         }
     }
+}
+
+interface OnChipClickListener {
+    fun onChipClick(text: String)
 }
 
 interface OnChipViewMoreClickListener {

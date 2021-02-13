@@ -40,7 +40,7 @@
             android:layout_marginHorizontal="@dimen/padding_medium" />
 
         <TextView
-            style="@style/AppTheme.TitleTextStyle"
+            style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

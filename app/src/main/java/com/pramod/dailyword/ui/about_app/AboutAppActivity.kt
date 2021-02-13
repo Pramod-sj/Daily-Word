@@ -20,6 +20,7 @@ import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
 import com.pramod.dailyword.util.CommonUtils
+import com.pramod.dailyword.util.shareApp
 
 class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel>() {
 

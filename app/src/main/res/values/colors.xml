@@ -136,6 +136,7 @@
 
 
     <color name="widget_background">#70000000</color>
+    <color name="widget_background_small">#90000000</color>
 
     <color name="home_appbar_color">@color/colorPrimary</color>
 
@@ -157,4 +158,5 @@
     <color name="social_media_background_color">#30ACABAB</color>
     <color name="social_media_stroke_color">#ACABAB</color>
 
+    <color name="stroke_color_word_details">#ACABAB</color>
 </resources>

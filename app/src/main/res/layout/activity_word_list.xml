@@ -26,32 +26,12 @@
         tools:context=".ui.words.WordListActivity">
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            app:cardElevation="5dp"
-            app:cardPreventCornerOverlap="false"
-            app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
-
-            <com.facebook.ads.NativeAdLayout
-                adId="@{AdsManager.NATIVE_BANNER_ID_4}"
-                showAdWithSomeDelay="@{1000}"
-                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                verticalAd="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.card.MaterialCardView>
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
-            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordListViewModel.edgeToEdgeEnabled}"
-            app:onRefreshListener="@{()->wordListViewModel.refresh()}"
-            app:refreshing="@{wordListViewModel.refreshState.status==Status.RUNNING}">
+            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordListViewModel.edgeToEdgeEnabled}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_words"

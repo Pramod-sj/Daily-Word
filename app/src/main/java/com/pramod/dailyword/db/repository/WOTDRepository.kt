@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.asLiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.paging.*
 import com.google.gson.Gson
 import com.pramod.dailyword.db.NetworkBoundResource
 import com.pramod.dailyword.db.Resource
@@ -254,17 +253,6 @@ class WOTDRepository(private val context: Context) {
     }
 
 
-    /*@ExperimentalPagingApi
-    fun getAllWords(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
-        return Pager(
-            config = PagingConfig(pageSize = pageSize),
-            remoteMediator = WordPaginationRemoteMediator(this)
-        ) {
-            localDb.getWordOfTheDayDao().pagingSourceWords()
-        }.flow
-    }*/
-
-
     suspend fun getWords(startFrom: String?, limit: Int): Resource<List<WordOfTheDay>?> {
         return try {
             val apiResponse: ApiResponse<List<WordOfTheDay>> =
@@ -278,7 +266,6 @@ class WOTDRepository(private val context: Context) {
             handleNetworkException(null, e)
         }
     }
-
 
     private fun refreshAllWord(): LiveData<NetworkState> {
         val networkState = MutableLiveData<NetworkState>()
@@ -298,7 +285,10 @@ class WOTDRepository(private val context: Context) {
         return networkState
     }
 
-    fun getAllWords(): Listing<WordOfTheDay> {
+    /**
+     * Paging methods
+     */
+    fun getPagingWordList(): Listing<WordOfTheDay> {
         val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(LOCAL_PAGE_SIZE)
             .setEnablePlaceholders(false)
@@ -332,6 +322,20 @@ class WOTDRepository(private val context: Context) {
         )
     }
 
+    /**
+     * Paging methods
+     */
+    @ExperimentalPagingApi
+    fun getPagingWordList(pageSize: Int): Flow<PagingData<WordOfTheDay>> {
+        return Pager(
+            config = PagingConfig(pageSize = pageSize, enablePlaceholders = true),
+            remoteMediator = WordPaginationRemoteMediator(this)
+        ) {
+            localDb.getWordOfTheDayDao().pagingSourceWords()
+        }.flow
+    }
+
+
     fun getWordLocally(word: String): LiveData<WordOfTheDay> =
         localDb.getWordOfTheDayDao().getWord(word)
 
@@ -346,7 +350,20 @@ class WOTDRepository(private val context: Context) {
         addAllWord(words)
     }
 
-    suspend fun addWord(word: WordOfTheDay): Long = localDb.getWordOfTheDayDao().add(word)
+    suspend fun addWord(word: WordOfTheDay): Long {
+        word.date?.let { date ->
+            val cal =
+                CalenderUtil.convertStringToCalender(
+                    date,
+                    CalenderUtil.DATE_FORMAT
+                )
+            word.dateTimeInMillis = cal?.timeInMillis
+            val dayColor = CommonUtils.getColorBasedOnDay(cal)
+            word.wordColor = dayColor[0]
+            word.wordDesaturatedColor = dayColor[1]
+        }
+        return localDb.getWordOfTheDayDao().add(word)
+    }
 
     suspend fun addAllWord(words: List<WordOfTheDay>) {
         Log.i("WOTDRepository", "addAllWord: ${Gson().toJson(words)}")

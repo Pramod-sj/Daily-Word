@@ -64,7 +64,6 @@
                     android:onClick="@{()->appSettingViewModel.toggleWindowAnimation()}"
                     app:checked="@{appSettingViewModel.windowAnimationPrefManager.liveData()}"
                     app:icon="@drawable/ic_animation_outline"
-                    android:visibility="gone"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
                     app:showRadioButton="true"
@@ -107,7 +106,7 @@
                     app:iconColorTint="@color/app_icon_tint"
                     app:showRadioButton="true"
                     app:subTitle="Receive notification when word of the day is available"
-                    app:title="DailyWord Notification"
+                    app:title="Daily Word Notification"
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 

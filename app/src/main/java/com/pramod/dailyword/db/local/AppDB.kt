@@ -14,7 +14,7 @@ import com.pramod.dailyword.db.model.WordOfTheDay
 import com.pramod.dailyword.util.ListConverter
 
 @TypeConverters(ListConverter::class)
-@Database(entities = [WordOfTheDay::class, Bookmark::class], version = 7, exportSchema = false)
+@Database(entities = [WordOfTheDay::class, Bookmark::class], version = 8, exportSchema = false)
 abstract class AppDB : RoomDatabase() {
 
     companion object {
@@ -31,7 +31,8 @@ abstract class AppDB : RoomDatabase() {
                         AppDB::class.java,
                         APP_DB_NAME
 
-                    )./*fallbackToDestructiveMigration()*/addMigrations(migration_6_7)
+                    ).addMigrations(migration_6_7)
+                        .addMigrations(migration_7_8)
                         .build()
                     return INSTANCE!!
                 }
@@ -71,6 +72,15 @@ abstract class AppDB : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN synonyms TEXT")
                 database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN antonyms TEXT")
+            }
+        }
+
+        private object migration_7_8 : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE Bookmark RENAME TO old_Bookmark")
+                database.execSQL("CREATE TABLE Bookmark (bookmarkId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bookmarkedWord TEXT NOT NULL, bookmarkedAt INTEGER)")
+                database.execSQL("INSERT INTO Bookmark SELECT null,bookmarkedWord,bookmarkedAt FROM old_Bookmark")
+                database.execSQL("DROP TABLE old_Bookmark")
             }
         }
 

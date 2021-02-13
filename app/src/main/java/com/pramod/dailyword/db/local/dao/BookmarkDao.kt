@@ -1,7 +1,7 @@
 package com.pramod.dailyword.db.local.dao
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -20,8 +20,11 @@ interface BookmarkDao {
     @Query("SELECT * FROM WordOfTheDay as wd INNER JOIN Bookmark as f ON wd.word==f.bookmarkedWord WHERE wd.word=:word")
     suspend fun get(word: String): WordOfTheDay?
 
+    /*@Query("SELECT * FROM WordOfTheDay as wd INNER JOIN Bookmark as f ON wd.word==f.bookmarkedWord ORDER BY f.bookmarkedAt DESC")
+    fun getBookmarksPagingDataSource(): DataSource.Factory<Int, WordOfTheDay>*/
+
     @Query("SELECT * FROM WordOfTheDay as wd INNER JOIN Bookmark as f ON wd.word==f.bookmarkedWord ORDER BY f.bookmarkedAt DESC")
-    fun getBookmarksPagingDataSource(): DataSource.Factory<Int, WordOfTheDay>
+    fun getBookmarksPagingDataSource(): PagingSource<Int, WordOfTheDay>
 
     @Query("SELECT * FROM WordOfTheDay as wd INNER JOIN Bookmark as f ON wd.word==f.bookmarkedWord ORDER BY f.bookmarkedAt DESC")
     fun getBookmarks(): LiveData<List<WordOfTheDay>>

@@ -1,6 +1,7 @@
 package com.pramod.dailyword.helper
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
@@ -11,15 +12,15 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import com.facebook.ads.*
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.pramod.dailyword.databinding.BannerNativeAdBinding
-import com.pramod.dailyword.firebase.FBRemoteConfig
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pramod.dailyword.R
+import com.pramod.dailyword.databinding.BannerNativeAdBinding
 import com.pramod.dailyword.databinding.BannerNativeAdVerticalBinding
 import com.pramod.dailyword.databinding.DialogNativeAdBinding
+import com.pramod.dailyword.firebase.FBRemoteConfig
 import com.pramod.dailyword.util.CommonUtils
-import java.util.ArrayList
+import com.pramod.dailyword.util.getContextCompatColor
+import java.util.*
 
 class AdsManager private constructor(private val context: Context) {
     private val fbRemoteConfig = FBRemoteConfig()
@@ -87,23 +88,26 @@ class AdsManager private constructor(private val context: Context) {
                 null,
                 false
             )
-            val builder = MaterialAlertDialogBuilder(context)
+            val bottomSheetDialog = BottomSheetDialog(context,R.style.AppTheme_BottomSheetDialog)
+            bottomSheetDialog.setContentView(binding.root)
+
+            /*val builder = MaterialAlertDialogBuilder(context)
                 .setView(binding.root)
                 .setCancelable(false)
-            val alertDialog = builder.create()
+            val alertDialog = builder.create()*/
 
             binding.nativeAdCloseButton.setOnClickListener {
-                alertDialog.dismiss()
+                bottomSheetDialog.dismiss()
                 closeClickCallback?.invoke()
             }
             val shown = adsManager.showNativeAdOnDialog(binding, {
                 binding.nativeAdLoading.isVisible = false
                 binding.nativeAdLinearLayoutWrapper.isVisible = true
             }, {
-                alertDialog.dismiss()
+                bottomSheetDialog.dismiss()
             })
             if (shown) {
-                alertDialog.show()
+                bottomSheetDialog.show()
             }
         }
 
@@ -193,6 +197,7 @@ class AdsManager private constructor(private val context: Context) {
     fun showNativeBannerAd(
         adId: String,
         nativeAdLayout: NativeAdLayout,
+        colorAccent: Int,
         verticalBannerAd: Boolean,
         adLoadedCallack: (() -> Unit)? = null
     ): Boolean {
@@ -225,9 +230,9 @@ class AdsManager private constructor(private val context: Context) {
                     }
                     adLoadedCallack?.invoke()
                     if (verticalBannerAd) {
-                        inflateBannerNativeViewVertical(nativeAdLayout, it)
+                        inflateBannerNativeViewVertical(nativeAdLayout, it, colorAccent)
                     } else {
-                        inflateBannerNativeView(nativeAdLayout, it)
+                        inflateBannerNativeView(nativeAdLayout, it, colorAccent)
                     }
 
                 }
@@ -245,7 +250,8 @@ class AdsManager private constructor(private val context: Context) {
 
     private fun inflateBannerNativeView(
         nativeAdLayout: NativeAdLayout,
-        nativeBannerAd: NativeBannerAd
+        nativeBannerAd: NativeBannerAd,
+        colorAccent: Int
     ) {
 
         nativeBannerAd.unregisterView()
@@ -271,6 +277,9 @@ class AdsManager private constructor(private val context: Context) {
         binding.nativeAdButton.text = nativeBannerAd.adCallToAction
         binding.nativeAdButton.isVisible = nativeBannerAd.hasCallToAction()
 
+        //set accent
+        binding.nativeAdButton.backgroundTintList = ColorStateList.valueOf(colorAccent)
+
         //registering click callbacks
 
         val clickableViews = ArrayList<View>()
@@ -285,7 +294,8 @@ class AdsManager private constructor(private val context: Context) {
 
     private fun inflateBannerNativeViewVertical(
         nativeAdLayout: NativeAdLayout,
-        nativeBannerAd: NativeBannerAd
+        nativeBannerAd: NativeBannerAd,
+        colorAccent: Int
     ) {
 
         nativeBannerAd.unregisterView()
@@ -310,6 +320,9 @@ class AdsManager private constructor(private val context: Context) {
         binding.nativeAdSponseredLabel.text = nativeBannerAd.sponsoredTranslation
         binding.nativeAdButton.text = nativeBannerAd.adCallToAction
         binding.nativeAdButton.isVisible = nativeBannerAd.hasCallToAction()
+
+        //set accent
+        binding.nativeAdButton.backgroundTintList = ColorStateList.valueOf(colorAccent)
 
         //registering click callbacks
 
@@ -417,13 +430,13 @@ class AdsManager private constructor(private val context: Context) {
     }
 }
 
-class AdsBindingAdapter {
+class AdBindingAdaper {
 
     companion object {
 
         @JvmStatic
         @BindingAdapter(
-            value = ["showNativeAd", "adId", "showAdWithSomeDelay", "verticalAd"],
+            value = ["showNativeAd", "adId", "showAdWithSomeDelay", "app:adColorAccent", "app:ad_onLoadAd", "app:ad_onAdLoaded", "verticalAd"],
             requireAll = false
         )
         fun showNativeAd(
@@ -431,15 +444,26 @@ class AdsBindingAdapter {
             showNativeAd: Boolean,
             adId: String,
             showAdWithSomeDelay: Long,
+            colorAccent: Int?,
+            onLoadAdCallback: OnLoadAdCallback?,
+            onAdLoadedCallback: OnAdLoadedCallback?,
             verticalAd: Boolean = false
         ) {
             if (showNativeAd) {
                 Handler().postDelayed({
                     val adsManager = AdsManager.newInstance(nativeAdLayout.context)
-                    adsManager.showNativeBannerAd(adId, nativeAdLayout, verticalAd) {
+                    onLoadAdCallback?.onLoadAd()
+                    adsManager.showNativeBannerAd(
+                        adId,
+                        nativeAdLayout,
+                        colorAccent
+                            ?: nativeAdLayout.context.getContextCompatColor(R.color.colorPrimary),
+                        verticalAd
+                    ) {
                         //only make it visible when ad loaded successfully
                         nativeAdLayout.isVisible = true
                         CommonUtils.showViewAlphaAnimation(nativeAdLayout)
+                        onAdLoadedCallback?.onAdLoaded()
                     }
 
                 }, showAdWithSomeDelay)
@@ -450,5 +474,15 @@ class AdsBindingAdapter {
 
 
     }
+
+
+    interface OnAdLoadedCallback {
+        fun onAdLoaded()
+    }
+
+    interface OnLoadAdCallback {
+        fun onLoadAd()
+    }
+
 
 }

@@ -42,24 +42,40 @@
         android:transitionGroup="true"
         tools:context=".ui.home.HomeActivity">
 
+
         <ImageView
             android:id="@+id/home_imageView_sun"
-            loadDrawable="@{(ThemeManager.isNightModeActive(context))?@drawable/ic_moon:@drawable/ic_sun}"
+            loadDrawable="@{@drawable/ic_sun}"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginBottom="100dp"
-            app:alpha="@{(ThemeManager.isNightModeActive(context))?0.6f:1}"
+            app:isVisible="@{!ThemeManager.isNightModeActive(context)}"
+            app:selected="@{true}" />
+
+
+        <ImageView
+            android:id="@+id/home_imageView_moon"
+            loadDrawable="@{@drawable/ic_moon}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/margin_extra_large"
+            android:alpha="@integer/alpha_moon"
+            app:isVisible="@{ThemeManager.isNightModeActive(context)}"
+            app:layout_anchor="@id/home_imageView_buildings"
+            app:layout_anchorGravity="end"
             app:selected="@{true}" />
 
         <ImageView
             android:id="@+id/home_imageView_buildings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/buildings"
-            app:alpha="@{(ThemeManager.isNightModeActive(context))?0.5f:1}"
+            android:layout_height="180dp"
+            android:layout_gravity="bottom"
+            android:alpha="@integer/alpha_mountains"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test"
             app:applyBottomPaddingInset="@{mainViewModel.edgeToEdgeEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
@@ -89,14 +105,15 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="@dimen/margin_large">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/home_app_icon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/margin_small"
                         android:src="@drawable/ic_vocabulary_24dp"
-                        android:tint="@color/app_icon_tint" />
+                        android:tint="@color/app_icon_tint"
+                        app:tint="@color/app_icon_tint" />
 
 
                     <TextView
@@ -151,8 +168,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:clickable="true"
                             android:gravity="center"
                             android:onClick="@{(v)->viewCallbacks.learnAll(v)}"
                             android:orientation="vertical">
@@ -183,8 +198,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:gravity="center"
                             android:onClick="@{(v)->viewCallbacks.gotoBookmark(v)}"
                             android:orientation="vertical">
 
@@ -215,8 +228,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:gravity="center"
                             android:onClick="@{(v)->viewCallbacks.gotoRandomWord(v)}"
                             android:orientation="vertical">
 
@@ -246,8 +257,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:clickable="true"
                             android:gravity="center"
                             android:onClick="@{(v)->viewCallbacks.gotoRecap(v)}"
                             android:orientation="vertical">
@@ -361,7 +370,7 @@
                         </LinearLayout>
 
                         <TextView
-                            style="@style/AppTheme.TitleTextStyle"
+                            style="@style/AppTheme.SubTitleTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
@@ -381,6 +390,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@{`How to use `+mainViewModel.todaysWordOfTheDay.word}"
+                                android:textColor="@color/textColor_highEmphasis"
                                 android:textSize="@dimen/text_sub_title"
                                 android:textStyle="bold" />
 

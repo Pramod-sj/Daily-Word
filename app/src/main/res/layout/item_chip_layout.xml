@@ -10,7 +10,8 @@
         android:id="@+id/chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_small"
         android:text="Hello"
+        android:textColor="@color/app_icon_tint"
+        android:textSize="@dimen/text_sub_title"
         app:ensureMinTouchTargetSize="false" />
 </layout>

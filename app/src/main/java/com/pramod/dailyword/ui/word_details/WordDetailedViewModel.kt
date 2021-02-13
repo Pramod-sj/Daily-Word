@@ -34,6 +34,8 @@ class WordDetailedViewModel(
 
     val loadingLiveData = MutableLiveData<Boolean>()
 
+    var navigator: WordDetailNavigator? = null
+
     fun retry() {
         shouldForceRefresh = true
         retryEventLiveData.value = true
@@ -95,7 +97,7 @@ class WordDetailedViewModel(
         if (_isAudioPronouncing.value == false) {
             _isAudioPronouncing.value = true
             PronounceHelper.playAudio(url) {
-                _isAudioPronouncing.value =false
+                _isAudioPronouncing.value = false
             }
         }
     }

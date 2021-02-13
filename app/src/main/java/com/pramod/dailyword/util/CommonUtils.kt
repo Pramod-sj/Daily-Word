@@ -7,6 +7,10 @@ import android.animation.PropertyValuesHolder
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.text.Spannable
@@ -23,11 +27,43 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import com.pramod.dailyword.R
+import com.pramod.dailyword.exts.resolveAttrToColor
 import com.pramod.dailyword.helper.ThemeManager
 import java.util.*
 import kotlin.collections.map as map1
 
+
 object CommonUtils {
+
+
+    fun viewToBitmap(view: View): Bitmap? {
+        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null) bgDrawable.draw(canvas) else canvas.drawColor(
+            view.context.resolveAttrToColor(
+                android.R.attr.colorBackground
+            )
+        )
+        view.draw(canvas)
+        return returnedBitmap
+    }
+
+    fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+        var width = drawable.intrinsicWidth
+        width = if (width > 0) width else 1
+        var height = drawable.intrinsicHeight
+        height = if (height > 0) height else 1
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        drawable.draw(canvas)
+        return bitmap
+    }
+
     @JvmStatic
     fun formatString(list: List<String>, delimiter: String): String {
         val stringBuilder: StringBuilder = StringBuilder()
@@ -201,7 +237,6 @@ object CommonUtils {
 
     @JvmStatic
     fun changeAlpha(color: Int, alpha: Int) = ColorUtils.setAlphaComponent(color, alpha)
-
 
 
     @JvmStatic
@@ -392,8 +427,11 @@ object CommonUtils {
 
 
     @JvmStatic
-    fun getTopNItemFromList(list: List<String>, n: Int): List<String> {
+    fun getTopNItemFromList(list: List<String>?, n: Int): List<String> {
         val newList = arrayListOf<String>()
+        if (list == null) {
+            return newList
+        }
         for (i in 0 until n) {
             if (i < list.size) {
                 newList.add(list[i])

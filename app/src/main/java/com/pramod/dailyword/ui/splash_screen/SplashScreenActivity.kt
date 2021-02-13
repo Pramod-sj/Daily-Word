@@ -1,27 +1,21 @@
 package com.pramod.dailyword.ui.splash_screen
 
+import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.pramod.dailyword.R
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
 import com.pramod.dailyword.db.remote.EndPoints
 import com.pramod.dailyword.firebase.FBTopicSubscriber
-import com.pramod.dailyword.helper.NotificationPrefManager
+import com.pramod.dailyword.helper.PrefManager
+import com.pramod.dailyword.helper.ThemeManager
 import com.pramod.dailyword.helper.showWebViewDialog
 import com.pramod.dailyword.ui.BaseActivity
 import com.pramod.dailyword.ui.home.HomeActivity
-import com.pramod.dailyword.util.CommonUtils
-import com.pramod.dailyword.util.showLinks
+import com.pramod.dailyword.util.*
 import kotlinx.android.synthetic.main.activity_splash_screen.*
-import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.helper.PrefManager
 
 
 class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>() {
@@ -39,10 +33,32 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
             else !ThemeManager.isNightModeActive(this)
         )
         super.onCreate(savedInstanceState)
+        //addGradientToAppIcon()
         registerTopics()
         animateAppIcon()
         navigateToHomePage()
         setUpAcceptLinks()
+    }
+
+    private fun addGradientToAppIcon() {
+        try {
+            mBinding.splashAppIcon.setImageBitmap(
+                GradientUtils.addGradient(
+                    CommonUtils.drawableToBitmap(
+                        getContextCompatDrawable(
+                            R.drawable.ic_vocabulary
+                        )!!
+                    )!!,
+                    getContextCompatColor(R.color.colorPrimaryDark),
+                    getContextCompatColor(R.color.colorPrimary)
+                )
+            )
+        } catch (e: Exception) {
+            //if exception occur fallback to normal icon
+            mBinding.splashAppIcon.setImageResource(R.drawable.ic_vocabulary)
+            mBinding.splashAppIcon.imageTintList =
+                ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
+        }
     }
 
     private fun navigateToHomePage() {
@@ -59,7 +75,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     }
 
     private fun animateAppIcon() {
-        mViewModel.animateSplashIcon().observe(this, Observer {
+        mViewModel.animateSplashIcon().observe(this, {
             if (it) {
                 val initialXYDimen = resources.getDimension(R.dimen.splash_icon_big)
                 val finalXYDimen = resources.getDimension(R.dimen.splash_icon_normal)

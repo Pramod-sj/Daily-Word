@@ -4,13 +4,13 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity
 class Bookmark {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "bookmarkedWord")
+    var bookmarkId: Int? = null
+
     var bookmarkedWord: String? = null
 
     var bookmarkedAt: Long? = null

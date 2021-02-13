@@ -9,13 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AbsListView
-import android.widget.AdapterView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -23,10 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BottomSheetDialogLayoutBinding
-import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import com.pramod.dailyword.ui.about_app.AboutAppActivity
-import java.util.*
 
 
 /*fun Context.showLottieDialog(fileName: String, title: String, body: String) {
@@ -171,6 +166,10 @@ fun Activity.showBottomSheet(
     bottomSheetDialog.setContentView(binding.root)
     binding.bottomSheetTitle.text = title
     binding.bottomSheetBody.text = desc
+
+    binding.bottomSheetBtnPositive.isVisible = positiveText != null
+    binding.bottomSheetBtnNegative.isVisible = negativeText != null
+
     binding.bottomSheetBtnPositive.text = positiveText
     binding.bottomSheetBtnNegative.text = negativeText
     binding.bottomSheetBtnPositive.setOnClickListener {
