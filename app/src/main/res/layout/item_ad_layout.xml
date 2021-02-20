@@ -4,9 +4,9 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.helper.AdsManager" />
+        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
         <import type="android.view.View" />
     </data>

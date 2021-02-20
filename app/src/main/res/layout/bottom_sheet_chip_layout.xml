@@ -14,7 +14,7 @@
 
         <variable
             name="onChipClickListener"
-            type="com.pramod.dailyword.binding_adapters.OnChipClickListener" />
+            type="com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener" />
     </data>
 
     <LinearLayout

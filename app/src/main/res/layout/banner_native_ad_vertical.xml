@@ -67,7 +67,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <com.pramod.dailyword.view.VerticalTextView
+                <com.pramod.dailyword.framework.ui.common.view.VerticalTextView
                     android:id="@+id/native_ad_social_context"
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                     android:singleLine="true"
                     android:text="Ad Desc" />
 
-                <com.pramod.dailyword.view.VerticalTextView
+                <com.pramod.dailyword.framework.ui.common.view.VerticalTextView
                     android:id="@+id/native_ad_title"
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"

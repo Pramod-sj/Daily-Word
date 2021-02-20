@@ -5,9 +5,9 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.ui.recapwords.RecapWordsViewModel" />
+        <import type="com.pramod.dailyword.framework.ui.recap.RecapWordsViewModel" />
 
         <variable
             name="recapWordsViewModel"

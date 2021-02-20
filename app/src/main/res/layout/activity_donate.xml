@@ -3,11 +3,11 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <variable
             name="donateViewModel"
-            type="com.pramod.dailyword.ui.donate.DonateViewModel" />
+            type="com.pramod.dailyword.framework.ui.donate.DonateViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,8 +22,7 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never"
             android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingTop="?attr/actionBarSize"
-            app:applyTopBottomPaddingInset="@{donateViewModel.edgeToEdgeEnabled}">
+            android:paddingTop="?attr/actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,7 +86,6 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{donateViewModel.edgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

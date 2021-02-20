@@ -3,37 +3,13 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <import type="com.pramod.dailyword.BuildConfig" />
 
-        <import type="com.pramod.dailyword.ui.about_app.AppLinkNavigate" />
-
-        <import type="com.pramod.dailyword.ui.about_app.CreditLinkNavigate" />
-
-        <import type="com.pramod.dailyword.ui.about_app.DeveloperLinkNavigate" />
-
-        <import type="com.pramod.dailyword.ui.about_app.OtherLinkNavigate" />
-
-        <variable
-            name="appLinkNavigate"
-            type="AppLinkNavigate" />
-
-        <variable
-            name="creditLinkNavigate"
-            type="CreditLinkNavigate" />
-
-        <variable
-            name="developerLinkNavigate"
-            type="DeveloperLinkNavigate" />
-
-        <variable
-            name="otherLinkNavigate"
-            type="OtherLinkNavigate" />
-
         <variable
             name="aboutAppViewModel"
-            type="com.pramod.dailyword.ui.about_app.AboutAppViewModel" />
+            type="com.pramod.dailyword.framework.ui.aboutapp.AboutAppViewModel" />
 
 
     </data>
@@ -107,7 +83,7 @@
                             android:layout_gravity="center_horizontal"
                             android:text="@string/app_tag_line" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
@@ -117,11 +93,11 @@
                             app:title="Version"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
-                            android:onClick="@{()->appLinkNavigate.openChangelogActivity()}"
+                            android:onClick="@{()->aboutAppViewModel.appLinkNavigate.openChangelogActivity()}"
                             app:icon="@drawable/ic_round_change_log_24"
                             app:showRadioButton="false"
                             app:subTitle="Checkout what's new in this version"
@@ -156,40 +132,40 @@
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appLinkNavigate.navigateToForkProject()}"
+                            android:onClick="@{()->aboutAppViewModel.appLinkNavigate.navigateToForkProject()}"
                             app:icon="@drawable/ic_source_fork"
                             app:showRadioButton="false"
                             app:subTitle="View source code or fork on github"
                             app:title="Fork on github"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appLinkNavigate.openDonatePage()}"
+                            android:onClick="@{()->aboutAppViewModel.appLinkNavigate.openDonatePage()}"
                             app:icon="@drawable/ic_baseline_card_giftcard_24"
                             app:showRadioButton="false"
                             app:subTitle="Liked my work?"
                             app:title="Donate"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appLinkNavigate.shareAppWithFriends()}"
+                            android:onClick="@{()->aboutAppViewModel.appLinkNavigate.shareAppWithFriends()}"
                             app:icon="@drawable/ic_outline_share_24"
                             app:showRadioButton="false"
                             app:subTitle="Share with your family, friends and colleague, and learn new words together"
                             app:title="Share"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appLinkNavigate.openGooglePlayReview()}"
+                            android:onClick="@{()->aboutAppViewModel.appLinkNavigate.openGooglePlayReview()}"
                             app:icon="@drawable/ic_outline_rate_review_24"
                             app:showRadioButton="false"
                             app:subTitle="Take a moment to rate my app on Google play store"
@@ -222,7 +198,7 @@
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
-                        <com.pramod.dailyword.view.CircularImageView
+                        <com.pramod.dailyword.framework.ui.common.view.CircularImageView
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_gravity="center"
@@ -263,7 +239,7 @@
                                     android:layout_height="30dp"
                                     android:layout_margin="@dimen/margin_small"
                                     android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->developerLinkNavigate.navigateToGithub()}"
+                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGithub()}"
                                     android:src="@drawable/ic_github"
                                     android:tint="@color/app_icon_tint" />
                             </FrameLayout>
@@ -279,7 +255,7 @@
                                     android:layout_height="30dp"
                                     android:layout_margin="@dimen/margin_small"
                                     android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->developerLinkNavigate.navigateToGmail()}"
+                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGmail()}"
                                     android:src="@drawable/ic_gmail"
                                     android:tint="@color/app_icon_tint" />
                             </FrameLayout>
@@ -295,7 +271,7 @@
                                     android:layout_height="30dp"
                                     android:layout_margin="@dimen/margin_small"
                                     android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->developerLinkNavigate.navigateToInstagram()}"
+                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToInstagram()}"
                                     android:src="@drawable/ic_instagram"
                                     android:tint="@color/app_icon_tint" />
                             </FrameLayout>
@@ -311,7 +287,7 @@
                                     android:layout_height="30dp"
                                     android:layout_margin="@dimen/margin_small"
                                     android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->developerLinkNavigate.navigateToFacebook()}"
+                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToFacebook()}"
                                     android:src="@drawable/ic_facebook"
                                     android:tint="@color/app_icon_tint" />
                             </FrameLayout>
@@ -347,27 +323,27 @@
                             android:textColor="?android:attr/windowBackground"
                             android:textStyle="bold" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->creditLinkNavigate.navigateToFreePikWebsite()}"
+                            android:onClick="@{()->aboutAppViewModel.creditLinkNavigate.navigateToFreePikWebsite()}"
                             app:icon="@drawable/ic_freepik"
                             app:subTitle="App icon/logo made by Freepik from flaticon"
                             app:title="App Logo" />
 
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->creditLinkNavigate.navigateToMaterialDesignIcon()}"
+                            android:onClick="@{()->aboutAppViewModel.creditLinkNavigate.navigateToMaterialDesignIcon()}"
                             app:icon="@drawable/ic_vector_square"
                             app:subTitle="All material designed icons are used from this website"
                             app:title="Material Design Icons" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->creditLinkNavigate.navigateToMerriamWebster()}"
+                            android:onClick="@{()->aboutAppViewModel.creditLinkNavigate.navigateToMerriamWebster()}"
                             app:icon="@drawable/merriam_webster_logo"
                             app:noIconColorTint="true"
                             app:subTitle="@{@string/merriam_webster_credit_text}"
@@ -403,29 +379,29 @@
                             android:textStyle="bold" />
 
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->otherLinkNavigate.showOpenSourceLibs()}"
+                            android:onClick="@{()->aboutAppViewModel.otherLinkNavigate.showOpenSourceLibs()}"
                             app:icon="@drawable/ic_open_source_license"
                             app:showRadioButton="false"
                             app:subTitle="All used libraries details"
                             app:title="Open Source Libraries"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->otherLinkNavigate.showTermsAndService()}"
+                            android:onClick="@{()->aboutAppViewModel.otherLinkNavigate.showTermsAndService()}"
                             app:icon="@drawable/ic_terms_and_conditions"
                             app:showRadioButton="false"
                             app:title="Terms &amp; Services"
                             app:titleTextSize="@dimen/text_sub_title" />
 
-                        <com.pramod.dailyword.view.ITSCustomLayout
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->otherLinkNavigate.showPrivacyPolicy()}"
+                            android:onClick="@{()->aboutAppViewModel.otherLinkNavigate.showPrivacyPolicy()}"
                             app:icon="@drawable/ic_privacy_policy_black_24dp"
                             app:showRadioButton="false"
                             app:title="Privacy Policies"

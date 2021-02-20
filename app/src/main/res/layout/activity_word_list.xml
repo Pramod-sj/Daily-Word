@@ -3,18 +3,18 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.helper.AdsManager" />
+        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.db.model.Status" />
+        <import type="com.pramod.dailyword.business.data.network.Status" />
 
 
         <variable
             name="wordListViewModel"
-            type="com.pramod.dailyword.ui.words.WordListViewModel" />
+            type="com.pramod.dailyword.framework.ui.words.WordListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"

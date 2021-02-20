@@ -3,9 +3,9 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <variable
             name="colorResId"
@@ -33,14 +33,14 @@
             android:id="@+id/word_example_sr_no"
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="30dp"
-            android:textStyle="bold"
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:background="@drawable/background_curve"
             android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?desaturatedColorResId:colorResId)),30)}"
             android:gravity="center"
             android:text="@{String.valueOf(srNo)}"
-            android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}" />
+            android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}"
+            android:textStyle="bold" />
 
         <TextView
             style="@style/AppTheme.SubTitleTextStyle"

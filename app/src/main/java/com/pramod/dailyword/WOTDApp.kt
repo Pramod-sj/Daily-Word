@@ -4,12 +4,12 @@ import android.app.Application
 import android.content.Context
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
-import com.pramod.dailyword.firebase.FBTopicSubscriber
-import com.pramod.dailyword.helper.NotificationPrefManager
-import com.pramod.dailyword.helper.PrefManager
-import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.util.CustomExceptionHandler
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.util.CustomExceptionHandler
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class WOTDApp : Application() {
 
     override fun onCreate() {

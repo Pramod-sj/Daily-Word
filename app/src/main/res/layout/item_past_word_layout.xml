@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="com.pramod.dailyword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
-        <import type="com.pramod.dailyword.db.model.WordOfTheDay" />
-
-        <import type="com.pramod.dailyword.ui.home.SelectedItem" />
-
+        <import type="com.pramod.dailyword.business.domain.model.Word" />
 
         <variable
-            name="wordOfTheDay"
-            type="com.pramod.dailyword.db.model.WordOfTheDay" />
+            name="word"
+            type="Word" />
 
     </data>
 
@@ -35,14 +31,14 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{CalenderUtil.isYesterday(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)?`Yesterday`:CalenderUtil.convertDateStringToSpecifiedDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_FORMAT_DISPLAY)}" />
+                android:text="@{CalenderUtil.isYesterday(word.date,CalenderUtil.DATE_FORMAT)?`Yesterday`:CalenderUtil.convertDateStringToSpecifiedDateString(word.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_FORMAT_DISPLAY)}" />
 
             <TextView
 
                 android:id="@+id/textView_item_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wordOfTheDay.word}"
+                android:text="@{word.word}"
                 android:textSize="@dimen/text_h5"
                 android:textStyle="bold"
                 android:transitionName="CONTAINER" />

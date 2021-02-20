@@ -18,8 +18,9 @@
         <!-- Navigation Drawer -->
         <item name="colorNavigationItem">@color/navigation_item_color</item>
         <item name="colorNavigationItemSelected">@color/navigation_item_color</item>
-        <item name="drawableNavigationItemBackground">@drawable/background_navigation_item_selector</item>
-
+        <item name="drawableNavigationItemBackground">
+            @drawable/background_navigation_item_selector
+        </item>
     </style>
 
     <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />
@@ -112,7 +113,6 @@
         <item name="android:textSize">@dimen/text_sub_title</item>
         <item name="android:textColor">@color/textColor_mediumEmphasis</item>
     </style>
-
 
 
     <style name="AppTheme.SubTitleTextStyle.Bold" parent="AppTheme.SubTitleTextStyle">

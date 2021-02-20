@@ -20,7 +20,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.recapwords.RecapWordsActivity"
+            android:name=".framework.ui.recap.RecapWordsActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
 
@@ -29,19 +29,19 @@
             android:value="${crashlyticsCollectionEnabled}" />
 
         <activity
-            android:name=".ui.change_logs.ChangelogActivity"
+            android:name=".framework.ui.changelogs.ChangelogActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.bookmarked_words.FavoriteWordsActivity"
+            android:name=".framework.ui.bookmarks.FavoriteWordsActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.donate.DonateActivity"
+            android:name=".framework.ui.donate.DonateActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.splash_screen.SplashScreenActivity"
+            android:name=".framework.ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.SplashScreenActivity">
 
@@ -52,32 +52,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.about_app.AboutAppActivity"
+            android:name=".framework.ui.aboutapp.AboutAppActivity"
             android:label="@string/title_activity_about_app"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.settings.AppSettingActivity"
+            android:name=".framework.ui.settings.AppSettingActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.words.WordListActivity"
+            android:name=".framework.ui.words.WordListActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.word_details.WordDetailedActivity"
+            android:name=".framework.ui.worddetails.WordDetailedActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.home.HomeActivity"
+            android:name=".framework.ui.home.HomeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.crash_handler.CustomCrashActivity"
-            android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -86,14 +82,14 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 
-        <service android:name=".firebase.FBMessageService">
+        <service android:name="com.pramod.dailyword.framework.firebase.FBMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <receiver
-            android:name=".widget.WordWidgetProvider"
+            android:name="com.pramod.dailyword.framework.widget.WordWidgetProvider"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -110,7 +106,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <receiver
-            android:name=".widget.SmallWordWidgetProvider"
+            android:name="com.pramod.dailyword.framework.widget.SmallWordWidgetProvider"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -127,9 +123,9 @@
         </receiver>
 
         <service
-            android:name=".widget.WidgetDataLoadService"
+            android:name="com.pramod.dailyword.framework.widget.WidgetDataLoadService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

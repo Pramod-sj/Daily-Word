@@ -7,29 +7,20 @@
 
         <import type="com.pramod.dailyword.R" />
 
-        <import type="com.pramod.dailyword.db.Resource.Status" />
+        <import type="com.pramod.dailyword.business.data.network.Status" />
 
-        <import type="com.pramod.dailyword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <import type="android.view.View" />
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
-
-        <import type="com.pramod.dailyword.ui.home.SelectedItem" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
 
         <variable
             name="mainViewModel"
-            type="com.pramod.dailyword.ui.home.HomeViewModel" />
+            type="com.pramod.dailyword.framework.ui.home.HomeViewModel" />
 
-        <variable
-            name="pastWordAdapter"
-            type="com.pramod.dailyword.ui.home.PastWordAdapter" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
-
-        <variable
-            name="viewCallbacks"
-            type="com.pramod.dailyword.ui.home.ViewCallbacks" />
 
         <import type="android.graphics.Color" />
 
@@ -137,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:onRefreshListener="@{()->mainViewModel.refreshDataSource()}"
+            app:onRefreshListener="@{()->mainViewModel.refresh()}"
             app:refreshing="@{mainViewModel.showLoading}">
 
             <androidx.core.widget.NestedScrollView
@@ -169,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:onClick="@{(v)->viewCallbacks.learnAll(v)}"
+                            android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -198,7 +189,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:onClick="@{(v)->viewCallbacks.gotoBookmark(v)}"
+                            android:onClick="@{(v)->mainViewModel.navigator.gotoBookmark(v)}"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -228,7 +219,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:onClick="@{(v)->viewCallbacks.gotoRandomWord(v)}"
+                            android:onClick="@{(v)->mainViewModel.navigator.gotoRandomWord(v)}"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -258,7 +249,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:onClick="@{(v)->viewCallbacks.gotoRecap(v)}"
+                            android:onClick="@{(v)->mainViewModel.navigator.gotoRecap(v)}"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -289,15 +280,15 @@
                         android:id="@+id/main_linearLayout_wotd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="@{(v)->viewCallbacks.readMore(v,mainViewModel.todaysWordOfTheDay)}"
+                        android:onClick="@{(v)->mainViewModel.navigator.readMore(v,mainViewModel.wordOfTheDayLiveData)}"
                         android:orientation="vertical"
                         android:paddingHorizontal="@dimen/padding_large"
                         android:paddingVertical="@dimen/padding_small"
                         android:transitionGroup="true"
-                        android:visibility="@{mainViewModel.todaysWordOfTheDay==null?View.INVISIBLE:View.VISIBLE}">
+                        android:visibility="@{mainViewModel.wordOfTheDayLiveData==null?View.INVISIBLE:View.VISIBLE}">
 
                         <!--
-                                            copyToClipBoardText="@{mainViewModel.todaysWordOfTheDay.word}"
+                                            copyToClipBoardText="@{mainViewModel.wordOfTheDayLiveData.word}"
                                             rootLayout="@{coordinatorLayout}"
                         -->
 
@@ -311,7 +302,7 @@
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:singleLine="true"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.word}"
+                            android:text="@{mainViewModel.wordOfTheDayLiveData.word}"
                             android:textIsSelectable="true" />
 
                         <LinearLayout
@@ -326,7 +317,7 @@
                                 style="@style/AppTheme.TitleTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{mainViewModel.todaysWordOfTheDay.attribute}"
+                                android:text="@{mainViewModel.wordOfTheDayLiveData.attribute}"
                                 android:textStyle="italic" />
 
                             <TextView
@@ -341,7 +332,7 @@
                                 style="@style/AppTheme.TitleTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{mainViewModel.todaysWordOfTheDay.pronounce}" />
+                                android:text="@{mainViewModel.wordOfTheDayLiveData.pronounce}" />
 
                             <com.kuassivi.component.RipplePulseRelativeLayout
                                 android:id="@+id/rippleEffect_audio"
@@ -355,15 +346,27 @@
                                 app:pulse_layout_RippleColor="@color/ripple_tint"
                                 app:pulse_layout_RippleStartRadiusPercent="50">
 
-                                <ImageButton
-                                    android:id="@+id/main_card_view_pronounce"
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/lottie_speaker"
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:background="@android:color/transparent"
-                                    android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.todaysWordOfTheDay.pronounceAudio)}"
-                                    android:padding="@dimen/padding_medium"
-                                    android:src="@drawable/ic_volume_up_black_24dp"
-                                    android:tint="@color/app_icon_tint" />
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.wordOfTheDayLiveData.pronounceAudio)}"
+                                    android:padding="12dp"
+                                    app:lottie_autoPlay="false"
+                                    app:lottie_fallbackRes="@drawable/ic_volume_up_black_24dp"
+                                    app:lottie_fileName="lottie_speaker_anim_2.json"
+                                    app:lottie_loop="true" />
+                                <!--
+                                                                <ImageButton
+                                                                    android:id="@+id/main_card_view_pronounce"
+                                                                    android:layout_width="48dp"
+                                                                    android:layout_height="48dp"
+                                                                    android:background="@android:color/transparent"
+                                                                    android:onClick="@{()->mainViewModel.pronounceWord(mainViewModel.wordOfTheDayLiveData.pronounceAudio)}"
+                                                                    android:padding="@dimen/padding_medium"
+                                                                    android:src="@drawable/ic_volume_up_black_24dp"
+                                                                    android:tint="@color/app_icon_tint" />-->
 
 
                             </com.kuassivi.component.RipplePulseRelativeLayout>
@@ -377,7 +380,7 @@
                             android:layout_marginBottom="@dimen/margin_small"
                             android:ellipsize="end"
                             android:maxLines="3"
-                            android:text="@{mainViewModel.todaysWordOfTheDay.meanings[0]}" />
+                            android:text="@{mainViewModel.wordOfTheDayLiveData.meanings[0]}" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -389,7 +392,7 @@
                                 style="@style/AppTheme.SubTitleTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{`How to use `+mainViewModel.todaysWordOfTheDay.word}"
+                                android:text="@{`How to use `+mainViewModel.wordOfTheDayLiveData.word}"
                                 android:textColor="@color/textColor_highEmphasis"
                                 android:textSize="@dimen/text_sub_title"
                                 android:textStyle="bold" />
@@ -399,7 +402,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:maxLines="4"
-                                android:text="@{mainViewModel.todaysWordOfTheDay.examples[0]}" />
+                                android:text="@{mainViewModel.wordOfTheDayLiveData.examples[0]}" />
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
@@ -409,11 +412,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:height="40dp"
-                            android:onClick="@{(v)->viewCallbacks.readMore(v,mainViewModel.todaysWordOfTheDay)}"
+                            android:onClick="@{(v)->mainViewModel.navigator.readMore(v,mainViewModel.wordOfTheDayLiveData)}"
                             android:text="@string/read_more"
                             android:textSize="@dimen/text_small"
                             android:visibility="gone"
-                            app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
+                            app:buttonTextColorBasedOnWord="@{mainViewModel.wordOfTheDayLiveData}" />
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -428,7 +431,6 @@
                         android:paddingHorizontal="@dimen/padding_small"
                         android:paddingVertical="@dimen/padding_large"
                         android:splitMotionEvents="false"
-                        app:adapter="@{pastWordAdapter}"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <com.google.android.material.button.MaterialButton
@@ -440,11 +442,11 @@
                         android:layout_marginTop="-10dp"
                         android:layout_marginEnd="@dimen/margin_large"
                         android:ellipsize="end"
-                        android:onClick="@{(v)->viewCallbacks.learnAll(v)}"
+                        android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
                         android:text="@string/learn_all"
                         android:textSize="@dimen/text_small"
                         android:visibility="gone"
-                        app:buttonTextColorBasedOnWord="@{mainViewModel.todaysWordOfTheDay}" />
+                        app:buttonTextColorBasedOnWord="@{mainViewModel.wordOfTheDayLiveData}" />
 
                     <!--android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"-->
 

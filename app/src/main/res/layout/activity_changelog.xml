@@ -11,19 +11,13 @@
             name="showContinueButton"
             type="Boolean" />
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
-
-        <import type="com.pramod.dailyword.helper.PrefManager" />
-
-        <variable
-            name="changelogCallbacks"
-            type="com.pramod.dailyword.ui.change_logs.ChangelogCallbacks" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.PrefManager" />
 
         <variable
             name="changelogViewModel"
-            type="com.pramod.dailyword.ui.change_logs.ChangelogViewModel" />
+            type="com.pramod.dailyword.framework.ui.changelogs.ChangelogViewModel" />
 
     </data>
 
@@ -53,7 +47,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/margin_large"
             android:height="60dp"
-            android:onClick="@{()->changelogCallbacks.onContinueLearningWordsClick()}"
+            android:onClick="@{()->changelogViewModel.navigator.onContinueLearningWordsClick()}"
             android:text="@string/value_continue"
             android:visibility="@{showContinueButton?View.VISIBLE:View.GONE}"
             app:applyBottomMarginInset="@{changelogViewModel.edgeToEdgeEnabled}"

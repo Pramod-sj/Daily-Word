@@ -5,11 +5,11 @@
 
         <import type="android.view.View" />
 
-        <import type="com.pramod.dailyword.helper.PrefManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.PrefManager" />
 
         <variable
             name="splashScreenViewModel"
-            type="com.pramod.dailyword.ui.splash_screen.SplashScreenViewModel" />
+            type="com.pramod.dailyword.framework.ui.splash_screen.SplashScreenViewModel" />
 
     </data>
 

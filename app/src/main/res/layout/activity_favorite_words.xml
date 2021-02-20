@@ -7,15 +7,15 @@
 
         <import type="android.view.View" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <variable
             name="favoriteWordsViewModel"
-            type="com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsViewModel" />
+            type="com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsViewModel" />
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.helper.AdsManager" />
+        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
 
     </data>
 

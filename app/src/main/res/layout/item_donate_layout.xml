@@ -6,7 +6,7 @@
 
         <variable
             name="donateItem"
-            type="com.pramod.dailyword.ui.donate.DonateItem" />
+            type="com.pramod.dailyword.framework.ui.donate.DonateItem" />
 
         <variable
             name="alphaColor"

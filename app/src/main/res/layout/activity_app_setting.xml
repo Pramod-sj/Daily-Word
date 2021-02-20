@@ -3,15 +3,13 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
-
-        <import type="com.pramod.dailyword.helper.PrefManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.PrefManager" />
 
         <variable
             name="appSettingViewModel"
-            type="com.pramod.dailyword.ui.settings.AppSettingViewModel" />
+            type="com.pramod.dailyword.framework.ui.settings.AppSettingViewModel" />
 
     </data>
 
@@ -30,7 +28,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
-            app:applyTopBottomPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}">
+            app:applyTopBottomPaddingInset="@{appSettingViewModel.edgeToEdgeValue}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,22 +45,22 @@
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.showThemeSelector()}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.openChooseThemeDialog()}"
                     app:icon="@drawable/ic_outline_theme_24"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
-                    app:subTitle="@{CommonUtils.capitalizeFirstLetter(ThemeManager.getThemeNameFromOrdinal(appSettingViewModel.themeManager.liveData))}"
+                    app:subTitle="@{appSettingViewModel.themeValue}"
                     app:title="Theme"
                     app:titlePaddingStart="@dimen/margin_small" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.toggleWindowAnimation()}"
-                    app:checked="@{appSettingViewModel.windowAnimationPrefManager.liveData()}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleWindowAnimation()}"
+                    app:checked="@{appSettingViewModel.windowAnimValue}"
                     app:icon="@drawable/ic_animation_outline"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
@@ -72,11 +70,11 @@
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.toggleEdgeToEdge()}"
-                    app:checked="@{appSettingViewModel.windowPrefManager.liveData}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
+                    app:checked="@{appSettingViewModel.edgeToEdgeValue}"
                     app:icon="@drawable/ic_baseline_fullscreen_24"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
@@ -97,11 +95,11 @@
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleDailyWordNotification()}"
-                    app:checked="@{appSettingViewModel.notificationPrefManager.dailyWordNotificationEnabledLiveData}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleDailyWordNotification()}"
+                    app:checked="@{appSettingViewModel.dailyWordNotificationValue}"
                     app:icon="@drawable/ic_notifications_none_black_24dp"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showRadioButton="true"
@@ -111,11 +109,11 @@
                     app:titleTextSize="@dimen/text_sub_title" />
 
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
-                    app:checked="@{appSettingViewModel.notificationPrefManager.reminderNotificationEnabledLiveData}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleReminderNotification()}"
+                    app:checked="@{appSettingViewModel.reminderNotificationValue}"
                     app:icon="@drawable/ic_outline_notifications_active_24"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showRadioButton="true"
@@ -135,13 +133,13 @@
                     android:textAllCaps="true"
                     android:textColor="@color/colorPrimary" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.goToDokiActivity()}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToFacingNotificationIssue()}"
                     app:icon="@drawable/ic_round_report_problem_24"
                     app:iconColorTint="@color/app_icon_tint"
-                    app:onLongClick="@{()->appSettingViewModel.copyFirebaseTokenId()}"
+                    app:onLongClick="@{()->appSettingViewModel.settingUseCase.copyFirebaseTokenId()}"
                     app:showIconBackground="false"
                     app:showRadioButton="false"
                     app:subTitle="Not receiving notifications, fix it yourself"
@@ -149,10 +147,10 @@
                     app:titlePaddingStart="@dimen/margin_small"
                     app:titleTextSize="@dimen/text_sub_title" />
 
-                <com.pramod.dailyword.view.ITSCustomLayout
+                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.goToAbout()}"
+                    android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToAbout()}"
                     app:icon="@drawable/ic_info_outline_black_24dp"
                     app:iconColorTint="@color/app_icon_tint"
                     app:showIconBackground="false"
@@ -172,7 +170,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{appSettingViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{appSettingViewModel.edgeToEdgeValue}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 
