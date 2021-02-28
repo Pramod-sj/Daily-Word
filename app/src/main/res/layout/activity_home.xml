@@ -174,7 +174,7 @@
                                 android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.green_400),Constants.COLOR_ALPHA)}"
                                 android:clickable="false"
                                 android:padding="13dp"
-                                android:src="@drawable/ic_list_24"
+                                android:src="@drawable/ic_round_format_list_bulleted_24"
                                 android:tint="@color/green_400" />
 
                             <TextView
