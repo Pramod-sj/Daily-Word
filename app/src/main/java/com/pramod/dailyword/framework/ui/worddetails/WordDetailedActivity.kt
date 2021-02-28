@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.ui.worddetails
 
 import android.os.Bundle
 import android.transition.ArcMotion
+import android.util.Log
 import android.view.*
 import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
@@ -13,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
@@ -27,9 +29,7 @@ import com.pramod.dailyword.framework.ui.common.exts.shareApp
 import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
 
@@ -86,6 +86,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         handleRippleAnimationForAudioEffect()
     }
 
+
     private fun keepScreenOn() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -105,6 +106,9 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     private fun handleRippleAnimationForAudioEffect() {
 
+        viewModel.audioPlayer.audioPlaying.observe(this) {
+            Log.i(TAG, "handleRippleAnimationForAudioEffect: " + Gson().toJson(it))
+        }
 
         themeManager.liveData().observe(this) {
             binding.lottieSpeaker.post {
@@ -112,14 +116,6 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
             }
         }
 
-        mViewModel.isAudioPronouncing.observe(this) {
-            if (it) {
-                binding.lottieSpeaker.playAnimation()
-            } else {
-                binding.lottieSpeaker.cancelAnimation()
-            }
-
-        }
     }
 
     private fun setUpToolbar() {

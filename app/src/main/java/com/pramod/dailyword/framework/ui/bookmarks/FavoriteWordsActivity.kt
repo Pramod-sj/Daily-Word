@@ -8,22 +8,19 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
-import com.pramod.dailyword.framework.prefmanagers.WindowAnimationPrefManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.word.WordsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,7 +33,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
     override val bindingVariable: Int = BR.favoriteWordsViewModel
 
     @Inject
-    lateinit var animationPrefManager: WindowAnimationPrefManager
+    lateinit var animPrefManager: WindowAnimPrefManager
 
 
     companion object {
@@ -95,21 +92,21 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
             openWordDetailsPage(
                 word.date!!,
                 option,
-                animationPrefManager.isWindowAnimationEnabled()
+                animPrefManager.isEnabled()
             )
         }
         binding.recyclerviewWords.adapter = adapter
+
+        adapter?.addLoadStateListener {
+            Log.i(TAG, "initAdapter: " + Gson().toJson(it))
+            mViewModel.showPlaceHolderLiveData.value = adapter?.itemCount == 0
+        }
+
         lifecycleScope.launch(Dispatchers.Main) {
             mViewModel.getFavWords().collectLatest { pagingData ->
                 Log.i(TAG, "initAdapter: process")
                 adapter?.submitData(lifecycle, pagingData)
                 Log.i(TAG, "initAdapter: done" + adapter?.itemCount)
-            }
-
-            adapter?.loadStateFlow?.map { it.refresh }?.distinctUntilChanged()?.collect {
-                if (it is LoadState.NotLoading) {
-                    mViewModel.showPlaceHolderLiveData.value = adapter?.itemCount ?: 0 == 0
-                }
             }
         }
 

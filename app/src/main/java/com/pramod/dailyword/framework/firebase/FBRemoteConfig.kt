@@ -39,7 +39,7 @@ class FBRemoteConfig {
     }
 
 
-    fun isAdsEnabled(): Boolean = remoteConfig.getBoolean(REMOTE_CONFIG_KEY_ADS)
+    fun isAdsEnabled(): Boolean = /*remoteConfig.getBoolean(REMOTE_CONFIG_KEY_ADS)*/false
 
     fun baseUrl(): String {
         val baseUrl = remoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)

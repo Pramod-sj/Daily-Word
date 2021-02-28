@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
-            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordListViewModel.edgeToEdgeEnabled}">
+            app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordListViewModel.isEdgeToEdgeEnabled}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_words"
@@ -43,7 +43,7 @@
                 android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
                 android:scrollbars="vertical"
                 android:splitMotionEvents="false"
-                app:applyTopBottomPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
+                app:applyTopBottomPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{wordListViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
 

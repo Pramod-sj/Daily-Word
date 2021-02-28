@@ -25,23 +25,23 @@
         android:animateLayoutChanges="true"
         tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
 
-<!--        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            app:cardElevation="5dp"
-            app:cardPreventCornerOverlap="false"
-            app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
+        <!--        <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    app:cardElevation="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
 
-            <com.facebook.ads.NativeAdLayout
-                adId="@{AdsManager.NATIVE_BANNER_ID_1}"
-                showAdWithSomeDelay="@{1000}"
-                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                verticalAd="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    <com.facebook.ads.NativeAdLayout
+                        adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                        showAdWithSomeDelay="@{1000}"
+                        showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                        verticalAd="@{true}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-        </com.google.android.material.card.MaterialCardView>-->
+                </com.google.android.material.card.MaterialCardView>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
@@ -53,8 +53,7 @@
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
-            android:visibility="@{favoriteWordsViewModel.showPlaceHolderLiveData?View.GONE:View.VISIBLE}"
-            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <include
@@ -71,7 +70,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
 

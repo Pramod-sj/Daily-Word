@@ -12,10 +12,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
-import com.pramod.dailyword.R
 import javax.inject.Inject
 
-class WindowPrefManager @Inject constructor(private val context: Context) {
+class EgdeToEdgePrefManager @Inject constructor(private val context: Context) {
 
 
     private val sharedPreferences =
@@ -24,6 +23,8 @@ class WindowPrefManager @Inject constructor(private val context: Context) {
 
 
     companion object {
+        val TAG = EgdeToEdgePrefManager::class.java.simpleName
+
         private const val PREFERENCES_NAME = "window_preferences"
         private const val KEY_EDGE_TO_EDGE_ENABLED = "edge_to_edge_enabled"
         private const val EDGE_TO_EDGE_BAR_ALPHA = 128
@@ -39,33 +40,34 @@ class WindowPrefManager @Inject constructor(private val context: Context) {
         }
 
         fun newInstance(context: Context) =
-            WindowPrefManager(
+            EgdeToEdgePrefManager(
                 context
             )
     }
 
 
-    fun toggleEdgeToEdgeEnabled() {
-        Log.i("EDGE TO EDGE TOGGLE", (!isEdgeToEdgeEnabled()).toString())
+    fun toggle() {
+        Log.i("EDGE TO EDGE TOGGLE", (!isEnabled()).toString())
         editor.putBoolean(
             KEY_EDGE_TO_EDGE_ENABLED,
-            !isEdgeToEdgeEnabled()
+            !isEnabled()
         ).commit()
     }
 
-    fun isEdgeToEdgeEnabled() = sharedPreferences.getBoolean(
+    fun isEnabled() = sharedPreferences.getBoolean(
         KEY_EDGE_TO_EDGE_ENABLED,
         false
     )
 
     fun applyEdgeToEdgeIfEnabled(window: Window, forceApply: Boolean? = false) {
-        val edgeToEdgeEnabled = if (forceApply == true) true else isEdgeToEdgeEnabled()
+        val edgeToEdgeEnabled = if (forceApply == true) true else isEnabled()
+        Log.i(TAG, "applyEdgeToEdgeIfEnabled: $edgeToEdgeEnabled")
         applyEdgeToEdgePreference(window, edgeToEdgeEnabled)
     }
 
-    fun applyEdgeToEdgePreference(window: Window, shouldApply: Boolean) {
-        val statusBarColor = getStatusBarColor(isEdgeToEdgeEnabled())
-        val navbarColor = getNavBarColor(isEdgeToEdgeEnabled())
+    private fun applyEdgeToEdgePreference(window: Window, shouldApply: Boolean) {
+        val statusBarColor = getStatusBarColor(isEnabled())
+        val navbarColor = getNavBarColor(isEnabled())
         val lightBackground =
             isColorLight(
                 MaterialColors.getColor(
@@ -145,5 +147,6 @@ class WindowPrefManager @Inject constructor(private val context: Context) {
             false
         )
     }
+
 
 }

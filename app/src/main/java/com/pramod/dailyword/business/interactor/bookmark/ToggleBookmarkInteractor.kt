@@ -8,8 +8,9 @@ import com.pramod.dailyword.business.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
+import javax.inject.Inject
 
-class ToggleBookmarkInteractor (
+class ToggleBookmarkInteractor @Inject constructor(
     private val bookmarkCacheDataSource: BookmarkCacheDataSource,
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 ) {

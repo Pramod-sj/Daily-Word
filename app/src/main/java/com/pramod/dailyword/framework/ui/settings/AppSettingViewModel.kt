@@ -1,6 +1,6 @@
 package com.pramod.dailyword.framework.ui.settings
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,14 +10,14 @@ class AppSettingViewModel @Inject constructor() : BaseViewModel() {
 
     var settingUseCase: SettingUseCase? = null
 
-    var themeValue: LiveData<String>? = null
+    val themeValue = MutableLiveData<String>()
 
-    var windowAnimValue: LiveData<Boolean>? = null
+    val windowAnimValue = MutableLiveData<Boolean>()
 
-    var edgeToEdgeValue: LiveData<Boolean>? = null
+    val edgeToEdgeValue = MutableLiveData<Boolean>()
 
-    var dailyWordNotificationValue: LiveData<Boolean>? = null
+    val dailyWordNotificationValue = MutableLiveData<Boolean>()
 
-    var reminderNotificationValue: LiveData<Boolean>? = null
+    val reminderNotificationValue = MutableLiveData<Boolean>()
 
 }

@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
-import com.pramod.dailyword.framework.prefmanagers.WindowAnimationPrefManager
-import com.pramod.dailyword.framework.prefmanagers.WindowPrefManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
+import com.pramod.dailyword.framework.prefmanagers.EgdeToEdgePrefManager
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,10 +22,10 @@ abstract class ThemedActivity : AppCompatActivity() {
     lateinit var themeManager: ThemeManager
 
     @Inject
-    lateinit var windowPrefManager: WindowPrefManager
+    lateinit var egdeToEdgePrefManager: EgdeToEdgePrefManager
 
     @Inject
-    lateinit var windowAnimPrefManager: WindowAnimationPrefManager
+    lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
     private var forceEdgeToEdge: Boolean? = null
 
@@ -34,15 +34,13 @@ abstract class ThemedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-
     fun forceEdgeToEdge(forceEdgeToEdge: Boolean) {
         this.forceEdgeToEdge = forceEdgeToEdge
     }
 
     private fun shouldApplyEdgeToEdge() {
-        windowPrefManager.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
+        egdeToEdgePrefManager.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
     }
-
 
     open fun lightStatusBar(
         makeLight: Boolean = !ThemeManager.isNightModeActive(this),

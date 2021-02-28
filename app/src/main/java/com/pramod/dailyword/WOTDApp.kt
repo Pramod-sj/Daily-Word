@@ -12,12 +12,20 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class WOTDApp : Application() {
 
+    private val themeManager: ThemeManager by lazy {
+        return@lazy ThemeManager.newInstance(this)
+    }
+
+    private val appPrefManager: PrefManager by lazy {
+        return@lazy PrefManager(this)
+    }
+
     override fun onCreate() {
+        appPrefManager.incrementAppLaunchCount()
         super.onCreate()
-        ThemeManager.newInstance(this).applyTheme()
+        themeManager.applyTheme()
         //setUpCustomCrashHandler()
         initAds()
-        PrefManager.getInstance(this).incrementAppLaunchCount()
     }
 
     companion object {

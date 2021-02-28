@@ -9,6 +9,7 @@ import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,6 +57,9 @@ open class BaseWidgetProvider : AppWidgetProvider() {
                             val word = it.getStringExtra(WordWidgetProvider.EXTRA_BOOKMARKED_WORD)
                             word?.let { bookmarked_word ->
                                 toggleBookmarkInteractor.toggle(bookmarked_word)
+                                    .collectLatest {
+
+                                    }
                                 //run data fetch job to get updated data
                                 runTodayWordFetchJob(context)
                             }

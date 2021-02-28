@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,12 +16,9 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".ui.about_app.AboutAppActivity">
 
         <androidx.core.widget.NestedScrollView
@@ -30,7 +29,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
-            app:applyTopBottomPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}">
+            app:applyTopBottomPaddingInset="@{aboutAppViewModel.isEdgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,53 +39,52 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="@dimen/card_elevation_min">
+                    app:cardElevation="@dimen/card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/padding_large">
 
-                        <TextView
-                            style="@style/AppTheme.SmallTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/margin_medium"
-                            android:background="@drawable/background_about_titles_curve_edge"
-                            android:backgroundTint="?colorPrimary"
-                            android:padding="@dimen/margin_medium"
-                            android:text="@string/app_info_text"
-                            android:textAllCaps="true"
-                            android:textColor="?android:attr/windowBackground"
-                            android:textStyle="bold" />
 
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="@dimen/margin_medium"
                             android:src="@drawable/ic_app_icon" />
 
                         <TextView
-                            style="@style/AppTheme.Header5TextStyle.Bold"
+                            style="@style/AppTheme.TitleTextStyle.Bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:text="@string/app_name" />
 
                         <TextView
-                            style="@style/ITSSubTitleStyle"
+                            style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginVertical="2dp"
+                            android:text="@{BuildConfig.VERSION_NAME+` (`+BuildConfig.VERSION_CODE+`)`}" />
+
+                        <TextView
+                            style="@style/AppTheme.SubTitleTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginVertical="@dimen/margin_small"
                             android:text="@string/app_tag_line" />
+
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
+                            android:visibility="gone"
                             app:icon="@drawable/ic_info_outline_black_24dp"
                             app:showRadioButton="false"
                             app:subTitle="@{BuildConfig.VERSION_NAME+`(`+BuildConfig.VERSION_CODE+`)`}"
@@ -102,35 +100,170 @@
                             app:showRadioButton="false"
                             app:subTitle="Checkout what's new in this version"
                             app:title="Changelogs"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/padding_medium">
+
+                    <com.pramod.dailyword.framework.ui.common.view.CircularImageView
+                        android:id="@+id/imgView_dev"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="-40dp"
+                        android:elevation="@dimen/card_elevation_max"
+                        android:src="@drawable/dev_profile"
+                        app:civ_border_color="?android:attr/windowBackground"
+                        app:civ_border_width="3dp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_dev_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_extra_large"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        app:cardCornerRadius="@dimen/card_radius_max"
+                        app:cardElevation="@dimen/card_elevation">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingTop="50dp"
+                            android:paddingBottom="@dimen/padding_medium">
+
+
+                            <TextView
+                                style="@style/AppTheme.SmallTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="2dp"
+                                android:gravity="center"
+                                android:text="@string/designed_amp_developed_by"
+                                android:textAlignment="center" />
+
+                            <TextView
+                                style="@style/AppTheme.SubTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="2dp"
+                                android:text="@string/dev_name"
+                                android:textColor="@color/textColor_highEmphasis" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginVertical="@dimen/margin_medium"
+                                android:layout_marginBottom="@dimen/margin_medium">
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_medium"
+                                    android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                    <ImageButton
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_margin="@dimen/margin_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGithub()}"
+                                        android:src="@drawable/ic_github"
+                                        android:tint="@color/app_icon_tint" />
+                                </FrameLayout>
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_medium"
+                                    android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                    <ImageButton
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_margin="@dimen/margin_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGmail()}"
+                                        android:src="@drawable/ic_gmail"
+                                        android:tint="@color/app_icon_tint" />
+                                </FrameLayout>
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_medium"
+                                    android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                    <ImageButton
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_margin="@dimen/margin_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToInstagram()}"
+                                        android:src="@drawable/ic_instagram"
+                                        android:tint="@color/app_icon_tint" />
+                                </FrameLayout>
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_medium"
+                                    android:background="@drawable/background_dev_social_app_circle_stroke">
+
+                                    <ImageButton
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_margin="@dimen/margin_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToFacebook()}"
+                                        android:src="@drawable/ic_facebook"
+                                        android:tint="@color/app_icon_tint" />
+                                </FrameLayout>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="@dimen/card_elevation_min">
+                    app:cardElevation="@dimen/card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/padding_medium">
 
                         <TextView
                             style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_medium"
                             android:layout_marginBottom="@dimen/margin_medium"
-                            android:background="@drawable/background_about_titles_curve_edge"
-                            android:backgroundTint="?colorPrimary"
                             android:padding="@dimen/margin_medium"
                             android:text="@string/support_development_text"
                             android:textAllCaps="true"
-                            android:textColor="?android:attr/windowBackground"
-                            android:textStyle="bold" />
+                            android:textColor="?colorPrimary" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
@@ -140,6 +273,7 @@
                             app:showRadioButton="false"
                             app:subTitle="View source code or fork on github"
                             app:title="Fork on github"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -150,6 +284,7 @@
                             app:showRadioButton="false"
                             app:subTitle="Liked my work?"
                             app:title="Donate"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -160,6 +295,7 @@
                             app:showRadioButton="false"
                             app:subTitle="Share with your family, friends and colleague, and learn new words together"
                             app:title="Share"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -170,6 +306,7 @@
                             app:showRadioButton="false"
                             app:subTitle="Take a moment to rate my app on Google play store"
                             app:title="Rate"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -177,151 +314,26 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="@dimen/card_elevation_min">
+                    app:cardElevation="@dimen/card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/margin_medium">
 
                         <TextView
                             style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/background_about_titles_curve_edge"
-                            android:backgroundTint="?colorPrimary"
-                            android:padding="@dimen/margin_medium"
-                            android:text="@string/developer_string"
-                            android:textAllCaps="true"
-                            android:textColor="?android:attr/windowBackground"
-                            android:textStyle="bold" />
-
-                        <com.pramod.dailyword.framework.ui.common.view.CircularImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/margin_medium"
-                            android:src="@drawable/dev_profile"
-                            app:civ_border_color="@color/app_icon_tint"
-                            app:civ_border_width="1dp" />
-
-                        <TextView
-                            style="@style/AppTheme.Header5TextStyle.Bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/dev_name" />
-
-                        <TextView
-                            style="@style/ITSSubTitleStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/dev_info" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginVertical="@dimen/margin_medium"
-                            android:layout_marginBottom="@dimen/margin_medium">
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_medium"
-                                android:background="@drawable/background_dev_social_app_circle_stroke">
-
-                                <ImageButton
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_margin="@dimen/margin_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGithub()}"
-                                    android:src="@drawable/ic_github"
-                                    android:tint="@color/app_icon_tint" />
-                            </FrameLayout>
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_medium"
-                                android:background="@drawable/background_dev_social_app_circle_stroke">
-
-                                <ImageButton
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_margin="@dimen/margin_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToGmail()}"
-                                    android:src="@drawable/ic_gmail"
-                                    android:tint="@color/app_icon_tint" />
-                            </FrameLayout>
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_medium"
-                                android:background="@drawable/background_dev_social_app_circle_stroke">
-
-                                <ImageButton
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_margin="@dimen/margin_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToInstagram()}"
-                                    android:src="@drawable/ic_instagram"
-                                    android:tint="@color/app_icon_tint" />
-                            </FrameLayout>
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_medium"
-                                android:background="@drawable/background_dev_social_app_circle_stroke">
-
-                                <ImageButton
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:layout_margin="@dimen/margin_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->aboutAppViewModel.developerLinkNavigate.navigateToFacebook()}"
-                                    android:src="@drawable/ic_facebook"
-                                    android:tint="@color/app_icon_tint" />
-                            </FrameLayout>
-
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-
-                    app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="@dimen/card_elevation_min">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/AppTheme.SmallTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginBottom="@dimen/margin_medium"
-                            android:background="@drawable/background_about_titles_curve_edge"
-                            android:backgroundTint="?colorPrimary"
                             android:padding="@dimen/margin_medium"
                             android:text="Credits"
                             android:textAllCaps="true"
-                            android:textColor="?android:attr/windowBackground"
-                            android:textStyle="bold" />
+                            android:textColor="?colorPrimary" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
@@ -329,7 +341,8 @@
                             android:onClick="@{()->aboutAppViewModel.creditLinkNavigate.navigateToFreePikWebsite()}"
                             app:icon="@drawable/ic_freepik"
                             app:subTitle="App icon/logo made by Freepik from flaticon"
-                            app:title="App Logo" />
+                            app:title="App Logo"
+                            app:titleStyle="normal" />
 
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -338,7 +351,8 @@
                             android:onClick="@{()->aboutAppViewModel.creditLinkNavigate.navigateToMaterialDesignIcon()}"
                             app:icon="@drawable/ic_vector_square"
                             app:subTitle="All material designed icons are used from this website"
-                            app:title="Material Design Icons" />
+                            app:title="Material Design Icons"
+                            app:titleStyle="normal" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
@@ -347,7 +361,8 @@
                             app:icon="@drawable/merriam_webster_logo"
                             app:noIconColorTint="true"
                             app:subTitle="@{@string/merriam_webster_credit_text}"
-                            app:title="Merriam Webster" />
+                            app:title="Merriam Webster"
+                            app:titleStyle="normal" />
 
                     </LinearLayout>
 
@@ -356,27 +371,26 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="@dimen/card_elevation_min">
+                    app:cardElevation="@dimen/card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingVertical="@dimen/margin_medium">
 
                         <TextView
                             style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginBottom="@dimen/margin_medium"
-                            android:background="@drawable/background_about_titles_curve_edge"
-                            android:backgroundTint="?colorPrimary"
                             android:padding="@dimen/padding_medium"
                             android:text="@string/about_app_others"
                             android:textAllCaps="true"
-                            android:textColor="?android:attr/windowBackground"
-                            android:textStyle="bold" />
+                            android:textColor="?colorPrimary" />
 
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -387,6 +401,7 @@
                             app:showRadioButton="false"
                             app:subTitle="All used libraries details"
                             app:title="Open Source Libraries"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -396,6 +411,7 @@
                             app:icon="@drawable/ic_terms_and_conditions"
                             app:showRadioButton="false"
                             app:title="Terms &amp; Services"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -405,19 +421,22 @@
                             app:icon="@drawable/ic_privacy_policy_black_24dp"
                             app:showRadioButton="false"
                             app:title="Privacy Policies"
+                            app:titleStyle="normal"
                             app:titleTextSize="@dimen/text_sub_title" />
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_medium"
-                    android:text="@string/made_in"
-                    android:textColor="@color/textColor_highEmphasis"
-                    android:textStyle="bold" />
+                    android:text="@string/made_in" />
+
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -428,7 +447,7 @@
             android:layout_gravity="top"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{aboutAppViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{aboutAppViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

@@ -37,7 +37,7 @@
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
-            app:applyTopBottomPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{changelogViewModel.isEdgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.button.MaterialButton
@@ -50,7 +50,7 @@
             android:onClick="@{()->changelogViewModel.navigator.onContinueLearningWordsClick()}"
             android:text="@string/value_continue"
             android:visibility="@{showContinueButton?View.VISIBLE:View.GONE}"
-            app:applyBottomMarginInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:applyBottomMarginInset="@{changelogViewModel.isEdgeToEdgeEnabled}"
             app:cornerRadius="30dp"
             app:icon="@drawable/ic_round_arrow_forward_24"
             app:iconGravity="end"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{changelogViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{changelogViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

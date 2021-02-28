@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import javax.inject.Inject
 
-class WindowAnimationPrefManager @Inject constructor(val context: Context) {
+class WindowAnimPrefManager @Inject constructor(val context: Context) {
     private val sharedPreferences =
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val editor = sharedPreferences.edit()
@@ -16,17 +16,17 @@ class WindowAnimationPrefManager @Inject constructor(val context: Context) {
 
         private fun isAtLeastP() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
-        fun newInstance(context: Context) = WindowAnimationPrefManager(context)
+        fun newInstance(context: Context) = WindowAnimPrefManager(context)
     }
 
-    fun toggleWindowAnimationEnabled() {
+    fun toggle() {
         editor.putBoolean(
             KEY_ANIMATION_ENABLED,
-            !isWindowAnimationEnabled()
+            !isEnabled()
         ).commit()
     }
 
-    fun isWindowAnimationEnabled() = sharedPreferences.getBoolean(
+    fun isEnabled() = sharedPreferences.getBoolean(
         KEY_ANIMATION_ENABLED,
         isAtLeastP()
     ) /*false*/

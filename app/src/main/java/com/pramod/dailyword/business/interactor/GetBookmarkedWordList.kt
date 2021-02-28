@@ -8,8 +8,7 @@ import com.pramod.dailyword.business.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetBookmarkedWordListInteractor @ExperimentalPagingApi constructor(
-    private val wordPaginationRemoteMediator: WordPaginationRemoteMediator,
+class GetBookmarkedWordList @ExperimentalPagingApi constructor(
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 ) {
     @ExperimentalPagingApi

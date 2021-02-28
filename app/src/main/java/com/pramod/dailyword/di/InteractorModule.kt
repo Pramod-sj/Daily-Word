@@ -66,11 +66,9 @@ object InteractorModule {
     @ExperimentalPagingApi
     @Provides
     fun provideGetBookmarkedWordsInteractor(
-        wordPaginationRemoteMediator: WordPaginationRemoteMediator,
         bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
-    ): GetBookmarkedWordListInteractor {
-        return GetBookmarkedWordListInteractor(
-            wordPaginationRemoteMediator,
+    ): GetBookmarkedWordList {
+        return GetBookmarkedWordList(
             bookmarkedWordCacheDataSource
         )
     }

@@ -2,17 +2,20 @@ package com.pramod.dailyword.di
 
 import android.content.Context
 import androidx.paging.ExperimentalPagingApi
+import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
 import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
-import com.pramod.dailyword.framework.prefmanagers.*
+import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
+import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -33,8 +36,8 @@ object AppModule {
     @Provides
     fun provideWindowAnimationPrefManager(
         @ApplicationContext context: Context
-    ): WindowAnimationPrefManager {
-        return WindowAnimationPrefManager.newInstance(context)
+    ): WindowAnimPrefManager {
+        return WindowAnimPrefManager.newInstance(context)
     }
 
     @Provides
@@ -74,5 +77,14 @@ object AppModule {
         @ApplicationContext context: Context
     ): PrefManager {
         return PrefManager(context)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideAudioPlayer(
+        @ApplicationContext context: Context
+    ): AudioPlayer {
+        return AudioPlayer(context)
     }
 }

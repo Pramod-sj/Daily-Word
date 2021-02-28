@@ -3,6 +3,12 @@
 
     <declare-styleable name="ITSCustomLayout">
         <attr name="title" format="string|reference" />
+        <attr name="maxSubTitleLines" format="integer" />
+        <attr name="titleStyle" format="enum">
+            <enum name="italic" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="normal" value="2" />
+        </attr>
         <attr name="subTitle" format="string|reference" />
         <attr name="icon" format="reference" />
         <attr name="iconColorTint" format="reference" />

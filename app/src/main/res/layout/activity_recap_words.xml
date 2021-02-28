@@ -29,8 +29,8 @@
             android:clipToPadding="false"
             android:orientation="vertical"
             app:appBarLayout="@{appBar}"
-            app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.edgeToEdgeEnabled}"
-            app:applyTopBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.isEdgeToEdgeEnabled}"
+            app:applyTopBottomPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:isVisible="@{recapWordsViewModel.words.size()>0}"
             app:spanCount="2" />
@@ -52,7 +52,7 @@
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
             android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

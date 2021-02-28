@@ -4,36 +4,39 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.pramod.dailyword.framework.util.CommonUtils
 import javax.inject.Inject
 
 class ThemeManager @Inject constructor(context: Context) {
+
     private val sPref = context.getSharedPreferences(THEME_PREF, Context.MODE_PRIVATE)
     private val editor = sPref.edit()
-    private val defaultTheme = Options.DARK
 
-    enum class Options {
-        DARK,
-        LIGHT,
-        DEFAULT
+    private val defaultTheme = THEME_MODE_DARK
+
+
+    private fun setThemeMode(themeMode: String) {
+        editor.putString(KEY_THEME_MODE, themeMode).commit()
     }
 
-    fun setDefaultThemeMode(option: Options) =
-        editor.putInt(KEY_THEME_MODE, option.ordinal).commit()
+    fun getThemeMode(): String {
+        return sPref.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
+    }
 
+    fun liveData(): LiveData<String> =
+        SPrefStringLiveData(sPref, KEY_THEME_MODE, defaultTheme).map {
+            return@map it ?: defaultTheme
+        }
 
-    fun getDefaultThemeModeOption() =
-        Options.values()[sPref.getInt(KEY_THEME_MODE, defaultTheme.ordinal)]
-
-    fun getDefaultThemeMode() = sPref.getInt(KEY_THEME_MODE, defaultTheme.ordinal)
-
-    fun liveData(): SPrefIntLiveData =
-        SPrefIntLiveData(sPref, KEY_THEME_MODE, defaultTheme.ordinal)
-
-    fun applyTheme(option: Options = getDefaultThemeModeOption()) {
-        val mode = when (option) {
-            Options.DARK -> AppCompatDelegate.MODE_NIGHT_YES
-            Options.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+    fun applyTheme(themeMode: String = getThemeMode()) {
+        if (themeMode != getThemeMode()) {
+            setThemeMode(themeMode)
+        }
+        val mode = when (themeMode) {
+            THEME_MODE_DARK -> AppCompatDelegate.MODE_NIGHT_YES
+            THEME_MODE_LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
             else -> {
                 when {
                     CommonUtils.isAtLeastAndroidP() -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -49,10 +52,10 @@ class ThemeManager @Inject constructor(context: Context) {
     private var onThemeValueChangedListener: OnThemeValueChangedListener? = null
 
     private val sharedPreferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, s: String ->
+        SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
             if (s == KEY_THEME_MODE) {
                 onThemeValueChangedListener?.onThemeValueChanged(
-                    Options.values()[sPref.getInt(KEY_THEME_MODE, defaultTheme.ordinal)]
+                    sPref.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
                 )
             }
         }
@@ -68,14 +71,20 @@ class ThemeManager @Inject constructor(context: Context) {
     }
 
     interface OnThemeValueChangedListener {
-        fun onThemeValueChanged(newVal: ThemeManager.Options)
+        fun onThemeValueChanged(themeMode: String)
     }
 
 
     companion object {
+        val TAG = ThemeManager::class.java.simpleName
+
         const val THEME_PREF = "theme_pref"
 
         const val KEY_THEME_MODE = "theme_mode"
+
+        const val THEME_MODE_DARK = "Dark"
+        const val THEME_MODE_LIGHT = "Light"
+        const val THEME_MODE_DEFAULT = "Default"
 
         @JvmStatic
         fun newInstance(context: Context): ThemeManager = ThemeManager(context)
@@ -89,20 +98,5 @@ class ThemeManager @Inject constructor(context: Context) {
                 else -> false
             }
         }
-
-        @JvmStatic
-        fun getThemeNameFromOrdinal(ordinal: Int): String = Options.values()[ordinal].name
-
-        /*fun getDefaultThemeMode(): Int = AppCompatDelegate.getDefaultNightMode()
-
-        fun getDefaultThemeOption(): Options {
-            return when (AppCompatDelegate.getDefaultNightMode()) {
-                AppCompatDelegate.MODE_NIGHT_YES -> Options.DARK
-                AppCompatDelegate.MODE_NIGHT_NO -> Options.LIGHT
-                else -> Options.DEFAULT
-            }
-        }
-
-        */
     }
 }

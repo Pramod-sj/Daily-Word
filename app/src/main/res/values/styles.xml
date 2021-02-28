@@ -130,7 +130,7 @@
     </style>
 
     <style name="ITSSubTitleStyle" parent="AppTheme.SubTitleTextStyle">
-        <item name="android:textSize">@dimen/text_sub_title</item>
+        <item name="android:textSize">@dimen/text_small</item>
     </style>
 
     <style name="CollapsingToolbar.TextAppearance.Expanded" parent="TextAppearance.MaterialComponents.Headline6">

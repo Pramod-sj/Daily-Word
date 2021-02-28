@@ -38,7 +38,6 @@ fun Activity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = 
 }
 
 
-@ExperimentalCoroutinesApi
 fun Activity.openWordDetailsPage(
     wordDate: String,
     option: ActivityOptions? = null,

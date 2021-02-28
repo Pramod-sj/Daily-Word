@@ -2,8 +2,10 @@ package com.pramod.dailyword.framework.ui.common.view
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
@@ -11,7 +13,10 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.databinding.*
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.CustomItsLayoutBinding
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -33,6 +38,17 @@ class ITSCustomLayout : LinearLayout {
     private var titlePaddingStart = 0f
     private var titlePaddingEnd = 0f
 
+    /**
+     * default max lines is 2
+     */
+    private var maxSubTitleLines = 2
+
+    /**
+     * 0 - italic
+     * 1 - bold
+     * 2 - normal
+     */
+    private var titleTextStyle = 1
 
     companion object {
         @JvmStatic
@@ -114,6 +130,10 @@ class ITSCustomLayout : LinearLayout {
                 0
             ).toFloat()
 
+        titleTextStyle = a.getInt(R.styleable.ITSCustomLayout_titleStyle, 1) // default: bold
+
+        maxSubTitleLines =
+            a.getInteger(R.styleable.ITSCustomLayout_maxSubTitleLines, 2) //default: 2
 
         init()
         a.recycle()
@@ -131,9 +151,36 @@ class ITSCustomLayout : LinearLayout {
             customItsLayoutBinding.txtViewCustomTitle.textSize = titleTextSize!!
         }
         setTitle(title)
+        applyTitleTextStyle()
         setSubTitle(subTitle)
+        applyMaxLineSubTitle()
         setIcon(icon)
         shouldShowSwitch(showSwitch)
+    }
+
+    private fun applyMaxLineSubTitle() {
+        customItsLayoutBinding.txtViewCustomSubtitle
+            .maxLines = maxSubTitleLines
+    }
+
+    private fun applyTitleTextStyle() {
+        customItsLayoutBinding.txtViewCustomTitle.apply {
+            Log.i("TAG", "applyTitleTextStyle: $titleTextStyle")
+            val tf = when (titleTextStyle) {
+                0 -> Typeface.ITALIC
+                1 -> Typeface.BOLD
+                else -> Typeface.NORMAL
+            }
+            setTypeface(
+                if (tf == Typeface.NORMAL) {
+                    null
+                } else {
+                    typeface
+                },
+                tf
+            )
+        }
+
     }
 
     private fun addPaddingIfSaid() {
@@ -193,7 +240,7 @@ class ITSCustomLayout : LinearLayout {
                     resId
                 )
             )
-            if(!noIconTint) {
+            if (!noIconTint) {
                 customItsLayoutBinding.imageIconCustomLayout.imageTintList =
                     if (iconTintResId != -1)
                         ColorStateList.valueOf(ContextCompat.getColor(context, iconTintResId))

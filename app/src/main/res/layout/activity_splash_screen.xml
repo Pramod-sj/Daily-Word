@@ -106,14 +106,13 @@
                 android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
             <TextView
+                style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_medium"
-                android:text="@string/made_in"
-                android:textColor="@color/textColor_highEmphasis"
-                android:textStyle="bold" />
+                android:text="@string/made_in"/>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

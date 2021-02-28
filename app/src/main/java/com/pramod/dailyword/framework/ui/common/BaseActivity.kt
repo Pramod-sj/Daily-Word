@@ -18,12 +18,12 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.isEdgeToEdgeEnabled = egdeToEdgePrefManager.isEnabled()
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
-        mViewModel = viewModel
         binding.lifecycleOwner = this
+        mViewModel = viewModel
         binding.setVariable(bindingVariable, mViewModel)
         binding.executePendingBindings()
-        mViewModel.edgeToEdgeEnabled = windowPrefManager.isEdgeToEdgeEnabled()
         setMessageObserver()
     }
 

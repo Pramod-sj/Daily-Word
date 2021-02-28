@@ -13,7 +13,7 @@ abstract class BaseViewModel : ViewModel() {
 
     //this variable is used for applying edge to edge for all the screens
     //this is added in base viewmodel because we need to use in all the screens
-    var edgeToEdgeEnabled: Boolean? = null
+    var isEdgeToEdgeEnabled: Boolean? = null
 
     //this variable hold whether night mode is enabled
     var isNightMode: Boolean? = null

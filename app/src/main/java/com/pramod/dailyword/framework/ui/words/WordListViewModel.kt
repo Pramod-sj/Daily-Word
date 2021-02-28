@@ -15,8 +15,9 @@ const val LOCAL_PAGE_SIZE = 20
 const val NETWORK_PAGE_SIZE = 20
 
 @HiltViewModel
-class WordListViewModel @Inject constructor(
-    private val getWordListInteractor: GetWordListInteractor
+class WordListViewModel
+@Inject constructor(
+    getWordListInteractor: GetWordListInteractor
 ) : BaseViewModel() {
 
     companion object {
@@ -27,11 +28,9 @@ class WordListViewModel @Inject constructor(
     val wordUIModelList: Flow<PagingData<WordListUiModel>> =
         getWordListInteractor.getWordList(pagingConfig = PagingConfig(20))
             .map { pagingData ->
-                var index = -1L
                 return@map pagingData
                     .map { word ->
-                        index++
-                        WordListUiModel.WordItem(index, word)
+                        WordListUiModel.WordItem(0, word)
                     }
                     .insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
                         val daysElapsed = TimeUnit.DAYS.convert(

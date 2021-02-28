@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.home
 import android.app.Activity
 import android.app.ActivityOptions
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -13,11 +12,10 @@ import android.text.SpannableString
 import android.util.Log
 import android.view.*
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
@@ -26,10 +24,11 @@ import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
+import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
-import com.pramod.dailyword.databinding.ActivityMainBinding
+import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
@@ -38,49 +37,20 @@ import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import java.util.*
 
 
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
-class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
+class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
-    override val layoutId: Int = R.layout.activity_main
+    override val layoutId: Int = R.layout.activity_home
     override val viewModel: HomeViewModel by viewModels()
     override val bindingVariable: Int = BR.mainViewModel
 
-
-    companion object {
-
-        val TAG = HomeActivity::class.simpleName
-
-        @JvmStatic
-        fun openActivity(context: Context) {
-            val intent = Intent(context, HomeActivity::class.java)
-            context.startActivity(intent)
-        }
-
-        @JvmStatic
-        fun openActivityWithFade(context: Context) {
-            val intent = Intent(context, HomeActivity::class.java)
-            context.startActivity(intent)
-            if (context is Activity) {
-                context.overridePendingTransition(
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-            }
-        }
-
-        @JvmStatic
-        fun openActivityWithTransition(context: Context, option: ActivityOptions) {
-            val intent = Intent(context, HomeActivity::class.java)
-            ActivityCompat.startActivity(context, intent, option.toBundle())
-        }
-    }
 
     private lateinit var pastWordAdapter: PastWordAdapter
 
@@ -136,15 +106,6 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
             }
         }
-
-        mViewModel.isAudioPronouncing.observe(this) {
-            if (it) {
-                binding.lottieSpeaker.playAnimation()
-            } else {
-                binding.lottieSpeaker.cancelAnimation()
-            }
-
-        }
     }
 
     private fun setUpViewCallbacks() {
@@ -186,14 +147,13 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
     }
 
     private fun showChangelogActivity() {
-        lifecycleScope.launchWhenCreated {
-            mViewModel.showChangelogActivity
-                .collect {
-                    if (it) {
-                        openChangelogPage(true)
-                    }
+        mViewModel.showChangelogActivity
+            .asLiveData(Dispatchers.IO)
+            .observe(this) { show ->
+                if (show) {
+                    openChangelogPage(true)
                 }
-        }
+            }
 
     }
 
@@ -288,7 +248,7 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
                 }
             }
         })
-        viewModel.wordsExceptTodayLiveData.observe(this, Observer {
+        viewModel.wordsExceptTodayLiveData.observe(this, {
             it?.let { words ->
                 pastWordAdapter.submitList(words)
                 binding.mainRecyclerviewPastWords.scrollToPosition(0)
@@ -513,4 +473,10 @@ class HomeActivity : BaseActivity<ActivityMainBinding, HomeViewModel>() {
         bottomSheetDialog?.setContentView(navigationView, l)
     }
 
+
+    companion object {
+
+        val TAG = HomeActivity::class.simpleName
+
+    }
 }

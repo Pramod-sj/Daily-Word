@@ -1,7 +1,5 @@
 package com.pramod.dailyword.framework.ui.aboutapp
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialSharedAxis
@@ -9,12 +7,11 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAboutAppBinding
 import com.pramod.dailyword.framework.datasource.network.EndPoints
+import com.pramod.dailyword.framework.helper.openGmail
+import com.pramod.dailyword.framework.helper.openGoogleReviewPage
+import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.exts.openChangelogPage
-import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
-import com.pramod.dailyword.framework.ui.common.exts.showWebViewDialog
-import com.pramod.dailyword.framework.helper.*
-import com.pramod.dailyword.framework.ui.common.exts.shareApp
+import com.pramod.dailyword.framework.ui.common.exts.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,17 +23,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
 
 
     companion object {
-        @JvmStatic
-        fun openActivity(context: Context) {
-            val intent = Intent(context, AboutAppActivity::class.java)
-            context.startActivity(intent)
-        }
-
-        @JvmStatic
-        fun openActivity(context: Context, bundle: Bundle) {
-            val intent = Intent(context, AboutAppActivity::class.java)
-            context.startActivity(intent, bundle)
-        }
+        val TAG = AboutAppActivity::class.java.simpleName
     }
 
 
@@ -77,7 +64,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
             }
 
             override fun openDonatePage() {
-                openDonatePage()
+                this@AboutAppActivity.openDonatePage()
             }
 
             override fun shareAppWithFriends() {
@@ -103,7 +90,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
             }
 
             override fun showOpenSourceLibs() {
-                showOpenSourceLibs()
+                showLib()
             }
         }
 

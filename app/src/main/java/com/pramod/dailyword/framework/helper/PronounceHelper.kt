@@ -12,7 +12,7 @@ class PronounceHelper {
             Log.d("AUDIO URL", url)
             try {
                 val mediaPlayer = MediaPlayer()
-                mediaPlayer.setDataSource(url)
+                mediaPlayer.setDataSource("/storage/emulated/0/Android/data/com.pramod.dailyword/files/Audios/20210221_183945.mp3")
                 mediaPlayer.setAudioAttributes(
                     AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .build()

@@ -45,7 +45,7 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
                 resources.getString(R.string.card_transition_name)
             )
 
-            openWordDetailsPage(word.date!!, option)
+            openWordDetailsPage(word.date!!, option, windowAnimPrefManager.isEnabled())
         }
         binding.recyclerViewRecapWords.adapter = adapter
         mViewModel.words.observe(this) {
