@@ -50,7 +50,7 @@ class PastWordAdapter(
                     canStartActivity = false;
                     onItemClickCallback.invoke(
                         bindingAdapterPosition,
-                        getItem(position)
+                        getItem(bindingAdapterPosition)
                     )
                 }
             }
@@ -67,7 +67,7 @@ class PastWordAdapter(
                     oldItem: Word,
                     newItem: Word
                 ): Boolean {
-                    return oldItem.word == newItem.word
+                    return oldItem.date == newItem.date
                 }
 
                 override fun areContentsTheSame(
@@ -79,9 +79,9 @@ class PastWordAdapter(
 
                 override fun getChangePayload(oldItem: Word, newItem: Word): Any? {
                     val bundle = Bundle()
-                    bundle.putSerializable("DATE", newItem.date)
-                    bundle.putSerializable("dateTimeInMillis", newItem.dateTimeInMillis)
-                    bundle.putSerializable("WORD", newItem.word)
+                    bundle.putSerializable("date", newItem.date)
+                    bundle.putSerializable("word", newItem.word)
+                    bundle.putBoolean("isSeen", newItem.isSeen)
                     return bundle
                 }
 

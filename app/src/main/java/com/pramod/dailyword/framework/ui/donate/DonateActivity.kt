@@ -4,18 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
+import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityDonateBinding
+import com.pramod.dailyword.framework.ui.common.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DonateActivity : AppCompatActivity() {
-    lateinit var binding: ActivityDonateBinding
-    val mViewModel: DonateViewModel by viewModels()
+class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
+
+    override val layoutId: Int = R.layout.activity_donate
+    override val viewModel: DonateViewModel by viewModels()
+    override val bindingVariable: Int = BR.donateViewModel
 
 
     companion object {

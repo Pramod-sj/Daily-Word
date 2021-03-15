@@ -3,15 +3,18 @@ package com.pramod.dailyword.di
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
+import com.pramod.dailyword.business.data.cache.abstraction.SeenCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
 import com.pramod.dailyword.business.interactor.*
 import com.pramod.dailyword.business.interactor.bookmark.AddBookmarkInteractor
+import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
 import com.pramod.dailyword.business.interactor.bookmark.RemoveBookmarkInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(value = [SingletonComponent::class])
@@ -84,8 +87,10 @@ object InteractorModule {
     }
 
     @Provides
-    fun provideMarkWordAsSeenInteractor(wordCacheDataSource: WordCacheDataSource): MarkWordAsSeenInteractor {
-        return MarkWordAsSeenInteractor(wordCacheDataSource)
+    fun provideMarkWordAsSeenInteractor(
+        seenCacheDataSource: SeenCacheDataSource
+    ): MarkWordAsSeenInteractor {
+        return MarkWordAsSeenInteractor(seenCacheDataSource)
     }
 
     @ExperimentalPagingApi
@@ -94,8 +99,24 @@ object InteractorModule {
         wordPaginationRemoteMediator: WordPaginationRemoteMediator,
         bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
     ): GetWordListInteractor {
-        return GetWordListInteractor(wordPaginationRemoteMediator,bookmarkedWordCacheDataSource)
+        return GetWordListInteractor(wordPaginationRemoteMediator, bookmarkedWordCacheDataSource)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideMarkBookmarkedWordAsSeenInteractor(
+        bookmarkCacheDataSource: BookmarkCacheDataSource
+    ): MarkBookmarkedWordAsSeenInteractor {
+        return MarkBookmarkedWordAsSeenInteractor(bookmarkCacheDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAllBookmarks(
+        bookmarkCacheDataSource: BookmarkCacheDataSource
+    ): GetAllBookmarks {
+        return GetAllBookmarks(bookmarkCacheDataSource)
+    }
 
 }

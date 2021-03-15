@@ -6,10 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">false</item>
-        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
+
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
         <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -24,6 +27,9 @@
         <item name="drawableNavigationItemBackground">
             @drawable/background_navigation_item_selector
         </item>
+
+
+        <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>
 
 

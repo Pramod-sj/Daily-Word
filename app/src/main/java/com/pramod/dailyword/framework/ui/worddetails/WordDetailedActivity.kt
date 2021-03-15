@@ -1,5 +1,7 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.ArcMotion
 import android.util.Log
@@ -14,13 +16,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.gson.Gson
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.databinding.BottomSheetChipLayoutBinding
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.transition.isViewsLoaded
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener
 import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
@@ -29,6 +31,7 @@ import com.pramod.dailyword.framework.ui.common.exts.shareApp
 import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
@@ -37,60 +40,36 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     override val viewModel: WordDetailedViewModel by viewModels()
     override val bindingVariable: Int = BR.wordDetailedViewModel
 
-
-    /* companion object {
-
-         fun openActivity(context: Context, wordDate: String?, option: ActivityOptions?) {
-             val intent = Intent(context, WordDetailedActivity::class.java)
-             val bundle = Bundle()
-             bundle.putSerializable("WORD_DATE", wordDate)
-             intent.putExtras(bundle)
-             intent.putExtras(bundle)
-             if (option != null &&
-                 WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()
-             ) {
-                 context.startActivity(intent, option.toBundle())
-             } else {
-                 context.startActivity(intent)
-             }
-         }
-
-
-         fun openActivity(context: Context, word: WordOfTheDay, option: ActivityOptions?) {
-             val intent = Intent(context, WordDetailedActivity::class.java)
-             val bundle = Bundle()
-             bundle.putSerializable("WORD", word)
-             intent.putExtras(bundle)
-             if (option != null &&
-                 WindowAnimationPrefManager.newInstance(context).isWindowAnimationEnabled()
-             ) {
-                 context.startActivity(intent, option.toBundle())
-             } else {
-                 context.startActivity(intent)
-             }
-         }
-     }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportPostponeEnterTransition()
         initEnterAndReturnTransition()
         keepScreenOn()
-        super.onCreate(savedInstanceState)
         setUpToolbar()
         setNestedScrollListener()
         setNavigateMW()
         invalidateOptionMenuWhenWordAvailable()
         setWordColor()
         setUpExampleRecyclerView()
-        setUpDefinationRecyclerView()
+        setUpDefinitionRecyclerView()
         handleNavigator()
         handleRippleAnimationForAudioEffect()
+        val start = Calendar.getInstance().timeInMillis
+        isViewsLoaded(
+            binding.wordDetailedDefinationsRecyclerview,
+            binding.wordDetailedExamplesRecyclerview,
+            binding.chipGroupAntonyms,
+            binding.chipGroupSynonyms,
+            loadedCallback = {
+                Log.i(TAG, "onGlobalLayout: " + (Calendar.getInstance().timeInMillis - start))
+                supportStartPostponedEnterTransition()
+            }
+        )
     }
-
 
     private fun keepScreenOn() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
-
 
     private fun setWordColor() {
         mViewModel.word.observe(this) {
@@ -106,15 +85,13 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     private fun handleRippleAnimationForAudioEffect() {
 
-        viewModel.audioPlayer.audioPlaying.observe(this) {
-            Log.i(TAG, "handleRippleAnimationForAudioEffect: " + Gson().toJson(it))
-        }
-
-        themeManager.liveData().observe(this) {
-            binding.lottieSpeaker.post {
-                binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
+        themeManager.liveData().observe(this, object : Observer<String> {
+            override fun onChanged(t: String?) {
+                binding.lottieSpeaker.post {
+                    binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
+                }
             }
-        }
+        })
 
     }
 
@@ -138,8 +115,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun setUpExampleRecyclerView() {
         val adapter = ExampleAdapter()
         binding.wordDetailedExamplesRecyclerview.adapter = adapter
-
-        mViewModel.word.observe(this, Observer {
+        mViewModel.word.observe(this, {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
@@ -149,8 +125,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         })
     }
 
-    private fun setUpDefinationRecyclerView() {
-        val adapter = DefinationAdapter()
+    private fun setUpDefinitionRecyclerView() {
+        val adapter = DefinitionAdapter()
         binding.wordDetailedDefinationsRecyclerview.adapter = adapter
 
         mViewModel.word.observe(this, {
@@ -200,12 +176,16 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
         findViewById<View>(android.R.id.content).transitionName =
             resources.getString(R.string.card_transition_name)
-        window.sharedElementsUseOverlay = false
+
+        window.sharedElementsUseOverlay = true
+
+
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
         val enterTransition = MaterialContainerTransform().apply {
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
+            scrimColor = Color.TRANSPARENT
             setAllContainerColors(
                 MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
             )
@@ -287,5 +267,29 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         binding.executePendingBindings()
         bottomSheetDialog.setContentView(binding.root)
         bottomSheetDialog.show()
+    }
+
+    override fun finishAfterTransition() {
+        setResult()
+        super.finishAfterTransition()
+    }
+
+    private fun setResult() {
+        val data = Intent()
+        data.putExtra(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, viewModel.isBookmarkStatusChanged)
+        setResult(RESULT_OK, data)
+    }
+
+    companion object {
+
+        private const val EXTRA_WAS_BOOKMARK_STATUS_CHANGED = "was_bookmark_status_changed"
+
+        fun wasBookmarkStatusChanged(resultCode: Int, data: Bundle?): Boolean {
+            if (resultCode == RESULT_OK && data != null) {
+                return data.getBoolean(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, false);
+            }
+            return false
+        }
+
     }
 }

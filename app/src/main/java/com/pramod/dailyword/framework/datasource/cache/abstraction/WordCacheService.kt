@@ -7,6 +7,10 @@ interface WordCacheService {
 
     suspend fun add(word: Word): Long
 
+    suspend fun get(wordDate: String): Word?
+
+    suspend fun getAll(): List<Word>?
+
     suspend fun update(word: Word): Int
 
     suspend fun delete(word: String): Int

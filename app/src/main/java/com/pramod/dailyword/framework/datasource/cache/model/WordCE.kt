@@ -4,7 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "WordOfTheDay")
+@Entity(tableName = "Word")
 data class WordCE(
     @PrimaryKey
     @NonNull
@@ -26,10 +26,6 @@ data class WordCE(
 
     var dateTimeInMillis: Long?,
 
-    var isSeen: Boolean,
-
-    var seenAtTimeInMillis: Long?,
-
     var wordColor: Int = -1,
 
     var wordDesaturatedColor: Int = -1,
@@ -37,4 +33,5 @@ data class WordCE(
     var synonyms: List<String>?,
 
     var antonyms: List<String>?
+
 )

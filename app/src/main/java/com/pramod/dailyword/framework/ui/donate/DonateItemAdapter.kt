@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemDonateLayoutBinding
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -39,7 +40,7 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
         val color = CommonUtils.getColor(holder.binding.root.context, donateItem.color)
         holder.binding.color = color
         val alphaAppliedColor =
-            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 30)
+            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, Constants.COLOR_ALPHA)
         holder.binding.alphaColor = alphaAppliedColor
         holder.binding.executePendingBindings()
     }

@@ -42,7 +42,8 @@ fun Activity.restartActivity(smooth: Boolean = false) {
 
 fun Context.openWebsite(url: String) {
     val builder = CustomTabsIntent.Builder()
-    builder.setShowTitle(true)
+    builder.setShowTitle(false)
+    builder.setUrlBarHidingEnabled(true)
     builder.setStartAnimations(
         this,
         R.anim.slide_in_right,

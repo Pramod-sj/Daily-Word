@@ -29,14 +29,15 @@ class BookmarkedWordCEMapper @Inject constructor() : EntityMapper<BookmarkedWord
             entity.examples,
             entity.date,
             cal?.timeInMillis ?: entity.dateTimeInMillis,
-            entity.isSeen,
-            entity.seenAtTimeInMillis,
             dayColor?.get(0) ?: entity.wordColor,
             dayColor?.get(1) ?: entity.wordDesaturatedColor,
             entity.synonyms,
             entity.antonyms,
             entity.bookmarkId,
             entity.bookmarkedAt,
+            entity.bookmarkSeenAt,
+            entity.seenAt != null,
+            entity.seenAt,
         )
     }
 
@@ -51,8 +52,6 @@ class BookmarkedWordCEMapper @Inject constructor() : EntityMapper<BookmarkedWord
             domain.examples,
             domain.date,
             domain.dateTimeInMillis,
-            domain.isSeen,
-            domain.seenAtTimeInMillis,
             domain.wordColor,
             domain.wordDesaturatedColor,
             domain.synonyms,
@@ -60,6 +59,9 @@ class BookmarkedWordCEMapper @Inject constructor() : EntityMapper<BookmarkedWord
             domain.bookmarkedId,
             domain.word,
             domain.bookmarkedAt,
+            domain.bookmarkedSeenAt,
+            domain.word,
+            domain.seenAtTimeInMillis,
         )
     }
 }

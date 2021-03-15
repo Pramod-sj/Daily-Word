@@ -14,6 +14,14 @@ class WordCacheDataSourceImpl(private val wordCacheService: WordCacheService) :
         return wordCacheService.add(word)
     }
 
+    override suspend fun get(wordDate: String): Word? {
+        return wordCacheService.get(wordDate)
+    }
+
+    override suspend fun getAll(): List<Word>? {
+        return wordCacheService.getAll()
+    }
+
     override suspend fun update(word: Word): Int {
         return wordCacheService.update(word)
     }

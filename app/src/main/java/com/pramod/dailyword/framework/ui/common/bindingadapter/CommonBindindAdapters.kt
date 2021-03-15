@@ -19,6 +19,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.helper.RightDrawableOnTouchListener
@@ -228,6 +230,43 @@ object CommonBindindAdapters {
             switcher.setTag(R.id.animText_tag, tag)
         }
     }
+
+
+    @JvmStatic
+    @BindingAdapter(
+        value = ["app:loadImageUri", "app:loadImageDrawable", "app:placeHolderDrawable", "app:errorDrawable"],
+        requireAll = false
+    )
+    fun loadImageUrl(
+        imageView: ImageView,
+        imageUri: String?,
+        imageDrawable: Drawable?,
+        placeHolderDrawable: Drawable?,
+        errorDrawable: Drawable?
+    ) {
+        if (imageDrawable != null) {
+            Glide.with(imageView.context)
+                .load(imageDrawable)
+                .into(imageView)
+            return
+        }
+
+        if (imageUri == null) {
+            Glide.with(imageView.context)
+                .load(placeHolderDrawable)
+                .into(imageView)
+            return
+        }
+
+        Glide.with(imageView.context)
+            .load(imageUri)
+            .placeholder(placeHolderDrawable)
+            .error(errorDrawable)
+            .transition(DrawableTransitionOptions.withCrossFade(100))
+            .into(imageView)
+
+    }
+
 
     fun equals(a: Any?, b: Any?): Boolean {
         return if (a == null) b == null else a == b

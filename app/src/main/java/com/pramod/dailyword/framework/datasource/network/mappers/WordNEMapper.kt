@@ -24,15 +24,17 @@ class WordNEMapper @Inject constructor() : EntityMapper<WordNE, Word> {
             entity.examples,
             entity.date,
             cal?.timeInMillis,
-            false,
-            null,
             dayColor[0],
             dayColor[1],
             entity.synonyms,
             entity.antonyms,
-            -1,
-            -1,
-        )
+            null,
+            null,
+            null,
+            false,
+            null,
+
+            )
     }
 
     override fun toEntity(domain: Word): WordNE {

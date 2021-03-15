@@ -4,6 +4,8 @@ import com.google.android.material.snackbar.Snackbar
 
 sealed class Message {
 
+    var isShown: Boolean = false
+
     data class ToastMessage(
         val message: String,
         val duration: Int

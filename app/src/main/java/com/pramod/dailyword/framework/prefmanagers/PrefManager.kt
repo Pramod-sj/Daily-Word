@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import android.os.Build
 import androidx.preference.PreferenceManager
 import com.pramod.dailyword.BuildConfig
 
@@ -16,6 +15,8 @@ class PrefManager(context: Context) {
         private const val NEVER_SHOW_RATING = "NEVER_SHOW_RATING"
         private const val SHOW_INITIAL_CREDIT_DIALOG = "show_initial_credit_dialog"
         private const val KEY_APP_VERSION = "app_version"
+
+
 
         @JvmStatic
         fun getInstance(context: Context): PrefManager = PrefManager(context)

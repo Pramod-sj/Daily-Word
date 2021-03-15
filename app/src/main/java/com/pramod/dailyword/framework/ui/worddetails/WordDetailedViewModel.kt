@@ -2,13 +2,17 @@ package com.pramod.dailyword.framework.ui.worddetails
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetRandomWordInteractor
 import com.pramod.dailyword.business.interactor.GetWordDetailsByDateInteractor
+import com.pramod.dailyword.business.interactor.MarkBookmarkedWordAsSeenInteractor
+import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.util.Event
@@ -25,15 +29,22 @@ class WordDetailedViewModel @Inject constructor(
     private val getWordDetailsByDateInteractor: GetWordDetailsByDateInteractor,
     private val getRandomWordInteractor: GetRandomWordInteractor,
     private val toggleBookmarkInteractor: ToggleBookmarkInteractor,
+    private val homeScreenBadgeManager: HomeScreenBadgeManager,
+    private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
+    private val markBookmarkedWordAsSeenInteractor: MarkBookmarkedWordAsSeenInteractor,
     val audioPlayer: AudioPlayer
 ) : BaseViewModel() {
 
-    private val wordDate = stateHandle.get<String>("WORD_DATE")
+    private var isSeenStatusUpdated = false
 
+    var isBookmarkStatusChanged = false
 
-    companion object {
-        val TAG = WordDetailedViewModel::class.simpleName
+    private val wordDate = stateHandle.get<String>("WORD_DATE").also {
+        if (it == null) {
+            homeScreenBadgeManager.updatedRandomWordReadOn()
+        }
     }
+
 
     //this will be false when user open this activity first
     //when user manually pull to refresh this will be change to true
@@ -63,7 +74,7 @@ class WordDetailedViewModel @Inject constructor(
             return@switchMap if (wordDate == null) {
                 getRandomWordInteractor.getRandomWord()
             } else {
-                getWordDetailsByDateInteractor.getWordDetailsByDate(wordDate, true)
+                getWordDetailsByDateInteractor.getWordDetailsByDate(wordDate, shouldForceRefresh)
             }.asLiveData(Dispatchers.IO)
         }.asFlow()
 
@@ -79,6 +90,28 @@ class WordDetailedViewModel @Inject constructor(
                 }
                 it.data?.let { word ->
                     _word.value = word
+
+                    Log.i(TAG, ": isSeenStatusUpdated:" + isSeenStatusUpdated)
+
+                    if (!isSeenStatusUpdated) {
+                        viewModelScope.launch {
+                            markWordAsSeenInteractor.markAsSeen(word.word)
+                                .collectLatest {
+
+                                }
+
+                            word.bookmarkedId?.let {
+                                markBookmarkedWordAsSeenInteractor.markAsSeen(word.word)
+                                    .collectLatest {
+                                        Log.i(TAG, ": isSeenStatusUpdated" + Gson().toJson(it))
+                                    }
+                            }
+
+                            isSeenStatusUpdated = true
+                        }
+                    }
+
+
                 }
             }.launchIn(viewModelScope)
 
@@ -110,10 +143,16 @@ class WordDetailedViewModel @Inject constructor(
                 toggleBookmarkInteractor.toggle(
                     it.word
                 ).collectLatest {
-
+                    isBookmarkStatusChanged = true
                 }
             }
         }
     }
+
+
+    companion object {
+        val TAG = WordDetailedViewModel::class.simpleName
+    }
+
 
 }

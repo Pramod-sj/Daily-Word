@@ -16,7 +16,7 @@ abstract class ApiResponseHandler<ApiResponse, Data>(
             }
 
             is ApiResult.NetworkError -> {
-                Resource.error(throwable = NetworkError())
+                Resource.error(throwable = Throwable(response.message))
             }
 
             is ApiResult.Success -> {

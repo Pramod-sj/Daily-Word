@@ -26,11 +26,12 @@ object ChipGroupBA {
         chipGroup: ChipGroup,
         chipTextList: List<String>?,
         chipColor: Int?,
-        chipShowViewMoreButton: Boolean = false,
+        chipShowViewMoreButton: Boolean,
         onChipViewMoreClick: OnChipViewMoreClickListener?,
         onChipClickListener: OnChipClickListener?
     ) {
         chipTextList?.let {
+
             Log.i("CHIP TEXT", Gson().toJson(it))
             chipGroup.removeAllViews()
             for (chipText in it) {
@@ -70,7 +71,6 @@ object ChipGroupBA {
                             android.R.color.transparent
                         )
                     )
-                binding.chip.background = null
                 binding.chip.setOnClickListener { view ->
                     onChipViewMoreClick?.onViewMoreClick(view)
                 }
@@ -78,6 +78,7 @@ object ChipGroupBA {
                     binding.chip
                 )
             }
+
         }
     }
 }

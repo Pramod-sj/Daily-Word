@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
+
+        <variable
+            name="word"
+            type="com.pramod.dailyword.business.domain.model.Word" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        app:cardCornerRadius="@dimen/card_radius_max"
+        app:cardElevation="@dimen/card_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtView_bookmark_at"
+                    style="@style/AppTheme.SmallTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_toStartOf="@id/imgBtn_bookmark"
+                    android:text="@{CalenderUtil.convertCalenderToString(word.bookmarkedAt,CalenderUtil.DATE_FORMAT_DISPLAY)+` at `+CalenderUtil.convertCalenderToString(word.bookmarkedAt,CalenderUtil.TIME_FORMAT)}" />
+
+                <ImageButton
+                    android:id="@+id/imgBtn_bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="?actionBarItemBackground"
+                    android:src="@drawable/ic_trash_can_outline"
+                    android:tint="@color/app_icon_tint" />
+            </RelativeLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/AppTheme.Header5TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:drawableEnd="@{word.bookmarkedSeenAt!=null?null:@drawable/background_circle_12dp}"
+                android:drawablePadding="@dimen/margin_medium"
+                android:text="@{word.word}" />
+
+            <TextView
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@{word.meanings.get(0)}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:isGone="@{word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:background="@drawable/background_curve"
+                    android:backgroundTint="?colorPrimary"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingVertical="2dp"
+                    android:text="@string/synonyms"
+                    android:textColor="?android:attr/windowBackground"
+                    android:textSize="@dimen/text_tiny"
+                    app:isGone="@{word.synonyms.size()==0 }" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:background="@drawable/background_curve"
+                    android:backgroundTint="?colorPrimary"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingVertical="2dp"
+                    android:text="@string/antonyms"
+                    android:textColor="?android:attr/windowBackground"
+                    android:textSize="@dimen/text_tiny"
+                    app:isGone="@{word.antonyms.size()==0}" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

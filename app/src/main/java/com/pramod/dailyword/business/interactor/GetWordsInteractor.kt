@@ -9,20 +9,20 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import kotlinx.coroutines.flow.Flow
 
-class GetWordsInteractor (
+class GetWordsInteractor(
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
     private val wordCacheDataSource: WordCacheDataSource,
     private val wordNetworkDataSource: WordNetworkDataSource
 ) {
 
-    fun getWords(count: Int): Flow<Resource<List<Word>?>> {
+    fun getWords(count: Int, forceFetch: Boolean = true): Flow<Resource<List<Word>?>> {
         return object : NetworkBoundResource<List<Word>, List<Word>>() {
             override suspend fun fetchFromCache(): Flow<List<Word>?> {
                 return bookmarkedWordCacheDataSource.getFewWordsFromTopAsFlow(count)
             }
 
             override fun shouldFetchFromNetwork(data: List<Word>?): Boolean {
-                return true
+                return data?.size ?: 0 < count || forceFetch
             }
 
             override suspend fun saveIntoCache(data: List<Word>) {

@@ -1,46 +1,33 @@
 package com.pramod.dailyword.business.interactor
 
+import com.pramod.dailyword.business.data.cache.abstraction.SeenCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
-import com.pramod.dailyword.business.domain.model.Word
+import com.pramod.dailyword.business.domain.model.Seen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
 
 class MarkWordAsSeenInteractor(
-    private val wordCacheDataSource: WordCacheDataSource
+    private val seenCacheDataSource: SeenCacheDataSource
 ) {
-    fun markAsSeen(word: Word): Flow<Resource<Int?>> {
+    fun markAsSeen(word: String): Flow<Resource<Long?>> {
         return flow {
             emit(Resource.loading())
             val cacheResult = safeCacheCall(Dispatchers.IO) {
-                val updatedWord = Word(
-                    word.word,
-                    word.pronounce,
-                    word.pronounceAudio,
-                    word.meanings,
-                    word.didYouKnow,
-                    word.attribute,
-                    word.examples,
-                    word.date,
-                    word.dateTimeInMillis,
-                    true,
-                    Calendar.getInstance().timeInMillis,
-                    word.wordColor,
-                    word.wordDesaturatedColor,
-                    word.synonyms,
-                    word.antonyms,
-                    word.bookmarkedId,
-                    word.bookmarkedAt
+                val seen = Seen(
+                    word = word,
+                    seenAt = Calendar.getInstance().timeInMillis
                 )
-                wordCacheDataSource.update(updatedWord)
+                seenCacheDataSource.add(seen)
             }
-            val resource: Resource<Int?> = if (cacheResult.error == null) {
+            val resource: Resource<Long?> = if (cacheResult.error == null) {
                 Resource.success(cacheResult.data)
             } else Resource.error(cacheResult.error, null)
             emit(resource)
         }
     }
+
 }

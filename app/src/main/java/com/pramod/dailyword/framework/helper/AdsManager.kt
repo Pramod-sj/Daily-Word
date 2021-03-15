@@ -21,8 +21,9 @@ import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.CommonUtils
 import java.util.*
+import javax.inject.Inject
 
-class AdsManager private constructor(private val context: Context) {
+class AdsManager @Inject constructor(private val context: Context) {
     private val fbRemoteConfig = FBRemoteConfig()
 
     private val sharedPreferences =
@@ -88,7 +89,7 @@ class AdsManager private constructor(private val context: Context) {
                 null,
                 false
             )
-            val bottomSheetDialog = BottomSheetDialog(context,R.style.AppTheme_BottomSheetDialog)
+            val bottomSheetDialog = BottomSheetDialog(context, R.style.AppTheme_BottomSheetDialog)
             bottomSheetDialog.setContentView(binding.root)
 
             /*val builder = MaterialAlertDialogBuilder(context)

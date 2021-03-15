@@ -134,5 +134,9 @@ dependencies {
 
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0-alpha03'
 
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
     implementation project(path: ':audioplayer')
 }

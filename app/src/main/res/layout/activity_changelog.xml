@@ -26,19 +26,34 @@
         android:layout_height="match_parent"
         tools:context=".ui.change_logs.ChangelogActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_change_logs"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingHorizontal="@dimen/padding_medium"
             android:paddingTop="?attr/actionBarSize"
-            android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
-            android:scrollbars="vertical"
-            android:splitMotionEvents="false"
-            app:applyTopBottomPaddingInset="@{changelogViewModel.isEdgeToEdgeEnabled}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:applyTopBottomPaddingInset="@{changelogViewModel.isEdgeToEdgeEnabled}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_change_logs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
+                    android:scrollbars="vertical"
+                    android:splitMotionEvents="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fab_continue_learning_words"

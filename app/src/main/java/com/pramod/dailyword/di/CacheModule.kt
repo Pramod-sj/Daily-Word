@@ -5,15 +5,19 @@ import androidx.room.Room
 import com.pramod.dailyword.framework.datasource.cache.AppDB
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkCacheService
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
+import com.pramod.dailyword.framework.datasource.cache.abstraction.SeenCacheService
 import com.pramod.dailyword.framework.datasource.cache.abstraction.WordCacheService
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkDao
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkedWordDao
+import com.pramod.dailyword.framework.datasource.cache.dao.SeenDao
 import com.pramod.dailyword.framework.datasource.cache.dao.WordDao
 import com.pramod.dailyword.framework.datasource.cache.impl.BookmarkCacheServiceImpl
 import com.pramod.dailyword.framework.datasource.cache.impl.BookmarkedWordCacheServiceImpl
+import com.pramod.dailyword.framework.datasource.cache.impl.SeenCacheServiceImpl
 import com.pramod.dailyword.framework.datasource.cache.impl.WordCacheServiceImpl
 import com.pramod.dailyword.framework.datasource.cache.mappers.BookmarkCEMapper
 import com.pramod.dailyword.framework.datasource.cache.mappers.BookmarkedWordCEMapper
+import com.pramod.dailyword.framework.datasource.cache.mappers.SeenCEMapper
 import com.pramod.dailyword.framework.datasource.cache.mappers.WordCEMapper
 import dagger.Module
 import dagger.Provides
@@ -87,6 +91,20 @@ object CacheModule {
         bookmarkedWordCEMapper: BookmarkedWordCEMapper
     ): BookmarkedWordCacheService {
         return BookmarkedWordCacheServiceImpl(bookmarkedWordDao, bookmarkedWordCEMapper)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSeenDao(appDB: AppDB): SeenDao {
+        return appDB.getSeenDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSeenCacheService(seenDao: SeenDao, seenCEMapper: SeenCEMapper): SeenCacheService {
+        return SeenCacheServiceImpl(
+            seenDao, seenCEMapper
+        )
     }
 
 }

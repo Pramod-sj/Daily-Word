@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.util
 
-import java.lang.Error
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -11,6 +10,7 @@ class CalenderUtil {
         const val DATE_WITH_YEAR_FORMAT_DISPLAY = "dd MMM yy"
         const val DATE_FORMAT = "yyyy-MM-dd"
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
+        const val TIME_FORMAT = "hh:mm a"
 
         val DAYS = listOf(
             "Sunday",
@@ -21,6 +21,10 @@ class CalenderUtil {
             "Friday",
             "Saturday"
         )
+
+        fun isTodaySunday(calender: Calendar): Boolean {
+            return Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == 0
+        }
 
         fun getCalendarInstance(as12AM: Boolean = false): Calendar {
             val calendar = Calendar.getInstance(Locale.US)
@@ -100,6 +104,20 @@ class CalenderUtil {
                 return reqSimpleDateFormat.format(date)
             }
             return null
+        }
+
+        @JvmStatic
+        fun getFancyDay(dateString: String, dateFormat: String = DATE_FORMAT): String {
+            return if (isYesterday(
+                    dateString,
+                    dateFormat
+                )
+            ) "Yesterday"
+            else convertDateStringToSpecifiedDateString(
+                dateString,
+                dateFormat,
+                DATE_FORMAT_DISPLAY
+            ) ?: dateString
         }
 
         @JvmStatic

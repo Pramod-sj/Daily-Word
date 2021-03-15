@@ -6,24 +6,21 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
-import com.pramod.dailyword.business.data.network.Resource
-import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
-import com.pramod.dailyword.business.data.network.utils.ApiResponseHandler
-import com.pramod.dailyword.business.data.network.utils.safeApiCall
-import com.pramod.dailyword.business.domain.model.Word
+import com.pramod.dailyword.business.data.network.utils.handleApiException
 import com.pramod.dailyword.framework.datasource.cache.model.BookmarkedWordCE
-import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
-import com.pramod.dailyword.framework.ui.words.NETWORK_PAGE_SIZE
+import com.pramod.dailyword.framework.prefmanagers.RemoteKeyPrefManager
+import com.pramod.dailyword.framework.ui.words.PAGE_SIZE
 import com.pramod.dailyword.framework.util.CalenderUtil
-import kotlinx.coroutines.Dispatchers
+import retrofit2.HttpException
 import java.util.*
 import javax.inject.Inject
 
 @ExperimentalPagingApi
 class WordPaginationRemoteMediator @Inject constructor(
     private val wordNetworkDataSource: WordNetworkDataSource,
-    private val wordCacheDataSource: WordCacheDataSource
+    private val wordCacheDataSource: WordCacheDataSource,
+    private val remoteKeyPrefManager: RemoteKeyPrefManager
 ) : RemoteMediator<Int, BookmarkedWordCE>() {
 
     companion object {
@@ -31,7 +28,10 @@ class WordPaginationRemoteMediator @Inject constructor(
     }
 
     override suspend fun initialize(): InitializeAction {
-        return InitializeAction.SKIP_INITIAL_REFRESH
+        //only launch initial refresh when data in local is less then PAGE_SIZE
+        return if ((wordCacheDataSource.getAll()?.size ?: 0) < PAGE_SIZE
+        ) InitializeAction.LAUNCH_INITIAL_REFRESH
+        else InitializeAction.SKIP_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -43,17 +43,17 @@ class WordPaginationRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> null
                 LoadType.APPEND -> {
 
-                    val lastItem = state.lastItemOrNull()
+                    remoteKeyPrefManager.getNextRemoteKey()
                         ?: return MediatorResult.Success(endOfPaginationReached = true)
 
-                    lastItem.date
+                    remoteKeyPrefManager.getNextRemoteKey()
 
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             }
 
 
-            val endCalendar = if (loadKey == null) {
+            val cal = if (loadKey == null) {
                 Calendar.getInstance(Locale.US)
             } else {
                 CalenderUtil.convertStringToCalender(
@@ -61,46 +61,42 @@ class WordPaginationRemoteMediator @Inject constructor(
                     CalenderUtil.DATE_FORMAT
                 )!!
             }
-            if (loadType == LoadType.APPEND) {
-                //subtract the calendar by one day which will be the next startFrom
-                endCalendar.roll(
-                    Calendar.DATE, false
-                )
 
-            }
             val startFrom = CalenderUtil.convertCalenderToString(
-                endCalendar,
+                cal,
                 CalenderUtil.DATE_FORMAT
             )
 
             Log.i(TAG, "NEXT LOAD KEY: $startFrom")
 
-            val response = safeApiCall(Dispatchers.IO) {
-                wordNetworkDataSource.getWords(
-                    startFrom = startFrom,
-                    limit = NETWORK_PAGE_SIZE
-                )
-            }
+            val resource = wordNetworkDataSource.getWords(
+                startFrom = startFrom,
+                limit = state.config.pageSize
+            )
 
-            val resource =
-                object : ApiResponseHandler<ApiResponse<List<Word>>, List<Word>>(response) {
-                    override suspend fun handleSuccess(resultObj: ApiResponse<List<Word>>): Resource<List<Word>?> {
-                        return if (resultObj.code == "200") {
-                            Resource.success(resultObj.data)
-                        } else {
-                            Resource.error(Throwable(resultObj.message), null)
-                        }
-                    }
-                }.getResult()
+            if (resource.code == "200") {
+                Log.i(TAG, "load: success")
 
-
-            if (resource.status == Status.SUCCESS) {
                 if (loadType == LoadType.REFRESH) {
                     Log.i(TAG, "LOAD TYPE: REFRESH -- DELETE ALL WORDS")
                     wordCacheDataSource.deleteAll()
+                    remoteKeyPrefManager.setNextRemoteKey(null)
                 }
 
+
                 resource.data?.let {
+
+                    //subtract the calendar by one day which will be the next startFrom
+
+                    CalenderUtil.convertStringToCalender(
+                        it.last().date,
+                        CalenderUtil.DATE_FORMAT
+                    )?.let { calendar ->
+                        calendar.roll(Calendar.DATE, false)
+                        val nextKey =
+                            CalenderUtil.convertCalenderToString(calendar, CalenderUtil.DATE_FORMAT)
+                        remoteKeyPrefManager.setNextRemoteKey(nextKey)
+                    }
                     wordCacheDataSource.addAll(it)
                 }
 
@@ -108,15 +104,21 @@ class WordPaginationRemoteMediator @Inject constructor(
                     endOfPaginationReached = (resource.data?.size ?: 0) < state.config.pageSize
                 )
             } else {
-                MediatorResult.Error(Exception(resource.error?.message))
+                MediatorResult.Error(Exception(resource.message))
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.i(TAG, "ERROR: $e")
-            MediatorResult.Error(e)
+            MediatorResult.Error(handleApiException(e))
         }
     }
 
 
+}
+
+private fun convertErrorBody(throwable: HttpException): String? {
+    return try {
+        throwable.toString()
+    } catch (exception: Exception) {
+        "Unknown"
+    }
 }

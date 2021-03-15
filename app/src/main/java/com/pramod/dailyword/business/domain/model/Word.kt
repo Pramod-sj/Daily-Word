@@ -19,10 +19,6 @@ data class Word(
 
     val dateTimeInMillis: Long?,
 
-    val isSeen: Boolean,
-
-    val seenAtTimeInMillis: Long?,
-
     val wordColor: Int = -1,
 
     val wordDesaturatedColor: Int = -1,
@@ -33,5 +29,42 @@ data class Word(
 
     val bookmarkedId: Int?,
 
-    val bookmarkedAt: Long?
-)
+    val bookmarkedAt: Long?,
+
+    val bookmarkedSeenAt: Long?,
+
+    val isSeen: Boolean,
+
+    val seenAtTimeInMillis: Long?
+
+
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Word
+
+        if (word != other.word) return false
+        if (pronounce != other.pronounce) return false
+        if (pronounceAudio != other.pronounceAudio) return false
+        if (meanings != other.meanings) return false
+        if (didYouKnow != other.didYouKnow) return false
+        if (attribute != other.attribute) return false
+        if (examples != other.examples) return false
+        if (date != other.date) return false
+        if (dateTimeInMillis != other.dateTimeInMillis) return false
+        if (wordColor != other.wordColor) return false
+        if (wordDesaturatedColor != other.wordDesaturatedColor) return false
+        if (synonyms != other.synonyms) return false
+        if (antonyms != other.antonyms) return false
+        if (bookmarkedId != other.bookmarkedId) return false
+        if (bookmarkedAt != other.bookmarkedAt) return false
+        if (bookmarkedSeenAt != other.bookmarkedSeenAt) return false
+        if (isSeen != other.isSeen) return false
+        if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
+
+        return true
+    }
+}

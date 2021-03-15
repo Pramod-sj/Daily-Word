@@ -45,8 +45,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
+            android:overScrollMode="never"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/padding_small"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingTop="?attr/actionBarSize"
@@ -54,7 +56,8 @@
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
             app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2" />
 
         <include
             layout="@layout/list_placeholder_layout"

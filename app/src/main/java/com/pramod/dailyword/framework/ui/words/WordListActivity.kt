@@ -2,28 +2,33 @@ package com.pramod.dailyword.framework.ui.words
 
 //import androidx.paging.ExperimentalPagingApi
 import android.app.ActivityOptions
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.transition.Transition
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import com.google.android.material.transition.platform.Hold
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialElevationScale
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
+import com.pramod.dailyword.framework.helper.AdsManager
+import com.pramod.dailyword.framework.transition.TransitionCallback
+import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
-import com.pramod.dailyword.framework.ui.common.word.WordsAdapter
-import com.pramod.dailyword.framework.helper.AdsManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
 class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel>() {
@@ -34,18 +39,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
 
 
     companion object {
-        @JvmStatic
-        fun openActivity(context: Context) {
-            val intent = Intent(context, WordListActivity::class.java)
-            context.startActivity(intent)
-        }
-
-        @JvmStatic
-        fun openActivity(context: Context, bundle: Bundle) {
-            val intent = Intent(context, WordListActivity::class.java)
-            context.startActivity(intent, bundle)
-        }
-
         val TAG = WordListActivity::class.java.simpleName
     }
 
@@ -53,7 +46,7 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
     @ExperimentalPagingApi
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
-        initExitTransition()
+        //initExitTransition()
         super.onCreate(savedInstanceState)
         setUpToolbar()
         initAdapter()
@@ -61,7 +54,6 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         findViewById<View>(android.R.id.content).postDelayed({
             showNativeAdDialogWithDelay()
         }, 150)
-
     }
 
     override fun onResume() {
@@ -88,6 +80,8 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         //val concatAdapter = ConcatAdapter()
 
         adapter = WordsAdapter { i: Int, word: Word ->
+            initExitTransition()
+
             Log.i(TAG, "initAdapter: ")
             val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
             val option = ActivityOptions.makeSceneTransitionAnimation(
@@ -95,22 +89,26 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 view!!,
                 resources.getString(R.string.card_transition_name)
             )
-            openWordDetailsPage(word.date!!, option)
-        }.apply {
-            withLoadStateFooter(NetworkStateAdapter {
-                adapter?.retry()
-            })
+            openWordDetailsPage(
+                wordDate = word.date!!,
+                option = option,
+                shouldAnimate = windowAnimPrefManager.isEnabled()
+            )
         }
 
-        binding.recyclerviewWords.adapter = adapter
+        binding.recyclerviewWords.adapter = adapter?.withLoadStateFooter(
+            NetworkStateAdapter {
+                adapter?.retry()
+            })
 
         //concatAdapter.addAdapter(adapter!!)
 
-        lifecycleScope.launchWhenCreated {
-            mViewModel.wordUIModelList.collectLatest {
+        mViewModel.wordUIModelList.observe(this@WordListActivity) {
+            lifecycleScope.launch {
                 adapter?.submitData(it)
             }
         }
+
 
     }
 
@@ -130,17 +128,48 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
         window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
     }*/
 
-    private fun initExitTransition() {
-        window.sharedElementsUseOverlay = false
-        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-        window.allowEnterTransitionOverlap = true
-        window.allowReturnTransitionOverlap = true
-    }
-
 
     private fun showNativeAdDialogWithDelay() {
         Handler().postDelayed({
             AdsManager.incrementCountAndShowNativeAdDialog(this)
         }, 1000)
+    }
+
+    private fun initExitTransition() {
+        window.allowReturnTransitionOverlap = true
+        window.exitTransition = Hold().apply {
+            duration = 300
+        }
+        /*window.exitTransition.addListener(object : TransitionCallback() {
+            override fun onTransitionStart(transition: Transition) {
+                super.onTransitionStart(transition)
+                Log.i(TAG, "onTransitionStart: ")
+            }
+
+            override fun onTransitionEnd(transition: Transition) {
+                super.onTransitionEnd(transition)
+                Log.i(TAG, "onTransitionEnd: ")
+            }
+        })*/
+    }
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+
+        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.reenterTransition = MaterialElevationScale(true).apply {
+            duration = 250
+        }
+
+        supportPostponeEnterTransition()
+
+        val start = Calendar.getInstance().timeInMillis
+        isViewsPreDrawn(binding.recyclerviewWords) {
+            Log.i(
+                BaseActivity.TAG,
+                "isViewsPreDrawn: " + (Calendar.getInstance().timeInMillis - start)
+            )
+            supportStartPostponedEnterTransition();
+        }
     }
 }

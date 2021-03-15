@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.prefmanagers
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -42,11 +43,13 @@ class ThemeManager @Inject constructor(context: Context) {
                     CommonUtils.isAtLeastAndroidP() -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                     CommonUtils.isAtLeastAndroidL() -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
                     else -> AppCompatDelegate.MODE_NIGHT_NO
-
                 }
             }
         }
+        Log.i(TAG, "before: applyTheme: "+AppCompatDelegate.getDefaultNightMode())
         AppCompatDelegate.setDefaultNightMode(mode)
+        Log.i(TAG, "after: applyTheme: "+AppCompatDelegate.getDefaultNightMode())
+
     }
 
     private var onThemeValueChangedListener: OnThemeValueChangedListener? = null

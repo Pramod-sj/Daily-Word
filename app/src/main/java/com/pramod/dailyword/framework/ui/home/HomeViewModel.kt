@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.home
 import android.text.SpannableString
 import android.util.Log
 import androidx.lifecycle.*
-import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.business.data.network.Resource
@@ -11,7 +10,7 @@ import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
-import com.pramod.dailyword.framework.helper.PronounceHelper
+import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
@@ -25,7 +24,8 @@ class HomeViewModel @Inject constructor(
     private val prefManager: PrefManager,
     private val getWordsInteractor: GetWordsInteractor,
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
-    val audioPlayer: AudioPlayer
+    val audioPlayer: AudioPlayer,
+    val homeScreenBadgeManager: HomeScreenBadgeManager
 ) : BaseViewModel() {
 
     companion object {
@@ -76,7 +76,8 @@ class HomeViewModel @Inject constructor(
         wordList.asFlow()
             .onEach { resource ->
 
-                Log.i("TAG", ": " + Gson().toJson(resource))
+                Log.i(TAG, ": word of the day")
+
                 _showLoading.value = resource.status == Status.LOADING
                 if (resource.status == Status.ERROR) {
                     resource.error?.message?.let { message ->
@@ -106,7 +107,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun updateWordSeenStatus(word: Word) {
-        markWordAsSeenInteractor.markAsSeen(word)
+        markWordAsSeenInteractor.markAsSeen(word.word)
     }
 
     val showChangelogActivity: Flow<Boolean> = flow {

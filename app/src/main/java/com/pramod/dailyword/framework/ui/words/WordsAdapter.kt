@@ -1,4 +1,4 @@
-package com.pramod.dailyword.framework.ui.common.word
+package com.pramod.dailyword.framework.ui.words
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +10,8 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ItemAdLayoutBinding
 import com.pramod.dailyword.databinding.ItemWordListLayoutBinding
+import com.pramod.dailyword.framework.ui.common.word.WordComparator
+import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 
 
 class WordsAdapter(
@@ -44,8 +46,9 @@ class WordsAdapter(
 
     }
 
+
     override fun getItemViewType(position: Int): Int {
-        Log.i("TAG", "getItemViewType: " + getItem(position))
+        Log.i("TAG", "getItemViewType: " + getItem(position)?.javaClass?.simpleName)
         return when (getItem(position)) {
             is WordListUiModel.AdItem -> ITEM_TYPE_AD
             is WordListUiModel.WordItem -> ITEM_TYPE_WORD
@@ -72,7 +75,7 @@ class WordsAdapter(
                     false
                 )
             )
-            else -> throw ClassCastException("Unknown viewType ${viewType} ${itemCount}")
+            else -> throw ClassCastException("Unknown viewType $viewType $itemCount")
         }
     }
 

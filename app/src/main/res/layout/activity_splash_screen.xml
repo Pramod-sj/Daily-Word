@@ -46,9 +46,8 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/margin_medium"
-                android:src="@drawable/ic_vocabulary"
-                android:tint="@color/app_icon_tint"
-                app:tint="@color/app_icon_tint"/>
+                app:tint="@color/colorPrimary"
+                android:src="@drawable/ic_vocabulary"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -112,7 +111,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_medium"
-                android:text="@string/made_in"/>
+                android:text="@string/made_in"
+                android:textStyle="bold" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

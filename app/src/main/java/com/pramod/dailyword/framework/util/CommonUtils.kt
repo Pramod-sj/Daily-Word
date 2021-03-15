@@ -9,6 +9,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -16,6 +17,8 @@ import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -85,16 +88,29 @@ object CommonUtils {
             appname.length,
             SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+        span.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            appname.length,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         return span
     }
 
     @JvmStatic
-    fun getGreetMessage(): String {
+    fun getGreetMessage(): SpannableString {
         val cal: Calendar = Calendar.getInstance()
-        return when (cal.get(Calendar.HOUR_OF_DAY)) {
-            in 0..11 -> "Good Morning"
-            in 12..16 -> "Good Afternoon"
-            else -> "Good Evening"
+
+        val random = arrayOf("Hi, ", "Hello, ", "Hey, ", "")
+
+        return SpannableString(
+            when (cal.get(Calendar.HOUR_OF_DAY)) {
+                in 0..11 -> "${random.random()}Good Morning"
+                in 12..16 -> "${random.random()}Good Afternoon"
+                else -> "${random.random()}Good Evening"
+            }
+        ).also {
+            it.setSpan(RelativeSizeSpan(0.9f), 0, it.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 

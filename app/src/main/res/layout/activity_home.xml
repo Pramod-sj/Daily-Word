@@ -100,8 +100,8 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/home_app_icon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/margin_small"
                         android:src="@drawable/ic_vocabulary_24dp"
@@ -111,7 +111,7 @@
 
                     <TextView
                         android:id="@+id/toolbar_title"
-                        style="@style/AppTheme.Header5TextStyle.Bold"
+                        style="@style/AppTheme.Header5TextStyle"
                         switchingText="@{mainViewModel.title()}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
-
+            <!-- <include android:id="@+id/toolbar_custom" layout="@layout/layout_custom_toolbar" />-->
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -153,6 +153,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:clipToPadding="false"
                         android:padding="@dimen/padding_medium"
                         android:weightSum="4">
 
@@ -165,17 +167,32 @@
                             android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
                             android:orientation="vertical">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="3dp"
-                                android:background="@drawable/background_circle"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.green_400),Constants.COLOR_ALPHA)}"
-                                android:clickable="false"
-                                android:padding="13dp"
-                                android:src="@drawable/ic_round_format_list_bulleted_24"
-                                android:tint="@color/green_400" />
+                                android:clipChildren="false"
+                                android:clipToPadding="false">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/background_circle"
+                                    android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.green_400),Constants.COLOR_ALPHA)}"
+                                    android:clickable="false"
+                                    android:padding="13dp"
+                                    android:src="@drawable/ic_round_format_list_bulleted_24"
+                                    android:tint="@color/green_400" />
+
+                                <View
+                                    android:id="@+id/view_badge_word_list"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="end|top"
+                                    android:background="@drawable/background_home_badge" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -194,18 +211,32 @@
                             android:onClick="@{(v)->mainViewModel.navigator.gotoBookmark(v)}"
                             android:orientation="vertical">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="3dp"
-                                android:background="@drawable/background_circle"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.blue_400),Constants.COLOR_ALPHA)}"
-                                android:clickable="false"
-                                android:padding="13dp"
+                                android:clipChildren="false"
+                                android:clipToPadding="false">
 
-                                android:src="@drawable/ic_round_bookmarks_24"
-                                android:tint="@color/blue_400" />
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/background_circle"
+                                    android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.blue_400),Constants.COLOR_ALPHA)}"
+                                    android:clickable="false"
+                                    android:padding="13dp"
+                                    android:src="@drawable/ic_outline_bookmarks_24"
+                                    android:tint="@color/blue_400" />
+
+                                <View
+                                    android:id="@+id/view_badge_bookmark"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="end|top"
+                                    android:background="@drawable/background_home_badge" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -221,20 +252,38 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:onClick="@{(v)->mainViewModel.navigator.gotoRandomWord(v)}"
                             android:orientation="vertical">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_margin="3dp"
-                                android:background="@drawable/background_circle"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.pink_400),Constants.COLOR_ALPHA)}"
-                                android:padding="13dp"
+                                android:clipChildren="false"
+                                android:clipToPadding="false">
 
-                                android:src="@drawable/ic_random_word"
-                                android:tint="@color/pink_400" />
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/background_circle"
+                                    android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.pink_400),Constants.COLOR_ALPHA)}"
+                                    android:padding="13dp"
+                                    android:src="@drawable/ic_random_word"
+                                    android:tint="@color/pink_400" />
+
+                                <TextView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="end|top"
+                                    android:background="@drawable/background_home_badge"
+                                    android:gravity="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="10dp"
+                                    android:textStyle="bold"
+                                    app:isVisible="@{mainViewModel.homeScreenBadgeManager.showBadgeOnRandomWord()}" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -254,16 +303,36 @@
                             android:onClick="@{(v)->mainViewModel.navigator.gotoRecap(v)}"
                             android:orientation="vertical">
 
-                            <androidx.appcompat.widget.AppCompatImageView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="3dp"
-                                android:background="@drawable/background_circle"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.orange_600),Constants.COLOR_ALPHA)}"
-                                android:padding="13dp"
-                                android:src="@drawable/ic_recap"
-                                android:tint="@color/orange_600" />
+                                android:clipChildren="false"
+                                android:clipToPadding="false">
+
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/background_circle"
+                                    android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.orange_600),Constants.COLOR_ALPHA)}"
+                                    android:padding="13dp"
+                                    android:src="@drawable/ic_recap"
+                                    android:tint="@color/orange_600" />
+
+                                <TextView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="end|top"
+                                    android:background="@drawable/background_home_badge"
+                                    android:gravity="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_tiny"
+                                    android:textStyle="bold"
+                                    android:visibility="gone"
+                                    app:isVisible="@{mainViewModel.homeScreenBadgeManager.showBadgeOnRecap()}" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"

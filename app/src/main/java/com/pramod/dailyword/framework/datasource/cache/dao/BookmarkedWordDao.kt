@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 
 const val query_get_all_word =
-    "SELECT * FROM WordOfTheDay LEFT JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord"
+    "SELECT * FROM Word LEFT JOIN Bookmark ON Word.word==Bookmark.bookmarkedWord LEFT JOIN Seen ON Word.word==Seen.seenWord"
 
 const val query_get_only_bookmarked =
-    "SELECT * FROM WordOfTheDay INNER JOIN Bookmark ON WordOfTheDay.word==Bookmark.bookmarkedWord"
+    "SELECT * FROM Word INNER JOIN Bookmark ON Word.word==Bookmark.bookmarkedWord LEFT JOIN Seen ON Word.word==Seen.seenWord"
 
 @Dao
 interface BookmarkedWordDao {
@@ -27,10 +27,10 @@ interface BookmarkedWordDao {
     @Query("$query_get_all_word WHERE date=:date")
     fun getWordByDateAsFlow(date: String): Flow<BookmarkedWordCE?>
 
-    @Query("$query_get_all_word WHERE WordOfTheDay.word=:word")
+    @Query("$query_get_all_word WHERE Word.word=:word")
     fun getWordByName(word: String): LiveData<BookmarkedWordCE?>
 
-    @Query("$query_get_all_word WHERE WordOfTheDay.word=:word")
+    @Query("$query_get_all_word WHERE Word.word=:word")
     fun getWordByNameFlow(word: String): Flow<BookmarkedWordCE?>
 
     @Query("$query_get_all_word ORDER BY dateTimeInMillis DESC LIMIT 1 OFFSET 0")

@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.domain.model.Word
+import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
 import kotlinx.coroutines.flow.Flow
 
@@ -80,7 +81,7 @@ class BookmarkedWordCacheDataSourceImpl(private val bookmarkedWordCacheService: 
     @ExperimentalPagingApi
     override fun getWordsPagingSource(
         pagingConfig: PagingConfig,
-        remoteMediator: com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
+        remoteMediator: WordPaginationRemoteMediator
     ): Flow<PagingData<Word>> {
         return bookmarkedWordCacheService.getWordsPagingSource(pagingConfig, remoteMediator)
     }

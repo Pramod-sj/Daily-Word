@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+
+        <ImageButton
+            android:id="@+id/button_toolbar_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:background="?actionBarItemBackground"
+            android:contentDescription="@string/custom_toolbar_navigation_button_desc"
+            android:src="@drawable/ic_vocabulary_24dp"
+            android:tint="@color/app_icon_tint" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/button_toolbar_option_menu"
+            android:layout_toEndOf="@id/button_toolbar_navigation"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtView_toolbar_title"
+                style="@style/AppTheme.Header5TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily Word" />
+
+            <TextView
+                android:id="@+id/txtView_toolbar_sub_title"
+                style="@style/AppTheme.SubTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/button_toolbar_option_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:tint="@color/app_icon_tint"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:background="?actionBarItemBackground"
+            android:contentDescription="@string/custom_toolbar_option_menu_desc"
+            android:src="@drawable/ic_more_vert_black_24dp" />
+
+    </RelativeLayout>
+</layout>

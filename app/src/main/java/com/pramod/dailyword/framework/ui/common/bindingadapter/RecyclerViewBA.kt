@@ -1,10 +1,11 @@
 package com.pramod.dailyword.framework.ui.common.bindingadapter
 
-import android.view.ViewTreeObserver
-import androidx.core.view.updatePadding
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.pramod.dailyword.framework.helper.edgetoedge.doOnApplyWindowInsets
+import com.pramod.dailyword.framework.prefmanagers.EgdeToEdgePrefManager
 
 class RecyclerViewBA {
     companion object {
@@ -17,15 +18,28 @@ class RecyclerViewBA {
             appBarLayout: AppBarLayout
         ) {
             if (applyRecyclerViewTopPadding) {
-                appBarLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
-                    ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        appBarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        val appBarHeight = appBarLayout.height
-                        recyclerView.updatePadding(top = appBarHeight)
-                    }
+                appBarLayout.post {
+                    appBarLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
+                        OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            appBarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            val appBarHeight = appBarLayout.height
+                            if (EgdeToEdgePrefManager.newInstance(appBarLayout.context)
+                                    .isEnabled()
+                            ) {
+                                recyclerView.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+                                    val topPadding =
+                                        appBarHeight + windowInsets.systemWindowInsetTop
+                                    recyclerView.setPadding(0, topPadding, 0, 0)
+                                }
+                            } else {
+                                recyclerView.setPadding(0, appBarHeight, 0, 0)
+                            }
+                        }
 
-                })
+                    })
+
+                }
             }
         }
 

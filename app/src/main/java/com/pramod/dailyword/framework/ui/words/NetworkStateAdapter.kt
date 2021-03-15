@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.words
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.paging.LoadState
@@ -28,13 +29,13 @@ class NetworkStateAdapter(
         }
 
         fun bindTo(loadState: LoadState) {
-            Log.i("TAG", "bindTo: " + Gson().toJson(loadState))
-            binding.networkStateProgress.isVisible = loadState == LoadState.Loading
-            binding.networkStateErrorLayout.isVisible = loadState is LoadState.Error
-            binding.networkStateBtnRetry.isVisible = loadState is LoadState.Error
-            binding.networkStateTxtViewError.isVisible = loadState is LoadState.Error
-            binding.networkStateTxtViewError.text =
-                (loadState as LoadState.Error).error.message
+            binding.networkStateProgress.isInvisible = loadState != LoadState.Loading
+            binding.networkStateErrorLayout.isInvisible = loadState !is LoadState.Error
+            binding.networkStateBtnRetry.isInvisible = loadState !is LoadState.Error
+            binding.networkStateTxtViewError.isInvisible = loadState !is LoadState.Error
+            if (loadState is LoadState.Error) {
+                binding.networkStateTxtViewError.text = loadState.error.message
+            }
         }
 
     }

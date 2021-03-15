@@ -5,5 +5,7 @@ data class Bookmark(
 
     val bookmarkedWord: String?,
 
-    val bookmarkedAt: Long?
+    val bookmarkedAt: Long?,
+
+    val bookmarkSeenAt: Long?
 )

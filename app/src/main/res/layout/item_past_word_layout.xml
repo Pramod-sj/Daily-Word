@@ -16,6 +16,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
+        android:transitionName="@string/card_transition_name"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         app:cardCornerRadius="25dp"
@@ -31,17 +32,17 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{CalenderUtil.isYesterday(word.date,CalenderUtil.DATE_FORMAT)?`Yesterday`:CalenderUtil.convertDateStringToSpecifiedDateString(word.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_FORMAT_DISPLAY)}" />
+                android:text="@{CalenderUtil.getFancyDay(word.date,CalenderUtil.DATE_FORMAT)}" />
 
-            <TextView
-
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView_item_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@{word.seen?null:@drawable/background_circle_12dp}"
+                android:drawablePadding="@dimen/margin_medium"
                 android:text="@{word.word}"
                 android:textSize="@dimen/text_h5"
-                android:textStyle="bold"
-                android:transitionName="CONTAINER" />
+                android:textStyle="bold" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

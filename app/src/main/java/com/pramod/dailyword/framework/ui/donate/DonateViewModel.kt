@@ -1,10 +1,9 @@
 package com.pramod.dailyword.framework.ui.donate
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.R
-import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
+import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,9 +12,8 @@ class DonateViewModel
 @ExperimentalPagingApi
 @Inject
 constructor(
-    val mediator: WordPaginationRemoteMediator,
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : BaseViewModel() {
 
 
     val donateItemList = arrayListOf(

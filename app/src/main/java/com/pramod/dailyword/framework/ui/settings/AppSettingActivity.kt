@@ -57,7 +57,6 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
     private fun initEdgeToEdgeValue() {
         egdeToEdgePrefManager.getLiveData().observe(this) {
             mViewModel.edgeToEdgeValue.value = it
-
         }
     }
 

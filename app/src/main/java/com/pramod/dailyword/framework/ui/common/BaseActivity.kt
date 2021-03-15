@@ -27,10 +27,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
         setMessageObserver()
     }
 
-    companion object {
-        val TAG = BaseActivity::class.java.simpleName
-    }
-
     private fun safeViewFinding(parent: View, viewId: Int): View? {
         return try {
             parent.findViewById(viewId)
@@ -60,6 +56,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
     }
 
     private fun handleSnackBarMessage(it: Message.SnackBarMessage) {
+        if (it.isShown) {
+            return
+        }
         val snackBar = Snackbar.make(
             if (it.parentViewId != null)
                 safeViewFinding(
@@ -79,6 +78,11 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
             snackBar.setAnchorView(id)
         }
         snackBar.addCallback(object : Snackbar.Callback() {
+            override fun onShown(sb: Snackbar?) {
+                super.onShown(sb)
+                it.isShown = true
+            }
+
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
                 mViewModel.setMessage(null)
@@ -87,6 +91,10 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
         })
         snackBar.show()
 
+    }
+
+    companion object {
+        val TAG = BaseActivity::class.java.simpleName
     }
 
 }

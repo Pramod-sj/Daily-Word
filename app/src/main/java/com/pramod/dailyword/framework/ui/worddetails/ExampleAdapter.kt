@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +11,7 @@ import com.pramod.dailyword.databinding.ItemWordExampleLayoutBinding
 class ExampleAdapter(
     private var colorResId: Int? = null,
     private var desaturatedColorResId: Int? = null
-) : ListAdapter<String, ExampleAdapter.ExampleViewHolder>(StringDiffCallback) {
+) : ListAdapter<String, ExampleAdapter.ExampleViewHolder>(StringComparator) {
 
     fun setColors(colorResId: Int?, desaturatedColorResId: Int?) {
         this.colorResId = colorResId;

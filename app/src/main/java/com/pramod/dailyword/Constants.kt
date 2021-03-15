@@ -9,6 +9,6 @@ class Constants {
         const val REQUEST_CODE_PENDING_INTENT_ON_WIDGET_BOOKMARK = 204
         const val JOB_ID_FETCH_DATA_FOR_WIDGET = 205
 
-        const val COLOR_ALPHA = 40
+        const val COLOR_ALPHA = 30
     }
 }

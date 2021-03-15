@@ -23,9 +23,9 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     override val viewModel: SplashScreenViewModel by viewModels()
     override val bindingVariable: Int = BR.splashScreenViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         forceEdgeToEdge(true)
+        lightStatusBar(matchingBackgroundColor = true)
         super.onCreate(savedInstanceState)
         //addGradientToAppIcon()
         animateAppIcon()
@@ -42,8 +42,8 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
                             R.drawable.ic_vocabulary
                         )!!
                     )!!,
-                    getContextCompatColor(R.color.colorPrimaryDark),
-                    getContextCompatColor(R.color.colorPrimary)
+                    getContextCompatColor(R.color.purple_200),
+                    getContextCompatColor(R.color.green_600)
                 )
             )
         } catch (e: Exception) {

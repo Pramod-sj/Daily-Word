@@ -19,10 +19,6 @@ data class BookmarkedWordCE(
 
     var dateTimeInMillis: Long?,
 
-    var isSeen: Boolean,
-
-    var seenAtTimeInMillis: Long?,
-
     var wordColor: Int = -1,
 
     var wordDesaturatedColor: Int = -1,
@@ -35,5 +31,13 @@ data class BookmarkedWordCE(
 
     var bookmarkedWord: String?,
 
-    var bookmarkedAt: Long?
-)
+    var bookmarkedAt: Long?,
+
+    var bookmarkSeenAt: Long?,
+
+    var seenWord: String?,
+
+    var seenAt: Long?,
+
+
+    )

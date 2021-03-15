@@ -255,7 +255,7 @@ class DailogHelper {
             positionText?.let {
                 dialog.setPositiveButton(it) { dialogInterface: DialogInterface, i: Int ->
                     dialogInterface.dismiss()
-                    positiveClickCallback?.invoke(items[selectedItemIndex].toUpperCase())
+                    positiveClickCallback?.invoke(items[selectedItemIndex])
                 }
             }
             negativeText?.let {

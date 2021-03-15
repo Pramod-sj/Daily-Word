@@ -24,7 +24,8 @@ class ToggleBookmarkInteractor @Inject constructor(
                     Bookmark(
                         bookmarkId = null,
                         bookmarkedWord = word?.word,
-                        bookmarkedAt = Calendar.getInstance().timeInMillis
+                        bookmarkedAt = Calendar.getInstance().timeInMillis,
+                        bookmarkSeenAt = null
                     )
                 )
             } else {

@@ -10,7 +10,8 @@ class BookmarkCEMapper @Inject constructor() : EntityMapper<BookmarkCE, Bookmark
         return Bookmark(
             entity.bookmarkId,
             entity.bookmarkedWord,
-            entity.bookmarkedAt
+            entity.bookmarkedAt,
+            entity.bookmarkSeenAt
         )
     }
 
@@ -18,7 +19,8 @@ class BookmarkCEMapper @Inject constructor() : EntityMapper<BookmarkCE, Bookmark
         return BookmarkCE(
             domain.bookmarkId,
             domain.bookmarkedWord,
-            domain.bookmarkedAt
+            domain.bookmarkedAt,
+            domain.bookmarkSeenAt
         )
     }
 }

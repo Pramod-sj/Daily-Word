@@ -1,6 +1,7 @@
 package com.pramod.dailyword.business.data.network
 
 import android.util.Log
+import com.pramod.dailyword.business.data.network.utils.handleApiException
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import kotlinx.coroutines.flow.*
 
@@ -37,12 +38,13 @@ abstract class NetworkBoundResource<RequestType, ResponseType> {
                     }
                 }
 
-            } catch (throwable: Throwable) {
+            } catch (e: Exception) {
+                e.printStackTrace()
                 Log.i(
                     TAG,
-                    "asFlow: network call failed $throwable fetching from cache"
+                    "asFlow: network call failed ${e.message} fetching from cache"
                 )
-                fetchFromCache().map { Resource.error(throwable, it) }
+                fetchFromCache().map { Resource.error(handleApiException(e), it) }
             }
         } else {
             Log.i(TAG, "asFlow: fetching from cache")

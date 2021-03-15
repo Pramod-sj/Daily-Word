@@ -13,7 +13,7 @@ object WordComparator : DiffUtil.ItemCallback<WordListUiModel>() {
             oldItem.word.date == newItem.word.date
         } else if (oldItem is WordListUiModel.AdItem && newItem is WordListUiModel.AdItem) {
             oldItem.adId == newItem.adId
-        } else false
+        } else true
     }
 
     override fun areContentsTheSame(
@@ -24,11 +24,11 @@ object WordComparator : DiffUtil.ItemCallback<WordListUiModel>() {
             oldItem == newItem
         } else if (oldItem is WordListUiModel.AdItem && newItem is WordListUiModel.AdItem) {
             oldItem == newItem
-        } else false
+        } else true
     }
 
     override fun getChangePayload(oldItem: WordListUiModel, newItem: WordListUiModel): Any? {
-        if (oldItem is WordListUiModel.WordItem && newItem is WordListUiModel.WordItem) {
+        return if (oldItem is WordListUiModel.WordItem && newItem is WordListUiModel.WordItem) {
             val wordOfTheDay = newItem.word
             val bundle = Bundle()
             bundle.putString("DATE", wordOfTheDay.date)
@@ -36,11 +36,11 @@ object WordComparator : DiffUtil.ItemCallback<WordListUiModel>() {
             bundle.putStringArrayList(
                 "DEFINATION",
                 wordOfTheDay.meanings?.let { ArrayList(it) } ?: arrayListOf())
-            return bundle
+            bundle
         } else if (oldItem is WordListUiModel.AdItem && newItem is WordListUiModel.AdItem) {
-            return null
+            null
         } else {
-            return null
+            null
         }
     }
 

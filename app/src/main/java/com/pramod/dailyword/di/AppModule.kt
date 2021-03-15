@@ -3,16 +3,16 @@ package com.pramod.dailyword.di
 import android.content.Context
 import androidx.paging.ExperimentalPagingApi
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
 import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
+import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
-import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
-import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
-import com.pramod.dailyword.framework.prefmanagers.PrefManager
-import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
+import com.pramod.dailyword.framework.helper.AdsManager
+import com.pramod.dailyword.framework.prefmanagers.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,9 +28,14 @@ object AppModule {
     @Provides
     fun provideWordPagingRemoteMediator(
         wordCacheDataSource: WordCacheDataSource,
-        wordNetworkDataSource: WordNetworkDataSource
+        wordNetworkDataSource: WordNetworkDataSource,
+        remoteKeyPrefManager: RemoteKeyPrefManager
     ): WordPaginationRemoteMediator {
-        return WordPaginationRemoteMediator(wordNetworkDataSource, wordCacheDataSource)
+        return WordPaginationRemoteMediator(
+            wordNetworkDataSource,
+            wordCacheDataSource,
+            remoteKeyPrefManager
+        )
     }
 
     @Provides
@@ -87,4 +92,30 @@ object AppModule {
     ): AudioPlayer {
         return AudioPlayer(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideAdsManager(
+        @ApplicationContext context: Context
+    ): AdsManager {
+        return AdsManager.newInstance(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeScreenBadgeManager(
+        @ApplicationContext context: Context,
+        bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
+        getAllBookmarks: GetAllBookmarks
+    ): HomeScreenBadgeManager {
+        return HomeScreenBadgeManager(context, bookmarkedWordCacheDataSource, getAllBookmarks)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteKeyPrefManager(@ApplicationContext context: Context): RemoteKeyPrefManager {
+        return RemoteKeyPrefManager(context)
+    }
+
+
 }

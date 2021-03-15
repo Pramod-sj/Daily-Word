@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BB86FC</color>
+    <color name="colorPrimary">@color/rally_green_200</color>
     <color name="colorPrimaryDark">#252525</color>
-    <color name="colorAccent">#BB86FC</color>
+    <color name="colorAccent">@color/rally_green_200</color>
 
     <color name="app_logo_tint">@color/white</color>
 
-    <color name="scrollBarColorPrimary">#40BB86FC</color>
+    <color name="scrollBarColorPrimary">#40ce93d8</color>
 
     <color name="app_theme_icon_tint">@color/green_200</color>
     <color name="app_animation_icon_tint">@color/orange_200</color>
@@ -34,7 +34,7 @@
 
     <color name="bottomSheetDialogNavigationBarColor">#282828</color>
 
-    <color name="windowBackgroundColor">#232323</color>
+    <color name="windowBackgroundColor">#212121</color>
 
 
     <!-- Start Donate Item Colors -->

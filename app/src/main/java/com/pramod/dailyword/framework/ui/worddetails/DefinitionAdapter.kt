@@ -1,20 +1,17 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemWordDefinationLayoutBinding
-import com.pramod.dailyword.databinding.ItemWordExampleLayoutBinding
 
-class DefinationAdapter(
+class DefinitionAdapter(
     private var colorResId: Int? = null,
     private var desaturatedColorResId: Int? = null
-) : ListAdapter<String, DefinationAdapter.DefinationViewHolder>(StringDiffCallback) {
+) : ListAdapter<String, DefinitionAdapter.DefinationViewHolder>(StringComparator) {
 
     fun setColors(colorResId: Int?, desaturatedColorResId: Int?) {
         this.colorResId = colorResId;

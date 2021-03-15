@@ -23,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         app:cardCornerRadius="0dp"
-        app:cardElevation="@dimen/card_elevation_word_item">
+        app:cardElevation="@dimen/card_elevation_word_item"
+        app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor)),30)}">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -69,18 +70,55 @@
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:paddingVertical="@dimen/padding_small">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     style="@style/AppTheme.Header5TextStyle.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
+                    android:drawableEnd="@{word.seen?null:@drawable/background_circle_12dp}"
+                    android:drawablePadding="@dimen/margin_medium"
                     android:text="@{word.word}" />
 
                 <TextView
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
                     android:text="@{word.meanings.get(0)}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:isGone="@{word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:background="@drawable/background_curve"
+                        android:backgroundTint="?colorPrimary"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:text="@string/synonyms"
+                        android:paddingVertical="2dp"
+                        android:textColor="?android:attr/windowBackground"
+                        android:textSize="@dimen/text_tiny"
+                        app:isGone="@{word.synonyms.size()==0 }" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:background="@drawable/background_curve"
+                        android:paddingVertical="2dp"
+                        android:backgroundTint="?colorPrimary"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:text="@string/antonyms"
+                        android:textColor="?android:attr/windowBackground"
+                        android:textSize="@dimen/text_tiny"
+                        app:isGone="@{word.antonyms.size()==0}" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>

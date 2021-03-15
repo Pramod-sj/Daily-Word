@@ -15,8 +15,20 @@ class WordCacheServiceImpl(private val wordDao: WordDao, private val wordCEMappe
         return wordDao.add(wordCEMapper.toEntity(word))
     }
 
+    override suspend fun get(wordDate: String): Word? {
+        return wordDao.get(wordDate)?.let { wordCEMapper.fromEntity(it) }
+    }
+
+    override suspend fun getAll(): List<Word>? {
+        return wordDao.getAll()?.map {
+            wordCEMapper.fromEntity(it)
+        }
+    }
+
     override suspend fun update(word: Word): Int {
-        return wordDao.update(wordCEMapper.toEntity(word))
+        return wordCEMapper.toEntity(word).let {
+            wordDao.update(it)
+        }
     }
 
     override suspend fun delete(word: String): Int {

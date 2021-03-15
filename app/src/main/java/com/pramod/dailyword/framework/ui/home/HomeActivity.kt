@@ -13,18 +13,18 @@ import android.util.Log
 import android.view.*
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
@@ -33,6 +33,7 @@ import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.*
@@ -51,12 +52,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     override val viewModel: HomeViewModel by viewModels()
     override val bindingVariable: Int = BR.mainViewModel
 
-
     private lateinit var pastWordAdapter: PastWordAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        initExitTransition()
         super.onCreate(savedInstanceState)
+        //initExitTransition()
         //addGradientToAppIcon()
         setUpViewCallbacks()
         deepLinkNotification()
@@ -69,6 +70,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         //showDummyLotttieDialog()
         handleShowingCreditAndAutoStartDialog()
         handleRippleAnimationForAudioEffect()
+        handleBadgeVisibility()
     }
 
     override fun onResume() {
@@ -76,28 +78,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         pastWordAdapter.setCanStartActivity(true)
     }
 
-
-    private fun addGradientToAppIcon() {
-        try {
-            binding.homeAppIcon.setImageBitmap(
-                GradientUtils.addGradient(
-                    CommonUtils.drawableToBitmap(
-                        getContextCompatDrawable(
-                            R.drawable.ic_vocabulary
-                        )!!
-                    )!!,
-                    getContextCompatColor(R.color.colorPrimaryDark),
-                    getContextCompatColor(R.color.colorPrimary)
-                )
-            )
-        } catch (e: Exception) {
-            //if exception occur fallback to normal icon
-            binding.homeAppIcon.setImageResource(R.drawable.ic_vocabulary)
-            binding.homeAppIcon.imageTintList =
-                ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
-        }
+    private fun initExitTransition() {
+        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
     }
 
+    private fun handleBadgeVisibility() {
+        viewModel.homeScreenBadgeManager.showBadgeOnBookmark().observe(this) {
+            Log.i(TAG, "handleBadgeVisibility: showBadgeOnBookmark:$it")
+            binding.viewBadgeBookmark.isVisible = it
+        }
+        viewModel.homeScreenBadgeManager.showBadgeOnWordList().observe(this) {
+            Log.i(TAG, "handleBadgeVisibility: showBadgeOnWordList:$it")
+            binding.viewBadgeWordList.isVisible = it
+        }
+    }
 
     private fun handleRippleAnimationForAudioEffect() {
 
@@ -181,20 +175,53 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun initToolbar() {
+
+
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.let { title = null }
+
+        supportActionBar?.let { actionBar ->
+
+
+            actionBar.title = null
+
+            /*   actionBar.setDisplayShowTitleEnabled(false)
+               actionBar.setDisplayShowCustomEnabled(true)
+
+               val layoutCustomTitleToolbarBinding: LayoutCustomTitleToolbarBinding =
+                   DataBindingUtil.inflate(
+                       layoutInflater,
+                       R.layout.layout_custom_title_toolbar,
+                       null,
+                       false
+                   )
+               val params: ActionBar.LayoutParams = ActionBar.LayoutParams(
+                   ActionBar.LayoutParams.WRAP_CONTENT,
+                   ActionBar.LayoutParams.MATCH_PARENT,
+                   Gravity.CENTER
+               )
+               actionBar.setCustomView(
+                   layoutCustomTitleToolbarBinding.txtViewToolbarTitle,
+                   params
+               )
+
+               mViewModel.title().observe(this) {
+                   CommonBindindAdapters.switchingText(
+                       layoutCustomTitleToolbarBinding.txtViewToolbarTitle,
+                       it
+                   )
+               }*/
+
+        }
+
+
+
         mViewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
         Handler(Looper.getMainLooper()).postDelayed({
             mViewModel.setTitle(CommonUtils.getFancyAppName(this))
         }, 2000)
+
     }
 
-    private fun initExitTransition() {
-        window.allowEnterTransitionOverlap = true
-        window.allowReturnTransitionOverlap = true
-        window.sharedElementsUseOverlay = false
-        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-    }
 
     private fun showNotification(word: Word) {
         val notificationHelper = NotificationHelper(this@HomeActivity)
@@ -235,7 +262,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
         }
         binding.mainRecyclerviewPastWords.adapter = pastWordAdapter
-        viewModel.wordOfTheDayLiveData.observe(this, Observer {
+        viewModel.wordOfTheDayLiveData.observe(this, {
             it?.let {
                 if (!it.isSeen) {
                     viewModel.updateWordSeenStatus(it)
@@ -249,10 +276,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             }
         })
         viewModel.wordsExceptTodayLiveData.observe(this, {
-            it?.let { words ->
-                pastWordAdapter.submitList(words)
-                binding.mainRecyclerviewPastWords.scrollToPosition(0)
-            }
+            pastWordAdapter.submitList(it)
         })
     }
 
@@ -268,7 +292,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         openWordDetailsPage(
             word.date!!,
             option,
-            true
+            windowAnimPrefManager.isEnabled()
         )
     }
 
@@ -471,6 +495,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         bottomSheetDialog?.setContentView(navigationView, l)
+    }
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+
+        window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+
+        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+
+        supportPostponeEnterTransition()
+        isViewsPreDrawn(binding.mainRecyclerviewPastWords) {
+            supportStartPostponedEnterTransition()
+        }
+
     }
 
 

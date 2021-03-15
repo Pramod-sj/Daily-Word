@@ -54,7 +54,8 @@
                     app:showIconBackground="false"
                     app:subTitle="@{appSettingViewModel.themeValue}"
                     app:title="Theme"
-                    app:titlePaddingStart="@dimen/margin_small" />
+                    app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold" />
 
                 <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                     android:layout_width="match_parent"
@@ -68,6 +69,7 @@
                     app:subTitle="Animate when switching from one window to another"
                     app:title="Window Animation (Beta)"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -82,6 +84,7 @@
                     app:subTitle="Immersive mode"
                     app:title="Full Screen (Edge to Edge)"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <TextView
@@ -106,6 +109,7 @@
                     app:subTitle="Receive notification when word of the day is available"
                     app:title="Daily Word Notification"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
 
@@ -120,6 +124,7 @@
                     app:subTitle="Receive a reminding notification"
                     app:title="Reminder Notification"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <TextView
@@ -145,6 +150,7 @@
                     app:subTitle="Not receiving notifications, fix it yourself"
                     app:title="Facing Notification Issue?"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
                 <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
@@ -158,6 +164,7 @@
                     app:subTitle="Links, developer, license, others"
                     app:title="About"
                     app:titlePaddingStart="@dimen/margin_small"
+                    app:titleStyle="bold"
                     app:titleTextSize="@dimen/text_sub_title" />
 
             </LinearLayout>

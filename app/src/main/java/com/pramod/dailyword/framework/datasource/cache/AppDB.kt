@@ -7,15 +7,21 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.pramod.dailyword.framework.datasource.cache.convertors.ListConverter
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkDao
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkedWordDao
+import com.pramod.dailyword.framework.datasource.cache.dao.SeenDao
 import com.pramod.dailyword.framework.datasource.cache.dao.WordDao
 import com.pramod.dailyword.framework.datasource.cache.model.BookmarkCE
+import com.pramod.dailyword.framework.datasource.cache.model.SeenCE
 import com.pramod.dailyword.framework.datasource.cache.model.WordCE
-import com.pramod.dailyword.framework.datasource.cache.convertors.ListConverter
 
 @TypeConverters(ListConverter::class)
-@Database(entities = [WordCE::class, BookmarkCE::class], version = 8, exportSchema = false)
+@Database(
+    entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
+    version = 9,
+    exportSchema = false
+)
 abstract class AppDB : RoomDatabase() {
 
     companion object {
@@ -34,6 +40,7 @@ abstract class AppDB : RoomDatabase() {
 
                     ).addMigrations(migration_6_7)
                         .addMigrations(migration_7_8)
+                        .addMigrations(migration_8_9)
                         .build()
                     return INSTANCE!!
                 }
@@ -59,11 +66,9 @@ abstract class AppDB : RoomDatabase() {
         private object migration_5_6 : Migration(5, 6) {
             override fun migrate(database: SupportSQLiteDatabase) {
 
-                database.beginTransaction()
                 database.execSQL("ALTER TABLE WordOfTheDay RENAME TO old_WordOfTheDay")
                 database.execSQL("CREATE TABLE WordOfTheDay (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,isSeen INTEGER DEFAULT 0 NOT NULL,seenAtTimeInMillis INTEGER,wordColor INTEGER,wordDesaturatedColor INTEGER)")
                 database.execSQL("INSERT INTO WordOfTheDay SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,examples,date,dateTimeInMillis,isSeen,seenAtTimeInMillis,wordColor,wordDesaturatedColor FROM old_WordOfTheDay")
-                database.endTransaction()
 
                 database.execSQL("CREATE TABLE Favorite(favoriteWord TEXT,favoriteCreatedAt LONG)")
             }
@@ -85,6 +90,24 @@ abstract class AppDB : RoomDatabase() {
             }
         }
 
+        private object migration_8_9 : Migration(8, 9) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                database.execSQL("ALTER TABLE WordOfTheDay RENAME TO old_WordOfTheDay")
+                database.execSQL("CREATE TABLE Word (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,wordColor INTEGER,wordDesaturatedColor INTEGER)")
+                database.execSQL("INSERT INTO WordOfTheDay SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor FROM old_WordOfTheDay")
+
+                database.execSQL("CREATE TABLE Seen (seenWord TEXT PRIMARY KEY NOT NULL,seenAt INTEGER)")
+                database.execSQL("INSERT INTO Seen SELECT word,seenAtTimeInMillis FROM old_WordOfTheDay WHERE isSeen=1")
+
+                database.execSQL("ALTER TABLE Bookmark ADD COLUMN bookmarkSeenAt INTEGER")
+
+                database.execSQL("DROP TABLE old_WordOfTheDay")
+
+
+            }
+        }
+
     }
 
 
@@ -93,5 +116,7 @@ abstract class AppDB : RoomDatabase() {
     abstract fun getBookmarkDao(): BookmarkDao
 
     abstract fun getBookmarkedWordDao(): BookmarkedWordDao
+
+    abstract fun getSeenDao(): SeenDao
 
 }

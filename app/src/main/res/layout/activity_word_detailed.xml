@@ -326,12 +326,13 @@
                             </LinearLayout>
 
                             <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup_synonyms"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingHorizontal="@dimen/padding_large"
                                 android:paddingVertical="@dimen/padding_small"
                                 app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.synonyms,6)}"
-                                app:chipShowViewMoreButton="@{true}"
+                                app:chipShowViewMoreButton="@{wordDetailedViewModel.word.synonyms.size()>6}"
                                 app:chipSpacingHorizontal="@dimen/padding_small"
                                 app:chipSpacingVertical="@dimen/padding_medium"
                                 app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
@@ -384,6 +385,7 @@
                             </LinearLayout>
 
                             <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup_antonyms"
                                 style="@style/Widget.MaterialComponents.ChipGroup"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -392,7 +394,7 @@
                                 android:paddingHorizontal="@dimen/padding_large"
                                 android:paddingVertical="@dimen/padding_small"
                                 app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.antonyms,6)}"
-                                app:chipShowViewMoreButton="@{true}"
+                                app:chipShowViewMoreButton="@{wordDetailedViewModel.word.antonyms.size()>6}"
                                 app:chipSpacingHorizontal="@dimen/padding_small"
                                 app:chipSpacingVertical="@dimen/padding_medium"
                                 app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
