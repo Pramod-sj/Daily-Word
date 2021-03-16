@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
 import android.util.Log
+import android.util.Pair
 import android.view.*
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -285,8 +286,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         val option = view?.let {
             ActivityOptions.makeSceneTransitionAnimation(
                 activity,
-                view,
-                resources.getString(R.string.card_transition_name)
+                Pair(it, word.date!!)
             )
         }
         openWordDetailsPage(
@@ -499,8 +499,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
-
-        window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
 
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 

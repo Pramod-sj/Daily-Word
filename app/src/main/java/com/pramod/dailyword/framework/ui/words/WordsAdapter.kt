@@ -30,7 +30,8 @@ class WordsAdapter(
 
     inner class WordViewHolder(private val binding: ItemWordListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(word: Word?) {
+        fun bind(word: Word) {
+            binding.itemWordListCardView.transitionName = word.date
             binding.word = word
             binding.itemWordListCardView.setOnClickListener {
                 if (canStartActivity) {

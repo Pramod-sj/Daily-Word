@@ -1,18 +1,19 @@
 package com.pramod.dailyword.framework.ui.recap
 
 import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
+import android.transition.Transition
+import android.util.Log
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityRecapWordsBinding
-import com.pramod.dailyword.framework.transition.isViewsPreDrawn
+import com.pramod.dailyword.framework.transition.TransitionCallback
+import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsViewModel>() {
@@ -41,11 +42,20 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
     private fun initAdapter() {
         val adapter = RecapWordAdapter { pos, word ->
 
+            setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            window.sharedElementExitTransition.addListener(object : TransitionCallback() {
+                override fun onTransitionEnd(transition: Transition) {
+                    super.onTransitionEnd(transition)
+                    Log.i("TAG", "onTransitionEnd: ")
+                    removeCallbacks(this)
+                }
+            })
+
             val view = binding.recyclerViewRecapWords.layoutManager!!.findViewByPosition(pos)
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this,
                 view!!,
-                resources.getString(R.string.card_transition_name)
+                word.date
             )
 
             openWordDetailsPage(word.date!!, option, windowAnimPrefManager.isEnabled())
@@ -56,14 +66,10 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
         }
     }
 
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
-        super.onActivityReenter(resultCode, data)
-        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-        supportPostponeEnterTransition()
-        isViewsPreDrawn(binding.recyclerViewRecapWords) {
-            supportStartPostponedEnterTransition();
-        }
+    override fun onBackPressed() {
+        finish()
     }
+
 
     companion object {
         val TAG = RecapWordsActivity::class.java

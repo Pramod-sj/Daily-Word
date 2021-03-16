@@ -14,7 +14,9 @@ import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.GradientUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @ExperimentalPagingApi
 @AndroidEntryPoint
 class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>() {

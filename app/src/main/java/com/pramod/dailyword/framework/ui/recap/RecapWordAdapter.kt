@@ -33,7 +33,9 @@ class RecapWordAdapter(
     }
 
     override fun onBindViewHolder(holder: RecapWordViewHolder, position: Int) {
-        holder.binding.word = getItem(position)
+        val word = getItem(position)
+        holder.binding.root.transitionName = word.date
+        holder.binding.word = word
         holder.binding.executePendingBindings()
     }
 }

@@ -32,7 +32,9 @@ class PastWordAdapter(
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.binding.word = getItem(position)
+        val word = getItem(position)
+        holder.binding.root.transitionName = word.date
+        holder.binding.word = word
         holder.binding.executePendingBindings()
     }
 

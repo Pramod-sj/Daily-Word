@@ -31,12 +31,13 @@ class BookmarkedWordsAdapter(
 
     inner class BookmarkedWordViewHolder(private val binding: ItemBookmarkedWordLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(word: Word?) {
+        fun bind(word: Word) {
+            binding.root.transitionName = word.date
             binding.word = word
             binding.root.setOnClickListener {
                 if (canStartActivity) {
                     canStartActivity = false;
-                    itemClickCallback?.invoke(bindingAdapterPosition, word!!)
+                    itemClickCallback?.invoke(bindingAdapterPosition, word)
                 }
             }
             binding.imgBtnBookmark.setOnClickListener {
@@ -90,7 +91,6 @@ class BookmarkedWordsAdapter(
             holder.bind(wordItem.word)
         }
     }
-
 
 
 }

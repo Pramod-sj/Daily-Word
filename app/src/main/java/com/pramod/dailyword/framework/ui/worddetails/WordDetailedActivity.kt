@@ -1,9 +1,13 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
+import android.app.Instrumentation
 import android.content.Intent
-import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.transition.ArcMotion
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.TransitionSet
 import android.util.Log
 import android.view.*
 import androidx.activity.viewModels
@@ -22,7 +26,9 @@ import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.databinding.BottomSheetChipLayoutBinding
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.transition.TransitionCallback
 import com.pramod.dailyword.framework.transition.isViewsLoaded
+import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener
 import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
@@ -175,40 +181,66 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun initEnterAndReturnTransition() {
 
         findViewById<View>(android.R.id.content).transitionName =
-            resources.getString(R.string.card_transition_name)
+            intent.extras?.getString("WORD_DATE")
 
-        window.sharedElementsUseOverlay = true
-
+        window.allowEnterTransitionOverlap = false
+        window.allowReturnTransitionOverlap = false
+        window.sharedElementsUseOverlay = false
 
         setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-        val enterTransition = MaterialContainerTransform().apply {
+
+        window.sharedElementEnterTransition =
+            TransitionSet()
+                .addTransition(MaterialContainerTransform().apply {
+                    excludeTarget(android.R.id.statusBarBackground, true)
+                    excludeTarget(android.R.id.navigationBarBackground, true)
+
+                    setAllContainerColors(
+                        MaterialColors.getColor(
+                            findViewById(android.R.id.content),
+                            R.attr.colorSurface
+                        )
+                    )
+                    addTarget(android.R.id.content)
+                    duration = 300
+                    pathMotion = ArcMotion()
+                    interpolator = FastOutSlowInInterpolator()
+                })
+                .addTransition(Fade().apply {
+                    excludeTarget(android.R.id.statusBarBackground, true)
+                    excludeTarget(android.R.id.navigationBarBackground, true)
+                    interpolator = FastOutSlowInInterpolator()
+                    duration = 300
+                })
+
+        window.sharedElementReturnTransition = MaterialContainerTransform().apply {
+
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
-            scrimColor = Color.TRANSPARENT
+
             setAllContainerColors(
                 MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
             )
             addTarget(android.R.id.content)
-            duration = 300
+            duration = 250
             pathMotion = ArcMotion()
             interpolator = FastOutSlowInInterpolator()
         }
 
-        val returnTransition = MaterialContainerTransform().apply {
-            excludeTarget(android.R.id.statusBarBackground, true)
-            excludeTarget(android.R.id.navigationBarBackground, true)
-            setAllContainerColors(
-                MaterialColors.getColor(findViewById(android.R.id.content), R.attr.colorSurface)
-            )
-            addTarget(android.R.id.content)
-            duration = 200
-            pathMotion = ArcMotion()
-            interpolator = FastOutSlowInInterpolator()
-        }
+        window.sharedElementEnterTransition.addListener(object : TransitionCallback() {
+            override fun onTransitionEnd(transition: Transition) {
+                super.onTransitionEnd(transition)
+                removeCallbacks(this)
+            }
+        })
 
-        window.sharedElementEnterTransition = enterTransition
-        window.sharedElementReturnTransition = returnTransition
+        window.sharedElementReturnTransition.addListener(object : TransitionCallback() {
+            override fun onTransitionEnd(transition: Transition) {
+                super.onTransitionEnd(transition)
+                removeCallbacks(this)
+            }
+        })
     }
 
     private fun setNestedScrollListener() {
@@ -268,6 +300,14 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         bottomSheetDialog.setContentView(binding.root)
         bottomSheetDialog.show()
     }
+
+    override fun onStop() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q && !isFinishing) {
+            Instrumentation().callActivityOnSaveInstanceState(this, Bundle())
+        }
+        super.onStop()
+    }
+
 
     override fun finishAfterTransition() {
         setResult()

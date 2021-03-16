@@ -62,7 +62,7 @@ class FavoriteWordsActivity : BaseActivity<ActivityFavoriteWordsBinding, Favorit
             val option = ActivityOptions.makeSceneTransitionAnimation(
                 this,
                 view!!,
-                resources.getString(R.string.card_transition_name)
+                word.date
             )
             openWordDetailsPage(
                 word.date!!,
