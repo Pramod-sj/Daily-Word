@@ -10,6 +10,7 @@ import com.pramod.dailyword.business.interactor.*
 import com.pramod.dailyword.business.interactor.bookmark.AddBookmarkInteractor
 import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
 import com.pramod.dailyword.business.interactor.bookmark.RemoveBookmarkInteractor
+import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -117,6 +118,15 @@ object InteractorModule {
         bookmarkCacheDataSource: BookmarkCacheDataSource
     ): GetAllBookmarks {
         return GetAllBookmarks(bookmarkCacheDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideToggleBookmark(
+        bookmarkCacheDataSource: BookmarkCacheDataSource,
+        bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
+    ): ToggleBookmarkInteractor {
+        return ToggleBookmarkInteractor(bookmarkCacheDataSource, bookmarkedWordCacheDataSource)
     }
 
 }

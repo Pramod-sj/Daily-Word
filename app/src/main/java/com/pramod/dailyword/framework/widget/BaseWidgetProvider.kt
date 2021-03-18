@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
+import com.google.gson.Gson
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -58,7 +59,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
                             word?.let { bookmarked_word ->
                                 toggleBookmarkInteractor.toggle(bookmarked_word)
                                     .collectLatest {
-
+                                        Log.i(TAG, "toggle: " + Gson().toJson(it))
                                     }
                                 //run data fetch job to get updated data
                                 runTodayWordFetchJob(context)

@@ -9,12 +9,18 @@
             type="com.pramod.dailyword.framework.ui.donate.DonateItem" />
 
         <variable
+            name="strokeColor"
+            type="Integer" />
+
+        <variable
             name="alphaColor"
             type="Integer" />
 
         <variable
             name="color"
             type="Integer" />
+
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -23,8 +29,8 @@
         android:layout_margin="@dimen/margin_medium"
         app:cardCornerRadius="@dimen/card_radius_max"
         app:cardElevation="0dp"
-        app:strokeColor="@{color}"
-        app:strokeWidth="0.5dp">
+        app:strokeColor="@{strokeColor}"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"

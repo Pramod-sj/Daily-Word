@@ -45,12 +45,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
-            android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/padding_small"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/padding_small"
             android:paddingTop="?attr/actionBarSize"
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
@@ -69,10 +69,10 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
             app:applyTopPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">

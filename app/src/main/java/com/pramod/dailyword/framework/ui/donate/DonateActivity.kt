@@ -11,6 +11,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityDonateBinding
 import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.Message
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,18 +24,11 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
     companion object {
         val TAG = DonateActivity::class.java.simpleName
-
-        @JvmStatic
-        fun openActivity(context: Context) {
-            val intent = Intent(context, DonateActivity::class.java)
-            context.startActivity(intent)
-        }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_donate)
         setUpToolbar()
         setUpBilling()
         setUpDonateItemRecyclerView()
@@ -63,11 +57,11 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
             }
 
             override fun onProductPurchased(productId: String, details: TransactionDetails?) {
-                //mViewModel.setMessage(Message.SnackBarMessage("Thank you so much :)"))
+                mViewModel.setMessage(Message.SnackBarMessage("Thank you so much :)"))
             }
 
             override fun onBillingError(errorCode: Int, error: Throwable?) {
-                //mViewModel.setMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
+                mViewModel.setMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
             }
 
         })
@@ -76,7 +70,7 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
             if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
-                //mViewModel.setMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
+                mViewModel.setMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
             } else {
                 billingProcessor.purchase(this, donateItem.itemPurchaseId)
             }

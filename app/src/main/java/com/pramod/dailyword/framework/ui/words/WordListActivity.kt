@@ -2,7 +2,6 @@ package com.pramod.dailyword.framework.ui.words
 
 //import androidx.paging.ExperimentalPagingApi
 import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -73,23 +72,28 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
 
         //val concatAdapter = ConcatAdapter()
 
-        adapter = WordsAdapter { i: Int, word: Word ->
+        adapter = WordsAdapter(
+            itemClickCallback = { i: Int, word: Word ->
 
-            setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+                setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-            Log.i(TAG, "initAdapter: ")
-            val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
-            val option = ActivityOptions.makeSceneTransitionAnimation(
-                this@WordListActivity,
-                view!!,
-                word.date
-            )
-            openWordDetailsPage(
-                wordDate = word.date!!,
-                option = option,
-                shouldAnimate = windowAnimPrefManager.isEnabled()
-            )
-        }
+                Log.i(TAG, "initAdapter: ")
+                val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
+                val option = ActivityOptions.makeSceneTransitionAnimation(
+                    this@WordListActivity,
+                    view!!,
+                    word.date
+                )
+                openWordDetailsPage(
+                    wordDate = word.date!!,
+                    option = option,
+                    shouldAnimate = windowAnimPrefManager.isEnabled()
+                )
+            },
+            bookmarkCallback = { i: Int, word: Word ->
+                viewModel.toggleBookmark(word)
+            }
+        )
 
         binding.recyclerviewWords.adapter = adapter?.withLoadStateFooter(
             NetworkStateAdapter {

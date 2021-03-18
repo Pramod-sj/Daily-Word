@@ -65,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/imgBtn_bookmark_word_list"
                 android:layout_toEndOf="@id/item_word_list_date"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/padding_medium"
@@ -99,8 +100,8 @@
                         android:background="@drawable/background_curve"
                         android:backgroundTint="?colorPrimary"
                         android:paddingHorizontal="@dimen/padding_small"
-                        android:text="@string/synonyms"
                         android:paddingVertical="2dp"
+                        android:text="@string/synonyms"
                         android:textColor="?android:attr/windowBackground"
                         android:textSize="@dimen/text_tiny"
                         app:isGone="@{word.synonyms.size()==0 }" />
@@ -110,9 +111,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small"
                         android:background="@drawable/background_curve"
-                        android:paddingVertical="2dp"
                         android:backgroundTint="?colorPrimary"
                         android:paddingHorizontal="@dimen/padding_small"
+                        android:paddingVertical="2dp"
                         android:text="@string/antonyms"
                         android:textColor="?android:attr/windowBackground"
                         android:textSize="@dimen/text_tiny"
@@ -120,6 +121,16 @@
 
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imgBtn_bookmark_word_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/selector_icon_bookmark"
+                app:selected="@{word.bookmarkedId!=null}" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

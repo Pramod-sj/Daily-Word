@@ -16,6 +16,7 @@ import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 
 class WordsAdapter(
     val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
+    val bookmarkCallback: ((pos: Int, word: Word) -> Unit)? = null
 ) : PagingDataAdapter<WordListUiModel, RecyclerView.ViewHolder>(WordComparator) {
     private var canStartActivity = true
 
@@ -30,15 +31,29 @@ class WordsAdapter(
 
     inner class WordViewHolder(private val binding: ItemWordListLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(word: Word) {
-            binding.itemWordListCardView.transitionName = word.date
-            binding.word = word
+
+        init {
             binding.itemWordListCardView.setOnClickListener {
                 if (canStartActivity) {
                     canStartActivity = false;
-                    itemClickCallback?.invoke(bindingAdapterPosition, word!!)
+                    itemClickCallback?.invoke(
+                        bindingAdapterPosition,
+                        (getItem(bindingAdapterPosition) as WordListUiModel.WordItem).word
+                    )
                 }
             }
+            binding.imgBtnBookmarkWordList.setOnClickListener {
+                bookmarkCallback?.invoke(
+                    bindingAdapterPosition,
+                    (getItem(bindingAdapterPosition) as WordListUiModel.WordItem).word
+                )
+            }
+
+        }
+
+        fun bind(word: Word) {
+            binding.itemWordListCardView.transitionName = word.date
+            binding.word = word
             binding.executePendingBindings()
         }
     }

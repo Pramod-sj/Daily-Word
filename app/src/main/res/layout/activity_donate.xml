@@ -19,10 +19,13 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
             android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingTop="?attr/actionBarSize">
+            android:paddingTop="?attr/actionBarSize"
+            app:applyTopBottomPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,9 +37,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:cardElevation="0dp"
-                    app:strokeColor="@color/app_icon_tint"
-                    app:strokeWidth="0.5dp">
+                    app:strokeColor="@color/stroke_about_cards"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -82,10 +84,11 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
+            app:applyTopPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 

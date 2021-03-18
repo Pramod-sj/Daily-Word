@@ -23,9 +23,9 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="?attr/actionBarSize"
-            android:clipToPadding="false"
             android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="?attr/actionBarSize"
             app:applyTopBottomPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled()}">
 
             <LinearLayout
@@ -88,12 +88,12 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
             app:applyTopPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">

@@ -40,8 +40,14 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
         val color = CommonUtils.getColor(holder.binding.root.context, donateItem.color)
         holder.binding.color = color
         val alphaAppliedColor =
-            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, Constants.COLOR_ALPHA)
+            CommonUtils.changeAlpha(
+                holder.binding.root.context,
+                donateItem.color,
+                Constants.COLOR_ALPHA
+            )
         holder.binding.alphaColor = alphaAppliedColor
+        holder.binding.strokeColor =
+            CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 90)
         holder.binding.executePendingBindings()
     }
 

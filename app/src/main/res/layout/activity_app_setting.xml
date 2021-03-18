@@ -173,10 +173,10 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
             app:applyTopPaddingInset="@{appSettingViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
