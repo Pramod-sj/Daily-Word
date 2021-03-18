@@ -9,10 +9,6 @@
 
         <import type="com.pramod.dailyword.business.data.network.Status" />
 
-        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
-
-        <import type="android.view.View" />
-
         <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
 
         <variable
@@ -20,9 +16,6 @@
             type="com.pramod.dailyword.framework.ui.home.HomeViewModel" />
 
         <import type="com.pramod.dailyword.framework.util.CommonUtils" />
-
-
-        <import type="android.graphics.Color" />
 
         <import type="com.pramod.dailyword.Constants" />
 
@@ -32,11 +25,9 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionGroup="true"
         tools:context=".ui.home.HomeActivity">
 
-
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/home_imageView_sun"
             loadDrawable="@{@drawable/ic_sun}"
             android:layout_width="60dp"
@@ -47,8 +38,7 @@
             app:isVisible="@{!ThemeManager.isNightModeActive(context)}"
             app:selected="@{true}" />
 
-
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/home_imageView_moon"
             loadDrawable="@{@drawable/ic_moon}"
             android:layout_width="40dp"
@@ -61,14 +51,14 @@
             app:layout_anchorGravity="end"
             app:selected="@{true}" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/home_imageView_buildings"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_gravity="bottom"
             android:alpha="@integer/alpha_mountains"
             android:scaleType="centerCrop"
-            android:src="@drawable/test"
+            android:src="@drawable/drawable_background_scenery"
             app:applyBottomPaddingInset="@{mainViewModel.isEdgeToEdgeEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
@@ -356,7 +346,7 @@
                         android:paddingHorizontal="@dimen/padding_large"
                         android:paddingVertical="@dimen/padding_small"
                         android:transitionGroup="true"
-                        android:visibility="@{mainViewModel.wordOfTheDayLiveData==null?View.INVISIBLE:View.VISIBLE}">
+                        app:isVisible="@{mainViewModel.wordOfTheDayLiveData!=null}">
 
                         <!--
                                             copyToClipBoardText="@{mainViewModel.wordOfTheDayLiveData.word}"
