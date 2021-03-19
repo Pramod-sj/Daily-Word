@@ -18,8 +18,9 @@ import androidx.core.app.NotificationCompat.DEFAULT_VIBRATE
 import androidx.core.content.ContextCompat
 import com.pramod.dailyword.R
 import java.util.concurrent.atomic.AtomicInteger
+import javax.inject.Inject
 
-class NotificationHelper(val context: Context) : ContextWrapper(context) {
+class NotificationHelper @Inject constructor(val context: Context) : ContextWrapper(context) {
     private val notificationManager: NotificationManager =
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

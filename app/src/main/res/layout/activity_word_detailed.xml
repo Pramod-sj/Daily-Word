@@ -14,11 +14,11 @@
 
         <import type="com.pramod.dailyword.R" />
 
-        <variable
-            name="cardElevation"
-            type="Integer" />
-
         <import type="android.graphics.Color" />
+
+        <variable
+            name="adsEnabled"
+            type="Boolean" />
 
         <variable
             name="wordColor"
@@ -179,7 +179,7 @@
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!wordDetailedViewModel.fbRemoteConfig.adsEnabled || wordColor==null}">
+                        app:isGone="@{!adsEnabled || wordColor==null}">
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -189,7 +189,7 @@
                                 android:id="@+id/native_ad_container_2"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_2}"
                                 showAdWithSomeDelay="@{2000}"
-                                showNativeAd="@{wordDetailedViewModel.fbRemoteConfig.adsEnabled &amp;&amp; wordColor!=null}"
+                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -250,7 +250,7 @@
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!wordDetailedViewModel.fbRemoteConfig.adsEnabled || wordColor==null || (wordDetailedViewModel.word.synonyms.size()==0 &amp;&amp; wordDetailedViewModel.word.antonyms.size()==0)}">
+                        app:isGone="@{!adsEnabled || wordColor==null || (wordDetailedViewModel.word.synonyms.size()==0 &amp;&amp; wordDetailedViewModel.word.antonyms.size()==0)}">
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -260,7 +260,7 @@
                                 android:id="@+id/native_ad_container_3"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_3}"
                                 showAdWithSomeDelay="@{2000}"
-                                showNativeAd="@{wordDetailedViewModel.fbRemoteConfig.adsEnabled  &amp;&amp; wordColor!=null &amp;&amp; (wordDetailedViewModel.word.synonyms.size()>0 || wordDetailedViewModel.word.antonyms.size()>0)}"
+                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null &amp;&amp; (wordDetailedViewModel.word.synonyms.size()>0 || wordDetailedViewModel.word.antonyms.size()>0)}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -410,7 +410,7 @@
                         android:layout_marginBottom="@dimen/margin_small"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!wordDetailedViewModel.fbRemoteConfig.adsEnabled || wordColor==null}">
+                        app:isGone="@{!adsEnabled || wordColor==null}">
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -420,7 +420,7 @@
                                 android:id="@+id/native_ad_container_4"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_4}"
                                 showAdWithSomeDelay="@{2000}"
-                                showNativeAd="@{wordDetailedViewModel.fbRemoteConfig.getInstance().adsEnabled &amp;&amp; wordColor!=null}"
+                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

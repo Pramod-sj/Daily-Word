@@ -11,16 +11,27 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityChangelogBinding
 import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChangelogActivity : BaseActivity<ActivityChangelogBinding, ChangelogViewModel>() {
+class ChangelogActivity :
+    BaseActivity<ActivityChangelogBinding, ChangelogViewModel>(R.layout.activity_changelog) {
 
-    override val layoutId: Int = R.layout.activity_changelog
     override val viewModel: ChangelogViewModel by viewModels()
+
     override val bindingVariable: Int = BR.changelogViewModel
 
+    private val adapter: ChangelogAdapter by lazy {
+        val type = TypeToken.getParameterized(List::class.java, Changes::class.java).type
+        val changelogList =
+            Gson().fromJson<List<Changes>>(
+                CommonUtils.loadJsonFromAsset(this, "change_logs.json"),
+                type
+            )
+        ChangelogAdapter(changelogList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,45 +40,22 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, ChangelogViewMo
                 EXTRA_SHOW_CONTINUE_BUTTON, false
             )
         )
-        setUpToolbar()
-        initChangelogAdapter()
+        setUpToolbar(binding.toolbar, null, true, navIconClickListener = {
+            finish()
+            if (intent.getBooleanExtra(EXTRA_SHOW_CONTINUE_BUTTON, false)) {
+                overridePendingTransition(0, android.R.anim.fade_out)
+            }
+        })
+        bindingAdapter()
         setUpCallbacks()
     }
 
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_close_24)
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-            if (intent.getBooleanExtra(
-                    EXTRA_SHOW_CONTINUE_BUTTON, false
-                )
-            ) {
-                overridePendingTransition(
-                    0,
-                    android.R.anim.fade_out
-                )
-            }
-        }
-    }
-
-
-    private fun initChangelogAdapter() {
-        val type = TypeToken.getParameterized(List::class.java, Changes::class.java).type
-        val changelogList =
-            Gson().fromJson<List<Changes>>(
-                CommonUtils.loadJsonFromAsset(this, "change_logs.json"),
-                type
-            )
-        val changelogAdapter = ChangelogAdapter(changelogList)
-        binding.recyclerviewChangeLogs.adapter = changelogAdapter
+    private fun bindingAdapter() {
+        binding.recyclerviewChangeLogs.adapter = adapter
     }
 
     private fun setUpCallbacks() {
-        mViewModel.navigator = object : ChangelogNavigator {
+        viewModel.navigator = object : ChangelogNavigator {
             override fun onContinueLearningWordsClick() {
                 finish()
                 overridePendingTransition(0, android.R.anim.fade_out)
@@ -77,19 +65,6 @@ class ChangelogActivity : BaseActivity<ActivityChangelogBinding, ChangelogViewMo
 
     companion object {
         const val EXTRA_SHOW_CONTINUE_BUTTON = "showContinueButton"
-
-        @JvmStatic
-        fun openActivity(context: Context, showContinueButton: Boolean = false) {
-            val intent = Intent(context, ChangelogActivity::class.java)
-            if (context is Activity) {
-                context.overridePendingTransition(
-                    android.R.anim.fade_in,
-                    android.R.anim.fade_out
-                )
-            }
-            intent.putExtra(EXTRA_SHOW_CONTINUE_BUTTON, showContinueButton)
-            context.startActivity(intent)
-        }
     }
 
 }

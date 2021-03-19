@@ -14,7 +14,7 @@ import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
 import javax.inject.Inject
 
-class EgdeToEdgePrefManager @Inject constructor(private val context: Context) {
+class EdgeToEdgePrefManager @Inject constructor(private val context: Context) {
 
 
     private val sharedPreferences =
@@ -23,7 +23,7 @@ class EgdeToEdgePrefManager @Inject constructor(private val context: Context) {
 
 
     companion object {
-        val TAG = EgdeToEdgePrefManager::class.java.simpleName
+        val TAG = EdgeToEdgePrefManager::class.java.simpleName
 
         private const val PREFERENCES_NAME = "window_preferences"
         private const val KEY_EDGE_TO_EDGE_ENABLED = "edge_to_edge_enabled"
@@ -40,7 +40,7 @@ class EgdeToEdgePrefManager @Inject constructor(private val context: Context) {
         }
 
         fun newInstance(context: Context) =
-            EgdeToEdgePrefManager(
+            EdgeToEdgePrefManager(
                 context
             )
     }

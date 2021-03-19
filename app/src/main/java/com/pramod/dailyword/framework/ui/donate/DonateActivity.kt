@@ -1,10 +1,8 @@
 package com.pramod.dailyword.framework.ui.donate
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
 import com.pramod.dailyword.BR
@@ -12,13 +10,15 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityDonateBinding
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
+class DonateActivity :
+    BaseActivity<ActivityDonateBinding, DonateViewModel>(R.layout.activity_donate) {
 
-    override val layoutId: Int = R.layout.activity_donate
     override val viewModel: DonateViewModel by viewModels()
+
     override val bindingVariable: Int = BR.donateViewModel
 
 
@@ -29,19 +29,9 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setUpToolbar()
+        setUpToolbar(binding.toolbar, null, true)
         setUpBilling()
         setUpDonateItemRecyclerView()
-    }
-
-
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
 
@@ -57,11 +47,11 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
             }
 
             override fun onProductPurchased(productId: String, details: TransactionDetails?) {
-                mViewModel.setMessage(Message.SnackBarMessage("Thank you so much :)"))
+                viewModel.setMessage(Message.SnackBarMessage("Thank you so much :)"))
             }
 
             override fun onBillingError(errorCode: Int, error: Throwable?) {
-                mViewModel.setMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
+                viewModel.setMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
             }
 
         })
@@ -70,13 +60,13 @@ class DonateActivity : BaseActivity<ActivityDonateBinding, DonateViewModel>() {
     private fun setUpDonateItemRecyclerView() {
         val donateItemAdapter = DonateItemAdapter { i: Int, donateItem: DonateItem ->
             if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
-                mViewModel.setMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
+                viewModel.setMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
             } else {
                 billingProcessor.purchase(this, donateItem.itemPurchaseId)
             }
         }
         binding.donateRecyclerView.adapter = donateItemAdapter
-        donateItemAdapter.submitList(mViewModel.donateItemList)
+        donateItemAdapter.submitList(viewModel.donateItemList)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

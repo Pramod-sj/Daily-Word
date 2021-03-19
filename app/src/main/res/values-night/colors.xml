@@ -49,7 +49,7 @@
 
 
     <color name="social_media_background_color">#20ACABAB</color>
-    <color name="social_media_stroke_color">#ACABAB</color>
+    <color name="social_media_stroke_color">@color/grey_extra_dark</color>
 
     <color name="stroke_about_cards">@color/grey_very_extra_dark</color>
 </resources>

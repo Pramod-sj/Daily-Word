@@ -22,7 +22,7 @@
             @drawable/background_navigation_item_selector
         </item>
 
-        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:fontFamily">@font/opensans_regular</item>
 
     </style>
 

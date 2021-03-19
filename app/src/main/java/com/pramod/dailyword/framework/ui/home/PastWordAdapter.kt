@@ -1,8 +1,8 @@
 package com.pramod.dailyword.framework.ui.home
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,7 +13,7 @@ import com.pramod.dailyword.databinding.ItemPastWordLayoutBinding
 
 class PastWordAdapter(
     val onItemClickCallback: (Int, Word) -> Unit
-) : ListAdapter<Word, PastWordAdapter.WordViewHolder>(diffCallback) {
+) : ListAdapter<PastWordUIModel, PastWordAdapter.WordViewHolder>(PastUIModelComparator) {
     private var canStartActivity = true
 
     fun setCanStartActivity(canStart: Boolean) {
@@ -33,8 +33,8 @@ class PastWordAdapter(
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val word = getItem(position)
-        holder.binding.root.transitionName = word.date
-        holder.binding.word = word
+        holder.binding.root.transitionName = word.word.date
+        holder.binding.pastWordUIModel = word
         holder.binding.executePendingBindings()
     }
 
@@ -52,7 +52,7 @@ class PastWordAdapter(
                     canStartActivity = false;
                     onItemClickCallback.invoke(
                         bindingAdapterPosition,
-                        getItem(bindingAdapterPosition)
+                        getItem(bindingAdapterPosition).word
                     )
                 }
             }
@@ -61,34 +61,28 @@ class PastWordAdapter(
 
     fun canStart() = canStartActivity
 
+    object PastUIModelComparator : DiffUtil.ItemCallback<PastWordUIModel>() {
+        override fun areItemsTheSame(oldItem: PastWordUIModel, newItem: PastWordUIModel): Boolean {
+            return oldItem.day == newItem.day
+        }
 
-    companion object {
-        private val diffCallback =
-            object : DiffUtil.ItemCallback<Word>() {
-                override fun areItemsTheSame(
-                    oldItem: Word,
-                    newItem: Word
-                ): Boolean {
-                    return oldItem.date == newItem.date
-                }
+        override fun areContentsTheSame(
+            oldItem: PastWordUIModel,
+            newItem: PastWordUIModel
+        ): Boolean {
+            return oldItem == newItem
+        }
 
-                override fun areContentsTheSame(
-                    oldItem: Word,
-                    newItem: Word
-                ): Boolean {
-                    return oldItem == newItem
-                }
 
-                override fun getChangePayload(oldItem: Word, newItem: Word): Any? {
-                    val bundle = Bundle()
-                    bundle.putSerializable("date", newItem.date)
-                    bundle.putSerializable("word", newItem.word)
-                    bundle.putBoolean("isSeen", newItem.isSeen)
-                    return bundle
-                }
+        override fun getChangePayload(oldItem: PastWordUIModel, newItem: PastWordUIModel): Any {
+            return bundleOf(
+                "day" to newItem.day,
+                "word" to newItem.word
+            )
+        }
 
-            }
     }
 
 }
+
 

@@ -2,7 +2,7 @@ package com.pramod.dailyword.di
 
 import android.content.Context
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
-import com.pramod.dailyword.framework.prefmanagers.EgdeToEdgePrefManager
+import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,8 +24,8 @@ object ActivityFragmentComponent {
     @Provides
     fun provideWindowPrefManager(
         @ActivityContext context: Context
-    ): EgdeToEdgePrefManager {
-        return EgdeToEdgePrefManager.newInstance(context)
+    ): EdgeToEdgePrefManager {
+        return EdgeToEdgePrefManager.newInstance(context)
     }
 
 }

@@ -7,22 +7,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
 
-abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActivity() {
+abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
+    private val layoutId: Int
+) : ThemedActivity() {
 
     lateinit var binding: T
-    lateinit var mViewModel: V
 
-    abstract val layoutId: Int
     abstract val viewModel: V
+
     abstract val bindingVariable: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.isEdgeToEdgeEnabled = egdeToEdgePrefManager.isEnabled()
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
         binding.lifecycleOwner = this
-        mViewModel = viewModel
-        binding.setVariable(bindingVariable, mViewModel)
+        viewModel.isEdgeToEdgeEnabled = edgeToEdgePrefManager.isEnabled()
+        binding.setVariable(bindingVariable, viewModel)
         binding.executePendingBindings()
         setMessageObserver()
     }
@@ -36,7 +36,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
     }
 
     private fun setMessageObserver() {
-        mViewModel.message.observe(this) { message ->
+        viewModel.message.observe(this) { message ->
             message?.let {
                 when (it) {
                     is Message.SnackBarMessage -> {
@@ -80,12 +80,16 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : ThemedActi
         snackBar.addCallback(object : Snackbar.Callback() {
             override fun onShown(sb: Snackbar?) {
                 super.onShown(sb)
+
                 it.isShown = true
+
+                viewModel.setMessage(null)
+                snackBar.removeCallback(this)
             }
 
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
-                mViewModel.setMessage(null)
+                viewModel.setMessage(null)
                 snackBar.removeCallback(this)
             }
         })

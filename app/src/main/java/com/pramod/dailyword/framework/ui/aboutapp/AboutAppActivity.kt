@@ -15,10 +15,11 @@ import com.pramod.dailyword.framework.ui.common.exts.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel>() {
+class AboutAppActivity :
+    BaseActivity<ActivityAboutAppBinding, AboutAppViewModel>(R.layout.activity_about_app) {
 
-    override val layoutId: Int = R.layout.activity_about_app
     override val viewModel: AboutAppViewModel by viewModels()
+
     override val bindingVariable: Int = BR.aboutAppViewModel
 
 
@@ -30,7 +31,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         initTransition()
         super.onCreate(savedInstanceState)
-        setUpToolbar()
+        setUpToolbar(binding.toolbar, null, true)
         setAppLink()
         setDeveloperLink()
         setCreditLink()
@@ -44,17 +45,8 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
         window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
     }
 
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun setAppLink() {
-        mViewModel.appLinkNavigate = object : AppLinkNavigate {
+        viewModel.appLinkNavigate = object : AppLinkNavigate {
             override fun navigateToForkProject() {
                 openWebsite(resources.getString(R.string.app_git_url))
             }
@@ -80,7 +72,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
 
     private fun setOthersLink() {
 
-        mViewModel.otherLinkNavigate = object : OtherLinkNavigate {
+        viewModel.otherLinkNavigate = object : OtherLinkNavigate {
             override fun showTermsAndService() {
                 showWebViewDialog(EndPoints.TERM_AND_CONDITION)
             }
@@ -98,7 +90,7 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
 
     private fun setDeveloperLink() {
 
-        mViewModel.developerLinkNavigate = object : DeveloperLinkNavigate {
+        viewModel.developerLinkNavigate = object : DeveloperLinkNavigate {
             override fun navigateToGithub() {
                 openWebsite(resources.getString(R.string.dev_github_url))
             }

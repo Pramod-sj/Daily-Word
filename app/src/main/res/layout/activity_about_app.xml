@@ -41,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/stroke_about_cards">
+                    app:strokeColor="@color/stroke_about_cards"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:text="@string/app_name" />
+                            android:text="@{CommonUtils.getFancyAppName(context)}" />
 
                         <TextView
                             style="@style/AppTheme.SmallTextStyle"
@@ -77,7 +77,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginVertical="@dimen/margin_small"
+                            android:layout_marginVertical="2dp"
                             android:text="@string/app_tag_line" />
 
 
@@ -136,8 +136,8 @@
                         android:layout_marginHorizontal="@dimen/margin_extra_large"
                         android:layout_marginBottom="@dimen/margin_medium"
                         app:cardCornerRadius="@dimen/card_radius_max"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="@color/stroke_about_cards">
+                        app:strokeColor="@color/stroke_about_cards"
+                        app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -251,8 +251,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/stroke_about_cards">
+                    app:strokeColor="@color/stroke_about_cards"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -322,8 +322,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/stroke_about_cards">
+                    app:strokeColor="@color/stroke_about_cards"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -380,8 +380,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_extra_large"
                     app:cardCornerRadius="@dimen/card_radius_max"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/stroke_about_cards">
+                    app:strokeColor="@color/stroke_about_cards"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -449,8 +449,8 @@
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
-            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"

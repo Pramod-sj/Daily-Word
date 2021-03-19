@@ -107,20 +107,6 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun getFancyDay(dateString: String, dateFormat: String = DATE_FORMAT): String {
-            return if (isYesterday(
-                    dateString,
-                    dateFormat
-                )
-            ) "Yesterday"
-            else convertDateStringToSpecifiedDateString(
-                dateString,
-                dateFormat,
-                DATE_FORMAT_DISPLAY
-            ) ?: dateString
-        }
-
-        @JvmStatic
         fun isYesterday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
             if (dateString == null) {
                 return false;
@@ -137,6 +123,26 @@ class CalenderUtil {
             }
             val cal: Calendar = Calendar.getInstance(Locale.US)
             return convertCalenderToString(cal, dateFormat) == dateString
+        }
+
+
+        @JvmStatic
+        fun getFancyDay(dateString: String?, dateFormat: String = DATE_FORMAT): String {
+            return when {
+                isToday(dateString, dateFormat) -> {
+                    "Today"
+                }
+                isYesterday(dateString, dateFormat) -> {
+                    "Yesterday"
+                }
+                else -> {
+                    convertDateStringToSpecifiedDateString(
+                        dateString,
+                        dateFormat,
+                        DATE_FORMAT_DISPLAY
+                    ) ?: dateString!!
+                }
+            }
         }
 
         @JvmStatic

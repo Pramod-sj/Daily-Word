@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.ui.home
 
-import android.app.Activity
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
@@ -21,7 +20,6 @@ import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
@@ -34,6 +32,7 @@ import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
@@ -42,35 +41,59 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
-class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
+class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.activity_home) {
 
-    override val layoutId: Int = R.layout.activity_home
     override val viewModel: HomeViewModel by viewModels()
+
     override val bindingVariable: Int = BR.mainViewModel
 
-    private lateinit var pastWordAdapter: PastWordAdapter
+    @Inject
+    lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
+    @Inject
+    lateinit var appUpdateHelper: AppUpdateHelper
+
+    @Inject
+    lateinit var autoStartPrefManager: AutoStartPrefManager
+
+    @Inject
+    lateinit var autoStartPermissionHelper: AutoStartPermissionHelper
+
+    @Inject
+    lateinit var prefManager: PrefManager
+
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
+
+    private val pastWordAdapter: PastWordAdapter by lazy {
+        PastWordAdapter { i: Int, word: Word ->
+            val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
+            view?.let { nonNullView ->
+                intentToWordDetail(nonNullView, word)
+            } ?: intentToWordDetail(null, word)
+        }
+    }
+
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //initExitTransition()
-        //addGradientToAppIcon()
+        initToolbar()
+        initAppUpdate()
+        showChangelogActivity()
+        settingUpAudioIconTint()
         setUpViewCallbacks()
         deepLinkNotification()
-        showChangelogActivity()
-        initAppUpdate()
-        initToolbar()
         initBottomSheetMenu()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
-        //showDummyLotttieDialog()
         handleShowingCreditAndAutoStartDialog()
-        handleRippleAnimationForAudioEffect()
         handleBadgeVisibility()
     }
 
@@ -79,8 +102,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         pastWordAdapter.setCanStartActivity(true)
     }
 
-    private fun initExitTransition() {
-        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+    private fun initToolbar() {
+        setUpToolbar(binding.toolbar, null, false)
+        viewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.setTitle(CommonUtils.getFancyAppName(this))
+        }, 2000)
     }
 
     private fun handleBadgeVisibility() {
@@ -94,8 +121,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         }
     }
 
-    private fun handleRippleAnimationForAudioEffect() {
-
+    private fun settingUpAudioIconTint() {
         themeManager.liveData().observe(this) {
             binding.lottieSpeaker.post {
                 binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
@@ -104,7 +130,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun setUpViewCallbacks() {
-        mViewModel.navigator = object : HomeNavigator {
+        viewModel.navigator = object : HomeNavigator {
             override fun copyToClipboard(word: Word?) {
                 word?.word?.let {
                     CommonUtils.copyToClipboard(this@HomeActivity, it)
@@ -116,7 +142,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     if (pastWordAdapter.canStart()) {
                         pastWordAdapter.setCanStartActivity(false)
                         val view = binding.mainLinearLayoutWotd
-                        intentToWordDetail(this@HomeActivity, view, word)
+                        intentToWordDetail(view, word)
                     }
                 }
             }
@@ -142,7 +168,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun showChangelogActivity() {
-        mViewModel.showChangelogActivity
+        viewModel.showChangelogActivity
             .asLiveData(Dispatchers.IO)
             .observe(this) { show ->
                 if (show) {
@@ -153,8 +179,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun handleShowingCreditAndAutoStartDialog() {
-        val prefManager = PrefManager.getInstance(this)
-
         if (prefManager.getShowInitailCreditDialogStatus()) {
             prefManager.changeShowInitialCreditDialogStatus(false)
             showBottomSheet(
@@ -175,57 +199,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         }
     }
 
-    private fun initToolbar() {
-
-
-        setSupportActionBar(binding.toolbar)
-
-        supportActionBar?.let { actionBar ->
-
-
-            actionBar.title = null
-
-            /*   actionBar.setDisplayShowTitleEnabled(false)
-               actionBar.setDisplayShowCustomEnabled(true)
-
-               val layoutCustomTitleToolbarBinding: LayoutCustomTitleToolbarBinding =
-                   DataBindingUtil.inflate(
-                       layoutInflater,
-                       R.layout.layout_custom_title_toolbar,
-                       null,
-                       false
-                   )
-               val params: ActionBar.LayoutParams = ActionBar.LayoutParams(
-                   ActionBar.LayoutParams.WRAP_CONTENT,
-                   ActionBar.LayoutParams.MATCH_PARENT,
-                   Gravity.CENTER
-               )
-               actionBar.setCustomView(
-                   layoutCustomTitleToolbarBinding.txtViewToolbarTitle,
-                   params
-               )
-
-               mViewModel.title().observe(this) {
-                   CommonBindindAdapters.switchingText(
-                       layoutCustomTitleToolbarBinding.txtViewToolbarTitle,
-                       it
-                   )
-               }*/
-
-        }
-
-
-
-        mViewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
-        Handler(Looper.getMainLooper()).postDelayed({
-            mViewModel.setTitle(CommonUtils.getFancyAppName(this))
-        }, 2000)
-
-    }
-
-
     private fun showNotification(word: Word) {
-        val notificationHelper = NotificationHelper(this@HomeActivity)
         val notification = notificationHelper.createNotification(
             title = "Welcome to Daily Word!",
             body = "Your first word of the day is '${word.word}'",
@@ -255,37 +229,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun setUpRecyclerViewAdapter() {
-        pastWordAdapter = PastWordAdapter { i: Int, word: Word ->
-            val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
-            view?.let { nonNullView ->
-                intentToWordDetail(this, nonNullView, word)
-            } ?: intentToWordDetail(activity = this, null, word)
-
-        }
         binding.mainRecyclerviewPastWords.adapter = pastWordAdapter
-        viewModel.wordOfTheDayLiveData.observe(this, {
+        viewModel.wordOfTheDay.observe(this, {
             it?.let {
                 if (!it.isSeen) {
                     viewModel.updateWordSeenStatus(it)
                     if (PrefManager.getInstance(this).getAppLaunchCount() == 1
-                        && !mViewModel.firstNotificationShown
+                        && !viewModel.firstNotificationShown
                     ) {
-                        mViewModel.firstNotificationShown = true
+                        viewModel.firstNotificationShown = true
                         showNotification(it)
                     }
                 }
             }
         })
-        viewModel.wordsExceptTodayLiveData.observe(this, {
+        viewModel.last6DayWords.observe(this, {
             pastWordAdapter.submitList(it)
         })
     }
 
-    private fun intentToWordDetail(activity: Activity, view: View? = null, word: Word) {
-
+    private fun intentToWordDetail(view: View? = null, word: Word) {
         val option = view?.let {
             ActivityOptions.makeSceneTransitionAnimation(
-                activity,
+                this,
                 Pair(it, word.date!!)
             )
         }
@@ -296,47 +262,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         )
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.home_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_more -> {
-                item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                bottomSheetDialog?.show()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    /*   private lateinit var bottomSheetDialog: BottomSheetDialog
-       private fun initBottomMenu() {
-           val navigationView = NavigationView(this)
-           navigationView.inflateMenu(R.menu.home_more_menu)
-           navigationView.setNavigationItemSelectedListener { item ->
-               when (item.itemId) {
-                   R.id.menu_rate -> {
-                       val intent = Intent(
-                           Intent.ACTION_VIEW,
-                           Uri.parse("market://details?id=$packageName")
-                       )
-                       startActivity(intent)
-                   }
-               }
-               bottomSheetDialog.dismiss()
-               false
-           }
-           bottomSheetDialog = BottomSheetDialog(this@HomeActivity)
-           bottomSheetDialog.setContentView(navigationView)
-       }
-   */
     private fun shouldShowRatingDialog() {
-        if (PrefManager.getInstance(this)
-                .shouldShowRateNowDialog()
-        ) {
+        if (prefManager.shouldShowRateNowDialog()) {
 
             val manager = ReviewManagerFactory.create(this)
             val request = manager.requestReviewFlow()
@@ -360,32 +287,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                 }
             }
 
-            /*showStaticPageDialog(
-                R.layout.dialog_rate_app,
-                positiveText = "Rate Now",
-                positiveClickCallback = {
-                    PrefManager.getInstance(this)
-                        .setUserClickedRateNow()
-                    openGoogleReviewPage()
-                },
-                negativeText = "Later",
-                neutralText = "Never",
-                neutralClickCallback = {
-                    PrefManager.getInstance(this)
-                        .setUserClickedNever()
-                }
-            )*/
         }
 
     }
 
-    var appUpdateHelper: AppUpdateHelper? = null
     private fun initAppUpdate() {
         appUpdateHelper = AppUpdateHelper(this)
-        appUpdateHelper?.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
+        appUpdateHelper.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
             override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
                 Log.i("HomeActivity", "Update available")
-                appUpdateHelper?.startImmediateUpdate(appUpdateInfo) {
+                appUpdateHelper.startImmediateUpdate(appUpdateInfo) {
                     viewModel.setMessage(Message.SnackBarMessage(it))
                 }
             }
@@ -397,8 +308,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun promptAutoStart() {
-        val autoStartPermissionHelper = AutoStartPermissionHelper.getInstance()
-        val autoStartPrefManager = AutoStartPrefManager.newInstance(this)
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
@@ -411,7 +320,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     positiveText = "Setting",
                     positiveClickCallback = {
                         if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            mViewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
                         }
                         autoStartPrefManager.clickedOnSetting()
                     },
@@ -461,8 +370,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         this.intent = intent
     }
 
-
-    private var bottomSheetDialog: BottomSheetDialog? = null
     private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView =
@@ -497,6 +404,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         bottomSheetDialog?.setContentView(navigationView, l)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_more -> {
+                item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                bottomSheetDialog?.show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
 
@@ -508,7 +430,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         }
 
     }
-
 
     companion object {
 

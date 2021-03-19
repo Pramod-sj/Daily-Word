@@ -6,11 +6,11 @@
 
         <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
-        <import type="com.pramod.dailyword.business.domain.model.Word" />
+        <import type="com.pramod.dailyword.framework.ui.home.PastWordUIModel" />
 
         <variable
-            name="word"
-            type="Word" />
+            name="pastWordUIModel"
+            type="PastWordUIModel" />
 
     </data>
 
@@ -18,7 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:transitionName="@{word.date}"
+        app:cardElevation="@dimen/card_elevation"
+        android:transitionName="@{pastWordUIModel.word.date}"
         app:cardCornerRadius="25dp">
 
         <LinearLayout
@@ -31,15 +32,15 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{CalenderUtil.getFancyDay(word.date,CalenderUtil.DATE_FORMAT)}" />
+                android:text="@{pastWordUIModel.day}" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView_item_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@{word.seen?null:@drawable/background_circle_12dp}"
+                android:drawableEnd="@{pastWordUIModel.word.seen?null:@drawable/background_circle_12dp}"
                 android:drawablePadding="@dimen/margin_medium"
-                android:text="@{word.word}"
+                android:text="@{pastWordUIModel.word.word}"
                 android:textSize="@dimen/text_h5"
                 android:textStyle="bold" />
 

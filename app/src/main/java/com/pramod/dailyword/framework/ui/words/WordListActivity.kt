@@ -16,63 +16,29 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
 import com.pramod.dailyword.framework.helper.AdsManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel>() {
+class WordListActivity :
+    BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {
 
-    override val layoutId: Int = R.layout.activity_word_list
     override val viewModel: WordListViewModel by viewModels()
+
     override val bindingVariable: Int = BR.wordListViewModel
 
+    @Inject
+    lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
-    companion object {
-        val TAG = WordListActivity::class.java.simpleName
-    }
-
-
-    @ExperimentalPagingApi
-    @ExperimentalCoroutinesApi
-    override fun onCreate(savedInstanceState: Bundle?) {
-        //initExitTransition()
-        super.onCreate(savedInstanceState)
-        setUpToolbar()
-        initAdapter()
-        setupSwipeToRefresh()
-        findViewById<View>(android.R.id.content).postDelayed({
-            showNativeAdDialogWithDelay()
-        }, 150)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adapter?.setCanStartActivity(true)
-    }
-
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-    }
-
-
-    private var adapter: WordsAdapter? = null
-
-    @ExperimentalPagingApi
-    @ExperimentalCoroutinesApi
-    private fun initAdapter() {
-
-        //val concatAdapter = ConcatAdapter()
-
-        adapter = WordsAdapter(
+    private val adapter: WordsAdapter by lazy {
+        WordsAdapter(
             itemClickCallback = { i: Int, word: Word ->
 
                 setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
@@ -94,44 +60,59 @@ class WordListActivity : BaseActivity<ActivityWordListBinding, WordListViewModel
                 viewModel.toggleBookmark(word)
             }
         )
+    }
 
-        binding.recyclerviewWords.adapter = adapter?.withLoadStateFooter(
+    @ExperimentalPagingApi
+    @ExperimentalCoroutinesApi
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setUpToolbar(binding.toolbar, null, true)
+        initAdapter()
+        setupSwipeToRefresh()
+        findViewById<View>(android.R.id.content).postDelayed({
+            showNativeAdDialogWithDelay()
+        }, 150)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.setCanStartActivity(true)
+    }
+
+    @ExperimentalPagingApi
+    @ExperimentalCoroutinesApi
+    private fun initAdapter() {
+
+        binding.recyclerviewWords.adapter = adapter.withLoadStateFooter(
             NetworkStateAdapter {
-                adapter?.retry()
+                adapter.retry()
             })
 
-        //concatAdapter.addAdapter(adapter!!)
-
-        mViewModel.wordUIModelList.observe(this@WordListActivity) {
+        viewModel.wordUIModelList.observe(this@WordListActivity) {
             lifecycleScope.launch {
-                adapter?.submitData(it)
+                adapter.submitData(it)
             }
         }
-
 
     }
 
     private fun setupSwipeToRefresh() {
         binding.swipeToRefresh.setOnRefreshListener {
-            adapter?.refresh()
+            adapter.refresh()
         }
-        adapter?.addLoadStateListener {
+        adapter.addLoadStateListener {
             binding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
         }
     }
-    /*private fun initTransition() {
-        window.sharedElementsUseOverlay = true
-        window.enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        window.exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        window.returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-        window.reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
-    }*/
-
 
     private fun showNativeAdDialogWithDelay() {
         Handler().postDelayed({
             AdsManager.incrementCountAndShowNativeAdDialog(this)
         }, 1000)
+    }
+
+    companion object {
+        val TAG = WordListActivity::class.java.simpleName
     }
 
 }

@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BuildConfig
-import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
@@ -14,6 +13,7 @@ import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
+import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -50,16 +50,9 @@ class HomeViewModel @Inject constructor(
         value = Unit
     }
 
-    private var _wordOfTheDayLiveData = MutableLiveData<Word?>()
+    val wordOfTheDay: LiveData<Word?>
 
-    val wordOfTheDayLiveData: LiveData<Word?>
-        get() = _wordOfTheDayLiveData
-
-
-    private var _wordsExceptTodayLiveData = MutableLiveData<List<Word>?>()
-
-    val wordsExceptTodayLiveData: LiveData<List<Word>?>
-        get() = _wordsExceptTodayLiveData
+    val last6DayWords: LiveData<List<PastWordUIModel>?>
 
     var firstNotificationShown = false
 
@@ -68,40 +61,41 @@ class HomeViewModel @Inject constructor(
 
     init {
 
-        val wordList: LiveData<Resource<List<Word>?>> = _refreshEvent.switchMap {
-            Log.i("TAG", ": " + _refreshEvent.value)
+        val wordList: LiveData<List<Word>?> = _refreshEvent.switchMap {
             return@switchMap getWordsInteractor.getWords(7).asLiveData(Dispatchers.IO)
+        }.map { resource ->
+            _showLoading.value = resource.status == Status.LOADING
+            if (resource.status == Status.ERROR) {
+                resource.error?.message?.let { message ->
+                    setMessage(Message.SnackBarMessage(message))
+                }
+            }
+            return@map resource.data
         }
 
-        wordList.asFlow()
-            .onEach { resource ->
+        wordOfTheDay = wordList.map {
+            if (it?.isNotEmpty() == true) it[0]
+            else null
+        }
 
-                Log.i(TAG, ": word of the day")
-
-                _showLoading.value = resource.status == Status.LOADING
-                if (resource.status == Status.ERROR) {
-                    resource.error?.message?.let { message ->
-                        setMessage(Message.SnackBarMessage(message))
+        last6DayWords = wordList.map {
+            it?.let { list ->
+                val newList = list.toMutableList().apply {
+                    if (isNotEmpty()) {
+                        removeAt(0)
                     }
                 }
-                resource.data?.let {
-                    _wordOfTheDayLiveData.value =
-                        if (it.isNotEmpty()) it[0] else null
+                newList
+            }
+        }.map {
+            it?.map { word ->
+                PastWordUIModel(CalenderUtil.getFancyDay(word.date, CalenderUtil.DATE_FORMAT), word)
+            }
+        }
 
-                    val newList = it.toMutableList().apply {
-                        if (isNotEmpty()) {
-                            removeAt(0)
-                        }
-                    }
-                    _wordsExceptTodayLiveData.value = newList
-
-                }
-
-            }.launchIn(viewModelScope)
     }
 
     fun refresh() {
-        Log.i(TAG, "refresh: ")
         _refreshEvent.value = Unit
     }
 

@@ -9,29 +9,34 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
-import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.DailogHelper
 import com.pramod.dailyword.framework.ui.common.exts.openAboutPage
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingViewModel>() {
+class AppSettingActivity :
+    BaseActivity<ActivityAppSettingBinding, AppSettingViewModel>(R.layout.activity_app_setting) {
 
-    override val layoutId: Int = R.layout.activity_app_setting
     override val viewModel: AppSettingViewModel by viewModels()
+
     override val bindingVariable: Int = BR.appSettingViewModel
+
+    @Inject
+    lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
     @Inject
     lateinit var notificationPrefManager: NotificationPrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setUpToolbar()
+        setUpToolbar(binding.toolbar, null, true)
         handleUserCase()
         initThemeValue()
         initEdgeToEdgeValue()
@@ -39,47 +44,38 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
         initNotificationValues()
     }
 
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun initThemeValue() {
         themeManager.liveData().observe(this) {
-            mViewModel.themeValue.value = it
+            viewModel.themeValue.value = it
         }
     }
 
     private fun initEdgeToEdgeValue() {
-        egdeToEdgePrefManager.getLiveData().observe(this) {
-            mViewModel.edgeToEdgeValue.value = it
+        edgeToEdgePrefManager.getLiveData().observe(this) {
+            viewModel.edgeToEdgeValue.value = it
         }
     }
 
     private fun initWindowAnimValue() {
         windowAnimPrefManager.liveData().observe(this) {
-            mViewModel.windowAnimValue.value = it
+            viewModel.windowAnimValue.value = it
         }
     }
 
     private fun initNotificationValues() {
 
         notificationPrefManager.getDailyWordNotificationEnabledLiveData().observe(this) {
-            mViewModel.dailyWordNotificationValue.value = it
+            viewModel.dailyWordNotificationValue.value = it
         }
 
         notificationPrefManager.getReminderNotificationEnabledLiveData().observe(this) {
-            mViewModel.reminderNotificationValue.value = it
+            viewModel.reminderNotificationValue.value = it
         }
     }
 
 
     private fun handleUserCase() {
-        mViewModel.settingUseCase = object : SettingUseCase {
+        viewModel.settingUseCase = object : SettingUseCase {
             override fun openChooseThemeDialog() {
                 DailogHelper.showRadioDialog(
                     this@AppSettingActivity,
@@ -95,11 +91,11 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
 
             override fun toggleWindowAnimation() {
                 windowAnimPrefManager.toggle()
-                Log.i(TAG, "toggleWindowAnimation: " + egdeToEdgePrefManager.isEnabled())
+                Log.i(TAG, "toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
             }
 
             override fun toggleEdgeToEdge() {
-                egdeToEdgePrefManager.toggle()
+                edgeToEdgePrefManager.toggle()
                 restartActivity(true)
             }
 
@@ -126,9 +122,9 @@ class AppSettingActivity : BaseActivity<ActivityAppSettingBinding, AppSettingVie
                 FirebaseMessaging.getInstance().token.addOnCompleteListener {
                     if (it.isSuccessful) {
                         CommonUtils.copyToClipboard(applicationContext, it.result)
-                        mViewModel.setMessage(Message.SnackBarMessage("Your token has been captured!"))
+                        viewModel.setMessage(Message.SnackBarMessage("Your token has been captured!"))
                     } else {
-                        mViewModel.setMessage(Message.SnackBarMessage("Sorry we're currently not able to fetch your token"))
+                        viewModel.setMessage(Message.SnackBarMessage("Sorry we're currently not able to fetch your token"))
                     }
                 }
             }

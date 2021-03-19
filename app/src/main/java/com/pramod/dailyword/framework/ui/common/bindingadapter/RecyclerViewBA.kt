@@ -5,7 +5,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.pramod.dailyword.framework.helper.edgetoedge.doOnApplyWindowInsets
-import com.pramod.dailyword.framework.prefmanagers.EgdeToEdgePrefManager
+import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
 
 class RecyclerViewBA {
     companion object {
@@ -24,7 +24,7 @@ class RecyclerViewBA {
                         override fun onGlobalLayout() {
                             appBarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                             val appBarHeight = appBarLayout.height
-                            if (EgdeToEdgePrefManager.newInstance(appBarLayout.context)
+                            if (EdgeToEdgePrefManager.newInstance(appBarLayout.context)
                                     .isEnabled()
                             ) {
                                 recyclerView.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->

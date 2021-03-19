@@ -9,14 +9,6 @@ class AutoStartPrefManager @Inject constructor(context: Context) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val editor = sharedPreferences.edit()
 
-
-    companion object {
-        private const val PREFERENCES_NAME = "auto_start_pref"
-        private const val KEY_CLICK_ON_ALREADY_ENABLED = "click_on_already_enabled"
-        private const val KEY_CLICK_ON_SETTING = "click_on_setting"
-        fun newInstance(context: Context) = AutoStartPrefManager(context)
-    }
-
     fun clickedOnAlreadyEnabled() {
         editor.putBoolean(KEY_CLICK_ON_ALREADY_ENABLED, true).commit()
     }
@@ -29,5 +21,12 @@ class AutoStartPrefManager @Inject constructor(context: Context) {
         sharedPreferences.getBoolean(KEY_CLICK_ON_ALREADY_ENABLED, false)
 
     fun isClickedOnSetting() = sharedPreferences.getBoolean(KEY_CLICK_ON_SETTING, false)
+
+    companion object {
+        private const val PREFERENCES_NAME = "auto_start_pref"
+        private const val KEY_CLICK_ON_ALREADY_ENABLED = "click_on_already_enabled"
+        private const val KEY_CLICK_ON_SETTING = "click_on_setting"
+        fun newInstance(context: Context) = AutoStartPrefManager(context)
+    }
 
 }

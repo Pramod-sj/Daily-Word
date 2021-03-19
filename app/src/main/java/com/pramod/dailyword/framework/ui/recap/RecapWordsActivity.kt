@@ -9,34 +9,32 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityRecapWordsBinding
+import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
 import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsViewModel>() {
+class RecapWordsActivity :
+    BaseActivity<ActivityRecapWordsBinding, RecapWordsViewModel>(R.layout.activity_recap_words) {
 
-    override val layoutId: Int = R.layout.activity_recap_words
     override val viewModel: RecapWordsViewModel by viewModels()
+
     override val bindingVariable: Int = BR.recapWordsViewModel
 
+    @Inject
+    lateinit var windowAnimPrefManager: WindowAnimPrefManager
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.sharedElementsUseOverlay = true
+        window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
-        setUpToolbar()
+        setUpToolbar(binding.toolbar, null, true)
         initAdapter()
-    }
-
-
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun initAdapter() {
@@ -61,7 +59,7 @@ class RecapWordsActivity : BaseActivity<ActivityRecapWordsBinding, RecapWordsVie
             openWordDetailsPage(word.date!!, option, windowAnimPrefManager.isEnabled())
         }
         binding.recyclerViewRecapWords.adapter = adapter
-        mViewModel.words.observe(this) {
+        viewModel.words.observe(this) {
             adapter.submitList(it)
         }
     }

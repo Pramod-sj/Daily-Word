@@ -24,7 +24,7 @@
         </item>
 
 
-        <item name="android:fontFamily">@font/google_sans_medium</item>
+        <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
     <style name="AppTheme.HomeActivity" parent="AppTheme">

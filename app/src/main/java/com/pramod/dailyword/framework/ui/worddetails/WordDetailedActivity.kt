@@ -24,6 +24,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.databinding.BottomSheetChipLayoutBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
@@ -31,27 +32,30 @@ import com.pramod.dailyword.framework.transition.isViewsLoaded
 import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener
-import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
-import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
-import com.pramod.dailyword.framework.ui.common.exts.shareApp
-import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
+import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>() {
+class WordDetailedActivity :
+    BaseActivity<ActivityWordDetailedBinding, WordDetailedViewModel>(R.layout.activity_word_detailed) {
 
-    override val layoutId: Int = R.layout.activity_word_detailed
     override val viewModel: WordDetailedViewModel by viewModels()
+
     override val bindingVariable: Int = BR.wordDetailedViewModel
+
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bindAdsInfo()
         supportPostponeEnterTransition()
         initEnterAndReturnTransition()
         keepScreenOn()
-        setUpToolbar()
+        setUpToolbar(binding.toolbar, null, true)
         setNestedScrollListener()
         setNavigateMW()
         invalidateOptionMenuWhenWordAvailable()
@@ -73,12 +77,16 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         )
     }
 
+    private fun bindAdsInfo() {
+        binding.setVariable(BR.adsEnabled, fbRemoteConfig.isAdsEnabled())
+    }
+
     private fun keepScreenOn() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun setWordColor() {
-        mViewModel.word.observe(this) {
+        viewModel.word.observe(this) {
             it?.let { word ->
                 binding.wordColor =
                     getContextCompatColor(
@@ -101,17 +109,8 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
 
     }
 
-    private fun setUpToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.let {
-            it.title = null
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-    }
-
     private fun invalidateOptionMenuWhenWordAvailable() {
-        mViewModel.word.observe(this, {
+        viewModel.word.observe(this, {
             if (it != null) {
                 invalidateOptionsMenu()
             }
@@ -121,7 +120,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     private fun setUpExampleRecyclerView() {
         val adapter = ExampleAdapter()
         binding.wordDetailedExamplesRecyclerview.adapter = adapter
-        mViewModel.word.observe(this, {
+        viewModel.word.observe(this, {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
@@ -135,7 +134,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         val adapter = DefinitionAdapter()
         binding.wordDetailedDefinationsRecyclerview.adapter = adapter
 
-        mViewModel.word.observe(this, {
+        viewModel.word.observe(this, {
             it?.let { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
@@ -146,7 +145,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     }
 
     private fun handleNavigator() {
-        mViewModel.navigator = object : WordDetailNavigator {
+        viewModel.navigator = object : WordDetailNavigator {
             override fun navigateToShowSynonymsList(list: List<String>?) {
                 list?.let {
                     showBottomSheetListOfChips(resources.getString(R.string.synonyms), it)
@@ -171,7 +170,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
     }
 
     private fun setNavigateMW() {
-        mViewModel.navigateToMerriamWebster().observe(this, Observer {
+        viewModel.navigateToMerriamWebster().observe(this, Observer {
             it.getContentIfNotHandled()?.let { url ->
                 openWebsite(url)
             }
@@ -247,7 +246,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
             val distanceToCover =
                 binding.txtViewWordOfTheDay.height + binding.txtViewWordOfTheDayDate.height
-            mViewModel.setTitleVisibility(distanceToCover < oldScrollY)
+            viewModel.setTitleVisibility(distanceToCover < oldScrollY)
             /*  if (oldScrollY < scrollY) {
                   mBinding.fabGotToMw.shrink()
               } else {
@@ -261,7 +260,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         menuInflater.inflate(R.menu.word_detail_menu, menu)
         menu?.findItem(R.id.menu_bookmark)
             ?.setIcon(
-                if (mViewModel.word.value?.bookmarkedId != null
+                if (viewModel.word.value?.bookmarkedId != null
                 ) R.drawable.ic_round_bookmark_24 else R.drawable.ic_baseline_bookmark_border_24
             )
         return super.onCreateOptionsMenu(menu)
@@ -274,7 +273,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
                     shareApp(bitmap = it)
                 } ?: shareApp()
             }
-            R.id.menu_bookmark -> mViewModel.bookmark()
+            R.id.menu_bookmark -> viewModel.bookmark()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -293,7 +292,7 @@ class WordDetailedActivity : BaseActivity<ActivityWordDetailedBinding, WordDetai
         binding.onChipClickListener = object : OnChipClickListener {
             override fun onChipClick(text: String) {
                 val url = resources.getString(R.string.google_search_url) + text
-                mViewModel.navigator?.navigateToWeb(url)
+                viewModel.navigator?.navigateToWeb(url)
             }
         }
         binding.executePendingBindings()

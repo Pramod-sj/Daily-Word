@@ -37,11 +37,10 @@
                 android:id="@+id/recyclerview_words"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:paddingTop="?attr/actionBarSize"
-                android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
-                android:scrollbars="vertical"
                 android:splitMotionEvents="false"
                 app:applyTopBottomPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
@@ -49,7 +48,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
-            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"

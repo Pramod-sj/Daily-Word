@@ -19,10 +19,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
 @AndroidEntryPoint
-class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>() {
+class SplashScreenActivity :
+    BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>(R.layout.activity_splash_screen) {
 
-    override val layoutId: Int = R.layout.activity_splash_screen
     override val viewModel: SplashScreenViewModel by viewModels()
+    
     override val bindingVariable: Int = BR.splashScreenViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +58,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     }
 
     private fun navigateToHomePage() {
-        mViewModel.navigateToHomePage().observe(this, {
+        viewModel.navigateToHomePage().observe(this, {
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
                     openHomePage(withFadeAnimation = true, finish = true)
@@ -67,7 +68,7 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
     }
 
     private fun animateAppIcon() {
-        mViewModel.animateSplashIcon().observe(this, {
+        viewModel.animateSplashIcon().observe(this, {
             if (it) {
                 val initialXYDimen = resources.getDimension(R.dimen.splash_icon_big)
                 val finalXYDimen = resources.getDimension(R.dimen.splash_icon_normal)
@@ -79,10 +80,10 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
                     finalXYDimen,
                     1000L,
                     {},
-                    { mViewModel.showSplashText() }
+                    { viewModel.showSplashText() }
                 )
             } else {
-                mViewModel.showSplashText()
+                viewModel.showSplashText()
             }
         })
     }

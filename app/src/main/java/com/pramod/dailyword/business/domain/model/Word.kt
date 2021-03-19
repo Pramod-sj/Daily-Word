@@ -1,5 +1,7 @@
 package com.pramod.dailyword.business.domain.model
 
+import java.io.Serializable
+
 data class Word(
     val word: String,
 
@@ -38,8 +40,7 @@ data class Word(
     val seenAtTimeInMillis: Long?
 
 
-
-) {
+) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
