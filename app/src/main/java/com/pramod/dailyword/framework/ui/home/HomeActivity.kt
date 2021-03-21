@@ -34,6 +34,7 @@ import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.isViewsPreDrawn
+import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.*
@@ -172,7 +173,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             .asLiveData(Dispatchers.IO)
             .observe(this) { show ->
                 if (show) {
-                    openChangelogPage(true)
+                    ChangelogDialogFragment.show(supportFragmentManager)
                 }
             }
 

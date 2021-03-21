@@ -1,4 +1,4 @@
-package com.pramod.dailyword.framework.helper.edgetoedge
+package com.pramod.dailyword.framework.ui.common.exts
 
 
 import android.util.Log

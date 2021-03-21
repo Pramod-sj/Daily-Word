@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
-import com.pramod.dailyword.framework.helper.edgetoedge.*
+import com.pramod.dailyword.framework.ui.common.exts.*
 
 class EdgeToEdgeUtils {
     companion object {

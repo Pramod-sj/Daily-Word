@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/green_400</color>
-    <color name="colorPrimaryDark">#252525</color>
+    <color name="colorPrimaryDark">#202020</color>
     <color name="colorAccent">@color/green_400</color>
 
     <color name="app_logo_tint">@color/white</color>
@@ -34,7 +34,6 @@
 
     <color name="bottomSheetDialogNavigationBarColor">#282828</color>
 
-    <color name="windowBackgroundColor">#212121</color>
 
 
     <!-- Start Donate Item Colors -->
@@ -52,4 +51,10 @@
     <color name="social_media_stroke_color">@color/grey_extra_dark</color>
 
     <color name="stroke_about_cards">@color/grey_very_extra_dark</color>
+
+    <!--dark window background color-->
+    <color name="windowBackgroundColor">#181818</color>
+    <!-- end -->
+
+    <color name="colorSurface">#161616</color>
 </resources>

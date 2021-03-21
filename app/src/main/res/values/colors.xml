@@ -152,6 +152,7 @@
     <color name="bottomSheetDialogNavigationBarColor">#FFFFFF</color>
 
     <color name="windowBackgroundColor">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
 
     <!-- Start Donate Item Colors -->
     <color name="color_cookie">@color/orange_600</color>

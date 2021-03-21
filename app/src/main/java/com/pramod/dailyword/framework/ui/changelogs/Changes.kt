@@ -25,8 +25,11 @@ class Changes {
 
     fun getFormattedChanges(bullet: String): String {
         val stringBuilder = StringBuilder()
-        for (change in changes) {
-            stringBuilder.append("$bullet $change\n")
+        changes.forEachIndexed { index, s ->
+            stringBuilder.append("$bullet $s")
+            if (index < changes.size - 1) {
+                stringBuilder.append("\n")
+            }
         }
         return stringBuilder.toString()
     }

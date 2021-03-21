@@ -1,11 +1,14 @@
 [
   {
-    "version": "1.4.0",
-    "release_name": "\uD83C\uDF89 Feature update 3 (Happy New Year) \uD83C\uDF89",
-    "date": "14 Jan 2021",
+    "version": "2.0.0",
+    "release_name": "\uD83C\uDF89 Feature update 3 \uD83C\uDF89",
+    "date": "28 Mar 2021",
     "changes": [
       "Read random word just a click away!",
-      "Recap word in a week",
+      "Better pronounce audio playing",
+      "There we go! Welcome Synonyms and Antonyms!",
+      "Recap your word knowledge on every sunday",
+      "Indication after each word",
       "Major UI Changes",
       "Performance improvement"
     ]

@@ -44,10 +44,6 @@
             android:value="${crashlyticsCollectionEnabled}" />
 
         <activity
-            android:name=".framework.ui.changelogs.ChangelogActivity"
-            android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".framework.ui.bookmarks.FavoriteWordsActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />

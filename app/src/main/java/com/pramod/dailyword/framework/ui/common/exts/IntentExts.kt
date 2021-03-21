@@ -12,7 +12,6 @@ import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsActivity
-import com.pramod.dailyword.framework.ui.changelogs.ChangelogActivity
 import com.pramod.dailyword.framework.ui.donate.DonateActivity
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
@@ -74,17 +73,6 @@ fun Activity.openRecapPage() {
 @ExperimentalCoroutinesApi
 fun Activity.openRandomWordPage() {
     startActivity(Intent(this, WordDetailedActivity::class.java))
-}
-
-
-fun Activity.openChangelogPage(showContinueButton: Boolean = false) {
-    val intent = Intent(this, ChangelogActivity::class.java)
-    overridePendingTransition(
-        android.R.anim.fade_in,
-        android.R.anim.fade_out
-    )
-    intent.putExtra(ChangelogActivity.EXTRA_SHOW_CONTINUE_BUTTON, showContinueButton)
-    startActivity(intent)
 }
 
 fun Activity.openDonatePage() {

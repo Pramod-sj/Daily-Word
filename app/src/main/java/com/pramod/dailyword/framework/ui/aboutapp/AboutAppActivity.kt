@@ -10,6 +10,7 @@ import com.pramod.dailyword.framework.datasource.network.EndPoints
 import com.pramod.dailyword.framework.helper.openGmail
 import com.pramod.dailyword.framework.helper.openGoogleReviewPage
 import com.pramod.dailyword.framework.helper.openWebsite
+import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +65,7 @@ class AboutAppActivity :
             }
 
             override fun openChangelogActivity() {
-                openChangelogPage()
+                ChangelogDialogFragment.show(supportFragmentManager)
             }
 
         }

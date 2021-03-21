@@ -4,7 +4,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.pramod.dailyword.framework.helper.edgetoedge.doOnApplyWindowInsets
+import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
 
 class RecyclerViewBA {
