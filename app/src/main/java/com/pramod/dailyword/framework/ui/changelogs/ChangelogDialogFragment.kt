@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -141,6 +142,15 @@ class ChangelogDialogFragment : DialogFragment() {
         return binding.root
     }
 
+    private fun applyBottomInsetToRecyclerView() {
+        binding.recyclerviewChangeLogs.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+            binding.recyclerviewChangeLogs
+                .updatePadding(
+                    bottom = windowInsets.systemWindowInsetBottom
+                )
+        }
+    }
+
     private fun applyRadiusBasedOnSlideOffset(slideOffset: Float) {
         val radiusInPixel = 35f;
         val newCornerRadius = convertNumberRangeToAnotherRangeFloat(
@@ -207,6 +217,7 @@ class ChangelogDialogFragment : DialogFragment() {
         bindingAdapter()
         enableBottomSheetDrag()
         dismissWhenClickOutside()
+        applyBottomInsetToRecyclerView()
         binding.root.postDelayed({
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }, 300)

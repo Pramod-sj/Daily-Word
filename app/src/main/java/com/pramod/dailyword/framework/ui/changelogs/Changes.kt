@@ -1,5 +1,10 @@
 package com.pramod.dailyword.framework.ui.changelogs
 
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
+import androidx.core.text.toSpannable
 import com.google.gson.annotations.SerializedName
 
 class Changes {
@@ -23,14 +28,16 @@ class Changes {
         return stringBuilder.toString()
     }
 
-    fun getFormattedChanges(bullet: String): String {
-        val stringBuilder = StringBuilder()
+    fun getFormattedChanges(): Spannable {
+        val spannableStringBuilder = SpannableStringBuilder()
         changes.forEachIndexed { index, s ->
-            stringBuilder.append("$bullet $s")
+            spannableStringBuilder.append(
+                s, BulletSpan(15), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             if (index < changes.size - 1) {
-                stringBuilder.append("\n")
+                spannableStringBuilder.appendLine()
             }
         }
-        return stringBuilder.toString()
+        return spannableStringBuilder.toSpannable()
     }
 }

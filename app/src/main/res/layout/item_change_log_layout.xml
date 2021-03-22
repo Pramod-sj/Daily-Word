@@ -18,23 +18,23 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/padding_medium"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium">
 
             <TextView
-                android:layout_gravity="start"
                 style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{`v`+changes.version}"
+                android:layout_gravity="start"
+                android:text="@{changes.version}"
                 android:textColor="@color/textColor_highEmphasis"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_gravity="end"
                 style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:text="@{changes.date}"
                 android:textColor="@color/textColor_highEmphasis"
                 android:textStyle="bold" />
@@ -52,6 +52,6 @@
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{changes.getFormattedChanges(@string/unicode_bullet)}" />
+            android:text="@{changes.getFormattedChanges()}" />
     </LinearLayout>
 </layout>
