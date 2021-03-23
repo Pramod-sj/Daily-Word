@@ -53,8 +53,9 @@
     <color name="stroke_about_cards">@color/grey_very_extra_dark</color>
 
     <!--dark window background color-->
-    <color name="windowBackgroundColor">#181818</color>
+    <color name="windowBackgroundColor">#191919</color>
     <!-- end -->
 
+    <!--colorSurface -->
     <color name="colorSurface">#161616</color>
 </resources>

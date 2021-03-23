@@ -37,6 +37,7 @@ import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -82,6 +83,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private var bottomSheetDialog: BottomSheetDialog? = null
+
+    private var donateBottomDialogFragment: DonateBottomDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -340,7 +343,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        appUpdateHelper?.onActivityResult(requestCode, resultCode, data)
+        appUpdateHelper.onActivityResult(requestCode, resultCode, data)
+
+        Log.i(TAG, "onActivityResult: $requestCode:$resultCode")
+        donateBottomDialogFragment?.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun deepLinkNotification() {
@@ -387,7 +393,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     openSettingPage()
                 }
                 R.id.menu_donate -> {
-                    openDonatePage()
+                    donateBottomDialogFragment = DonateBottomDialogFragment()
+                    donateBottomDialogFragment?.show(
+                        supportFragmentManager,
+                        DonateBottomDialogFragment.TAG
+                    )
                 }
                 R.id.menu_share -> {
                     CommonUtils.viewToBitmap(binding.coordinatorLayout)?.let { bitmap ->
@@ -431,6 +441,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         }
 
     }
+
 
     companion object {
 

@@ -13,6 +13,7 @@ import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,7 +58,7 @@ class AboutAppActivity :
             }
 
             override fun openDonatePage() {
-                this@AboutAppActivity.openDonatePage()
+                DonateBottomDialogFragment.show(supportFragmentManager)
             }
 
             override fun shareAppWithFriends() {

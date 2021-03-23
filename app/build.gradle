@@ -7,6 +7,9 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def keyPropertiesFile = rootProject.file("key.properties")
+def keyProperties = new Properties()
+keyProperties.load(new FileInputStream(keyPropertiesFile))
 
 android {
     compileSdkVersion 29
@@ -20,6 +23,8 @@ android {
         versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GOOGLE_LICENSE_KEY", keyProperties['GOOGLE_LICENSE_KEY'])
     }
 
     buildTypes {

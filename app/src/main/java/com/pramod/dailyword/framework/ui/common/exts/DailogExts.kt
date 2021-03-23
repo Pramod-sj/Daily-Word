@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AbsListView
@@ -120,6 +121,12 @@ fun Context.showWebViewDialog(url: String) {
         false
     )
     Log.i("URL", url)
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        dialogWebviewLayoutBinding.webView.settings
+            .forceDark = WebSettings.FORCE_DARK_ON
+    }
+
     dialogWebviewLayoutBinding.webView.webViewClient = object : WebViewClient() {
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)

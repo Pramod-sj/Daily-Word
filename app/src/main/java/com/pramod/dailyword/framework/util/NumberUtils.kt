@@ -11,7 +11,18 @@ fun convertNumberRangeToAnotherRange(
             newRange.first).toInt()
 }
 
-fun convertNumberRangeToAnotherRangeFloat(
+fun convertNumberRangeToAnotherRangeToFloat(
+    oldValue: Float,
+    oldRange: Pair<Int, Int>,
+    newRange: Pair<Int, Int>
+): Float {
+
+    return (((oldValue - oldRange.first) / (oldRange.second - oldRange.first)) *
+            (newRange.second - newRange.first) +
+            newRange.first)
+}
+
+fun convertNumberRangeToAnotherRangeFromFloat(
     oldValue: Float,
     oldRange: Pair<Float, Float>,
     newRange: Pair<Float, Float>

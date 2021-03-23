@@ -29,7 +29,7 @@ class DonateActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setUpToolbar(binding.toolbar, null, true)
+        //setUpToolbar(binding.toolbar, null, true)
         setUpBilling()
         setUpDonateItemRecyclerView()
     }

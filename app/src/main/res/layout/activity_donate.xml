@@ -15,95 +15,104 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         tools:context=".ui.donate.DonateActivity">
 
-        <androidx.core.widget.NestedScrollView
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_bottom_sheet"
             android:layout_width="match_parent"
-            android:clipToPadding="false"
-            android:clipChildren="false"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingTop="?attr/actionBarSize"
-            app:applyTopBottomPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}">
+            app:cardBackgroundColor="@color/windowBackgroundColor"
+            app:cardPreventCornerOverlap="false"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:shapeAppearanceOverlay="@style/FullScreenBottomSheetShape">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.google.android.material.card.MaterialCardView
+
+                <TextView
+                    android:id="@+id/txtView_appBar"
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:gravity="center"
+                    android:text="@string/title_donate" />
+
+                <com.pramod.dailyword.framework.ui.common.view.CustomNestedScrollView
+                    android:id="@+id/nestedScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    app:cardCornerRadius="@dimen/card_radius_max"
-                    app:strokeColor="@color/stroke_about_cards"
-                    app:strokeWidth="1dp">
+                    android:layout_below="@id/txtView_appBar"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:fillViewport="true"
+                    android:isScrollContainer="true"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="@dimen/padding_medium"
+                    android:scrollIndicators="top"
+                    app:applyTopBottomPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/margin_medium">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/margin_small"
-                            android:text="@string/support_development" />
+                            android:layout_margin="@dimen/margin_medium"
+                            app:cardBackgroundColor="@color/windowBackgroundColor"
+                            app:cardCornerRadius="@dimen/card_radius_max"
+                            app:strokeColor="@color/stroke_about_cards"
+                            app:strokeWidth="1dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/regards" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin_medium">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/margin_small"
+                                    android:text="@string/support_development" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/regards" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/dev_name"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/donate_recyclerView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/dev_name"
-                            android:textStyle="bold" />
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"
+                            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                            app:spanCount="2" />
 
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/donate_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-                    app:spanCount="2" />
+                </com.pramod.dailyword.framework.ui.common.view.CustomNestedScrollView>
 
-            </LinearLayout>
+            </RelativeLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </com.google.android.material.card.MaterialCardView>
 
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
-            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:alpha="@dimen/appbar_alpha"
-            app:applyTopPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/nestedScrollView">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-
-                <TextView
-                    style="@style/ToolbarTitleTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_donate" />
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
