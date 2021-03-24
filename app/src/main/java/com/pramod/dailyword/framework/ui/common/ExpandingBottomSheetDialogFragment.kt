@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.FloatRange
 import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
@@ -40,6 +41,7 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
      * use = 0.5 half expanded i.e. covering half of the screen
      * close to 1 more than half expanded i.e. covering more screen
      */
+    @FloatRange(from = 0.0, to = 1.0)
     open fun peekHeightFactor(): Float {
         return 0.7f
     }

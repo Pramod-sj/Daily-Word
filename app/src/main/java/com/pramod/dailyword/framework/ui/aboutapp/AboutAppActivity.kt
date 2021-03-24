@@ -12,7 +12,11 @@ import com.pramod.dailyword.framework.helper.openGoogleReviewPage
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
+import com.pramod.dailyword.framework.ui.common.exts.shareApp
+import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
+import com.pramod.dailyword.framework.ui.common.exts.showLib
+import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -76,11 +80,20 @@ class AboutAppActivity :
 
         viewModel.otherLinkNavigate = object : OtherLinkNavigate {
             override fun showTermsAndService() {
-                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+                //showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+                WebViewDialogFragment.show(
+                    resources.getString(R.string.term_and_condition),
+                    EndPoints.TERM_AND_CONDITION,
+                    supportFragmentManager
+                )
             }
 
             override fun showPrivacyPolicy() {
-                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+                WebViewDialogFragment.show(
+                    resources.getString(R.string.privacy_policy),
+                    EndPoints.PRIVACY_POLICY,
+                    supportFragmentManager
+                )
             }
 
             override fun showOpenSourceLibs() {

@@ -60,6 +60,7 @@ android {
 
 dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
     def room_version = "2.3.0-beta03"
     def lifecycle_version = "2.3.0"
     def hilt_viewmodels = "1.0.0-alpha03"
@@ -144,4 +145,7 @@ dependencies {
 
     //custom lib to play and store audio files
     implementation project(path: ':audioplayer')
+
+
+    implementation 'androidx.webkit:webkit:1.4.0-beta01'
 }

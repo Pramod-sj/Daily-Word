@@ -11,6 +11,7 @@ import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
 import com.pramod.dailyword.framework.datasource.network.EndPoints
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.GradientUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -92,14 +93,22 @@ class SplashScreenActivity :
         val termsAndConditionLink = Pair(
             resources.getString(R.string.term_and_condition),
             View.OnClickListener {
-                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+                WebViewDialogFragment.show(
+                    resources.getString(R.string.term_and_condition),
+                    EndPoints.TERM_AND_CONDITION,
+                    supportFragmentManager
+                )
             }
         )
 
         val privacyPolicyLink = Pair(
             resources.getString(R.string.privacy_policy),
             View.OnClickListener {
-                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+                WebViewDialogFragment.show(
+                    resources.getString(R.string.privacy_policy),
+                    EndPoints.PRIVACY_POLICY,
+                    supportFragmentManager
+                )
             }
         )
         binding.acceptConditionTextView.showLinks(termsAndConditionLink, privacyPolicyLink)
