@@ -1,2 +1,3 @@
 /build
 google-services.json
+/src/main/java/com/pramod/dailyword/db/remote/Endpoints.kt
