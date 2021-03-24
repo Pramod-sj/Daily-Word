@@ -6,11 +6,14 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
-import com.pramod.dailyword.framework.datasource.network.EndPoints
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
+import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
+import com.pramod.dailyword.framework.ui.common.exts.openHomePage
+import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.GradientUtils
@@ -24,7 +27,7 @@ class SplashScreenActivity :
     BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>(R.layout.activity_splash_screen) {
 
     override val viewModel: SplashScreenViewModel by viewModels()
-    
+
     override val bindingVariable: Int = BR.splashScreenViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +98,7 @@ class SplashScreenActivity :
             View.OnClickListener {
                 WebViewDialogFragment.show(
                     resources.getString(R.string.term_and_condition),
-                    EndPoints.TERM_AND_CONDITION,
+                    BuildConfig.TERM_AND_CONDITION,
                     supportFragmentManager
                 )
             }
@@ -106,7 +109,7 @@ class SplashScreenActivity :
             View.OnClickListener {
                 WebViewDialogFragment.show(
                     resources.getString(R.string.privacy_policy),
-                    EndPoints.PRIVACY_POLICY,
+                    BuildConfig.PRIVACY_POLICY,
                     supportFragmentManager
                 )
             }

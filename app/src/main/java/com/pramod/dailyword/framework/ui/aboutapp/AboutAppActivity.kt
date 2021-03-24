@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAboutAppBinding
-import com.pramod.dailyword.framework.datasource.network.EndPoints
 import com.pramod.dailyword.framework.helper.openGmail
 import com.pramod.dailyword.framework.helper.openGoogleReviewPage
 import com.pramod.dailyword.framework.helper.openWebsite
@@ -83,7 +83,7 @@ class AboutAppActivity :
                 //showWebViewDialog(EndPoints.TERM_AND_CONDITION)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.term_and_condition),
-                    EndPoints.TERM_AND_CONDITION,
+                    BuildConfig.TERM_AND_CONDITION,
                     supportFragmentManager
                 )
             }
@@ -91,7 +91,7 @@ class AboutAppActivity :
             override fun showPrivacyPolicy() {
                 WebViewDialogFragment.show(
                     resources.getString(R.string.privacy_policy),
-                    EndPoints.PRIVACY_POLICY,
+                    BuildConfig.PRIVACY_POLICY,
                     supportFragmentManager
                 )
             }

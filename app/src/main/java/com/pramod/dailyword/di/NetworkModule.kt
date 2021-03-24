@@ -1,6 +1,6 @@
 package com.pramod.dailyword.di
 
-import com.pramod.dailyword.framework.datasource.network.EndPoints
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.datasource.network.abstraction.IPNetworkService
 import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
 import com.pramod.dailyword.framework.datasource.network.impl.IPNetworkServiceImpl
@@ -49,7 +49,7 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(EndPoints.WOTD_API_BASE_URL)
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
