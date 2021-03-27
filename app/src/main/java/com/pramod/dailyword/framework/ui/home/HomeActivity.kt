@@ -17,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.lifecycle.asLiveData
 import androidx.paging.ExperimentalPagingApi
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -25,6 +26,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
@@ -37,6 +39,7 @@ import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +53,9 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.activity_home) {
+
+
+    
 
     override val viewModel: HomeViewModel by viewModels()
 
@@ -88,6 +94,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadBackgroundImage()
         initToolbar()
         initAppUpdate()
         showChangelogActivity()
@@ -104,6 +111,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+    }
+
+    private fun loadBackgroundImage() {
+        Glide.with(this)
+            .load(BuildConfig.HOME_BACKGROUND_URL)
+            .centerCrop()
+            .into(binding.homeImageViewBuildings)
     }
 
     private fun initToolbar() {
@@ -380,7 +394,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView =
-            NavigationView(this)
+            NavigationView(this, null, R.style.NavigationItemNoRipple)
         navigationView.updatePadding(top = 10, bottom = 15)
         navigationView.overScrollMode = View.OVER_SCROLL_NEVER
         navigationView.backgroundTintList =
@@ -424,7 +438,34 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         when (item.itemId) {
             R.id.menu_more -> {
                 item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                bottomSheetDialog?.show()
+                val bottomMenuDialog = BottomMenuDialog
+                    .show(supportFragmentManager)
+                bottomMenuDialog.bottomMenuItemClickListener =
+                    object : BottomMenuDialog.BottomMenuItemClickListener {
+                        override fun onMenuItemClick(menuItem: MenuItem) {
+                            when (menuItem.itemId) {
+                                R.id.menu_settings -> {
+                                    openSettingPage()
+                                }
+                                R.id.menu_donate -> {
+                                    donateBottomDialogFragment = DonateBottomDialogFragment()
+                                    donateBottomDialogFragment?.show(
+                                        supportFragmentManager,
+                                        DonateBottomDialogFragment.TAG
+                                    )
+                                }
+                                R.id.menu_share -> {
+                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
+                                        ?.let { bitmap ->
+                                            shareApp(bitmap = bitmap)
+                                        } ?: shareApp()
+                                }
+                            }
+                        }
+                    }
+
+                /*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                bottomSheetDialog?.show()*/
             }
         }
         return super.onOptionsItemSelected(item)

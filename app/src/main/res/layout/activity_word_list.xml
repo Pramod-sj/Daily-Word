@@ -48,7 +48,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
-            style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"

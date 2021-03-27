@@ -18,6 +18,12 @@
             android:icon="@drawable/ic_settings_outline"
             android:title="Settings"
             app:iconTint="@color/app_icon_tint" />
+
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="About"
+            app:iconTint="@color/app_icon_tint" />
     </group>
 
 </menu>

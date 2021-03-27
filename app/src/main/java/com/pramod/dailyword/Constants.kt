@@ -10,5 +10,6 @@ class Constants {
         const val JOB_ID_FETCH_DATA_FOR_WIDGET = 205
 
         const val COLOR_ALPHA = 30
+        const val COLOR_ALPHA_DONATE_ITEM = 10
     }
 }

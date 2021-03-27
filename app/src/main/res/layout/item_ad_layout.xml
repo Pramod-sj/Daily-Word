@@ -25,7 +25,7 @@
             <com.facebook.ads.NativeAdLayout
                 adId="@{AdsManager.NATIVE_BANNER_ID_4}"
                 showAdWithSomeDelay="@{300}"
-                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                showNativeAd="@{FBRemoteConfig.newInstance().adsEnabled}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="@dimen/padding_large"

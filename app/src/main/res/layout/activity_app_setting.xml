@@ -18,6 +18,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/setting_background"
         tools:context=".ui.about_app.AboutAppActivity">
 
         <androidx.core.widget.NestedScrollView
@@ -28,6 +29,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
+            android:splitMotionEvents="false"
             app:applyTopBottomPaddingInset="@{appSettingViewModel.isEdgeToEdgeEnabled}">
 
             <LinearLayout
@@ -35,137 +37,201 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/AppTheme.SmallTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="65dp"
-                    android:padding="@dimen/padding_medium"
-                    android:text="@string/personalize"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary" />
-
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.openChooseThemeDialog()}"
-                    app:icon="@drawable/ic_outline_theme_24"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showIconBackground="false"
-                    app:subTitle="@{appSettingViewModel.themeValue}"
-                    app:title="Theme"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold" />
+                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/setting_card_elevation">
 
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:padding="@dimen/padding_medium"
+                            android:text="@string/personalize"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.openChooseThemeDialog()}"
+                            app:showIconBackground="false"
+                            app:subTitle="@{appSettingViewModel.themeValue}"
+                            app:title="Theme"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleWindowAnimation()}"
+                            app:checked="@{appSettingViewModel.windowAnimValue}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="true"
+                            app:subTitle="Animate when switching from one window to another"
+                            app:title="Window Animation (Beta)"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
+
+                            app:checked="@{appSettingViewModel.edgeToEdgeValue}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="true"
+                            app:subTitle="Immersive mode"
+                            app:title="Full Screen (Edge to Edge)"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleWindowAnimation()}"
-                    app:checked="@{appSettingViewModel.windowAnimValue}"
-                    app:icon="@drawable/ic_animation_outline"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showIconBackground="false"
-                    app:showRadioButton="true"
-                    app:subTitle="Animate when switching from one window to another"
-                    app:title="Window Animation (Beta)"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
+                    android:layout_marginTop="@dimen/margin_large"
+                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/setting_card_elevation">
 
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:padding="@dimen/padding_medium"
+                            android:text="@string/notification"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleDailyWordNotification()}"
+
+                            app:checked="@{appSettingViewModel.dailyWordNotificationValue}"
+                            app:showRadioButton="true"
+                            app:subTitle="Receive notification when word of the day is available"
+                            app:title="Daily Word Notification"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_extra_large"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleReminderNotification()}"
+
+                            app:checked="@{appSettingViewModel.reminderNotificationValue}"
+                            app:showRadioButton="true"
+                            app:subTitle="Receive a reminding notification"
+                            app:title="Reminder Notification"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
-                    app:checked="@{appSettingViewModel.edgeToEdgeValue}"
-                    app:icon="@drawable/ic_baseline_fullscreen_24"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showIconBackground="false"
-                    app:showRadioButton="true"
-                    app:subTitle="Immersive mode"
-                    app:title="Full Screen (Edge to Edge)"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
+                    android:layout_marginTop="@dimen/margin_large"
+                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/setting_card_elevation">
 
-                <TextView
-                    style="@style/AppTheme.SmallTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="65dp"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:padding="@dimen/padding_medium"
-                    android:text="@string/notification"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleDailyWordNotification()}"
-                    app:checked="@{appSettingViewModel.dailyWordNotificationValue}"
-                    app:icon="@drawable/ic_notifications_none_black_24dp"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showRadioButton="true"
-                    app:subTitle="Receive notification when word of the day is available"
-                    app:title="Daily Word Notification"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:padding="@dimen/padding_medium"
+                            android:text="@string/other"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimary" />
 
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToFacingNotificationIssue()}"
+                            app:onLongClick="@{()->appSettingViewModel.settingUseCase.copyFirebaseTokenId()}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="false"
+                            app:subTitle="Not receiving notifications, fix it yourself"
+                            app:title="Facing Notification Issue?"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
 
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.toggleReminderNotification()}"
-                    app:checked="@{appSettingViewModel.reminderNotificationValue}"
-                    app:icon="@drawable/ic_outline_notifications_active_24"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showRadioButton="true"
-                    app:subTitle="Receive a reminding notification"
-                    app:title="Reminder Notification"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
 
-                <TextView
-                    style="@style/AppTheme.SmallTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="65dp"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:padding="@dimen/padding_medium"
-                    android:text="@string/other"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary" />
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToAbout()}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="false"
+                            app:subTitle="Links, developer, license, others"
+                            app:title="About"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
 
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToFacingNotificationIssue()}"
-                    app:icon="@drawable/ic_round_report_problem_24"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:onLongClick="@{()->appSettingViewModel.settingUseCase.copyFirebaseTokenId()}"
-                    app:showIconBackground="false"
-                    app:showRadioButton="false"
-                    app:subTitle="Not receiving notifications, fix it yourself"
-                    app:title="Facing Notification Issue?"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
-
-                <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToAbout()}"
-                    app:icon="@drawable/ic_info_outline_black_24dp"
-                    app:iconColorTint="@color/app_icon_tint"
-                    app:showIconBackground="false"
-                    app:showRadioButton="false"
-                    app:subTitle="Links, developer, license, others"
-                    app:title="About"
-                    app:titlePaddingStart="@dimen/margin_small"
-                    app:titleStyle="bold"
-                    app:titleTextSize="@dimen/text_sub_title" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
@@ -177,15 +243,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
-            app:applyTopPaddingInset="@{appSettingViewModel.isEdgeToEdgeEnabled}"
-            app:liftOnScroll="true"
-            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+            app:applyTopPaddingInset="@{appSettingViewModel.isEdgeToEdgeEnabled}">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?android:attr/windowBackground">
+                android:layout_height="?attr/actionBarSize">
 
                 <TextView
                     style="@style/ToolbarTitleTextStyle"

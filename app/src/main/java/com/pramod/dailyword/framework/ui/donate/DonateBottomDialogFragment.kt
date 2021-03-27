@@ -14,15 +14,20 @@ import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityDonateBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DonateBottomDialogFragment :
     ExpandingBottomSheetDialogFragment<ActivityDonateBinding>(R.layout.activity_donate) {
+
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
 
     override fun getBottomSheetBehaviorView(): View {
         return binding.cardBottomSheet
@@ -73,6 +78,7 @@ class DonateBottomDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         applyBottomInsetToScrollView()
+        loadLottieAnimationFileFromUrl()
         binding.donateRecyclerView.adapter = donateItemAdapter
         donateItemAdapter.submitList(viewModel.donateItemList)
         binding.nestedScrollView.setOnScrollChangeListener(
@@ -82,6 +88,12 @@ class DonateBottomDialogFragment :
                 Log.i(TAG, "onViewCreated: " + bottomSheetBehavior.isDraggable)
             })
         setMessageObserver()
+    }
+
+    private fun loadLottieAnimationFileFromUrl() {
+        binding.lottieThankYou.setAnimationFromUrl(
+            fbRemoteConfig.getThankYouLottieFileUrl()
+        )
     }
 
     private fun applyBottomInsetToScrollView() {

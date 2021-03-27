@@ -43,6 +43,9 @@ android {
         buildConfigField("String", "TERM_AND_CONDITION", endpointProperties['TERM_AND_CONDITION'])
         buildConfigField("String", "GET_PUBLIC_IP", endpointProperties['GET_PUBLIC_IP'])
         buildConfigField("String", "GET_IP_DETAILS", endpointProperties['GET_IP_DETAILS'])
+        buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
+
+        buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
         /**
          * End
          */

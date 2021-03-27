@@ -32,3 +32,14 @@ fun convertNumberRangeToAnotherRangeFromFloat(
             (newRange.second - newRange.first) +
             newRange.first).toInt()
 }
+
+fun convertNumberRangeToAnotherRangeFromFloatToFloat(
+    oldValue: Float,
+    oldRange: Pair<Float, Float>,
+    newRange: Pair<Float, Float>
+): Float {
+
+    return (((oldValue - oldRange.first) / (oldRange.second - oldRange.first)) *
+            (newRange.second - newRange.first) +
+            newRange.first)
+}

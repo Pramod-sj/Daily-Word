@@ -23,8 +23,10 @@ class FBRemoteConfig {
 
         const val REMOTE_CONFIG_KEY_ADS = "ads"
 
+        const val REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL = "lottie_donate_page_thank_you_url"
+
         @JvmStatic
-        fun getInstance(): FBRemoteConfig = FBRemoteConfig()
+        fun newInstance(): FBRemoteConfig = FBRemoteConfig()
     }
 
     init {
@@ -47,6 +49,14 @@ class FBRemoteConfig {
             return BuildConfig.API_BASE_URL
         }
         return baseUrl
+    }
+
+    fun getThankYouLottieFileUrl(): String {
+        val url = remoteConfig.getString(REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL)
+        if (url.isEmpty() || url.isBlank()) {
+            return BuildConfig.URL_LOTTIE_THANK_YOU
+        }
+        return url
     }
 
 

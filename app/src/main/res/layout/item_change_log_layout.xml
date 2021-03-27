@@ -45,11 +45,10 @@
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{changes.releaseName}"
-            android:textColor="@color/textColor_highEmphasis" />
+            android:text="@{changes.releaseName}" />
 
         <TextView
-            style="@style/AppTheme.SubTitleTextStyle"
+            style="@style/AppTheme.SmallTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{changes.getFormattedChanges()}" />

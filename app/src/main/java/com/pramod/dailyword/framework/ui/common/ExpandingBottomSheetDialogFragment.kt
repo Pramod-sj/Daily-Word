@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.ui.common
 
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.*
 import androidx.annotation.FloatRange
 import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -21,6 +23,7 @@ import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.exts.configStatusBar
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
+import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRange
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeFromFloat
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeToFloat
@@ -35,6 +38,23 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     abstract fun getBottomSheetBehaviorView(): View
+
+    /**
+     * override this method and return false when you don't want to stop bottom sheet dragging when
+     * dialog is in expanded state
+     * this method is returning true because to fix child view scrolling issue
+     */
+    open fun lockBottomSheetDragWhenExpanded(): Boolean {
+        return true
+    }
+
+    /**
+     * bottom sheet dialog opening delay (in millis)
+     * default value is 300ms
+     */
+    open fun getInitialDelay(): Long {
+        return 300
+    }
 
     /**
      * close to 0 less than half expanded i.e. covering less screen
@@ -92,7 +112,14 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
         dismissWhenClickOutside()
         binding.root.postDelayed({
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        }, 300)
+        }, getInitialDelay())
+    }
+
+    private fun insertHorizontalRule() {
+        val horizontalRule = AppCompatImageView(requireContext());
+        horizontalRule.setImageResource(R.drawable.ic_round_horizontal_rule_24)
+        horizontalRule.imageTintList =
+            ColorStateList.valueOf(requireActivity().getContextCompatColor(R.color.app_icon_tint))
     }
 
 
@@ -125,7 +152,8 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
                 dismiss()
             }
 
-            bottomSheetBehavior.isDraggable = newState != BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.isDraggable =
+                !lockBottomSheetDragWhenExpanded() && newState != BottomSheetBehavior.STATE_EXPANDED
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 if (!ThemeManager.isNightModeActive(requireContext())) {

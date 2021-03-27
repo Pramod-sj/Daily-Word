@@ -35,7 +35,6 @@
     <color name="bottomSheetDialogNavigationBarColor">#282828</color>
 
 
-
     <!-- Start Donate Item Colors -->
     <color name="color_cookie">@color/orange_200</color>
     <color name="color_coffee">@color/green_200</color>
@@ -50,12 +49,15 @@
     <color name="social_media_background_color">#20ACABAB</color>
     <color name="social_media_stroke_color">@color/grey_extra_dark</color>
 
-    <color name="stroke_about_cards">@color/grey_very_extra_dark</color>
+    <color name="stroke_about_cards">#3E3D3D</color>
 
     <!--dark window background color-->
-    <color name="windowBackgroundColor">#191919</color>
+    <color name="windowBackgroundColor">#202020</color>
     <!-- end -->
 
     <!--colorSurface -->
     <color name="colorSurface">#161616</color>
+
+    <color name="setting_stroke">#302F2F</color>
+    <color name="setting_background">#222222</color>
 </resources>

@@ -87,6 +87,11 @@ class ChangelogDialogFragment :
         )
     }
 
+    override fun onStateChanged(bottomSheet: View, newState: Int) {
+        super.onStateChanged(bottomSheet, newState)
+        bottomSheetBehavior.isDraggable = !binding.recyclerviewChangeLogs.canScrollVertically(-1)
+    }
+
     companion object {
         val TAG = ChangelogDialogFragment::class.java.simpleName
 

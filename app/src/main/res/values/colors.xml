@@ -168,4 +168,7 @@
     <color name="social_media_stroke_color">#ACABAB</color>
 
     <color name="stroke_about_cards">@color/grey_light</color>
+
+    <color name="setting_background">#F6F7F8</color>
+    <color name="setting_stroke">@color/grey_light</color>
 </resources>

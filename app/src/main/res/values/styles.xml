@@ -22,7 +22,7 @@
             @drawable/background_navigation_item_selector
         </item>
 
-        <item name="android:fontFamily">@font/opensans_regular</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
 
     </style>
 
@@ -151,6 +151,7 @@
 
     <style name="ToolbarTitleTextStyle" parent="AppTheme.Header5TextStyle.Bold">
         <item name="android:textColor">@color/textColor_highEmphasis</item>
+        <item name="fontFamily">@font/lato_black</item>
     </style>
 
     <style name="FAB.Extended" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
@@ -256,5 +257,19 @@
         <item name="cornerSizeTopRight">15dp</item>
     </style>
 
+    <style name="HomeCardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+    </style>
+
+    <style name="NavigationItemNoRipple">
+        <item name="android:colorControlHighlight">@android:color/transparent</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.NavItem.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 
 </resources>

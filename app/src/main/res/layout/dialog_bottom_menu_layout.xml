@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/windowBackgroundColor"
+            app:cardElevation="0dp"
+            app:cardPreventCornerOverlap="false"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:shapeAppearanceOverlay="@style/FullScreenBottomSheetShape">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtView_appBar"
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:gravity="center"
+                    android:text="Main menu" />
+
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/navigationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:splitMotionEvents="false"
+                    android:theme="@style/NavigationItemNoRipple"
+                    app:elevation="0dp"
+                    app:itemShapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NavItem.Rounded"
+                    app:itemShapeFillColor="@color/navigation_item_color"
+                    app:itemShapeInsetEnd="@dimen/margin_medium"
+                    app:itemShapeInsetStart="@dimen/margin_medium"
+                    app:menu="@menu/home_more_menu" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

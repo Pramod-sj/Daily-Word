@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.InverseBindingAdapter
@@ -156,6 +157,7 @@ class ITSCustomLayout : LinearLayout {
         applyMaxLineSubTitle()
         setIcon(icon)
         shouldShowSwitch(showSwitch)
+        applyMarginToTextViewIfSwitchAndIconHidden()
     }
 
     private fun applyMaxLineSubTitle() {
@@ -252,7 +254,7 @@ class ITSCustomLayout : LinearLayout {
             customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.VISIBLE
             shouldShowBackgroundTint()
         } else {
-            customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.INVISIBLE
+            customItsLayoutBinding.itsFrameLayoutImageIcon.visibility = View.GONE
         }
         invalidate()
     }
@@ -263,6 +265,16 @@ class ITSCustomLayout : LinearLayout {
             //setSwitchClickListener()
         } else {
             customItsLayoutBinding.itsSwitch.visibility = View.GONE
+        }
+    }
+
+    private fun applyMarginToTextViewIfSwitchAndIconHidden() {
+        if (!showSwitch && iconTintResId == -1) {
+            customItsLayoutBinding.itLinearLayoutTitleSubTitle
+                .updatePadding(
+                    top = CommonUtils.dpToPixel(context, 10f).toInt(),
+                    bottom = CommonUtils.dpToPixel(context, 10f).toInt()
+                )
         }
     }
 
