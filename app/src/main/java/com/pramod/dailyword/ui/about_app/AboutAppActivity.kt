@@ -3,23 +3,16 @@ package com.pramod.dailyword.ui.about_app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.transition.platform.MaterialSharedAxis
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAboutAppBinding
-import com.pramod.dailyword.db.remote.EndPoints
 import com.pramod.dailyword.helper.*
-import com.pramod.dailyword.helper.WindowPrefManager
 import com.pramod.dailyword.ui.BaseActivity
-import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.ui.change_logs.ChangelogActivity
-import com.pramod.dailyword.util.CommonUtils
+import com.pramod.dailyword.ui.donate.DonateActivity
 import com.pramod.dailyword.util.shareApp
 
 class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel>() {
@@ -106,11 +99,11 @@ class AboutAppActivity : BaseActivity<ActivityAboutAppBinding, AboutAppViewModel
 
         mBinding.setVariable(BR.otherLinkNavigate, object : OtherLinkNavigate {
             override fun showTermsAndService() {
-                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+                showWebViewDialog(BuildConfig.TERM_AND_CONDITION)
             }
 
             override fun showPrivacyPolicy() {
-                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+                showWebViewDialog(BuildConfig.PRIVACY_POLICY)
             }
 
             override fun showOpenSourceLibs() {

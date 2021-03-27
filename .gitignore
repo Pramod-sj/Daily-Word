@@ -10,3 +10,5 @@
 gradlew.bat
 gradlew
 gradle/wrapper
+/endpoint.properties
+/key.properties

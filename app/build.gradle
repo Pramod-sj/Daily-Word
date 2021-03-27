@@ -5,6 +5,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+
+def endPointPropertiesFile = rootProject.file("endpoint.properties")
+def endpointProperties = new Properties()
+endpointProperties.load(new FileInputStream(endPointPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -17,6 +22,18 @@ android {
         versionName "1.4.0-Stable"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", endpointProperties['BASE_URL'])
+        buildConfigField("String", "API_BASE_URL", endpointProperties['API_BASE_URL'])
+        buildConfigField("String", "WORLD_TIME_BASE_URL", endpointProperties['WORLD_TIME_BASE_URL'])
+        buildConfigField("String", "GET_WORD_OF_THE_DAY", endpointProperties['GET_WORD_OF_THE_DAY'])
+        buildConfigField("String", "GET_WORDS", endpointProperties['GET_WORDS'])
+        buildConfigField("String", "GET_RANDOM_WORD", endpointProperties['GET_RANDOM_WORD'])
+        buildConfigField("String", "PRIVACY_POLICY", endpointProperties['PRIVACY_POLICY'])
+        buildConfigField("String", "TERM_AND_CONDITION", endpointProperties['TERM_AND_CONDITION'])
+        buildConfigField("String", "GET_PUBLIC_IP", endpointProperties['GET_PUBLIC_IP'])
+        buildConfigField("String", "GET_IP_DETAILS", endpointProperties['GET_IP_DETAILS'])
+        buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
     }
 
     buildTypes {

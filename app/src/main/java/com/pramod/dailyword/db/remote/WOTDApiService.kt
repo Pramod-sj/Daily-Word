@@ -1,5 +1,6 @@
 package com.pramod.dailyword.db.remote
 
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.db.model.ApiResponse
 import com.pramod.dailyword.db.model.WordOfTheDay
 import retrofit2.Call
@@ -8,15 +9,15 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WOTDApiService {
-    @GET(EndPoints.GET_WORD_OF_THE_DAY)
+    @GET(BuildConfig.GET_WORD_OF_THE_DAY)
     suspend fun getWordOfTheDay(): ApiResponse<WordOfTheDay>
 
-    @GET(EndPoints.GET_WORDS)
+    @GET(BuildConfig.GET_WORDS)
     suspend fun getWords(
         @Query("startFrom") startFrom: String? = null,
         @Query("limit") limit: Int
     ): ApiResponse<List<WordOfTheDay>>
 
-    @GET(EndPoints.GET_RANDOM_WORD)
+    @GET(BuildConfig.GET_RANDOM_WORD)
     suspend fun getRandomWord(): ApiResponse<WordOfTheDay>
 }

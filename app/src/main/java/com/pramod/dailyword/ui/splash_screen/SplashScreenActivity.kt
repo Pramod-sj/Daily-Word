@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
-import com.pramod.dailyword.db.remote.EndPoints
 import com.pramod.dailyword.firebase.FBTopicSubscriber
 import com.pramod.dailyword.helper.PrefManager
 import com.pramod.dailyword.helper.ThemeManager
@@ -99,14 +99,14 @@ class SplashScreenActivity : BaseActivity<ActivitySplashScreenBinding, SplashScr
         val termsAndConditionLink = Pair(
             resources.getString(R.string.term_and_condition),
             View.OnClickListener {
-                showWebViewDialog(EndPoints.TERM_AND_CONDITION)
+                showWebViewDialog(BuildConfig.TERM_AND_CONDITION)
             }
         )
 
         val privacyPolicyLink = Pair(
             resources.getString(R.string.privacy_policy),
             View.OnClickListener {
-                showWebViewDialog(EndPoints.PRIVACY_POLICY)
+                showWebViewDialog(BuildConfig.PRIVACY_POLICY)
             }
         )
         accept_condition_textView.showLinks(termsAndConditionLink, privacyPolicyLink)

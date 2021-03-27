@@ -4,11 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
-import com.pramod.dailyword.db.remote.WOTDApiService
-import com.pramod.dailyword.db.remote.EndPoints
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.db.remote.IPService
 import com.pramod.dailyword.db.remote.TimeApiService
+import com.pramod.dailyword.db.remote.WOTDApiService
 import com.pramod.dailyword.firebase.FBRemoteConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,7 +27,7 @@ class NetworkUtils {
 
         fun getServerTimeApiService(): TimeApiService {
             val client = Retrofit.Builder()
-                .baseUrl(EndPoints.WORLD_TIME_BASE_URL)
+                .baseUrl(BuildConfig.WORLD_TIME_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -37,7 +36,7 @@ class NetworkUtils {
 
         fun getIPService(): IPService {
             val client = Retrofit.Builder()
-                .baseUrl(EndPoints.WOTD_API_BASE_URL)
+                .baseUrl(BuildConfig.API_BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
