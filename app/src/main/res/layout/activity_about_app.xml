@@ -126,8 +126,7 @@
                         android:elevation="3.1dp"
                         app:civ_border_color="@color/black"
                         app:civ_border_width="1dp"
-                        app:loadImageUri="@{@string/dev_git_profile}"
-                        app:placeHolderDrawable="@{@drawable/dev_profile}" />
+                        app:srcCompat="@drawable/dev_profile"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/card_dev_info"
