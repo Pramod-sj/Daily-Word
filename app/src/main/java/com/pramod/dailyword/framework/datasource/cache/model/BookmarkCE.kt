@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class BookmarkCE(
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    val bookmarkId: Int?,
+    val bookmarkId: Int,
 
     val bookmarkedWord: String?,
 

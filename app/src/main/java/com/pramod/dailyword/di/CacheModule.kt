@@ -1,7 +1,6 @@
 package com.pramod.dailyword.di
 
 import android.content.Context
-import androidx.room.Room
 import com.pramod.dailyword.framework.datasource.cache.AppDB
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkCacheService
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
@@ -33,14 +32,7 @@ object CacheModule {
     @Singleton
     @Provides
     fun provideDailyWordDatabase(@ApplicationContext context: Context): AppDB {
-        return Room
-            .databaseBuilder(
-                context,
-                AppDB::class.java,
-                AppDB.APP_DB_NAME
-            )
-            .fallbackToDestructiveMigration()
-            .build()
+        return AppDB.getInstance(context)
     }
 
     @JvmStatic
@@ -69,8 +61,8 @@ object CacheModule {
     @Singleton
     @Provides
     fun provideBookmarkCacheService(
-        bookmarkDao: BookmarkDao,
-        bookmarkCEMapper: BookmarkCEMapper
+            bookmarkDao: BookmarkDao,
+            bookmarkCEMapper: BookmarkCEMapper
     ): BookmarkCacheService {
         return BookmarkCacheServiceImpl(bookmarkDao, bookmarkCEMapper)
     }
@@ -87,8 +79,8 @@ object CacheModule {
     @Singleton
     @Provides
     fun provideBookmarkedWordCacheService(
-        bookmarkedWordDao: BookmarkedWordDao,
-        bookmarkedWordCEMapper: BookmarkedWordCEMapper
+            bookmarkedWordDao: BookmarkedWordDao,
+            bookmarkedWordCEMapper: BookmarkedWordCEMapper
     ): BookmarkedWordCacheService {
         return BookmarkedWordCacheServiceImpl(bookmarkedWordDao, bookmarkedWordCEMapper)
     }
@@ -103,7 +95,7 @@ object CacheModule {
     @Provides
     fun provideSeenCacheService(seenDao: SeenDao, seenCEMapper: SeenCEMapper): SeenCacheService {
         return SeenCacheServiceImpl(
-            seenDao, seenCEMapper
+                seenDao, seenCEMapper
         )
     }
 

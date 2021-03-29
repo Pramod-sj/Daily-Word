@@ -18,9 +18,9 @@ import com.pramod.dailyword.framework.datasource.cache.model.WordCE
 
 @TypeConverters(ListConverter::class)
 @Database(
-    entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
-    version = 9,
-    exportSchema = false
+        entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
+        version = 9,
+        exportSchema = false
 )
 abstract class AppDB : RoomDatabase() {
 
@@ -34,14 +34,12 @@ abstract class AppDB : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(AppDB::class) {
                     INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDB::class.java,
-                        APP_DB_NAME
+                            context.applicationContext,
+                            AppDB::class.java,
+                            APP_DB_NAME
 
-                    ).addMigrations(migration_6_7)
-                        .addMigrations(migration_7_8)
-                        .addMigrations(migration_8_9)
-                        .build()
+                    ).addMigrations(migration_6_7, migration_7_8, migration_8_9)
+                            .build()
                     return INSTANCE!!
                 }
             }
@@ -76,17 +74,33 @@ abstract class AppDB : RoomDatabase() {
 
         private object migration_6_7 : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN synonyms TEXT")
-                database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN antonyms TEXT")
+
+                try {
+                    database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN synonyms TEXT")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                try {
+                    database.execSQL("ALTER TABLE WordOfTheDay ADD COLUMN antonyms TEXT")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
             }
         }
 
         private object migration_7_8 : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
+
                 database.execSQL("ALTER TABLE Bookmark RENAME TO old_Bookmark")
-                database.execSQL("CREATE TABLE Bookmark (bookmarkId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bookmarkedWord TEXT NOT NULL, bookmarkedAt INTEGER)")
-                database.execSQL("INSERT INTO Bookmark SELECT null,bookmarkedWord,bookmarkedAt FROM old_Bookmark")
+
+                database.execSQL("CREATE TABLE Bookmark (bookmarkId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bookmarkedWord TEXT, bookmarkedAt INTEGER)")
+
+                database.execSQL("INSERT INTO Bookmark (bookmarkedWord,bookmarkedAt) SELECT bookmarkedWord,bookmarkedAt FROM old_Bookmark")
+
                 database.execSQL("DROP TABLE old_Bookmark")
+
             }
         }
 
@@ -94,16 +108,18 @@ abstract class AppDB : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
 
                 database.execSQL("ALTER TABLE WordOfTheDay RENAME TO old_WordOfTheDay")
-                database.execSQL("CREATE TABLE Word (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,wordColor INTEGER,wordDesaturatedColor INTEGER)")
-                database.execSQL("INSERT INTO WordOfTheDay SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor FROM old_WordOfTheDay")
 
-                database.execSQL("CREATE TABLE Seen (seenWord TEXT PRIMARY KEY NOT NULL,seenAt INTEGER)")
+                database.execSQL("CREATE TABLE Word (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,attribute TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,wordColor INTEGER NOT NULL,wordDesaturatedColor INTEGER NOT NULL,synonyms TEXT,antonyms TEXT)")
+
+                database.execSQL("INSERT INTO Word (word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms) SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms FROM old_WordOfTheDay")
+
+                database.execSQL("CREATE TABLE Seen (seenWord TEXT PRIMARY KEY NOT NULL,seenAt INTEGER NOT NULL)")
+
                 database.execSQL("INSERT INTO Seen SELECT word,seenAtTimeInMillis FROM old_WordOfTheDay WHERE isSeen=1")
 
                 database.execSQL("ALTER TABLE Bookmark ADD COLUMN bookmarkSeenAt INTEGER")
 
                 database.execSQL("DROP TABLE old_WordOfTheDay")
-
 
             }
         }
