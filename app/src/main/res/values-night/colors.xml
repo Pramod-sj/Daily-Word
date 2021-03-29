@@ -59,5 +59,6 @@
     <color name="colorSurface">#161616</color>
 
     <color name="setting_stroke">#302F2F</color>
-    <color name="setting_background">#222222</color>
+    <color name="setting_background">#202020</color>
+    <color name="setting_card_color">#181818</color>
 </resources>

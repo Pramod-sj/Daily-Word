@@ -40,21 +40,22 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    android:layout_marginBottom="@dimen/margin_large"
                     app:cardCornerRadius="0dp"
                     app:cardElevation="@dimen/setting_card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/setting_card_color"
                         android:orientation="vertical">
 
                         <TextView
                             style="@style/AppTheme.SmallTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_medium"
                             android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
                             android:padding="@dimen/padding_medium"
                             android:text="@string/personalize"
                             android:textAllCaps="true"
@@ -118,12 +119,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    android:layout_marginBottom="@dimen/margin_large"
                     app:cardCornerRadius="0dp"
                     app:cardElevation="@dimen/setting_card_elevation">
 
                     <LinearLayout
+                        android:background="@color/setting_card_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -143,7 +144,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.settingUseCase.toggleDailyWordNotification()}"
-
                             app:checked="@{appSettingViewModel.dailyWordNotificationValue}"
                             app:showRadioButton="true"
                             app:subTitle="Receive notification when word of the day is available"
@@ -178,14 +178,14 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    app:cardBackgroundColor="?android:attr/windowBackground"
+                    android:layout_marginBottom="@dimen/margin_large"
                     app:cardCornerRadius="0dp"
                     app:cardElevation="@dimen/setting_card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/setting_card_color"
                         android:orientation="vertical">
 
                         <TextView

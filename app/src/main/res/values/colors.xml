@@ -171,4 +171,5 @@
 
     <color name="setting_background">#F6F7F8</color>
     <color name="setting_stroke">@color/grey_light</color>
+    <color name="setting_card_color">@color/white</color>
 </resources>
