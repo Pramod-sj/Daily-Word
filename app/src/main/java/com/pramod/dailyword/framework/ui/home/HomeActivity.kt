@@ -38,6 +38,7 @@ import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.*
+import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
@@ -54,8 +55,6 @@ import javax.inject.Inject
 @ExperimentalPagingApi
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.activity_home) {
 
-
-    
 
     override val viewModel: HomeViewModel by viewModels()
 
@@ -115,17 +114,52 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun loadBackgroundImage() {
         Glide.with(this)
-            .load(BuildConfig.HOME_BACKGROUND_URL)
-            .centerCrop()
-            .into(binding.homeImageViewBuildings)
+                .load(BuildConfig.HOME_BACKGROUND_URL)
+                .centerCrop()
+                .into(binding.homeImageViewBuildings)
     }
 
     private fun initToolbar() {
-        setUpToolbar(binding.toolbar, null, false)
+        //setUpToolbar(binding.toolbar, null, false)
         viewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.setTitle(CommonUtils.getFancyAppName(this))
         }, 2000)
+        binding.customToolbar.buttonToolbarNavigation.setImageResource(R.drawable.ic_vocabulary_24dp)
+        binding.customToolbar.buttonToolbarOptionMenu.setImageResource(R.drawable.ic_more_vert_black_24dp)
+        binding.customToolbar.buttonToolbarOptionMenu.setOnClickListener {
+
+            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+
+            val bottomMenuDialog = BottomMenuDialog
+                    .show(supportFragmentManager)
+            bottomMenuDialog.bottomMenuItemClickListener =
+                    object : BottomMenuDialog.BottomMenuItemClickListener {
+                        override fun onMenuItemClick(menuItem: MenuItem) {
+                            when (menuItem.itemId) {
+                                R.id.menu_settings -> {
+                                    openSettingPage()
+                                }
+                                R.id.menu_donate -> {
+                                    donateBottomDialogFragment = DonateBottomDialogFragment()
+                                    donateBottomDialogFragment?.show(
+                                            supportFragmentManager,
+                                            DonateBottomDialogFragment.TAG
+                                    )
+                                }
+                                R.id.menu_share -> {
+                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
+                                            ?.let { bitmap ->
+                                                shareApp(bitmap = bitmap)
+                                            } ?: shareApp()
+                                }
+                            }
+                        }
+                    }
+        }
+        viewModel.title().observe(this) {
+            CommonBindindAdapters.switchingText(binding.customToolbar.txtViewToolbarTitle,it)
+        }
     }
 
     private fun handleBadgeVisibility() {
@@ -187,12 +221,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun showChangelogActivity() {
         viewModel.showChangelogActivity
-            .asLiveData(Dispatchers.IO)
-            .observe(this) { show ->
-                if (show) {
-                    ChangelogDialogFragment.show(supportFragmentManager)
+                .asLiveData(Dispatchers.IO)
+                .observe(this) { show ->
+                    if (show) {
+                        ChangelogDialogFragment.show(supportFragmentManager)
+                    }
                 }
-            }
 
     }
 
@@ -200,13 +234,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (prefManager.getShowInitailCreditDialogStatus()) {
             prefManager.changeShowInitialCreditDialogStatus(false)
             showBottomSheet(
-                "App Content Credit",
-                resources.getString(R.string.merriam_webster_credit_text),
-                positiveText = "Go to Merriam-Webster",
-                positiveClickCallback = {
-                    openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
-                },
-                negativeText = "Close"
+                    "App Content Credit",
+                    resources.getString(R.string.merriam_webster_credit_text),
+                    positiveText = "Go to Merriam-Webster",
+                    positiveClickCallback = {
+                        openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
+                    },
+                    negativeText = "Close"
             ) {
                 //prompt for auto start settings when credit dialog is dimissed
                 promptAutoStart()
@@ -219,29 +253,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun showNotification(word: Word) {
         val notification = notificationHelper.createNotification(
-            title = "Welcome to Daily Word!",
-            body = "Your first word of the day is '${word.word}'",
-            cancelable = true,
-            pendingIntent = PendingIntent.getActivity(
-                applicationContext,
-                NotificationHelper.generateUniqueNotificationId(),
-                Intent(this, HomeActivity::class.java).apply {
-                    putExtra(
-                        FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
-                        Gson().toJson(
-                            FBMessageService.MessagePayload(
-                                date = word.date!!,
-                                deepLink = FBMessageService.DEEP_LINK_TO_WORD_DETAILED
+                title = "Welcome to Daily Word!",
+                body = "Your first word of the day is '${word.word}'",
+                cancelable = true,
+                pendingIntent = PendingIntent.getActivity(
+                        applicationContext,
+                        NotificationHelper.generateUniqueNotificationId(),
+                        Intent(this, HomeActivity::class.java).apply {
+                            putExtra(
+                                    FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
+                                    Gson().toJson(
+                                            FBMessageService.MessagePayload(
+                                                    date = word.date!!,
+                                                    deepLink = FBMessageService.DEEP_LINK_TO_WORD_DETAILED
+                                            )
+                                    )
                             )
-                        )
-                    )
-                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                },
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+                            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        },
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                )
         )
         notificationHelper.showNotification(
-            notification = notification
+                notification = notification
         )
 
     }
@@ -253,7 +287,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 if (!it.isSeen) {
                     viewModel.updateWordSeenStatus(it)
                     if (PrefManager.getInstance(this).getAppLaunchCount() == 1
-                        && !viewModel.firstNotificationShown
+                            && !viewModel.firstNotificationShown
                     ) {
                         viewModel.firstNotificationShown = true
                         showNotification(it)
@@ -269,14 +303,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun intentToWordDetail(view: View? = null, word: Word) {
         val option = view?.let {
             ActivityOptions.makeSceneTransitionAnimation(
-                this,
-                Pair(it, word.date!!)
+                    this,
+                    Pair(it, word.date!!)
             )
         }
         openWordDetailsPage(
-            word.date!!,
-            option,
-            windowAnimPrefManager.isEnabled()
+                word.date!!,
+                option,
+                windowAnimPrefManager.isEnabled()
         )
     }
 
@@ -294,8 +328,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             Log.i(TAG, "shouldShowRatingDialog: succeed: done")
                         } else {
                             Log.i(
-                                TAG,
-                                "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
+                                    TAG,
+                                    "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
                             )
                         }
                     }
@@ -329,27 +363,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
-                    title = "Auto Start",
-                    message =
-                    if (!autoStartPrefManager.isClickedOnSetting())
-                        "Please enable auto start else notification feature won't work properly!"
-                    else
-                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
-                    positiveText = "Setting",
-                    positiveClickCallback = {
-                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
-                        }
-                        autoStartPrefManager.clickedOnSetting()
-                    },
-                    negativeText = "Cancel",
-                    negativeClickCallback = {
+                        title = "Auto Start",
+                        message =
+                        if (!autoStartPrefManager.isClickedOnSetting())
+                            "Please enable auto start else notification feature won't work properly!"
+                        else
+                            "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                        positiveText = "Setting",
+                        positiveClickCallback = {
+                            if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                                viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                            }
+                            autoStartPrefManager.clickedOnSetting()
+                        },
+                        negativeText = "Cancel",
+                        negativeClickCallback = {
 
-                    },
-                    neutralText = "Already Enabled",
-                    neutralClickCallback = {
-                        autoStartPrefManager.clickedOnAlreadyEnabled()
-                    }
+                        },
+                        neutralText = "Already Enabled",
+                        neutralClickCallback = {
+                            autoStartPrefManager.clickedOnAlreadyEnabled()
+                        }
                 )
             }
         }
@@ -365,13 +399,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun deepLinkNotification() {
         val messagePayload: FBMessageService.MessagePayload? =
-            Gson().fromJson(
-                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
-                FBMessageService.MessagePayload::class.java
-            )
+                Gson().fromJson(
+                        intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
+                        FBMessageService.MessagePayload::class.java
+                )
         Log.i(
-            TAG,
-            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
+                TAG,
+                "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
@@ -394,11 +428,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView =
-            NavigationView(this, null, R.style.NavigationItemNoRipple)
+                NavigationView(this, null, R.style.NavigationItemNoRipple)
         navigationView.updatePadding(top = 10, bottom = 15)
         navigationView.overScrollMode = View.OVER_SCROLL_NEVER
         navigationView.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
+                ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
         navigationView.elevation = 0f
         navigationView.inflateMenu(R.menu.home_more_menu)
         navigationView.setNavigationItemSelectedListener {
@@ -409,8 +443,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 R.id.menu_donate -> {
                     donateBottomDialogFragment = DonateBottomDialogFragment()
                     donateBottomDialogFragment?.show(
-                        supportFragmentManager,
-                        DonateBottomDialogFragment.TAG
+                            supportFragmentManager,
+                            DonateBottomDialogFragment.TAG
                     )
                 }
                 R.id.menu_share -> {
@@ -423,8 +457,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             false
         }
         val l = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
         )
         bottomSheetDialog?.setContentView(navigationView, l)
     }
@@ -439,30 +473,30 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             R.id.menu_more -> {
                 item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 val bottomMenuDialog = BottomMenuDialog
-                    .show(supportFragmentManager)
+                        .show(supportFragmentManager)
                 bottomMenuDialog.bottomMenuItemClickListener =
-                    object : BottomMenuDialog.BottomMenuItemClickListener {
-                        override fun onMenuItemClick(menuItem: MenuItem) {
-                            when (menuItem.itemId) {
-                                R.id.menu_settings -> {
-                                    openSettingPage()
-                                }
-                                R.id.menu_donate -> {
-                                    donateBottomDialogFragment = DonateBottomDialogFragment()
-                                    donateBottomDialogFragment?.show(
-                                        supportFragmentManager,
-                                        DonateBottomDialogFragment.TAG
-                                    )
-                                }
-                                R.id.menu_share -> {
-                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
-                                        ?.let { bitmap ->
-                                            shareApp(bitmap = bitmap)
-                                        } ?: shareApp()
+                        object : BottomMenuDialog.BottomMenuItemClickListener {
+                            override fun onMenuItemClick(menuItem: MenuItem) {
+                                when (menuItem.itemId) {
+                                    R.id.menu_settings -> {
+                                        openSettingPage()
+                                    }
+                                    R.id.menu_donate -> {
+                                        donateBottomDialogFragment = DonateBottomDialogFragment()
+                                        donateBottomDialogFragment?.show(
+                                                supportFragmentManager,
+                                                DonateBottomDialogFragment.TAG
+                                        )
+                                    }
+                                    R.id.menu_share -> {
+                                        CommonUtils.viewToBitmap(binding.coordinatorLayout)
+                                                ?.let { bitmap ->
+                                                    shareApp(bitmap = bitmap)
+                                                } ?: shareApp()
+                                    }
                                 }
                             }
                         }
-                    }
 
                 /*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 bottomSheetDialog?.show()*/

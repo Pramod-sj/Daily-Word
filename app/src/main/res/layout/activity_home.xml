@@ -86,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
+                android:visibility="gone"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin">
@@ -118,6 +119,10 @@
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
+
+            <include
+                android:id="@+id/customToolbar"
+                layout="@layout/layout_custom_toolbar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
