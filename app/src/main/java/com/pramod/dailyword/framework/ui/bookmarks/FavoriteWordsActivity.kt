@@ -95,4 +95,8 @@ class FavoriteWordsActivity :
         }
 
     }
+
+    override fun onBackPressed() {
+        finish()
+    }
 }

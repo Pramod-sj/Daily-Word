@@ -111,6 +111,10 @@ class WordListActivity :
         }, 1000)
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     companion object {
         val TAG = WordListActivity::class.java.simpleName
     }
