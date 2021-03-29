@@ -4,11 +4,9 @@ import android.content.Context
 import android.os.Build
 import javax.inject.Inject
 
-class WindowAnimPrefManager @Inject constructor(val context: Context) {
-    private val sharedPreferences =
-        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-    private val editor = sharedPreferences.edit()
-
+class WindowAnimPrefManager @Inject constructor(val context: Context) : BasePreferenceManager(
+    PREFERENCES_NAME, context
+) {
 
     companion object {
         private const val PREFERENCES_NAME = "window_animation_preferences"
@@ -26,13 +24,13 @@ class WindowAnimPrefManager @Inject constructor(val context: Context) {
         ).commit()
     }
 
-    fun isEnabled() = sharedPreferences.getBoolean(
+    fun isEnabled() = sPrefManager.getBoolean(
         KEY_ANIMATION_ENABLED,
         isAtLeastP()
     ) /*false*/
 
 
-    fun liveData() = SPrefBooleanLiveData(sharedPreferences, KEY_ANIMATION_ENABLED, isAtLeastP())
+    fun liveData() = SPrefBooleanLiveData(sPrefManager, KEY_ANIMATION_ENABLED, isAtLeastP())
 
 
 }

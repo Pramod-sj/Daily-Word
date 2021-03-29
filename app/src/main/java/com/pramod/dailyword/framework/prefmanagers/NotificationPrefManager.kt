@@ -3,11 +3,8 @@ package com.pramod.dailyword.framework.prefmanagers
 import android.content.Context
 import javax.inject.Inject
 
-class NotificationPrefManager @Inject constructor(context: Context) {
-
-    private val sharedPreferences =
-        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-    private val editor = sharedPreferences.edit()
+class NotificationPrefManager @Inject constructor(context: Context) :
+    BasePreferenceManager(PREFERENCES_NAME, context) {
 
 
     companion object {
@@ -27,7 +24,7 @@ class NotificationPrefManager @Inject constructor(context: Context) {
     }
 
 
-    fun isDailyWordNotificationEnabled() = sharedPreferences.getBoolean(
+    fun isDailyWordNotificationEnabled() = sPrefManager.getBoolean(
         KEY_DAILY_WORD_NOTIFICATION_ENABLED,
         true
     )
@@ -35,7 +32,7 @@ class NotificationPrefManager @Inject constructor(context: Context) {
 
     fun getDailyWordNotificationEnabledLiveData(): SPrefBooleanLiveData {
         return SPrefBooleanLiveData(
-            sharedPreferences,
+            sPrefManager,
             KEY_DAILY_WORD_NOTIFICATION_ENABLED, true
         )
     }
@@ -49,7 +46,7 @@ class NotificationPrefManager @Inject constructor(context: Context) {
     }
 
 
-    fun isReminderNotificationEnabled() = sharedPreferences.getBoolean(
+    fun isReminderNotificationEnabled() = sPrefManager.getBoolean(
         KEY_REMINDER_NOTIFICATION_ENABLED,
         true
     )
@@ -57,7 +54,7 @@ class NotificationPrefManager @Inject constructor(context: Context) {
 
     fun getReminderNotificationEnabledLiveData(): SPrefBooleanLiveData {
         return SPrefBooleanLiveData(
-            sharedPreferences,
+            sPrefManager,
             KEY_REMINDER_NOTIFICATION_ENABLED, true
         )
     }

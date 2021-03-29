@@ -51,7 +51,6 @@ class SplashScreenViewModel @Inject constructor(
                     }, 2000)
                 } else {
                     Handler().postDelayed({
-
                         goToHomePage()
                     }, 1000)
                 }
@@ -69,7 +68,7 @@ class SplashScreenViewModel @Inject constructor(
 
 
     fun goToHomePage() {
-        prefManager.setIsNewUser(false)
+        prefManager.markUserAsOld()
         navigateToHomePage.value = Event.init(true)
     }
 

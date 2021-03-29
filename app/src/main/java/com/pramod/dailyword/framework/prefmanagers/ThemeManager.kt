@@ -10,10 +10,8 @@ import androidx.lifecycle.map
 import com.pramod.dailyword.framework.util.CommonUtils
 import javax.inject.Inject
 
-class ThemeManager @Inject constructor(context: Context) {
-
-    private val sPref = context.getSharedPreferences(THEME_PREF, Context.MODE_PRIVATE)
-    private val editor = sPref.edit()
+class ThemeManager @Inject constructor(context: Context) :
+    BasePreferenceManager(THEME_PREF, context) {
 
     private val defaultTheme = THEME_MODE_DARK
 
@@ -23,11 +21,11 @@ class ThemeManager @Inject constructor(context: Context) {
     }
 
     fun getThemeMode(): String {
-        return sPref.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
+        return sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
     }
 
     fun liveData(): LiveData<String> =
-        SPrefStringLiveData(sPref, KEY_THEME_MODE, defaultTheme).map {
+        SPrefStringLiveData(sPrefManager, KEY_THEME_MODE, defaultTheme).map {
             return@map it ?: defaultTheme
         }
 
@@ -46,9 +44,9 @@ class ThemeManager @Inject constructor(context: Context) {
                 }
             }
         }
-        Log.i(TAG, "before: applyTheme: "+AppCompatDelegate.getDefaultNightMode())
+        Log.i(TAG, "before: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
         AppCompatDelegate.setDefaultNightMode(mode)
-        Log.i(TAG, "after: applyTheme: "+AppCompatDelegate.getDefaultNightMode())
+        Log.i(TAG, "after: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
 
     }
 
@@ -58,18 +56,18 @@ class ThemeManager @Inject constructor(context: Context) {
         SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
             if (s == KEY_THEME_MODE) {
                 onThemeValueChangedListener?.onThemeValueChanged(
-                    sPref.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
+                    sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
                 )
             }
         }
 
     fun registerListener(onThemeValueChangedListener: OnThemeValueChangedListener) {
         this.onThemeValueChangedListener = onThemeValueChangedListener;
-        sPref.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        sPrefManager.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
     fun unregisterListener() {
-        sPref.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        sPrefManager.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
         this.onThemeValueChangedListener = null;
     }
 

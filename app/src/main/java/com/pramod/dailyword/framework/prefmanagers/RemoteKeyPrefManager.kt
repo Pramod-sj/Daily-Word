@@ -1,20 +1,18 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import android.content.ContextWrapper
 
 /**
  * This pref class is used to store next remote key to be fetch from server for WordPagingRemoteMediator.kt
  */
-class RemoteKeyPrefManager(base: Context) : ContextWrapper(base) {
-    private val sPref = base.getSharedPreferences(PREF_NAME, MODE_PRIVATE)
+class RemoteKeyPrefManager(base: Context) : BasePreferenceManager(PREF_NAME, base) {
 
     fun setNextRemoteKey(nextRemoteKey: String?) {
-        sPref.edit().putString(KEY_NEXT_REMOTE_KEY, nextRemoteKey).apply()
+        editor.putString(KEY_NEXT_REMOTE_KEY, nextRemoteKey).apply()
     }
 
     fun getNextRemoteKey(): String? {
-        return sPref.getString(KEY_NEXT_REMOTE_KEY, null)
+        return sPrefManager.getString(KEY_NEXT_REMOTE_KEY, null)
     }
 
     companion object {

@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
@@ -12,7 +11,6 @@ import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
 import com.pramod.dailyword.framework.ui.common.exts.isSunday
 import com.pramod.dailyword.framework.util.CalenderUtil
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import java.util.*
@@ -21,12 +19,10 @@ class HomeScreenBadgeManager(
     private val base: Context,
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
     private val getAllBookmarks: GetAllBookmarks
-) : ContextWrapper(base) {
-    private val sPref = base.getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-
+) : BasePreferenceManager(PREF_NAME, base) {
 
     fun updatedRandomWordReadOn() {
-        sPref.edit().putString(
+        sPrefManager.edit().putString(
             KEY_LAST_RANDOM_WORD_READ_ON,
             CalenderUtil.convertCalenderToString(
                 Calendar.getInstance(), CalenderUtil.DATE_FORMAT
@@ -35,7 +31,7 @@ class HomeScreenBadgeManager(
     }
 
     fun showBadgeOnRandomWord(): LiveData<Boolean> {
-        val liveData = SPrefStringLiveData(sPref, KEY_LAST_RANDOM_WORD_READ_ON, null)
+        val liveData = SPrefStringLiveData(sPrefManager, KEY_LAST_RANDOM_WORD_READ_ON, null)
         return liveData.map {
             return@map CalenderUtil.convertCalenderToString(
                 Calendar.getInstance(),
@@ -45,7 +41,7 @@ class HomeScreenBadgeManager(
     }
 
     fun updateLastRecapOpenedOn() {
-        sPref.edit().putString(
+        sPrefManager.edit().putString(
             KEY_LAST_DATE_SHOWN_RECAP_BADGE_ONLY_SUNDAYS,
             CalenderUtil.convertCalenderToString(
                 Calendar.getInstance(), CalenderUtil.DATE_FORMAT
@@ -55,7 +51,11 @@ class HomeScreenBadgeManager(
 
     fun showBadgeOnRecap(): LiveData<Boolean> {
         val liveData =
-            SPrefStringLiveData(sPref, KEY_LAST_DATE_SHOWN_RECAP_BADGE_ONLY_SUNDAYS, null)
+            SPrefStringLiveData(
+                sPrefManager,
+                KEY_LAST_DATE_SHOWN_RECAP_BADGE_ONLY_SUNDAYS,
+                null
+            )
         return liveData.map {
             val lastDateTimeInMillis =
                 CalenderUtil.convertStringToCalender(
@@ -66,7 +66,7 @@ class HomeScreenBadgeManager(
 
             Log.i(
                 TAG,
-                "showBadgeOnRecap: ${lastDateTimeInMillis} ${todayTimeInMillis} ${
+                "showBadgeOnRecap: $lastDateTimeInMillis $todayTimeInMillis ${
                     Calendar.getInstance().isSunday()
                 }"
             )
@@ -81,7 +81,7 @@ class HomeScreenBadgeManager(
 
 
     /**
-     * call this method to observe KEY_IS_NEW_BOOKMARKS_ADDED spref value
+     * call this method to observe KEY_IS_NEW_BOOKMARKS_ADDED sPrefManager value
      */
     fun showBadgeOnBookmark(): LiveData<Boolean> {
         return getAllBookmarks.getBookmarks()

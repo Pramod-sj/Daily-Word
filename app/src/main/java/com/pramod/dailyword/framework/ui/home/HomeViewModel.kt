@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.ui.home
 
 import android.text.SpannableString
-import android.util.Log
 import androidx.lifecycle.*
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BuildConfig
@@ -105,9 +104,8 @@ class HomeViewModel @Inject constructor(
     }
 
     val showChangelogActivity: Flow<Boolean> = flow {
-        Log.i(TAG, ": " + prefManager.getLastAppVersion())
-        if (prefManager.getLastAppVersion() < BuildConfig.VERSION_CODE) {
-            prefManager.updateAppVersion()
+        if (prefManager.getLastSavedAppVersion() < BuildConfig.VERSION_CODE) {
+            prefManager.updateLastSavedAppVersion()
             emit(true)
         } else {
             emit(false)

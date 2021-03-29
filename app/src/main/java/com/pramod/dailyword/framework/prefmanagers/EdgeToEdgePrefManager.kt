@@ -14,13 +14,8 @@ import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
 import javax.inject.Inject
 
-class EdgeToEdgePrefManager @Inject constructor(private val context: Context) {
-
-
-    private val sharedPreferences =
-        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-    private val editor = sharedPreferences.edit()
-
+class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
+    BasePreferenceManager(PREFERENCES_NAME, context) {
 
     companion object {
         val TAG = EdgeToEdgePrefManager::class.java.simpleName
@@ -45,7 +40,6 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) {
             )
     }
 
-
     fun toggle() {
         Log.i("EDGE TO EDGE TOGGLE", (!isEnabled()).toString())
         editor.putBoolean(
@@ -54,7 +48,7 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) {
         ).commit()
     }
 
-    fun isEnabled() = sharedPreferences.getBoolean(
+    fun isEnabled() = sPrefManager.getBoolean(
         KEY_EDGE_TO_EDGE_ENABLED,
         false
     )
@@ -142,7 +136,7 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) {
 
     fun getLiveData(): SPrefBooleanLiveData {
         return SPrefBooleanLiveData(
-            sharedPreferences,
+            sPrefManager,
             KEY_EDGE_TO_EDGE_ENABLED,
             false
         )
