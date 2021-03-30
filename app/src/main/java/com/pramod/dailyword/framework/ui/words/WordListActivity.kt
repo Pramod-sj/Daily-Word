@@ -16,6 +16,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
 import com.pramod.dailyword.framework.helper.AdsManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
@@ -36,6 +37,9 @@ class WordListActivity :
 
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
+
+    @Inject
+    lateinit var prefManager: PrefManager
 
     private val adapter: WordsAdapter by lazy {
         WordsAdapter(
@@ -58,7 +62,8 @@ class WordListActivity :
             },
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
-            }
+            },
+            hideBadges = prefManager.getHideBadge()
         )
     }
 

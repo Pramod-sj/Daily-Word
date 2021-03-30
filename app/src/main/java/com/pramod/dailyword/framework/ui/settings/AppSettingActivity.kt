@@ -9,6 +9,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
@@ -34,6 +35,9 @@ class AppSettingActivity :
     @Inject
     lateinit var notificationPrefManager: NotificationPrefManager
 
+    @Inject
+    lateinit var prefManager: PrefManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar(binding.toolbar, null, true)
@@ -42,6 +46,7 @@ class AppSettingActivity :
         initEdgeToEdgeValue()
         initWindowAnimValue()
         initNotificationValues()
+        initHideBadgeValue()
     }
 
     private fun initThemeValue() {
@@ -59,6 +64,13 @@ class AppSettingActivity :
     private fun initWindowAnimValue() {
         windowAnimPrefManager.liveData().observe(this) {
             viewModel.windowAnimValue.value = it
+        }
+    }
+
+
+    private fun initHideBadgeValue() {
+        prefManager.getHideBadgeLiveData().observe(this) {
+            viewModel.hideBadgesValue.value = it
         }
     }
 
@@ -106,6 +118,10 @@ class AppSettingActivity :
             override fun toggleReminderNotification() {
                 notificationPrefManager.toggleReminderNotification()
 
+            }
+
+            override fun toggleBadgeVisibility() {
+                prefManager.toggleHideBadge()
             }
 
             override fun navigateToFacingNotificationIssue() {

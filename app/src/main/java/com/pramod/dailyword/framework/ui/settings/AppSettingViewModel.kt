@@ -20,4 +20,5 @@ class AppSettingViewModel @Inject constructor() : BaseViewModel() {
 
     val reminderNotificationValue = MutableLiveData<Boolean>()
 
+    val hideBadgesValue = MutableLiveData<Boolean>()
 }

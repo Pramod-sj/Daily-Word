@@ -1,7 +1,6 @@
 package com.library.audioplayer
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
@@ -13,8 +12,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AudioPlayer(
-    base: Context
-) : ContextWrapper(base) {
+    private val context: Context
+) {
 
     private val _audioDownloadingStatus = MutableLiveData<APEvent<Boolean>>()
     val audioDownloadingStatus: LiveData<APEvent<Boolean>>
@@ -42,7 +41,7 @@ class AudioPlayer(
 
     private val fileDownloader = FileDownloader()
 
-    private val cachedAudioDatabase = CachedAudioDatabase.getInstance(baseContext)
+    private val cachedAudioDatabase = CachedAudioDatabase.getInstance(context)
 
 
     private fun createFile(
@@ -73,7 +72,7 @@ class AudioPlayer(
                 startPlaying(cachedAudioCE.cachedAudioPath)
             } else {
                 val audioDestFile = createFile(
-                    baseContext,
+                    context,
                     "Audios",
                     null,
                     "mp3"

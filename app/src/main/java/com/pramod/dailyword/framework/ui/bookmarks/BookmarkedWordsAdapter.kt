@@ -16,7 +16,8 @@ import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 
 class BookmarkedWordsAdapter(
     val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
-    val deleteBookmarkCallback: (word: Word) -> Unit
+    val deleteBookmarkCallback: (word: Word) -> Unit,
+    private val hideBadges: Boolean = false
 ) : PagingDataAdapter<WordListUiModel, RecyclerView.ViewHolder>(WordComparator) {
     private var canStartActivity = true
 
@@ -34,6 +35,7 @@ class BookmarkedWordsAdapter(
         fun bind(word: Word) {
             binding.root.transitionName = word.date
             binding.word = word
+            binding.hideBadge = hideBadges
             binding.root.setOnClickListener {
                 if (canStartActivity) {
                     canStartActivity = false;

@@ -101,7 +101,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
-
                             app:checked="@{appSettingViewModel.edgeToEdgeValue}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
@@ -124,9 +123,51 @@
                     app:cardElevation="@dimen/setting_card_elevation">
 
                     <LinearLayout
-                        android:background="@color/setting_card_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/setting_card_color"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/AppTheme.SmallTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
+                            android:padding="@dimen/padding_medium"
+                            android:text="Suggestions"
+                            android:textAllCaps="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleBadgeVisibility()}"
+                            app:checked="@{appSettingViewModel.hideBadgesValue}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="true"
+                            app:subTitle="Badges are shown on newly added words &amp; bookmarks"
+                            app:title="Hide Badge"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_large"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/setting_card_elevation">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/setting_card_color"
                         android:orientation="vertical">
 
                         <TextView
@@ -208,6 +249,24 @@
                             app:showRadioButton="false"
                             app:subTitle="Not receiving notifications, fix it yourself"
                             app:title="Facing Notification Issue?"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToAbout()}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="false"
+                            app:subTitle="You'll loose your bookmarks and word seen data"
+                            app:title="Clear App Data"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />

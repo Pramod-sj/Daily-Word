@@ -15,7 +15,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import androidx.lifecycle.asLiveData
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -25,6 +24,7 @@ import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
+import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
@@ -33,6 +33,7 @@ import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
+import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.isViewsPreDrawn
@@ -44,7 +45,6 @@ import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 import javax.inject.Inject
@@ -78,13 +78,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var notificationHelper: NotificationHelper
 
+    @Inject
+    lateinit var homeScreenBadgeManager: HomeScreenBadgeManager
+
     private val pastWordAdapter: PastWordAdapter by lazy {
-        PastWordAdapter { i: Int, word: Word ->
+        PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
             val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
             view?.let { nonNullView ->
                 intentToWordDetail(nonNullView, word)
             } ?: intentToWordDetail(null, word)
-        }
+        })
     }
 
     private var bottomSheetDialog: BottomSheetDialog? = null
@@ -163,13 +166,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun handleBadgeVisibility() {
-        viewModel.homeScreenBadgeManager.showBadgeOnBookmark().observe(this) {
-            Log.i(TAG, "handleBadgeVisibility: showBadgeOnBookmark:$it")
+        homeScreenBadgeManager.showBadgeOnBookmark().observe(this) {
             binding.viewBadgeBookmark.isVisible = it
         }
-        viewModel.homeScreenBadgeManager.showBadgeOnWordList().observe(this) {
-            Log.i(TAG, "handleBadgeVisibility: showBadgeOnWordList:$it")
+        homeScreenBadgeManager.showBadgeOnWordList().observe(this) {
             binding.viewBadgeWordList.isVisible = it
+        }
+        homeScreenBadgeManager.showBadgeOnRandomWord().observe(this) {
+            binding.viewBadgeRandomWord.isVisible = it
+        }
+        homeScreenBadgeManager.showBadgeOnRecap().observe(this) {
+            binding.viewBadgeRecap.isVisible = it
         }
     }
 
@@ -220,14 +227,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun showChangelogActivity() {
-        viewModel.showChangelogActivity
-            .asLiveData(Dispatchers.IO)
-            .observe(this) { show ->
-                if (show) {
-                    ChangelogDialogFragment.show(supportFragmentManager)
-                }
-            }
-
+        if (prefManager.getLastSavedAppVersion() < BuildConfig.VERSION_CODE) {
+            ChangelogDialogFragment.show(supportFragmentManager)
+            prefManager.updateLastSavedAppVersion()
+        }
     }
 
     private fun handleShowingCreditAndAutoStartDialog() {
@@ -295,6 +298,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 }
             }
         })
+
         viewModel.last6DayWords.observe(this, {
             pastWordAdapter.submitList(it)
         })

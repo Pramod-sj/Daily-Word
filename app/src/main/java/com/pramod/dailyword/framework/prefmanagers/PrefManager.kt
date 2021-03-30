@@ -11,7 +11,7 @@ class PrefManager(context: Context) :
     MWCreditDialogContracts,
     IsNewUserContracts,
     LastSavedAppVersionContracts,
-    ShowBadgeContracts {
+    HideBadgeContracts {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -56,16 +56,20 @@ class PrefManager(context: Context) :
         editor.putInt(KEY_APP_VERSION, BuildConfig.VERSION_CODE).apply()
     }
 
-    override fun setShowBadge(show: Boolean) {
-        editor.putBoolean(KEY_SHOW_BADGE, show).apply()
+    override fun setHideBadge(hide: Boolean) {
+        editor.putBoolean(KEY_SHOW_BADGE, hide).apply()
     }
 
-    override fun getShowBadge(): Boolean {
-        return sPrefManager.getBoolean(KEY_SHOW_BADGE, true)
+    override fun getHideBadge(): Boolean {
+        return sPrefManager.getBoolean(KEY_SHOW_BADGE, false)
     }
 
-    override fun getShowBadgeLiveData(): LiveData<Boolean> {
-        return SPrefBooleanLiveData(sPrefManager, KEY_SHOW_BADGE, true)
+    override fun toggleHideBadge() {
+        editor.putBoolean(KEY_SHOW_BADGE, !getHideBadge()).apply()
+    }
+
+    override fun getHideBadgeLiveData(): LiveData<Boolean> {
+        return SPrefBooleanLiveData(sPrefManager, KEY_SHOW_BADGE, false)
     }
 
     companion object {
@@ -114,10 +118,12 @@ interface LastSavedAppVersionContracts {
     fun updateLastSavedAppVersion()
 }
 
-interface ShowBadgeContracts {
-    fun setShowBadge(show: Boolean)
+interface HideBadgeContracts {
+    fun setHideBadge(hide: Boolean)
 
-    fun getShowBadge(): Boolean
+    fun getHideBadge(): Boolean
 
-    fun getShowBadgeLiveData(): LiveData<Boolean>
+    fun toggleHideBadge()
+
+    fun getHideBadgeLiveData(): LiveData<Boolean>
 }

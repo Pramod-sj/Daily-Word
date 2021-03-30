@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ItemPastWordLayoutBinding
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 
 class PastWordAdapter(
     val onItemClickCallback: (Int, Word) -> Unit

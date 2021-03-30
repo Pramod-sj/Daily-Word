@@ -6,6 +6,7 @@ interface SettingUseCase {
     fun toggleEdgeToEdge()
     fun toggleDailyWordNotification()
     fun toggleReminderNotification()
+    fun toggleBadgeVisibility()
     fun navigateToFacingNotificationIssue()
     fun navigateToAbout()
     fun copyFirebaseTokenId()

@@ -13,6 +13,10 @@
         <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <variable
+            name="hideBadge"
+            type="Boolean" />
+
+        <variable
             name="word"
             type="com.pramod.dailyword.business.domain.model.Word" />
     </data>
@@ -76,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:drawableEnd="@{word.seen?null:@drawable/background_circle_12dp}"
+                    android:drawableEnd="@{!hideBadge &amp;&amp; !word.seen ?@drawable/background_circle_12dp:null}"
                     android:drawablePadding="@dimen/margin_medium"
                     android:text="@{word.word}" />
 

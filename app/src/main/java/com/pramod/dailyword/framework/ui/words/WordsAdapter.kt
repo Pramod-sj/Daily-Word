@@ -16,8 +16,10 @@ import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 
 class WordsAdapter(
     val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
-    val bookmarkCallback: ((pos: Int, word: Word) -> Unit)? = null
+    val bookmarkCallback: ((pos: Int, word: Word) -> Unit)? = null,
+    private val hideBadges: Boolean = false
 ) : PagingDataAdapter<WordListUiModel, RecyclerView.ViewHolder>(WordComparator) {
+
     private var canStartActivity = true
 
     companion object {
@@ -54,6 +56,7 @@ class WordsAdapter(
         fun bind(word: Word) {
             binding.itemWordListCardView.transitionName = word.date
             binding.word = word
+            binding.hideBadge = hideBadges
             binding.executePendingBindings()
         }
     }

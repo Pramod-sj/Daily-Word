@@ -11,6 +11,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.isViewsPreDrawn
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -35,6 +36,9 @@ class FavoriteWordsActivity :
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
+    @Inject
+    lateinit var prefManager: PrefManager
+
     private val adapter: BookmarkedWordsAdapter by lazy {
         BookmarkedWordsAdapter(itemClickCallback = { i: Int, word: Word ->
             val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
@@ -50,7 +54,7 @@ class FavoriteWordsActivity :
             )
         }, deleteBookmarkCallback = {
             viewModel.removeBookmark(it)
-        })
+        }, hideBadges = prefManager.getHideBadge())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,11 +1,11 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import android.content.ContextWrapper
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 
-open class BasePreferenceManager(prefName: String?, base: Context) : ContextWrapper(base) {
+open class BasePreferenceManager(prefName: String?, base: Context) {
 
     /**
      * if preference name is provided then create new or get existing preference file

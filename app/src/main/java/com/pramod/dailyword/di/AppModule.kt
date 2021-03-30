@@ -109,9 +109,15 @@ object AppModule {
     fun provideHomeScreenBadgeManager(
         @ApplicationContext context: Context,
         bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
-        getAllBookmarks: GetAllBookmarks
+        getAllBookmarks: GetAllBookmarks,
+        prefManager: PrefManager
     ): HomeScreenBadgeManager {
-        return HomeScreenBadgeManager(context, bookmarkedWordCacheDataSource, getAllBookmarks)
+        return HomeScreenBadgeManager(
+            context,
+            bookmarkedWordCacheDataSource,
+            getAllBookmarks,
+            prefManager
+        )
     }
 
     @Provides

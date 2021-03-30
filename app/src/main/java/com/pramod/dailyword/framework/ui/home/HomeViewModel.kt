@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.home
 import android.text.SpannableString
 import androidx.lifecycle.*
 import com.library.audioplayer.AudioPlayer
-import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
@@ -20,11 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val prefManager: PrefManager,
     private val getWordsInteractor: GetWordsInteractor,
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
-    val audioPlayer: AudioPlayer,
-    val homeScreenBadgeManager: HomeScreenBadgeManager
+    private val badgeManager: HomeScreenBadgeManager,
+    private val prefManager: PrefManager,
+    val audioPlayer: AudioPlayer
 ) : BaseViewModel() {
 
     companion object {
@@ -51,12 +50,13 @@ class HomeViewModel @Inject constructor(
 
     val wordOfTheDay: LiveData<Word?>
 
+    private val _last6DayWords = MediatorLiveData<List<PastWordUIModel>?>()
     val last6DayWords: LiveData<List<PastWordUIModel>?>
+        get() = _last6DayWords
 
     var firstNotificationShown = false
 
     var navigator: HomeNavigator? = null
-
 
     init {
 
@@ -77,7 +77,7 @@ class HomeViewModel @Inject constructor(
             else null
         }
 
-        last6DayWords = wordList.map {
+        val last6DayWordsSource1 = wordList.map {
             it?.let { list ->
                 val newList = list.toMutableList().apply {
                     if (isNotEmpty()) {
@@ -86,12 +86,26 @@ class HomeViewModel @Inject constructor(
                 }
                 newList
             }
-        }.map {
-            it?.map { word ->
-                PastWordUIModel(CalenderUtil.getFancyDay(word.date, CalenderUtil.DATE_FORMAT), word)
+        }
+        val last6DayWordsSource2 = prefManager.getHideBadgeLiveData()
+        _last6DayWords.addSource(last6DayWordsSource1) {
+            _last6DayWords.value = it?.map { word ->
+                PastWordUIModel(
+                    CalenderUtil.getFancyDay(word.date, CalenderUtil.DATE_FORMAT),
+                    word,
+                    !word.isSeen && last6DayWordsSource2.value == false
+                )
             }
         }
-
+        _last6DayWords.addSource(last6DayWordsSource2) {
+            _last6DayWords.value = last6DayWordsSource1.value?.map { word ->
+                PastWordUIModel(
+                    CalenderUtil.getFancyDay(word.date, CalenderUtil.DATE_FORMAT),
+                    word,
+                    !word.isSeen && it == false
+                )
+            }
+        }
     }
 
     fun refresh() {
@@ -103,14 +117,5 @@ class HomeViewModel @Inject constructor(
         markWordAsSeenInteractor.markAsSeen(word.word)
     }
 
-    val showChangelogActivity: Flow<Boolean> = flow {
-        if (prefManager.getLastSavedAppVersion() < BuildConfig.VERSION_CODE) {
-            prefManager.updateLastSavedAppVersion()
-            emit(true)
-        } else {
-            emit(false)
-        }
-
-    }
 
 }

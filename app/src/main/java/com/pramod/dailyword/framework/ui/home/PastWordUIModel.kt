@@ -4,5 +4,6 @@ import com.pramod.dailyword.business.domain.model.Word
 
 data class PastWordUIModel(
     val day: String,
-    val word: Word
+    val word: Word,
+    val showBadge: Boolean
 )
