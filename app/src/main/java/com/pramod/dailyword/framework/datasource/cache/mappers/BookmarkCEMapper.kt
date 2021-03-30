@@ -17,7 +17,7 @@ class BookmarkCEMapper @Inject constructor() : EntityMapper<BookmarkCE, Bookmark
 
     override fun toEntity(domain: Bookmark): BookmarkCE {
         return BookmarkCE(
-            domain.bookmarkId?:-1,
+            domain.bookmarkId ?: 0,
             domain.bookmarkedWord,
             domain.bookmarkedAt,
             domain.bookmarkSeenAt
