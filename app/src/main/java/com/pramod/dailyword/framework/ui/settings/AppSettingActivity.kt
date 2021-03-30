@@ -1,11 +1,14 @@
 package com.pramod.dailyword.framework.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.paging.ExperimentalPagingApi
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
+import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
@@ -13,12 +16,11 @@ import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
-import com.pramod.dailyword.framework.ui.common.exts.DailogHelper
-import com.pramod.dailyword.framework.ui.common.exts.openAboutPage
-import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
+import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -86,6 +88,8 @@ class AppSettingActivity :
     }
 
 
+    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalPagingApi::class)
     private fun handleUserCase() {
         viewModel.settingUseCase = object : SettingUseCase {
             override fun openChooseThemeDialog() {
@@ -143,6 +147,26 @@ class AppSettingActivity :
                         viewModel.setMessage(Message.SnackBarMessage("Sorry we're currently not able to fetch your token"))
                     }
                 }
+            }
+
+            override fun clearAppData() {
+                showBottomSheet(
+                    "Clear App Data",
+                    "Note: You'll loose all your bookmarks and word view data if you proceed",
+                    positiveText = "Proceed",
+                    positiveClickCallback = {
+                        val cleared = WOTDApp.clearAppData(this@AppSettingActivity)
+                        if (cleared) {
+                            openSplashScreen(
+                                Intent.FLAG_ACTIVITY_NEW_TASK
+                            )
+                        }
+                    },
+                    negativeText = "Cancel",
+                    negativeClickCallback = {
+
+                    }
+                )
             }
 
         }

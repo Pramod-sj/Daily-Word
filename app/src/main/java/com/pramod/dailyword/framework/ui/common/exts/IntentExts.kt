@@ -16,9 +16,21 @@ import com.pramod.dailyword.framework.ui.donate.DonateActivity
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
 import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
+import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.ui.worddetails.WordDetailedActivity
 import com.pramod.dailyword.framework.ui.words.WordListActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+
+
+@ExperimentalCoroutinesApi
+@ExperimentalPagingApi
+fun Activity.openSplashScreen(vararg flag: Int) {
+    val intent = Intent(this, SplashScreenActivity::class.java)
+    flag.forEach {
+        intent.addFlags(it)
+    }
+    startActivity(intent)
+}
 
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi

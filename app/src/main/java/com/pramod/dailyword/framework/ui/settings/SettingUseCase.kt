@@ -10,4 +10,5 @@ interface SettingUseCase {
     fun navigateToFacingNotificationIssue()
     fun navigateToAbout()
     fun copyFirebaseTokenId()
+    fun clearAppData()
 }

@@ -30,13 +30,15 @@ class WOTDApp : Application() {
 
     companion object {
         @JvmStatic
-        fun clearAppData(context: Context) {
-            try {
+        fun clearAppData(context: Context): Boolean {
+            return try {
                 val packageName: String = context.packageName
                 val runtime = Runtime.getRuntime()
                 runtime.exec("pm clear $packageName")
+                true
             } catch (e: Exception) {
                 e.printStackTrace()
+                false
             }
         }
     }
