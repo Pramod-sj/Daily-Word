@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/windowBackgroundColor"
             app:cardPreventCornerOverlap="false"
-            app:layout_behavior=".framework.ui.common.view.CustomBottomSheetBehavior"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             app:shapeAppearanceOverlay="@style/FullScreenBottomSheetShape">
 
             <RelativeLayout
