@@ -14,7 +14,9 @@ import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
 import javax.inject.Inject
 
-class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
+class EdgeToEdgePrefManager @Inject constructor(
+    private val context: Context
+) :
     BasePreferenceManager(PREFERENCES_NAME, context) {
 
     companion object {
@@ -53,15 +55,23 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
         false
     )
 
-    fun applyEdgeToEdgeIfEnabled(window: Window, forceApply: Boolean? = false) {
+    fun applyEdgeToEdgeIfEnabled(
+        window: Window,
+        forceApply: Boolean? = false,
+        transparentNavBar: Boolean? = false
+    ) {
         val edgeToEdgeEnabled = if (forceApply == true) true else isEnabled()
         Log.i(TAG, "applyEdgeToEdgeIfEnabled: $edgeToEdgeEnabled")
-        applyEdgeToEdgePreference(window, edgeToEdgeEnabled)
+        applyEdgeToEdgePreference(window, edgeToEdgeEnabled, transparentNavBar)
     }
 
-    private fun applyEdgeToEdgePreference(window: Window, shouldApply: Boolean) {
+    private fun applyEdgeToEdgePreference(
+        window: Window,
+        shouldApply: Boolean,
+        transparentNavBar: Boolean? = false
+    ) {
         val statusBarColor = getStatusBarColor(isEnabled())
-        val navbarColor = getNavBarColor(isEnabled())
+        val navbarColor = getNavBarColor(isEnabled(), transparentNavBar)
         val lightBackground =
             isColorLight(
                 MaterialColors.getColor(
@@ -70,10 +80,7 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
                     Color.BLACK
                 )
             )
-        val lightNavbar =
-            isColorLight(
-                navbarColor
-            )
+        val lightNavbar = isColorLight(navbarColor)
         val showDarkNavbarIcons =
             lightNavbar || navbarColor == Color.TRANSPARENT && lightBackground
         val decorView = window.decorView
@@ -100,7 +107,9 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
             )
             return ColorUtils.setAlphaComponent(
                 opaqueStatusBarColor,
-                EDGE_TO_EDGE_BAR_ALPHA
+                if (ThemeManager.isNightModeActive(context)) {
+                    0
+                } else EDGE_TO_EDGE_BAR_ALPHA
             )
         }
         return if (isEdgeToEdgeEnabled) {
@@ -113,7 +122,7 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
     }
 
     @TargetApi(VERSION_CODES.LOLLIPOP)
-    private fun getNavBarColor(isEdgeToEdgeEnabled: Boolean): Int {
+    private fun getNavBarColor(isEdgeToEdgeEnabled: Boolean, transparentNavBar: Boolean?): Int {
         if (isEdgeToEdgeEnabled && VERSION.SDK_INT < VERSION_CODES.O_MR1) {
             val opaqueNavBarColor = MaterialColors.getColor(
                 context,
@@ -122,7 +131,7 @@ class EdgeToEdgePrefManager @Inject constructor(private val context: Context) :
             )
             return ColorUtils.setAlphaComponent(
                 opaqueNavBarColor,
-                EDGE_TO_EDGE_BAR_ALPHA
+                if (transparentNavBar == true) 0 else EDGE_TO_EDGE_BAR_ALPHA
             )
         }
         return if (isEdgeToEdgeEnabled) {

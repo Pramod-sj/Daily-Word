@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.ui.splash_screen
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.activity.viewModels
 import androidx.paging.ExperimentalPagingApi
@@ -32,6 +33,7 @@ class SplashScreenActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         forceEdgeToEdge(true)
+        transparentNavBar = true
         lightStatusBar(matchingBackgroundColor = true)
         super.onCreate(savedInstanceState)
         //addGradientToAppIcon()
@@ -96,6 +98,7 @@ class SplashScreenActivity :
         val termsAndConditionLink = Pair(
             resources.getString(R.string.term_and_condition),
             View.OnClickListener {
+                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.term_and_condition),
                     BuildConfig.TERM_AND_CONDITION,
@@ -107,6 +110,7 @@ class SplashScreenActivity :
         val privacyPolicyLink = Pair(
             resources.getString(R.string.privacy_policy),
             View.OnClickListener {
+                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.privacy_policy),
                     BuildConfig.PRIVACY_POLICY,

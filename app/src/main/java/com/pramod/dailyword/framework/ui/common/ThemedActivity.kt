@@ -25,6 +25,7 @@ abstract class ThemedActivity : AppCompatActivity() {
 
     private var forceEdgeToEdge: Boolean? = null
 
+    var transparentNavBar: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,7 @@ abstract class ThemedActivity : AppCompatActivity() {
     }
 
     private fun shouldApplyEdgeToEdge() {
-        edgeToEdgePrefManager.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge)
+        edgeToEdgePrefManager.applyEdgeToEdgeIfEnabled(window, forceEdgeToEdge, transparentNavBar)
     }
 
     open fun lightStatusBar(

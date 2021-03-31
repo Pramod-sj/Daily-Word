@@ -95,6 +95,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private var donateBottomDialogFragment: DonateBottomDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        transparentNavBar = true
         super.onCreate(savedInstanceState)
         loadBackgroundImage()
         initToolbar()
