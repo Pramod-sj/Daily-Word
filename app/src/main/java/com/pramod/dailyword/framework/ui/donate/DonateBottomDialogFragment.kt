@@ -4,27 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
-import com.pramod.dailyword.databinding.ActivityDonateBinding
+import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
-import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
-import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class DonateBottomDialogFragment :
-    ExpandingBottomSheetDialogFragment<ActivityDonateBinding>(R.layout.activity_donate) {
+    ExpandingBottomSheetDialogFragment<DialogDonateBinding>(R.layout.dialog_donate) {
 
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
@@ -38,27 +34,50 @@ class DonateBottomDialogFragment :
     }
 
 
-    val viewModel: DonateViewModel by viewModels()
-
     private val billingProcessor: BillingProcessor by lazy {
         BillingProcessor(
             requireActivity(),
             BuildConfig.GOOGLE_LICENSE_KEY,
+            BuildConfig.MERCHANT_ID,
             object : BillingProcessor.IBillingHandler {
                 override fun onBillingInitialized() {
+                    Log.i(TAG, "onBillingInitialized: ")
+                    donateItemList.value?.let { localDonateItem ->
+                        val list = ArrayList(localDonateItem.map { it.itemProductId })
+                        val purchaseList = billingProcessor.getPurchaseListingDetails(list)
+                        Log.i(TAG, "onBillingInitialized: " + purchaseList?.size)
+                        purchaseList?.let {
+                            val localDonateItemMutable = localDonateItem.toMutableList()
+                            for (sku in purchaseList) {
+                                localDonateItem.find { sku.productId == it.itemProductId }?.let {
+                                    localDonateItemMutable[localDonateItem.indexOf(it)] =
+                                        DonateItem(
+                                            it.itemProductId,
+                                            it.drawableId,
+                                            it.itemProductId,
+                                            sku.priceText,
+                                            it.color
+                                        )
+                                }
+                            }
+                            donateItemList.value = localDonateItemMutable
+                        }
+                    }
 
                 }
 
                 override fun onPurchaseHistoryRestored() {
-
+                    Log.i(TAG, "onPurchaseHistoryRestored: ")
                 }
 
                 override fun onProductPurchased(productId: String, details: TransactionDetails?) {
-                    viewModel.setMessage(Message.SnackBarMessage("Thank you so much :)"))
+                    Log.i(TAG, "onProductPurchased: ")
+                    showSnackBarMessage(Message.SnackBarMessage("Thank you so much :)"))
                 }
 
                 override fun onBillingError(errorCode: Int, error: Throwable?) {
-                    viewModel.setMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
+                    Log.i(TAG, "onBillingError: " + error.toString())
+                    showSnackBarMessage(Message.SnackBarMessage("Something went wrong! Please try again!"))
                 }
 
             })
@@ -66,11 +85,19 @@ class DonateBottomDialogFragment :
 
     private val donateItemAdapter: DonateItemAdapter by lazy {
         DonateItemAdapter { i: Int, donateItem: DonateItem ->
-            Log.i(TAG, ": " + i)
-            if (billingProcessor.isPurchased(donateItem.itemPurchaseId)) {
-                viewModel.setMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
+            if (billingProcessor.isPurchased(donateItem.itemProductId)) {
+                showSnackBarMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
             } else {
-                billingProcessor.purchase(requireActivity(), donateItem.itemPurchaseId)
+                if (BillingProcessor.isIabServiceAvailable(context)) {
+                    billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
+                } else {
+                    showSnackBarMessage(
+                        Message.SnackBarMessage(
+                            "In-app purchase service not available, you need to update google play service",
+                            duration = Snackbar.LENGTH_LONG
+                        )
+                    )
+                }
             }
         }
     }
@@ -80,14 +107,15 @@ class DonateBottomDialogFragment :
         applyBottomInsetToScrollView()
         loadLottieAnimationFileFromUrl()
         binding.donateRecyclerView.adapter = donateItemAdapter
-        donateItemAdapter.submitList(viewModel.donateItemList)
+        donateItemList.observe(this) {
+            donateItemAdapter.submitList(it)
+        }
         binding.nestedScrollView.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
                 bottomSheetBehavior.isDraggable =
                     !binding.nestedScrollView.canScrollVertically(-1)
                 Log.i(TAG, "onViewCreated: " + bottomSheetBehavior.isDraggable)
             })
-        setMessageObserver()
     }
 
     private fun loadLottieAnimationFileFromUrl() {
@@ -120,27 +148,7 @@ class DonateBottomDialogFragment :
         super.onDestroy()
     }
 
-    private fun setMessageObserver() {
-        viewModel.message.observe(this) { message ->
-            message?.let {
-                when (it) {
-                    is Message.SnackBarMessage -> {
-                        handleSnackBarMessage(it)
-                        Log.i(BaseActivity.TAG, "setSnackBarObserver: snackbar message")
-                    }
-                    is Message.ToastMessage -> {
-                        Log.i(BaseActivity.TAG, "setSnackBarObserver: toast message")
-                    }
-                    is Message.DialogMessage -> {
-                        Log.i(BaseActivity.TAG, "setSnackBarObserver: dialog message")
-                    }
-                }
-            }
-
-        }
-    }
-
-    private fun handleSnackBarMessage(it: Message.SnackBarMessage) {
+    private fun showSnackBarMessage(it: Message.SnackBarMessage) {
         if (it.isShown) {
             return
         }
@@ -163,13 +171,12 @@ class DonateBottomDialogFragment :
 
                 it.isShown = true
 
-                viewModel.setMessage(null)
                 snackBar.removeCallback(this)
             }
 
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
-                viewModel.setMessage(null)
+
                 snackBar.removeCallback(this)
             }
         })

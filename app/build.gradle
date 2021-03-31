@@ -29,6 +29,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_LICENSE_KEY", keyProperties['GOOGLE_LICENSE_KEY'])
+        buildConfigField("String", "MERCHANT_ID", keyProperties['MERCHANT_ID'])
 
         /**
          * Base urls and Endpoints
@@ -171,5 +172,9 @@ dependencies {
     implementation project(path: ':audioplayer')
 
 
-    implementation 'androidx.webkit:webkit:1.4.0-beta01'
+    implementation 'androidx.webkit:webkit:1.4.0'
+
+    def billing_version = "3.0.0"
+
+    implementation "com.android.billingclient:billing-ktx:$billing_version"
 }

@@ -51,7 +51,7 @@
                 style="@style/AppTheme.TitleTextStyle.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/unicode_rupee_symbol+` `+String.valueOf(donateItem.amount)}"
+                android:text="@{donateItem.amount}"
                 android:textColor="@{color}" />
 
             <TextView

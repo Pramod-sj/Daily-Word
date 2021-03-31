@@ -5,9 +5,6 @@
 
         <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <variable
-            name="donateViewModel"
-            type="com.pramod.dailyword.framework.ui.donate.DonateViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +21,7 @@
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/windowBackgroundColor"
             app:cardPreventCornerOverlap="false"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_behavior=".framework.ui.common.view.CustomBottomSheetBehavior"
             app:shapeAppearanceOverlay="@style/FullScreenBottomSheetShape">
 
             <RelativeLayout
@@ -48,14 +45,14 @@
                     android:layout_below="@id/txtView_appBar"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:fillViewport="true"
-                    android:isScrollContainer="true"
                     android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/padding_medium"
                     android:scrollIndicators="top"
-                    app:applyTopBottomPaddingInset="@{donateViewModel.isEdgeToEdgeEnabled()}">
+                    app:applyBottomPaddingInset="@{true}">
 
                     <LinearLayout
+                        android:id="@+id/linearLayout_donate"
+                        android:descendantFocusability="blocksDescendants"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">

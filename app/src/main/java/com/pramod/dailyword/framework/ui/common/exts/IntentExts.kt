@@ -12,7 +12,6 @@ import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsActivity
-import com.pramod.dailyword.framework.ui.donate.DonateActivity
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
 import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
@@ -85,11 +84,6 @@ fun Activity.openRecapPage() {
 @ExperimentalCoroutinesApi
 fun Activity.openRandomWordPage() {
     startActivity(Intent(this, WordDetailedActivity::class.java))
-}
-
-fun Activity.openDonatePage() {
-    val intent = Intent(this, DonateActivity::class.java)
-    startActivity(intent)
 }
 
 fun Activity.openSettingPage() {

@@ -47,10 +47,7 @@
             android:name=".framework.ui.bookmarks.FavoriteWordsActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".framework.ui.donate.DonateActivity"
-            android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".framework.ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor"
