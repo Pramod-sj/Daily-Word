@@ -32,8 +32,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/txtView_appBar"
-                    android:scrollbars="none"
-                    android:scrollIndicators="top" />
+                    android:scrollIndicators="top"
+                    android:scrollbars="none" />
+
+                <TextView
+                    app:applyBottomMarginInset="@{true}"
+                    android:id="@+id/txtView_errorMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtView_appBar"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_large"
+                    android:visibility="gone" />
 
                 <ProgressBar
                     android:id="@+id/webView_progress"
