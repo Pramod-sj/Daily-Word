@@ -115,5 +115,8 @@ fun Activity.shareApp(
         )
         share.putExtra(Intent.EXTRA_STREAM, imageToShare)
     }
+    if (bitmap == null) {
+        share.type = "text/plain";
+    }
     ContextCompat.startActivity(this, Intent.createChooser(share, "Choose app..."), null)
 }
