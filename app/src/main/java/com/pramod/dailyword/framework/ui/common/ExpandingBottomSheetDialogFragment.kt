@@ -105,7 +105,6 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
         super.onViewCreated(view, savedInstanceState)
 
         binding.root.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
-            Log.i(ChangelogDialogFragment.TAG, "onCreateView: inset")
             topInset = windowInsets.systemWindowInsetTop
         }
 
@@ -223,8 +222,6 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
                 0.8f to 1f,
                 radiusInPixel to 0f
             )
-
-            Log.i(ChangelogDialogFragment.TAG, "onSlide: newCornerRadius:$newCornerRadius")
 
             val newShape: ShapeAppearanceModel = ShapeAppearanceModel.Builder()
                 .setTopLeftCorner(

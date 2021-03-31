@@ -4,8 +4,6 @@
     <string name="network_state_btn_retry">Retry</string>
 
 
-    <string name="interstitial_ad_id"></string>
-    <string name="banner_ad_id"></string>
     <string name="custom_crash_send_logs">Send logs</string>
     <string name="custom_crash_clear_app_data">clear app data</string>
     <string name="custom_crash_restart_app">restart app</string>
