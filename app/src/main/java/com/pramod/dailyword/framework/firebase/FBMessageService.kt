@@ -14,11 +14,12 @@ import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.util.CalenderUtil
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class FBMessageService : FirebaseMessagingService() {
 
     @Inject
@@ -65,66 +66,72 @@ class FBMessageService : FirebaseMessagingService() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.Main).launch {
+
                 var notification: Notification? = null
-                if (payload.noitificationType == NOTIFICATION_REMINDER) {
+                when (payload.noitificationType) {
+                    NOTIFICATION_REMINDER -> {
 
-                    Log.i(
-                        TAG,
-                        "onMessageReceived: isReminderNotificationEnabled: " + notificationPrefManager.isReminderNotificationEnabled()
-                    )
-                    if (!notificationPrefManager.isReminderNotificationEnabled()) {
-                        return@launch
-                    }
-
-
-                    val word = bookmarkedWordCacheDataSource.getWordNonLive(
-                        CalenderUtil.convertCalenderToString(
-                            Calendar.getInstance(Locale.US),
-                            CalenderUtil.DATE_FORMAT
+                        Log.i(
+                            TAG,
+                            "onMessageReceived: isReminderNotificationEnabled: " + notificationPrefManager.isReminderNotificationEnabled()
                         )
-                    )
-                    //Log.i(TAG, Gson().toJson(wordOfTheDay))
-
-                    //checking whether word seen or not
-                    word?.let {
-                        if (!it.isSeen) {
-                            notification = notificationHelper
-                                .createNotification(
-                                    title = payload.title,
-                                    body = payload.body,
-                                    pendingIntent = pendingIntent
-                                )
+                        if (!notificationPrefManager.isReminderNotificationEnabled()) {
+                            return@launch
                         }
-                    }
 
 
-                } else if (payload.noitificationType == NOTIFICATION_NEW_WORD) {
-
-                    if (!notificationPrefManager.isDailyWordNotificationEnabled()) {
-                        return@launch
-                    }
-
-                    notification = notificationHelper
-                        .createNotification(
-                            title = payload.title,
-                            body = payload.body,
-                            pendingIntent = pendingIntent
+                        val word = bookmarkedWordCacheDataSource.getWordNonLive(
+                            CalenderUtil.convertCalenderToString(
+                                Calendar.getInstance(Locale.US),
+                                CalenderUtil.DATE_FORMAT
+                            )
                         )
-                } else {
-                    //if no word in db or something diff notification type
-                    notification = notificationHelper
-                        .createNotification(
-                            title = payload.title,
-                            body = payload.body,
-                            pendingIntent = pendingIntent
-                        )
+                        //Log.i(TAG, Gson().toJson(wordOfTheDay))
+
+                        //checking whether word seen or not
+                        word?.let {
+                            if (!it.isSeen) {
+                                notification = notificationHelper
+                                    .createNotification(
+                                        title = payload.title,
+                                        body = payload.body,
+                                        pendingIntent = pendingIntent
+                                    )
+                            }
+                        }
+
+
+                    }
+                    NOTIFICATION_NEW_WORD -> {
+
+                        if (!notificationPrefManager.isDailyWordNotificationEnabled()) {
+                            return@launch
+                        }
+
+                        notification = notificationHelper
+                            .createNotification(
+                                title = payload.title,
+                                body = payload.body,
+                                pendingIntent = pendingIntent
+                            )
+                    }
+                    else -> {
+                        //if no word in db or something diff notification type
+                        notification = notificationHelper
+                            .createNotification(
+                                title = payload.title,
+                                body = payload.body,
+                                pendingIntent = pendingIntent
+                            )
+                    }
                 }
                 notification?.let {
                     notificationHelper.showNotification(it)
                 }
 
             }
+
         }
     }
 
