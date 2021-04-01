@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.R
@@ -33,17 +34,28 @@ fun Activity.openSplashScreen(vararg flag: Int) {
 
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
-fun Activity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
+fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
     val intent = Intent(this, HomeActivity::class.java)
-    startActivity(intent)
     if (withFadeAnimation) {
-        overridePendingTransition(
+        /*overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )*/
+        val option = ActivityOptions.makeCustomAnimation(
+            this,
             android.R.anim.fade_in,
             android.R.anim.fade_out
         )
+        startActivity(intent, option.toBundle())
+    } else {
+        startActivity(intent)
     }
     if (finish) {
-        finish()
+        if (withFadeAnimation) {
+            supportFinishAfterTransition()
+        } else {
+            finish()
+        }
     }
 }
 

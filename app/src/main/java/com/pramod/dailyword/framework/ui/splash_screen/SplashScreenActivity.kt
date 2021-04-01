@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.ui.splash_screen
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.activity.viewModels
@@ -18,6 +19,8 @@ import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.GradientUtils
+import com.pramod.dailyword.framework.util.isImageCached
+import com.pramod.dailyword.framework.util.preloadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -67,7 +70,20 @@ class SplashScreenActivity :
         viewModel.navigateToHomePage().observe(this, {
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
-                    openHomePage(withFadeAnimation = true, finish = true)
+                    isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
+                        Log.i(TAG, "isImageCached: $isCached")
+                        if (isCached) {
+                            openHomePage(withFadeAnimation = true, finish = false)
+                        } else {
+                            binding.btnGetStarted.showProgress(true)
+                            preloadImage(BuildConfig.HOME_BACKGROUND_URL) {
+                                binding.btnGetStarted.showProgress(false)
+                                Log.i(TAG, "preloadImage: $it")
+                                openHomePage(withFadeAnimation = true, finish = false)
+                            }
+                        }
+                    }
+
                 }
             }
         })
@@ -121,5 +137,8 @@ class SplashScreenActivity :
         binding.acceptConditionTextView.showLinks(termsAndConditionLink, privacyPolicyLink)
     }
 
+    companion object {
+        val TAG = SplashScreenActivity::class.java.simpleName
+    }
 
 }

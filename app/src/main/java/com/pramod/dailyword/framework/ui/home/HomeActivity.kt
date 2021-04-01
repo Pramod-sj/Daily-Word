@@ -24,7 +24,6 @@ import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
@@ -97,6 +96,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onCreate(savedInstanceState: Bundle?) {
         transparentNavBar = true
         super.onCreate(savedInstanceState)
+        supportPostponeEnterTransition()
         loadBackgroundImage()
         initToolbar()
         initAppUpdate()
@@ -117,6 +117,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun loadBackgroundImage() {
+        Log.i(TAG, "loadBackgroundImage: ")
         Glide.with(this)
             .load(BuildConfig.HOME_BACKGROUND_URL)
             .centerCrop()
@@ -157,7 +158,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                         shareApp(bitmap = bitmap)
                                     } ?: shareApp()
                             }
-                            
+
                             R.id.menu_about -> openAboutPage()
                         }
                     }

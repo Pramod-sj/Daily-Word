@@ -65,8 +65,7 @@
             android:layout_height="180dp"
             android:layout_gravity="bottom"
             android:alpha="@integer/alpha_mountains"
-            android:scaleType="centerCrop"
-            android:src="@drawable/drawable_background_scenery" />
+            android:scaleType="centerCrop" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
