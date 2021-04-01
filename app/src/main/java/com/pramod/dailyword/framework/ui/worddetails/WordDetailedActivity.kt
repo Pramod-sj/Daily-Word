@@ -9,21 +9,20 @@ import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionSet
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
-import androidx.databinding.DataBindingUtil
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
-import com.pramod.dailyword.databinding.BottomSheetChipLayoutBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
@@ -31,7 +30,6 @@ import com.pramod.dailyword.framework.transition.TransitionCallback
 import com.pramod.dailyword.framework.transition.isViewsLoaded
 import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -148,13 +146,21 @@ class WordDetailedActivity :
         viewModel.navigator = object : WordDetailNavigator {
             override fun navigateToShowSynonymsList(list: List<String>?) {
                 list?.let {
-                    showBottomSheetListOfChips(resources.getString(R.string.synonyms), it)
+                    ChipListDialogFragment.show(
+                        resources.getString(R.string.synonyms),
+                        it,
+                        supportFragmentManager
+                    )
                 }
             }
 
             override fun navigateToShowAntonymsList(list: List<String>?) {
                 list?.let {
-                    showBottomSheetListOfChips(resources.getString(R.string.antonyms), it)
+                    ChipListDialogFragment.show(
+                        resources.getString(R.string.antonyms),
+                        it,
+                        supportFragmentManager
+                    )
                 }
             }
 
@@ -276,28 +282,6 @@ class WordDetailedActivity :
             R.id.menu_bookmark -> viewModel.bookmark()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showBottomSheetListOfChips(title: String, list: List<String>) {
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
-        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        val binding = DataBindingUtil.inflate<BottomSheetChipLayoutBinding>(
-            LayoutInflater.from(this),
-            R.layout.bottom_sheet_chip_layout,
-            null,
-            false
-        )
-        binding.title = title
-        binding.listData = list
-        binding.onChipClickListener = object : OnChipClickListener {
-            override fun onChipClick(text: String) {
-                val url = resources.getString(R.string.google_search_url) + text
-                viewModel.navigator?.navigateToWeb(url)
-            }
-        }
-        binding.executePendingBindings()
-        bottomSheetDialog.setContentView(binding.root)
-        bottomSheetDialog.show()
     }
 
     override fun onStop() {

@@ -31,11 +31,6 @@ class DonateBottomDialogFragment :
         return binding.cardBottomSheet
     }
 
-    override fun peekHeightFactor(): Float {
-        return 0.8f
-    }
-
-
     private val billingProcessor: BillingProcessor by lazy {
         BillingProcessor.newBillingProcessor(
             requireActivity(),
@@ -112,12 +107,6 @@ class DonateBottomDialogFragment :
         donateItemList.observe(this) {
             donateItemAdapter.submitList(it)
         }
-        binding.nestedScrollView.setOnScrollChangeListener(
-            NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-                bottomSheetBehavior.isDraggable =
-                    !binding.nestedScrollView.canScrollVertically(-1)
-                Log.i(TAG, "onViewCreated: " + bottomSheetBehavior.isDraggable)
-            })
     }
 
     private fun loadLottieAnimationFileFromUrl() {

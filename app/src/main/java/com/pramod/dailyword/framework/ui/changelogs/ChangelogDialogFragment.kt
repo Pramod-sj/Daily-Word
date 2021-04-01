@@ -48,7 +48,6 @@ class ChangelogDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindingAdapter()
-        enableBottomSheetDrag()
         applyBottomInsetToRecyclerView()
     }
 
@@ -60,19 +59,6 @@ class ChangelogDialogFragment :
                     bottom = windowInsets.systemWindowInsetBottom
                 )
         }
-    }
-
-    /**
-     * This method is use to re-enable dragging feature when recycler can't be scroll up anymore
-     */
-    private fun enableBottomSheetDrag() {
-        binding.recyclerviewChangeLogs.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                bottomSheetBehavior.isDraggable = !recyclerView.canScrollVertically(-1)
-            }
-        })
     }
 
     private fun bindingAdapter() {

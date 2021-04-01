@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
+
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="listData"
+            type="java.util.List&lt;String>" />
+
+        <variable
+            name="onChipClickListener"
+            type="com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener" />
+
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        tools:context=".ui.donate.DonateActivity">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/windowBackgroundColor"
+            app:cardPreventCornerOverlap="false"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:shapeAppearanceOverlay="@style/FullScreenBottomSheetShape">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/txtView_appBar"
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:gravity="center"
+                    android:text="@{title}" />
+
+                <com.pramod.dailyword.framework.ui.common.view.CustomNestedScrollView
+                    android:id="@+id/nestedScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtView_appBar"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="@dimen/padding_medium"
+                    android:scrollIndicators="top"
+                    app:applyBottomPaddingInset="@{true}">
+
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroup_bottom_sheet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        android:paddingHorizontal="@dimen/margin_medium"
+                        android:paddingVertical="@dimen/padding_small"
+                        app:chipEntries="@{listData}"
+                        app:chipSpacingHorizontal="@dimen/padding_small"
+                        app:chipSpacingVertical="@dimen/padding_medium"
+                        app:onChipClick="@{onChipClickListener}" />
+
+                </com.pramod.dailyword.framework.ui.common.view.CustomNestedScrollView>
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
