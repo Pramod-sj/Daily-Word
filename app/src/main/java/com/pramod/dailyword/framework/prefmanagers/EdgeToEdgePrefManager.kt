@@ -50,9 +50,12 @@ class EdgeToEdgePrefManager @Inject constructor(
         ).commit()
     }
 
+    /**
+     * edge to edge is turned on by default
+     */
     fun isEnabled() = sPrefManager.getBoolean(
         KEY_EDGE_TO_EDGE_ENABLED,
-        false
+        true
     )
 
     fun applyEdgeToEdgeIfEnabled(

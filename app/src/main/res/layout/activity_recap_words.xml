@@ -51,7 +51,6 @@
                         android:padding="@dimen/padding_large"
                         android:text="@string/weekly_recap_note"
                         android:textColor="?android:attr/windowBackground"
-                        app:drawableEndCompat="@drawable/ic_round_close_24"
                         app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
                         app:drawableTint="?android:attr/windowBackground" />
 

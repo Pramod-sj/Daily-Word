@@ -157,6 +157,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                         shareApp(bitmap = bitmap)
                                     } ?: shareApp()
                             }
+                            
+                            R.id.menu_about -> openAboutPage()
                         }
                     }
                 }
