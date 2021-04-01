@@ -19,6 +19,8 @@ import com.pramod.dailyword.business.data.network.utils.safeApiCall
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import com.pramod.dailyword.framework.util.CalenderUtil
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,6 +28,7 @@ import java.util.*
 import javax.inject.Inject
 
 @ExperimentalPagingApi
+@AndroidEntryPoint
 class WidgetDataLoadService : JobService() {
     private val TAG = WidgetDataLoadService::class.simpleName
     private lateinit var appWidgetManager: AppWidgetManager
@@ -48,7 +51,7 @@ class WidgetDataLoadService : JobService() {
 
     override fun onStartJob(params: JobParameters?): Boolean {
         Log.i(TAG, "onStartJob: ")
-        GlobalScope.launch(Dispatchers.Main) {
+        CoroutineScope(Dispatchers.Main).launch {
 
             try {
                 val widgetComponent = ComponentName(baseContext, WordWidgetProvider::class.java)
@@ -183,6 +186,7 @@ class WidgetDataLoadService : JobService() {
             } finally {
                 jobFinished(params, false)
             }
+
         }
         return true
     }

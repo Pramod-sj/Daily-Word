@@ -51,11 +51,7 @@ fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: B
         startActivity(intent)
     }
     if (finish) {
-        if (withFadeAnimation) {
-            supportFinishAfterTransition()
-        } else {
-            finish()
-        }
+        finish()
     }
 }
 

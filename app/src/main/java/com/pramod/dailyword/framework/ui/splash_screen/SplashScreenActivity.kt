@@ -73,13 +73,13 @@ class SplashScreenActivity :
                     isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
                         Log.i(TAG, "isImageCached: $isCached")
                         if (isCached) {
-                            openHomePage(withFadeAnimation = true, finish = false)
+                            openHomePage(withFadeAnimation = true, finish = true)
                         } else {
                             binding.btnGetStarted.showProgress(true)
                             preloadImage(BuildConfig.HOME_BACKGROUND_URL) {
                                 binding.btnGetStarted.showProgress(false)
                                 Log.i(TAG, "preloadImage: $it")
-                                openHomePage(withFadeAnimation = true, finish = false)
+                                openHomePage(withFadeAnimation = true, finish = true)
                             }
                         }
                     }

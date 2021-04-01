@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import com.google.gson.Gson
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
+@AndroidEntryPoint
 open class BaseWidgetProvider : AppWidgetProvider() {
     private val TAG = BaseWidgetProvider::class.simpleName
 
