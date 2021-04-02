@@ -200,7 +200,7 @@ class AdsManager @Inject constructor(private val context: Context) {
         nativeAdLayout: NativeAdLayout,
         colorAccent: Int,
         verticalBannerAd: Boolean,
-        adLoadedCallack: (() -> Unit)? = null
+        adLoadedCallack: ((error: String?) -> Unit)? = null
     ): Boolean {
         if (!fbRemoteConfig.isAdsEnabled()) {
             Log.i(TAG, "Ads are disabled")
@@ -221,6 +221,7 @@ class AdsManager @Inject constructor(private val context: Context) {
 
                 override fun onError(p0: Ad?, p1: AdError?) {
                     Log.i(TAG, "Native ad Error: ${p1?.errorMessage}")
+                    adLoadedCallack?.invoke(p1?.errorMessage ?: "Error while loading adding")
                 }
 
                 override fun onAdLoaded(p0: Ad?) {
@@ -229,7 +230,7 @@ class AdsManager @Inject constructor(private val context: Context) {
                         Log.i(TAG, "Native ad loaded is null")
                         return
                     }
-                    adLoadedCallack?.invoke()
+                    adLoadedCallack?.invoke(null)
                     if (verticalBannerAd) {
                         inflateBannerNativeViewVertical(nativeAdLayout, it, colorAccent)
                     } else {
@@ -255,6 +256,9 @@ class AdsManager @Inject constructor(private val context: Context) {
         colorAccent: Int
     ) {
 
+        //remove any previous view added on nativeAdLayout
+        nativeAdLayout.removeAllViews()
+
         nativeBannerAd.unregisterView()
         val binding: BannerNativeAdBinding =
             DataBindingUtil.inflate(
@@ -266,7 +270,7 @@ class AdsManager @Inject constructor(private val context: Context) {
         nativeAdLayout.addView(binding.root)
 
         //bind adchoice icon
-        val adOptionsView: AdOptionsView =
+        val adOptionsView =
             AdOptionsView(nativeAdLayout.context, nativeBannerAd, nativeAdLayout)
         binding.adChoiceContainer.removeAllViews()
         binding.adChoiceContainer.addView(adOptionsView, 0)
@@ -298,6 +302,9 @@ class AdsManager @Inject constructor(private val context: Context) {
         nativeBannerAd: NativeBannerAd,
         colorAccent: Int
     ) {
+
+        //remove any previous view added on nativeAdLayout
+        nativeAdLayout.removeAllViews()
 
         nativeBannerAd.unregisterView()
         val binding: BannerNativeAdVerticalBinding =
@@ -451,28 +458,40 @@ class AdBindingAdaper {
             verticalAd: Boolean = false
         ) {
             if (showNativeAd) {
-                Handler().postDelayed({
-                    val adsManager = AdsManager.newInstance(nativeAdLayout.context)
+                Log.i("TAG", "showNativeAd: " + nativeAdLayout.getTag(R.id.isLoadingAd))
+                val isCalled =
+                    nativeAdLayout.getTag(R.id.isLoadingAd) == "${nativeAdLayout.id}_showNativeAd_called"
+                if (!isCalled) {
+                    nativeAdLayout.setTag(
+                        R.id.isLoadingAd,
+                        "${nativeAdLayout.id}_showNativeAd_called"
+                    )
                     onLoadAdCallback?.onLoadAd()
-                    adsManager.showNativeBannerAd(
-                        adId,
-                        nativeAdLayout,
-                        colorAccent
-                            ?: nativeAdLayout.context.getContextCompatColor(R.color.colorPrimary),
-                        verticalAd
-                    ) {
-                        //only make it visible when ad loaded successfully
-                        nativeAdLayout.isVisible = true
-                        CommonUtils.showViewAlphaAnimation(nativeAdLayout)
-                        onAdLoadedCallback?.onAdLoaded()
-                    }
+                    Handler().postDelayed({
+                        val adsManager = AdsManager.newInstance(nativeAdLayout.context)
+                        adsManager.showNativeBannerAd(
+                            adId,
+                            nativeAdLayout,
+                            colorAccent
+                                ?: nativeAdLayout.context.getContextCompatColor(R.color.colorPrimary),
+                            verticalAd
+                        ) { error ->
+                            if (error == null) {
+                                //only make it visible when ad loaded successfully
+                                CommonUtils.showViewAlphaAnimation(nativeAdLayout)
+                            } else {
+                                nativeAdLayout.setTag(R.id.isLoadingAd, null)
+                                nativeAdLayout.isVisible = false
+                            }
+                            onAdLoadedCallback?.onAdLoaded()
+                        }
 
-                }, showAdWithSomeDelay)
+                    }, showAdWithSomeDelay)
+                }
             } else {
                 nativeAdLayout.isVisible = false
             }
         }
-
 
     }
 

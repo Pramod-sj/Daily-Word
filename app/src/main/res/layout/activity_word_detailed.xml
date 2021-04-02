@@ -188,7 +188,7 @@
                             <com.facebook.ads.NativeAdLayout
                                 android:id="@+id/native_ad_container_2"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_2}"
-                                showAdWithSomeDelay="@{2000}"
+                                showAdWithSomeDelay="@{1000}"
                                 showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -259,7 +259,7 @@
                             <com.facebook.ads.NativeAdLayout
                                 android:id="@+id/native_ad_container_3"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_3}"
-                                showAdWithSomeDelay="@{2000}"
+                                showAdWithSomeDelay="@{1000}"
                                 showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null &amp;&amp; (wordDetailedViewModel.word.synonyms.size()>0 || wordDetailedViewModel.word.antonyms.size()>0)}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -419,7 +419,7 @@
                             <com.facebook.ads.NativeAdLayout
                                 android:id="@+id/native_ad_container_4"
                                 adId="@{AdsManager.NATIVE_BANNER_ID_4}"
-                                showAdWithSomeDelay="@{2000}"
+                                showAdWithSomeDelay="@{1000}"
                                 showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
