@@ -243,7 +243,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             showBottomSheet(
                 "App Content Credit",
                 resources.getString(R.string.merriam_webster_credit_text),
-                positiveText = "Go to Merriam-Webster",
+                positiveText = "Merriam-Webster",
                 positiveClickCallback = {
                     openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
                 },

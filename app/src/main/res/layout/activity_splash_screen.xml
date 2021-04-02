@@ -116,6 +116,7 @@
                 android:layout_marginTop="@dimen/margin_large"
                 android:layout_marginBottom="@dimen/margin_medium"
                 android:text="@string/made_in"
+                android:textColor="@color/textColor_disabled"
                 android:textSize="@dimen/text_tiny"
                 android:textStyle="bold" />
         </LinearLayout>

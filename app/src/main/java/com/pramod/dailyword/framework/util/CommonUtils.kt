@@ -369,7 +369,7 @@ object CommonUtils {
 
     fun showViewAlphaAnimation(view: View, duration: Long = 500) {
         view.isVisible = true
-        val alphaAnimation: AlphaAnimation = AlphaAnimation(0f, 1f)
+        val alphaAnimation = AlphaAnimation(0f, 1f)
         alphaAnimation.duration = duration
         alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {

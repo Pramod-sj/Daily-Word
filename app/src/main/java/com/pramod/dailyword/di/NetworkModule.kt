@@ -9,6 +9,7 @@ import com.pramod.dailyword.framework.datasource.network.mappers.IPInfoNEMapper
 import com.pramod.dailyword.framework.datasource.network.mappers.WordNEMapper
 import com.pramod.dailyword.framework.datasource.network.service.IPService
 import com.pramod.dailyword.framework.datasource.network.service.WordApiService
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,10 +47,11 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
+        gsonConverterFactory: GsonConverterFactory,
+        fbRemoteConfig: FBRemoteConfig
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
+            .baseUrl(fbRemoteConfig.baseUrl())
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
