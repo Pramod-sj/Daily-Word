@@ -7,10 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:statusBarColor">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">false</item>
-        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialDialog</item>
         <item name="extendedFloatingActionButtonStyle">@style/FAB.Extended</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -18,7 +18,11 @@
         <!-- Navigation Drawer -->
         <item name="colorNavigationItem">@color/navigation_item_color</item>
         <item name="colorNavigationItemSelected">@color/navigation_item_color</item>
-        <item name="drawableNavigationItemBackground">@drawable/background_navigation_item_selector</item>
+        <item name="drawableNavigationItemBackground">
+            @drawable/background_navigation_item_selector
+        </item>
+
+        <item name="android:fontFamily">@font/lato_regular</item>
 
     </style>
 
@@ -114,7 +118,6 @@
     </style>
 
 
-
     <style name="AppTheme.SubTitleTextStyle.Bold" parent="AppTheme.SubTitleTextStyle">
         <item name="android:textStyle">bold</item>
     </style>
@@ -130,7 +133,7 @@
     </style>
 
     <style name="ITSSubTitleStyle" parent="AppTheme.SubTitleTextStyle">
-        <item name="android:textSize">@dimen/text_sub_title</item>
+        <item name="android:textSize">@dimen/text_small</item>
     </style>
 
     <style name="CollapsingToolbar.TextAppearance.Expanded" parent="TextAppearance.MaterialComponents.Headline6">
@@ -148,6 +151,7 @@
 
     <style name="ToolbarTitleTextStyle" parent="AppTheme.Header5TextStyle.Bold">
         <item name="android:textColor">@color/textColor_highEmphasis</item>
+        <item name="fontFamily">@font/lato_black</item>
     </style>
 
     <style name="FAB.Extended" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
@@ -227,6 +231,45 @@
         <item name="itemIconTint">?attr/colorNavigationItem</item>
         <item name="itemTextColor">?attr/colorNavigationItem</item>
         <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="elevationOverlayEnabled">false</item>
+    </style>
+
+
+    <style name="FullScreenBottomSheetShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
+    </style>
+
+    <style name="HomeCardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+    </style>
+
+    <style name="NavigationItemNoRipple">
+        <item name="android:colorControlHighlight">@android:color/transparent</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.NavItem.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
 </resources>

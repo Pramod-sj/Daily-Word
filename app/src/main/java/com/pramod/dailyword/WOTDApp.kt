@@ -4,31 +4,41 @@ import android.app.Application
 import android.content.Context
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
-import com.pramod.dailyword.firebase.FBTopicSubscriber
-import com.pramod.dailyword.helper.NotificationPrefManager
-import com.pramod.dailyword.helper.PrefManager
-import com.pramod.dailyword.helper.ThemeManager
-import com.pramod.dailyword.util.CustomExceptionHandler
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.util.CustomExceptionHandler
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class WOTDApp : Application() {
 
+    private val themeManager: ThemeManager by lazy {
+        return@lazy ThemeManager.newInstance(this)
+    }
+
+    private val appPrefManager: PrefManager by lazy {
+        return@lazy PrefManager(this)
+    }
+
     override fun onCreate() {
+        appPrefManager.incrementAppLaunchCount()
         super.onCreate()
-        ThemeManager.newInstance(this).applyTheme()
+        themeManager.applyTheme()
         //setUpCustomCrashHandler()
         initAds()
-        PrefManager.getInstance(this).incrementAppLaunchCount()
     }
 
     companion object {
         @JvmStatic
-        fun clearAppData(context: Context) {
-            try {
+        fun clearAppData(context: Context): Boolean {
+            return try {
                 val packageName: String = context.packageName
                 val runtime = Runtime.getRuntime()
                 runtime.exec("pm clear $packageName")
+                true
             } catch (e: Exception) {
                 e.printStackTrace()
+                false
             }
         }
     }

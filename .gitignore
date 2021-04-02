@@ -7,8 +7,7 @@
 /captures
 .externalNativeBuild
 .cxx
-gradlew.bat
+key.properties
 gradlew
-gradle/wrapper
+gradlew.bat
 /endpoint.properties
-/key.properties

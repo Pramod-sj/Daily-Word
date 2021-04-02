@@ -5,9 +5,9 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.ui.recapwords.RecapWordsViewModel" />
+        <import type="com.pramod.dailyword.framework.ui.recap.RecapWordsViewModel" />
 
         <variable
             name="recapWordsViewModel"
@@ -20,20 +20,60 @@
         android:layout_height="match_parent"
         tools:context=".ui.recapwords.RecapWordsActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_recap_words"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/padding_small"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:orientation="vertical"
-            app:appBarLayout="@{appBar}"
-            app:applyRecyclerViewTopPadding="@{!recapWordsViewModel.edgeToEdgeEnabled}"
-            app:applyTopBottomPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            app:isVisible="@{recapWordsViewModel.words.size()>0}"
-            app:spanCount="2" />
+            android:paddingTop="?attr/actionBarSize"
+            app:applyTopBottomPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled()}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="@dimen/margin_medium"
+                    app:cardBackgroundColor="@color/green_400"
+                    app:cardCornerRadius="@dimen/card_radius_max"
+                    app:cardElevation="@dimen/card_elevation_max">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/AppTheme.SubTitleTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/padding_large"
+                        android:gravity="start|center_vertical"
+                        android:padding="@dimen/padding_large"
+                        android:text="@string/weekly_recap_note"
+                        android:textColor="?android:attr/windowBackground"
+                        app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
+                        app:drawableTint="?android:attr/windowBackground" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_recap_words"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/padding_small"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    app:isVisible="@{recapWordsViewModel.words.size()>0}"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:spanCount="2" />
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
 
         <include
@@ -46,13 +86,13 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:alpha="@dimen/appbar_alpha"
             android:animateLayoutChanges="true"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{recapWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScrollView">
 
@@ -96,18 +136,6 @@
                     android:text="@string/quick_recap" />
 
             </com.google.android.material.appbar.MaterialToolbar>
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/AppTheme.SubTitleTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_medium"
-                android:drawablePadding="35dp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="@dimen/padding_large"
-                android:text="@string/weekly_recap_note"
-                app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
-                app:drawableTint="@color/app_icon_tint" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

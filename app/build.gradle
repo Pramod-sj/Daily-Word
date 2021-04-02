@@ -1,10 +1,15 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'dagger.hilt.android.plugin'
+}
 
+def keyPropertiesFile = rootProject.file("key.properties")
+def keyProperties = new Properties()
+keyProperties.load(new FileInputStream(keyPropertiesFile))
 
 def endPointPropertiesFile = rootProject.file("endpoint.properties")
 def endpointProperties = new Properties()
@@ -19,10 +24,16 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 202001051
-        versionName "1.4.0-Stable"
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "GOOGLE_LICENSE_KEY", keyProperties['GOOGLE_LICENSE_KEY'])
+        buildConfigField("String", "MERCHANT_ID", keyProperties['MERCHANT_ID'])
+
+        /**
+         * Base urls and Endpoints
+         */
         buildConfigField("String", "BASE_URL", endpointProperties['BASE_URL'])
         buildConfigField("String", "API_BASE_URL", endpointProperties['API_BASE_URL'])
         buildConfigField("String", "WORLD_TIME_BASE_URL", endpointProperties['WORLD_TIME_BASE_URL'])
@@ -34,6 +45,11 @@ android {
         buildConfigField("String", "GET_PUBLIC_IP", endpointProperties['GET_PUBLIC_IP'])
         buildConfigField("String", "GET_IP_DETAILS", endpointProperties['GET_IP_DETAILS'])
         buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
+
+        buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
+        /**
+         * End
+         */
     }
 
     buildTypes {
@@ -69,12 +85,15 @@ android {
 
 dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-    def room_version = "2.3.0-alpha01"
-    def lifecycle_version = "2.3.0-rc01"
+
+    def room_version = "2.3.0-beta03"
+    def lifecycle_version = "2.3.1"
+    def hilt_viewmodels = "1.0.0-alpha03"
+    def hilt_version = "2.33-beta"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
-    testImplementation 'junit:junit:4.13.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.30"
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -85,7 +104,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-beta02'
 
     //in-app purchase helper lib
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'
@@ -115,27 +134,43 @@ dependencies {
 
     //firebase libs
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
-    implementation 'com.google.firebase:firebase-config-ktx:20.0.2'
-    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.1'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.3.0'
+    implementation 'com.google.firebase:firebase-config-ktx:20.0.4'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.4.0'
 
     //paging lib
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-beta01'
+    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-beta03'
 
     //FAN lib
-    implementation 'com.facebook.android:audience-network-sdk:6.+'
+    implementation 'com.facebook.android:audience-network-sdk:6.3.0'
 
     //AutoStarter lib
     implementation 'com.github.judemanutd:autostarter:1.0.8'
 
-    /*//lottie
-    implementation 'com.airbnb.android:lottie:3.4.1'*/
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.4.1'
 
+    //doki i.e. Don't kill my app
     implementation('dev.doubledot.doki:library:0.0.1@aar') {
         transitive = true
     }
 
-    implementation 'com.kuassivi.android.view:ripple-pulse-layout:0.1.9'
-
+    //in-app browser lib
     implementation "androidx.browser:browser:1.3.0"
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0-beta01'
+
+    //image loading library
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //custom lib to play and store audio files
+    implementation project(path: ':audioplayer')
+
+
+    implementation 'androidx.webkit:webkit:1.4.0'
+
 }

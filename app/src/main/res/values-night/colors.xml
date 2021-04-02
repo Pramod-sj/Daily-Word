@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BB86FC</color>
-    <color name="colorPrimaryDark">#252525</color>
-    <color name="colorAccent">#BB86FC</color>
+    <color name="colorPrimary">@color/green_400</color>
+    <color name="colorPrimaryDark">#202020</color>
+    <color name="colorAccent">@color/green_400</color>
 
     <color name="app_logo_tint">@color/white</color>
 
-    <color name="scrollBarColorPrimary">#40BB86FC</color>
+    <color name="scrollBarColorPrimary">#40ce93d8</color>
 
     <color name="app_theme_icon_tint">@color/green_200</color>
     <color name="app_animation_icon_tint">@color/orange_200</color>
@@ -34,8 +34,6 @@
 
     <color name="bottomSheetDialogNavigationBarColor">#282828</color>
 
-    <color name="windowBackgroundColor">#232323</color>
-
 
     <!-- Start Donate Item Colors -->
     <color name="color_cookie">@color/orange_200</color>
@@ -48,8 +46,19 @@
     <!-- End Donate Item Colors -->
 
 
-    <color name="social_media_background_color">#30ACABAB</color>
-    <color name="social_media_stroke_color">#ACABAB</color>
+    <color name="social_media_background_color">#20ACABAB</color>
+    <color name="social_media_stroke_color">@color/grey_extra_dark</color>
 
-    <color name="stroke_color_word_details">#ACABAB</color>
+    <color name="stroke_about_cards">#3E3D3D</color>
+
+    <!--dark window background color-->
+    <color name="windowBackgroundColor">#202020</color>
+    <!-- end -->
+
+    <!--colorSurface -->
+    <color name="colorSurface">#161616</color>
+
+    <color name="setting_stroke">#302F2F</color>
+    <color name="setting_background">#202020</color>
+    <color name="setting_card_color">#181818</color>
 </resources>

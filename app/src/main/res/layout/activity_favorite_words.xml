@@ -7,15 +7,15 @@
 
         <import type="android.view.View" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <variable
             name="favoriteWordsViewModel"
-            type="com.pramod.dailyword.ui.bookmarked_words.FavoriteWordsViewModel" />
+            type="com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsViewModel" />
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.helper.AdsManager" />
+        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
 
     </data>
 
@@ -25,37 +25,39 @@
         android:animateLayoutChanges="true"
         tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
 
-<!--        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            app:cardElevation="5dp"
-            app:cardPreventCornerOverlap="false"
-            app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
+        <!--        <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    app:cardElevation="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:shapeAppearanceOverlay="@style/AppTheme.VerticalAdCardShape">
 
-            <com.facebook.ads.NativeAdLayout
-                adId="@{AdsManager.NATIVE_BANNER_ID_1}"
-                showAdWithSomeDelay="@{1000}"
-                showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
-                verticalAd="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    <com.facebook.ads.NativeAdLayout
+                        adId="@{AdsManager.NATIVE_BANNER_ID_1}"
+                        showAdWithSomeDelay="@{1000}"
+                        showNativeAd="@{FBRemoteConfig.getInstance().adsEnabled}"
+                        verticalAd="@{true}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-        </com.google.android.material.card.MaterialCardView>-->
+                </com.google.android.material.card.MaterialCardView>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_words"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/padding_small"
             android:paddingTop="?attr/actionBarSize"
             android:scrollbarThumbVertical="@drawable/thumb_scroll_bar"
             android:scrollbars="vertical"
             android:splitMotionEvents="false"
-            android:visibility="@{favoriteWordsViewModel.showPlaceHolderLiveData?View.GONE:View.VISIBLE}"
-            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:applyTopBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2" />
 
         <include
             layout="@layout/list_placeholder_layout"
@@ -67,11 +69,11 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
-            android:background="@{CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground)}"
-            app:applyTopPaddingInset="@{favoriteWordsViewModel.edgeToEdgeEnabled}"
+            app:applyTopPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
 

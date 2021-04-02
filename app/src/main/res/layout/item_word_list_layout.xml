@@ -4,17 +4,21 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <variable
-            name="wordOfTheDay"
-            type="com.pramod.dailyword.db.model.WordOfTheDay" />
+            name="hideBadge"
+            type="Boolean" />
+
+        <variable
+            name="word"
+            type="com.pramod.dailyword.business.domain.model.Word" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -23,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         app:cardCornerRadius="0dp"
-        app:cardElevation="@dimen/card_elevation_word_item">
+        app:cardElevation="@dimen/card_elevation_word_item"
+        app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor)),30)}">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,7 +43,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/background_word_list_date"
-                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor)),30)}"
+                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor)),30)}"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_small">
@@ -47,15 +52,15 @@
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{CalenderUtil.getDayFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
+                    android:text="@{CalenderUtil.getDayFromDateString(word.date,CalenderUtil.DATE_FORMAT)}"
+                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? word.wordDesaturatedColor:word.wordColor))}"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{CalenderUtil.getMonthFromDateString(wordOfTheDay.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?wordOfTheDay.wordDesaturatedColor:wordOfTheDay.wordColor))}"
+                    android:text="@{CalenderUtil.getMonthFromDateString(word.date,CalenderUtil.DATE_FORMAT)}"
+                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor))}"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
 
@@ -64,24 +69,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/imgBtn_bookmark_word_list"
                 android:layout_toEndOf="@id/item_word_list_date"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:paddingVertical="@dimen/padding_small">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     style="@style/AppTheme.Header5TextStyle.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@{wordOfTheDay.word}" />
+                    android:drawableEnd="@{!hideBadge &amp;&amp; !word.seen ?@drawable/background_circle_12dp:null}"
+                    android:drawablePadding="@dimen/margin_medium"
+                    android:text="@{word.word}" />
 
                 <TextView
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{wordOfTheDay.meanings.get(0)}" />
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:text="@{word.meanings.get(0)}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:isGone="@{word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:background="@drawable/background_curve"
+                        android:backgroundTint="?colorPrimary"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:paddingVertical="2dp"
+                        android:text="@string/synonyms"
+                        android:textColor="?android:attr/windowBackground"
+                        android:textSize="@dimen/text_tiny"
+                        app:isGone="@{word.synonyms.size()==0 }" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:background="@drawable/background_curve"
+                        android:backgroundTint="?colorPrimary"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:paddingVertical="2dp"
+                        android:text="@string/antonyms"
+                        android:textColor="?android:attr/windowBackground"
+                        android:textSize="@dimen/text_tiny"
+                        app:isGone="@{word.antonyms.size()==0}" />
+
+                </LinearLayout>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imgBtn_bookmark_word_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?actionBarItemBackground"
+                android:src="@drawable/selector_icon_bookmark"
+                app:selected="@{word.bookmarkedId!=null}" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

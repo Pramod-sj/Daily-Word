@@ -7,36 +7,50 @@
 
         <variable
             name="changes"
-            type="com.pramod.dailyword.db.model.Changes" />
+            type="com.pramod.dailyword.framework.ui.changelogs.Changes" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/padding_large"
-        android:paddingVertical="@dimen/padding_small">
+        android:padding="@dimen/padding_large">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium">
+
+            <TextView
+                style="@style/AppTheme.SubTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@{changes.version}"
+                android:textColor="@color/textColor_highEmphasis"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/AppTheme.SubTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@{changes.date}"
+                android:textColor="@color/textColor_highEmphasis"
+                android:textStyle="bold" />
+
+        </FrameLayout>
 
         <TextView
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`v`+changes.version+` (`+changes.date+`) `}"
-            android:textColor="@color/textColor_highEmphasis"
-            android:textStyle="bold" />
+            android:text="@{changes.releaseName}" />
 
         <TextView
-            style="@style/AppTheme.SubTitleTextStyle"
+            style="@style/AppTheme.SmallTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{changes.releaseName}"
-            android:textColor="@color/textColor_highEmphasis" />
-
-        <TextView
-            style="@style/AppTheme.SubTitleTextStyle"
-            android:textColor="@color/textColor_mediumEmphasis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{changes.getFormattedChanges(@string/unicode_bullet)}" />
+            android:text="@{changes.getFormattedChanges()}" />
     </LinearLayout>
 </layout>

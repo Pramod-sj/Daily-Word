@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.pramod.dailyword.R" />
+
+        <import type="com.pramod.dailyword.business.data.network.Status" />
+
+        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
+
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
+
+        <import type="com.pramod.dailyword.Constants" />
+
+        <variable
+            name="isEdgeToEdgeEnabled"
+            type="Boolean" />
+
+        <variable
+            name="isDarkTheme"
+            type="Boolean" />
+
+        <variable
+            name="mainViewModel"
+            type="com.pramod.dailyword.framework.ui.home.HomeViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeActivity">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/home_imageView_sun"
+            loadDrawable="@{@drawable/ic_sun}"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginBottom="100dp"
+            app:isVisible="@{!ThemeManager.isNightModeActive(context)}"
+            app:selected="@{true}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/home_imageView_moon"
+            loadDrawable="@{@drawable/ic_moon}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/margin_extra_large"
+            android:alpha="@integer/alpha_moon"
+            app:isVisible="@{ThemeManager.isNightModeActive(context)}"
+            app:layout_anchor="@id/home_imageView_buildings"
+            app:layout_anchorGravity="end"
+            app:selected="@{true}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/home_imageView_buildings"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_gravity="bottom"
+            android:alpha="@integer/alpha_mountains"
+            android:scaleType="centerCrop" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium"
+            android:alpha="0.9"
+            android:background="@android:color/transparent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:applyTopPaddingInset="@{mainViewModel.isEdgeToEdgeEnabled}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScroll">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:visibility="gone"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/margin_large">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/home_app_icon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:src="@drawable/ic_vocabulary_24dp"
+                        android:tint="@color/app_icon_tint"
+                        app:tint="@color/app_icon_tint" />
+
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        style="@style/ToolbarTitleTextStyle"
+                        switchingText="@{mainViewModel.title()}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/home_app_icon"
+                        android:paddingHorizontal="@dimen/margin_medium" />
+
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <include
+                android:id="@+id/customToolbar"
+                layout="@layout/layout_custom_toolbar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:clipToPadding="false"
+                android:padding="@dimen/padding_medium"
+                android:weightSum="4">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/background_circle"
+                            android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.green_400),Constants.COLOR_ALPHA)}"
+                            android:clickable="false"
+                            android:padding="13dp"
+                            android:src="@drawable/ic_round_format_list_bulleted_24"
+                            android:tint="@color/green_400" />
+
+                        <View
+                            android:id="@+id/view_badge_word_list"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end|top"
+                            android:background="@drawable/background_home_badge" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:text="@string/previous_words"
+                        android:textSize="@dimen/text_tiny" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="@{(v)->mainViewModel.navigator.gotoBookmark(v)}"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/background_circle"
+                            android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.blue_400),Constants.COLOR_ALPHA)}"
+                            android:clickable="false"
+                            android:padding="13dp"
+                            android:src="@drawable/ic_outline_bookmarks_24"
+                            android:tint="@color/blue_400" />
+
+                        <View
+                            android:id="@+id/view_badge_bookmark"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end|top"
+                            android:background="@drawable/background_home_badge" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:text="@string/bookmarked_words"
+                        android:textSize="@dimen/text_tiny" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="@{(v)->mainViewModel.navigator.gotoRandomWord(v)}"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/background_circle"
+                            android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.pink_400),Constants.COLOR_ALPHA)}"
+                            android:padding="13dp"
+                            android:src="@drawable/ic_random_word"
+                            android:tint="@color/pink_400" />
+
+                        <View
+                            android:id="@+id/view_badge_random_word"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end|top"
+                            android:background="@drawable/background_home_badge"
+                            android:gravity="center" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:text="@string/random_word"
+                        android:textSize="@dimen/text_tiny" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:onClick="@{(v)->mainViewModel.navigator.gotoRecap(v)}"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/background_circle"
+                            android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.orange_600),Constants.COLOR_ALPHA)}"
+                            android:padding="13dp"
+                            android:src="@drawable/ic_recap"
+                            android:tint="@color/orange_600" />
+
+                        <View
+                            android:id="@+id/view_badge_recap"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="end|top"
+                            android:background="@drawable/background_home_badge"
+                            android:gravity="center" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:text="@string/quick_recap"
+                        android:textSize="@dimen/text_tiny" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            app:onRefreshListener="@{()->mainViewModel.refresh()}"
+            app:refreshing="@{mainViewModel.showLoading}">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:isScrollContainer="true"
+                android:scrollbars="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/padding_small">
+
+
+                    <LinearLayout
+                        android:id="@+id/main_linearLayout_wotd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{(v)->mainViewModel.navigator.readMore(v,mainViewModel.wordOfTheDay)}"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/padding_large"
+                        android:paddingVertical="@dimen/padding_small"
+                        android:transitionGroup="true"
+                        app:isVisible="@{mainViewModel.wordOfTheDay!=null}">
+
+                        <!--
+                                            copyToClipBoardText="@{mainViewModel.wordOfTheDayLiveData.word}"
+                                            rootLayout="@{coordinatorLayout}"
+                        -->
+
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/txtView_word_of_the_day"
+                            style="@style/AppTheme.Header1TextStyle.Bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/padding_medium"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="@{mainViewModel.wordOfTheDay.word}"
+                            android:textIsSelectable="true" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{mainViewModel.wordOfTheDay.attribute}"
+                                android:textStyle="italic" />
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/padding_small"
+                                android:text="@string/unicode_bullet" />
+
+                            <TextView
+                                style="@style/AppTheme.TitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{mainViewModel.wordOfTheDay.pronounce}" />
+
+                            <FrameLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_marginHorizontal="@dimen/padding_medium"
+                                android:animateLayoutChanges="true"
+                                android:clipChildren="false">
+
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/lottie_speaker"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->mainViewModel.audioPlayer.play(mainViewModel.wordOfTheDay.pronounceAudio)}"
+                                    android:padding="12dp"
+                                    app:lottie_animate="@{mainViewModel.audioPlayer.audioPlaying.contentIfNotHandled}"
+                                    app:lottie_autoPlay="false"
+                                    app:lottie_fallbackRes="@drawable/ic_volume_up_black_24dp"
+                                    app:lottie_fileName="lottie_speaker_anim_2.json"
+                                    app:lottie_loop="true" />
+
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/AppTheme.SubTitleTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="@{mainViewModel.wordOfTheDay.meanings[0]}" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/AppTheme.SubTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{`How to use `+mainViewModel.wordOfTheDay.word}"
+                                android:textColor="@color/textColor_highEmphasis"
+                                android:textSize="@dimen/text_sub_title"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                style="@style/AppTheme.SubTitleTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:text="@{mainViewModel.wordOfTheDay.examples[0]}" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:height="40dp"
+                            android:onClick="@{(v)->mainViewModel.navigator.readMore(v,mainViewModel.wordOfTheDay)}"
+                            android:text="@string/read_more"
+                            android:textSize="@dimen/text_small"
+                            android:visibility="gone"
+                            app:buttonTextColorBasedOnWord="@{mainViewModel.wordOfTheDay}" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/main_recyclerview_past_words"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        android:paddingHorizontal="@dimen/padding_small"
+                        android:paddingVertical="@dimen/padding_large"
+                        android:splitMotionEvents="false"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        applyBackgroundTint="@{CommonUtils.changeAlpha(CommonUtils.resolveAttrToColor(context,android.R.attr.windowBackground),120)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="-10dp"
+                        android:layout_marginEnd="@dimen/margin_large"
+                        android:ellipsize="end"
+                        android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
+                        android:text="@string/learn_all"
+                        android:textSize="@dimen/text_small"
+                        android:visibility="gone"
+                        app:buttonTextColorBasedOnWord="@{mainViewModel.wordOfTheDay}" />
+
+                    <!--android:visibility="@{(mainViewModel.wordsExceptToday.size()!=0)?View.VISIBLE:View.GONE}"-->
+
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

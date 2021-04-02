@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3D01C3</color>
-    <color name="colorAccent">#6200EE</color>
-    <color name="colorPrimaryDesaturated">#BB86FC</color>
+    <color name="colorPrimaryDark">@color/green_600</color>
+    <color name="colorPrimary">@color/green_500</color>
+    <color name="colorAccent">@color/green_500</color>
+    <color name="colorPrimaryDesaturated">@color/green_200</color>
 
     <color name="scrollBarColorPrimary">#406200EE</color>
 
@@ -68,7 +68,9 @@
     <color name="lightGreen_400">#9ccc65</color>
     <color name="lightGreen_200">#c5e1a5</color>
 
+    <color name="green_800">#2E7D32</color>
     <color name="green_600">#43a047</color>
+    <color name="green_500">#4CAF50</color>
     <color name="green_400">#66bb6a</color>
     <color name="green_200">#a5d6a7</color>
 
@@ -84,6 +86,12 @@
     <color name="yellow_100">#FFFF8D</color>
     <color name="yellow_400">#FFEA00</color>
     <color name="yellow_600">#FBC02D</color>
+
+
+    <color name="rally_green_800">#007a46</color>
+    <color name="rally_green_600">#009D5F</color>
+    <color name="rally_green_400">#1EB980</color>
+    <color name="rally_green_200">#8DD5B3</color>
 
 
     <color name="app_theme_icon_tint">@color/green_600</color>
@@ -144,6 +152,7 @@
     <color name="bottomSheetDialogNavigationBarColor">#FFFFFF</color>
 
     <color name="windowBackgroundColor">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
 
     <!-- Start Donate Item Colors -->
     <color name="color_cookie">@color/orange_600</color>
@@ -155,8 +164,12 @@
     <color name="color_meal">@color/deepOrange_600</color>
     <!-- End Donate Item Colors -->
 
-    <color name="social_media_background_color">#30ACABAB</color>
+    <color name="social_media_background_color">#20ACABAB</color>
     <color name="social_media_stroke_color">#ACABAB</color>
 
-    <color name="stroke_color_word_details">#ACABAB</color>
+    <color name="stroke_about_cards">@color/grey_light</color>
+
+    <color name="setting_background">#F6F7F8</color>
+    <color name="setting_stroke">@color/grey_light</color>
+    <color name="setting_card_color">@color/white</color>
 </resources>

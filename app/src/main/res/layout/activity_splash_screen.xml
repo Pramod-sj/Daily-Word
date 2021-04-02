@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
 
-        <import type="com.pramod.dailyword.helper.PrefManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.PrefManager" />
 
         <variable
             name="splashScreenViewModel"
-            type="com.pramod.dailyword.ui.splash_screen.SplashScreenViewModel" />
+            type="com.pramod.dailyword.framework.ui.splash_screen.SplashScreenViewModel" />
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
+            android:layout_height="188dp"
             android:layout_gravity="top"
             android:scaleType="fitXY"
             android:src="@drawable/ic_wave"
@@ -31,10 +31,10 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="40dp"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:gravity="center"
@@ -47,8 +47,7 @@
                 android:layout_height="150dp"
                 android:layout_margin="@dimen/margin_medium"
                 android:src="@drawable/ic_vocabulary"
-                android:tint="@color/app_icon_tint"
-                app:tint="@color/app_icon_tint"/>
+                app:tint="@color/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -67,7 +66,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    style="@style/AppTheme.TitleTextStyle"
+                    style="@style/AppTheme.SubTitleTextStyle"
                     switchText="@{splashScreenViewModel.splashScreenSubText()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,8 +85,9 @@
             android:orientation="vertical"
             app:applyBottomPaddingInset="@{true}">
 
-            <com.google.android.material.button.MaterialButton
+            <com.pramod.dailyword.framework.ui.common.view.MaterialProgressButton
                 android:id="@+id/btn_get_started"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -98,21 +98,26 @@
 
             <TextView
                 android:id="@+id/accept_condition_textView"
+                style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                android:text="@{String.format(@string/accept_text,@string/term_and_condition,@string/privacy_policy)}"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:lineSpacingExtra="4dp"
+                android:text="@{String.format(@string/accept_text,@string/term_and_condition_small,@string/privacy_policy_small)}"
                 android:textAlignment="center"
+                android:textColorLink="@color/textColor_mediumEmphasis"
                 android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_large"
                 android:layout_marginBottom="@dimen/margin_medium"
                 android:text="@string/made_in"
-                android:textColor="@color/textColor_highEmphasis"
+                android:textColor="@color/textColor_disabled"
+                android:textSize="@dimen/text_tiny"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

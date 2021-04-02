@@ -64,4 +64,7 @@
     <item name="alpha_mountains" format="float" type="integer">1</item>
 
     <dimen name="card_elevation_word_item">@dimen/card_elevation</dimen>
+
+    <dimen name="setting_card_elevation">1dp</dimen>
+    <dimen name="setting_stroke_start_margin">17dp</dimen>
 </resources>

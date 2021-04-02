@@ -4,17 +4,17 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.firebase.FBRemoteConfig" />
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.helper.ThemeManager" />
+        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
 
-        <import type="com.pramod.dailyword.util.CommonUtils" />
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
-        <import type="com.pramod.dailyword.util.CalenderUtil" />
+        <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <variable
-            name="wordOfTheDay"
-            type="com.pramod.dailyword.db.model.WordOfTheDay" />
+            name="word"
+            type="com.pramod.dailyword.business.domain.model.Word" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -37,26 +37,26 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{CalenderUtil.getDayName(wordOfTheDay.dateTimeInMillis)+` (`+CalenderUtil.convertCalenderToString(wordOfTheDay.dateTimeInMillis,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+`)`}" />
+                android:text="@{CalenderUtil.getDayName(word.dateTimeInMillis)+` (`+CalenderUtil.convertCalenderToString(word.dateTimeInMillis,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+`)`}" />
 
             <TextView
                 style="@style/AppTheme.Header5TextStyle.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:text="@{wordOfTheDay.word}" />
+                android:text="@{word.word}" />
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wordOfTheDay.meanings.get(0)}" />
+                android:text="@{word.meanings.get(0)}" />
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wordOfTheDay.examples.get(0)}"
+                android:text="@{word.examples.get(0)}"
                 android:textStyle="italic" />
         </LinearLayout>
 

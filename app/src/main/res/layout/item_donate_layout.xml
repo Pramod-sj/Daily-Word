@@ -6,7 +6,11 @@
 
         <variable
             name="donateItem"
-            type="com.pramod.dailyword.ui.donate.DonateItem" />
+            type="com.pramod.dailyword.framework.ui.donate.DonateItem" />
+
+        <variable
+            name="strokeColor"
+            type="Integer" />
 
         <variable
             name="alphaColor"
@@ -15,6 +19,8 @@
         <variable
             name="color"
             type="Integer" />
+
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -23,18 +29,18 @@
         android:layout_margin="@dimen/margin_medium"
         app:cardCornerRadius="@dimen/card_radius_max"
         app:cardElevation="0dp"
-        app:strokeColor="@{color}"
-        app:strokeWidth="0.5dp">
+        app:cardBackgroundColor="@{alphaColor}"
+        app:strokeColor="@{strokeColor}"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{alphaColor}"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/padding_large">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 loadDrawable="@{donateItem.drawableId}"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -45,7 +51,7 @@
                 style="@style/AppTheme.TitleTextStyle.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/unicode_rupee_symbol+` `+String.valueOf(donateItem.amount)}"
+                android:text="@{donateItem.amount}"
                 android:textColor="@{color}" />
 
             <TextView
