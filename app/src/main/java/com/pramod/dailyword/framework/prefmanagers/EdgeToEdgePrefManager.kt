@@ -22,6 +22,8 @@ class EdgeToEdgePrefManager @Inject constructor(
     companion object {
         val TAG = EdgeToEdgePrefManager::class.java.simpleName
 
+        private const val VALUE_DEFAULT_EDGE_TO_EDGE = true
+
         private const val PREFERENCES_NAME = "window_preferences"
         private const val KEY_EDGE_TO_EDGE_ENABLED = "edge_to_edge_enabled"
         private const val EDGE_TO_EDGE_BAR_ALPHA = 128
@@ -55,7 +57,7 @@ class EdgeToEdgePrefManager @Inject constructor(
      */
     fun isEnabled() = sPrefManager.getBoolean(
         KEY_EDGE_TO_EDGE_ENABLED,
-        true
+        VALUE_DEFAULT_EDGE_TO_EDGE
     )
 
     fun applyEdgeToEdgeIfEnabled(
@@ -150,7 +152,7 @@ class EdgeToEdgePrefManager @Inject constructor(
         return SPrefBooleanLiveData(
             sPrefManager,
             KEY_EDGE_TO_EDGE_ENABLED,
-            false
+            VALUE_DEFAULT_EDGE_TO_EDGE
         )
     }
 

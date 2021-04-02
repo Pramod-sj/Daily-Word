@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.settings
 
 import androidx.lifecycle.MutableLiveData
+import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
