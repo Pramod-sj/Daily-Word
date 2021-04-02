@@ -24,6 +24,9 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     lateinit var toggleBookmarkInteractor: ToggleBookmarkInteractor
 
     companion object {
+
+        const val EXTRA_INTENT_TO_HOME_WORD_DATE = "word_date"
+
         const val ACTION_AUTO_UPDATE_WIDGET =
             "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET"
         const val ACTION_TRY_AGAIN_FROM_WIDGET =

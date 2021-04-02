@@ -22,7 +22,6 @@ import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -55,6 +54,8 @@ class WidgetDataLoadService : JobService() {
 
             try {
                 val widgetComponent = ComponentName(baseContext, WordWidgetProvider::class.java)
+                val widgetComponentMedium =
+                    ComponentName(baseContext, MediumWordWidgetProvider::class.java)
                 val widgetComponentSmall =
                     ComponentName(baseContext, SmallWordWidgetProvider::class.java)
 
@@ -63,6 +64,14 @@ class WidgetDataLoadService : JobService() {
                 appWidgetManager.updateAppWidget(
                     widgetComponent,
                     WidgetViewHelper.createLoadingWidget(
+                        baseContext
+                    )
+                )
+
+                //show progress loader for medium widget
+                appWidgetManager.updateAppWidget(
+                    widgetComponentMedium,
+                    WidgetViewHelper.createLoadingWidgetMedium(
                         baseContext
                     )
                 )
@@ -126,6 +135,15 @@ class WidgetDataLoadService : JobService() {
                                     localWord
                                 )
                             )
+
+                            //updating medium widget view
+                            appWidgetManager.updateAppWidget(
+                                widgetComponentMedium,
+                                WidgetViewHelper.createWordOfTheDayWidgetMedium(
+                                    baseContext,
+                                    localWord
+                                )
+                            )
                         } else {
                             appWidgetManager.updateAppWidget(
                                 widgetComponent,
@@ -136,6 +154,16 @@ class WidgetDataLoadService : JobService() {
                                 )
                             )
 
+
+                            //updating medium widget view
+                            appWidgetManager.updateAppWidget(
+                                widgetComponentMedium,
+                                WidgetViewHelper.createPlaceHolderWidgetMedium(
+                                    baseContext,
+                                    R.drawable.ic_vocabulary,
+                                    "No word of the day found!"
+                                )
+                            )
 
                             //updating small widget view
                             appWidgetManager.updateAppWidget(
@@ -151,6 +179,16 @@ class WidgetDataLoadService : JobService() {
                         appWidgetManager.updateAppWidget(
                             widgetComponent,
                             WidgetViewHelper.createPlaceHolderWidget(
+                                baseContext,
+                                R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
+                                resource.error?.message ?: "Something went wrong! try again."
+                            )
+                        )
+
+                        //updating medium widget view
+                        appWidgetManager.updateAppWidget(
+                            widgetComponentMedium,
+                            WidgetViewHelper.createPlaceHolderWidgetMedium(
                                 baseContext,
                                 R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
                                 resource.error?.message ?: "Something went wrong! try again."
@@ -173,6 +211,11 @@ class WidgetDataLoadService : JobService() {
                         widgetComponent,
                         WidgetViewHelper.createWordOfTheDayWidget(baseContext, localWord)
                     )
+                    //update medium widget
+                    appWidgetManager.updateAppWidget(
+                        widgetComponentMedium,
+                        WidgetViewHelper.createWordOfTheDayWidgetMedium(baseContext, localWord)
+                    )
 
                     //update small widget
                     appWidgetManager.updateAppWidget(
@@ -193,7 +236,7 @@ class WidgetDataLoadService : JobService() {
 
     override fun onStopJob(params: JobParameters?): Boolean {
         Log.i(TAG, "onStopJob: ")
-        return true
+        return false
     }
 
     override fun onDestroy() {

@@ -43,6 +43,7 @@ import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
+import com.pramod.dailyword.framework.widget.BaseWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
@@ -104,6 +105,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         settingUpAudioIconTint()
         setUpViewCallbacks()
         deepLinkNotification()
+        //handleWidgetExtras()
         initBottomSheetMenu()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
@@ -425,6 +427,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             else -> {
 
             }
+        }
+    }
+
+    private fun handleWidgetExtras() {
+        val date = intent.extras?.getString(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+        date?.let {
+            openWordDetailsPage(it, null)
         }
     }
 
