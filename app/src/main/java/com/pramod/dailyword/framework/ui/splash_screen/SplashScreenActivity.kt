@@ -112,11 +112,11 @@ class SplashScreenActivity :
 
     private fun setUpAcceptLinks() {
         val termsAndConditionLink = Pair(
-            resources.getString(R.string.term_and_condition),
+            resources.getString(R.string.term_and_condition_small),
             View.OnClickListener {
                 it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 WebViewDialogFragment.show(
-                    resources.getString(R.string.term_and_condition),
+                    resources.getString(R.string.term_and_condition_small),
                     BuildConfig.TERM_AND_CONDITION,
                     supportFragmentManager
                 )
@@ -124,11 +124,11 @@ class SplashScreenActivity :
         )
 
         val privacyPolicyLink = Pair(
-            resources.getString(R.string.privacy_policy),
+            resources.getString(R.string.privacy_policy_small),
             View.OnClickListener {
                 it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 WebViewDialogFragment.show(
-                    resources.getString(R.string.privacy_policy),
+                    resources.getString(R.string.privacy_policy_small),
                     BuildConfig.PRIVACY_POLICY,
                     supportFragmentManager
                 )

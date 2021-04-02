@@ -88,7 +88,7 @@
             <com.pramod.dailyword.framework.ui.common.view.MaterialProgressButton
                 android:id="@+id/btn_get_started"
                 style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:enabled="@{splashScreenViewModel.enableStartButton()}"
@@ -104,9 +104,9 @@
                 android:layout_marginHorizontal="@dimen/margin_large"
                 android:layout_marginVertical="@dimen/margin_small"
                 android:lineSpacingExtra="4dp"
-                android:text="@{String.format(@string/accept_text,@string/term_and_condition,@string/privacy_policy)}"
+                android:text="@{String.format(@string/accept_text,@string/term_and_condition_small,@string/privacy_policy_small)}"
                 android:textAlignment="center"
-                android:textColorLink="@color/green_200"
+                android:textColorLink="@color/textColor_mediumEmphasis"
                 android:visibility="@{PrefManager.getInstance(context).newUser?View.VISIBLE:View.GONE}" />
 
             <TextView
