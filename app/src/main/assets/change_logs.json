@@ -1,13 +1,13 @@
 [
   {
-    "version": "2.0.0",
+    "version": "2.0.0-Beta-1",
     "release_name": "\uD83C\uDF89 Feature update 3 \uD83C\uDF89",
-    "date": "28 Mar 2021",
+    "date": "02 April 2021",
     "changes": [
-      "Read random word just a click away!",
+      "Read random words just a click away!",
       "Better and fast audio playing",
       "Welcome Synonyms and Antonyms!",
-      "Recap your word knowledge on every sunday",
+      "Recap your word knowledge every Sunday",
       "Badge indication for each word",
       "3 Different Widgets (2x1, 3x2, 5x3)",
       "Major UI Changes",

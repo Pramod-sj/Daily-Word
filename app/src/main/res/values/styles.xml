@@ -239,14 +239,10 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="actionMenuTextColor">@color/colorPrimary</item>
-        <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="elevationOverlayEnabled">false</item>
     </style>
 
