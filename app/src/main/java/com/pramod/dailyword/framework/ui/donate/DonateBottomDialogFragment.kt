@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.view.updatePadding
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentManager
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.TransactionDetails
@@ -14,6 +13,7 @@ import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.helper.BillingHelper
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -38,27 +38,6 @@ class DonateBottomDialogFragment :
             BuildConfig.MERCHANT_ID,
             object : BillingProcessor.IBillingHandler {
                 override fun onBillingInitialized() {
-                    Log.i(TAG, "onBillingInitialized: ")
-                    donateItemList.value?.let { localDonateItem ->
-                        val list = ArrayList(localDonateItem.map { it.itemProductId })
-                        val purchaseList = billingProcessor.getPurchaseListingDetails(list)
-                        purchaseList?.let {
-                            val localDonateItemMutable = localDonateItem.toMutableList()
-                            for (sku in purchaseList) {
-                                localDonateItem.find { sku.productId == it.itemProductId }?.let {
-                                    localDonateItemMutable[localDonateItem.indexOf(it)] =
-                                        DonateItem(
-                                            it.itemProductId,
-                                            it.drawableId,
-                                            it.title,
-                                            sku.priceText,
-                                            it.color
-                                        )
-                                }
-                            }
-                            donateItemList.value = localDonateItemMutable
-                        }
-                    }
 
                 }
 
@@ -85,7 +64,8 @@ class DonateBottomDialogFragment :
                 showSnackBarMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
             } else {
                 if (BillingProcessor.isIabServiceAvailable(context)) {
-                    billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
+                    billingHelper.purchase(requireActivity(), donateItem.itemProductId)
+                    //billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
                 } else {
                     showSnackBarMessage(
                         Message.SnackBarMessage(
@@ -98,15 +78,53 @@ class DonateBottomDialogFragment :
         }
     }
 
+    private lateinit var billingHelper: BillingHelper
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        billingProcessor.initialize()
+        initBillingHelper()
         applyBottomInsetToScrollView()
         loadLottieAnimationFileFromUrl()
         binding.donateRecyclerView.adapter = donateItemAdapter
         donateItemList.observe(this) {
             donateItemAdapter.submitList(it)
         }
+    }
+
+    private fun initBillingHelper() {
+
+        billingHelper = BillingHelper.newInstance(
+            requireContext(),
+            viewLifecycleOwner,
+            onBillingInitialized = {
+                Log.i(TAG, "onBillingInitialized: ")
+                donateItemList.value?.let { localDonateItem ->
+                    val list = ArrayList(localDonateItem.map { it.itemProductId })
+                    val purchaseList = billingProcessor.getPurchaseListingDetails(list)
+                    purchaseList?.let {
+                        val localDonateItemMutable = localDonateItem.toMutableList()
+                        for (sku in purchaseList) {
+                            localDonateItem.find { sku.productId == it.itemProductId }?.let {
+                                localDonateItemMutable[localDonateItem.indexOf(it)] =
+                                    DonateItem(
+                                        it.itemProductId,
+                                        it.drawableId,
+                                        it.title,
+                                        sku.priceText,
+                                        it.color
+                                    )
+                            }
+                        }
+                        donateItemList.value = localDonateItemMutable
+                    }
+                }
+            },
+            onBillingError = {
+                showSnackBarMessage(Message.SnackBarMessage(it))
+            }
+        )
+
     }
 
     private fun loadLottieAnimationFileFromUrl() {

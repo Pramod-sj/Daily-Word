@@ -90,6 +90,8 @@ dependencies {
     def lifecycle_version = "2.3.1"
     def hilt_viewmodels = "1.0.0-alpha03"
     def hilt_version = "2.33-beta"
+    def billing_version = "3.0.3"
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.30"
@@ -173,4 +175,6 @@ dependencies {
 
     implementation 'androidx.webkit:webkit:1.4.0'
 
+    //billing lib
+    implementation "com.android.billingclient:billing-ktx:$billing_version"
 }
