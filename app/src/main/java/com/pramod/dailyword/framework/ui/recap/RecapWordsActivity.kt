@@ -9,6 +9,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityRecapWordsBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
 import com.pramod.dailyword.framework.transition.removeCallbacks
@@ -29,10 +30,14 @@ class RecapWordsActivity :
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
+        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
+        binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         initAdapter()
     }

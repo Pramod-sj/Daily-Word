@@ -1,10 +1,7 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
 import android.os.Handler
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
@@ -32,7 +29,8 @@ class SplashScreenViewModel @Inject constructor(
         //subscribe to receive notification
         fbTopicSubscriber.subscribeToDailyWordNotification()
 
-        fbTopicSubscriber.subscribeToCountry()
+        //subscribe to country code
+        fbTopicSubscriber.subscribeToCountry(viewModelScope)
 
 
         splashScreenTextVisible.observeForever(object : Observer<Boolean> {

@@ -29,7 +29,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="?actionBarSize"
-            app:applyTopBottomPaddingInset="@{aboutAppViewModel.isEdgeToEdgeEnabled}">
+            app:applyVerticalPaddingInset="@{aboutAppViewModel.isEdgeToEdgeEnabled}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,9 +58,10 @@
                             android:src="@drawable/ic_app_icon" />
 
                         <TextView
-                            style="@style/AppTheme.TitleTextStyle.Bold"
+                            style="@style/ToolbarTitleTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:letterSpacing="0.03"
                             android:layout_gravity="center_horizontal"
                             android:text="@{CommonUtils.getFancyAppName(context)}" />
 
@@ -126,7 +127,7 @@
                         android:elevation="3.1dp"
                         app:civ_border_color="@color/black"
                         app:civ_border_width="1dp"
-                        app:srcCompat="@drawable/dev_profile"/>
+                        app:srcCompat="@drawable/dev_profile" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/card_dev_info"

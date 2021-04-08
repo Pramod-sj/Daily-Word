@@ -35,7 +35,7 @@ import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
-import com.pramod.dailyword.framework.transition.isViewsPreDrawn
+import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
@@ -528,7 +528,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
         supportPostponeEnterTransition()
-        isViewsPreDrawn(binding.mainRecyclerviewPastWords) {
+        doOnViewPreDrawn(binding.mainRecyclerviewPastWords) {
             supportStartPostponedEnterTransition()
         }
 

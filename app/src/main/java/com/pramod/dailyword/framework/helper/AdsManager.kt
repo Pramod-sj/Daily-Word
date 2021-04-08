@@ -54,6 +54,8 @@ class AdsManager @Inject constructor(private val context: Context) {
         const val NATIVE_BANNER_ID_4 = "2986832738063599_3134035463343325"
         const val NATIVE_INTERSTITIAL_AD = "2986832738063599_2986834191396787"
         const val TAG = "AdsManager"
+
+        @JvmStatic
         fun newInstance(context: Context): AdsManager {
             return AdsManager(context)
         }
@@ -116,7 +118,6 @@ class AdsManager @Inject constructor(private val context: Context) {
     }
 
 
-    private var bannerAdView: AdView? = null
     private var interstitialAdView: InterstitialAd? = null
     private var isInterstitialAdShown = false
 
@@ -160,6 +161,7 @@ class AdsManager @Inject constructor(private val context: Context) {
     /**
      * Current it can place banner ads at bottom of coordinator layout
      */
+    private var bannerAdView: AdView? = null
     fun showBannerAdInCoordinateLayout(layout: CoordinatorLayout): Boolean {
         if (!fbRemoteConfig.isAdsEnabled()) {
             Log.i(TAG, "Ads are disabled")
@@ -481,7 +483,7 @@ class AdBindingAdaper {
                                 CommonUtils.showViewAlphaAnimation(nativeAdLayout)
                             } else {
                                 nativeAdLayout.setTag(R.id.isLoadingAd, null)
-                                nativeAdLayout.isVisible = false
+                                nativeAdLayout.visibility = View.INVISIBLE
                             }
                             onAdLoadedCallback?.onAdLoaded()
                         }
@@ -489,7 +491,7 @@ class AdBindingAdaper {
                     }, showAdWithSomeDelay)
                 }
             } else {
-                nativeAdLayout.isVisible = false
+                nativeAdLayout.visibility = View.INVISIBLE
             }
         }
 
@@ -505,4 +507,10 @@ class AdBindingAdaper {
     }
 
 
+}
+
+fun Context.showNativeAdDialogWithDelay(delayMillis: Long = 1000) {
+    Handler().postDelayed({
+        AdsManager.incrementCountAndShowNativeAdDialog(this)
+    }, delayMillis)
 }

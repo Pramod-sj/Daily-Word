@@ -21,10 +21,10 @@ fun Window.configStatusBar(
         }
         decorView.systemUiVisibility = flags
         addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (matchingBackgroundColor) {
-            statusBarColor = context.resolveAttrToColor(android.R.attr.windowBackground)
+        statusBarColor = if (matchingBackgroundColor) {
+            context.resolveAttrToColor(android.R.attr.windowBackground)
         } else {
-            statusBarColor = context.getContextCompatColor(
+            context.getContextCompatColor(
                 if (statusBarColorResId != -1) statusBarColorResId
                 else (if (makeLight) R.color.white else R.color.black)
             )

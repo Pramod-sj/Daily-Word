@@ -34,6 +34,7 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/word_details_background"
         android:transitionGroup="true">
 
         <View
@@ -58,7 +59,7 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
-                app:applyTopBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}"
+                app:applyVerticalPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}"
                 app:isVisible="@{wordDetailedViewModel.word.date!=null}">
 
                 <LinearLayout
@@ -66,12 +67,13 @@
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:paddingBottom="@{adsEnabled?@dimen/ad_banner_height:0}">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details">
 
@@ -175,45 +177,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!adsEnabled || wordColor==null}">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.facebook.ads.NativeAdLayout
-                                android:id="@+id/native_ad_container_2"
-                                adId="@{AdsManager.NATIVE_BANNER_ID_2}"
-                                showAdWithSomeDelay="@{1000}"
-                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:paddingHorizontal="@dimen/margin_medium"
-                                android:paddingVertical="@dimen/margin_small"
-                                app:adColorAccent="@{wordColor}"
-                                app:ad_onAdLoaded="@{()->txtViewAdLoading2.setVisibility(View.GONE)}"
-                                app:ad_onLoadAd="@{()->txtViewAdLoading2.setVisibility(View.VISIBLE)}" />
-
-                            <TextView
-                                android:id="@+id/txtView_ad_loading_2"
-                                style="@style/AppTheme.SubTitleTextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Loading..." />
-
-                        </FrameLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details">
 
@@ -246,46 +211,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!adsEnabled || wordColor==null || (wordDetailedViewModel.word.synonyms.size()==0 &amp;&amp; wordDetailedViewModel.word.antonyms.size()==0)}">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.facebook.ads.NativeAdLayout
-                                android:id="@+id/native_ad_container_3"
-                                adId="@{AdsManager.NATIVE_BANNER_ID_3}"
-                                showAdWithSomeDelay="@{1000}"
-                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null &amp;&amp; (wordDetailedViewModel.word.synonyms.size()>0 || wordDetailedViewModel.word.antonyms.size()>0)}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:paddingHorizontal="@dimen/margin_medium"
-                                android:paddingVertical="@dimen/margin_small"
-                                app:adColorAccent="@{wordColor}"
-                                app:ad_onAdLoaded="@{()->txtViewAdLoading3.setVisibility(View.GONE)}"
-                                app:ad_onLoadAd="@{()->txtViewAdLoading3.setVisibility(View.VISIBLE)}" />
-
-
-                            <TextView
-                                android:id="@+id/txtView_ad_loading_3"
-                                style="@style/AppTheme.SubTitleTextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Loading..." />
-
-                        </FrameLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details"
                         app:isGone="@{wordDetailedViewModel.word.synonyms.size()==0}">
@@ -345,7 +272,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details"
                         app:isGone="@{wordDetailedViewModel.word.antonyms.size()==0}">
@@ -406,46 +333,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{!adsEnabled || wordColor==null}">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.facebook.ads.NativeAdLayout
-                                android:id="@+id/native_ad_container_4"
-                                adId="@{AdsManager.NATIVE_BANNER_ID_4}"
-                                showAdWithSomeDelay="@{1000}"
-                                showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:paddingHorizontal="@dimen/margin_medium"
-                                android:paddingVertical="@dimen/margin_small"
-                                app:adColorAccent="@{wordColor}"
-                                app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
-                                app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
-
-
-                            <TextView
-                                android:id="@+id/txtView_ad_loading_4"
-                                style="@style/AppTheme.SubTitleTextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Loading..." />
-
-                        </FrameLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details">
 
@@ -489,6 +378,47 @@
 
             </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="@dimen/ad_card_elevation"
+            app:isVisible="@{adsEnabled}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:applyBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled()}">
+
+
+                <com.facebook.ads.NativeAdLayout
+                    android:id="@+id/native_ad_container_4"
+                    adId="@{AdsManager.NATIVE_BANNER_ID_4}"
+                    showAdWithSomeDelay="@{500}"
+                    showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/margin_small"
+                    android:paddingHorizontal="@dimen/margin_medium"
+                    app:adColorAccent="@{wordColor}"
+                    app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
+                    app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
+
+
+                <TextView
+                    android:id="@+id/txtView_ad_loading_4"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:text="@string/loading" />
+
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
         <!--

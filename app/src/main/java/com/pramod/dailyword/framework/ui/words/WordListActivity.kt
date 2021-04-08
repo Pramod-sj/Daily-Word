@@ -3,9 +3,7 @@ package com.pramod.dailyword.framework.ui.words
 //import androidx.paging.ExperimentalPagingApi
 import android.app.ActivityOptions
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
@@ -15,7 +13,6 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
-import com.pramod.dailyword.framework.helper.AdsManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -74,9 +71,6 @@ class WordListActivity :
         setUpToolbar(binding.toolbar, null, true)
         initAdapter()
         setupSwipeToRefresh()
-        findViewById<View>(android.R.id.content).postDelayed({
-            showNativeAdDialogWithDelay()
-        }, 150)
     }
 
     override fun onResume() {
@@ -108,12 +102,6 @@ class WordListActivity :
         adapter.addLoadStateListener {
             binding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
         }
-    }
-
-    private fun showNativeAdDialogWithDelay() {
-        Handler().postDelayed({
-            AdsManager.incrementCountAndShowNativeAdDialog(this)
-        }, 1000)
     }
 
     override fun onBackPressed() {

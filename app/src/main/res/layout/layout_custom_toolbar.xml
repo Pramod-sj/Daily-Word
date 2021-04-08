@@ -34,6 +34,7 @@
                 android:id="@+id/txtView_toolbar_title"
                 style="@style/ToolbarTitleTextStyle"
                 android:layout_width="wrap_content"
+                android:letterSpacing="0.03"
                 android:layout_height="wrap_content"
                 android:text="Daily Word" />
 

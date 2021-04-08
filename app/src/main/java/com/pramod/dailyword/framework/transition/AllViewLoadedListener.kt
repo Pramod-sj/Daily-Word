@@ -3,24 +3,31 @@ package com.pramod.dailyword.framework.transition
 import android.view.View
 import android.view.ViewTreeObserver
 
-fun isViewsLoaded(vararg views: View, loadedCallback: () -> Unit) {
+/**
+ * skip null views
+ */
+fun doOnViewLoaded(vararg views: View?, loadedCallback: () -> Unit) {
     val viewLoadTrack = hashMapOf<Int, Boolean>()
     views.forEachIndexed { index, view ->
-        viewLoadTrack[index] = false
-        view.viewTreeObserver.addOnGlobalLayoutListener(object :
-            CustomOnGlobalLayoutListener(index, view) {
-            override fun onGlobalLayout() {
-                super.onGlobalLayout()
-                viewLoadTrack[viewIndex] = true
-                if (viewLoadTrack.values.all { it }) {
-                    loadedCallback.invoke()
+        if (view != null) {
+            viewLoadTrack[index] = false
+            view.viewTreeObserver?.addOnGlobalLayoutListener(object :
+                CustomOnGlobalLayoutListener(index, view) {
+                override fun onGlobalLayout() {
+                    super.onGlobalLayout()
+                    viewLoadTrack[viewIndex] = true
+                    if (viewLoadTrack.values.all { it }) {
+                        loadedCallback.invoke()
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            viewLoadTrack[index] = true
+        }
     }
 }
 
-fun isViewsPreDrawn(vararg views: View, preDrawnCallback: () -> Unit) {
+fun doOnViewPreDrawn(vararg views: View, preDrawnCallback: () -> Unit) {
     val viewLoadTrack = hashMapOf<Int, Boolean>()
     views.forEachIndexed { index, view ->
         viewLoadTrack[index] = false

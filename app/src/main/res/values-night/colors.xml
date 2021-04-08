@@ -61,4 +61,7 @@
     <color name="setting_stroke">#302F2F</color>
     <color name="setting_background">#202020</color>
     <color name="setting_card_color">#181818</color>
+
+    <color name="word_details_background">#101010</color>
+
 </resources>

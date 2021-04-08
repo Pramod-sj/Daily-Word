@@ -36,8 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@{changes.date}"
-                android:textColor="@color/textColor_highEmphasis"
-                android:textStyle="bold" />
+                android:textColor="@color/textColor_highEmphasis" />
 
         </FrameLayout>
 

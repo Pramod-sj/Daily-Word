@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         app:cardCornerRadius="@dimen/card_radius_max"
-        app:cardElevation="@dimen/card_elevation">
+        app:cardElevation="@dimen/card_elevation_min">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -58,13 +58,18 @@
     <dimen name="padding_no">0dp</dimen>
 
 
-    <dimen name="card_elevation_word_details">@dimen/card_elevation</dimen>
+    <dimen name="card_elevation_word_details">1dp</dimen>
 
     <item name="alpha_moon" format="float" type="integer">1</item>
     <item name="alpha_mountains" format="float" type="integer">1</item>
 
-    <dimen name="card_elevation_word_item">@dimen/card_elevation</dimen>
+    <dimen name="card_elevation_word_item">1dp</dimen>
 
     <dimen name="setting_card_elevation">1dp</dimen>
     <dimen name="setting_stroke_start_margin">17dp</dimen>
+
+
+    <dimen name="ad_banner_height">80dp</dimen>
+
+    <dimen name="ad_card_elevation">12dp</dimen>
 </resources>

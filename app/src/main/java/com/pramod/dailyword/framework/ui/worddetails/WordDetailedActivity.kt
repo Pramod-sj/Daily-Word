@@ -27,7 +27,7 @@ import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
-import com.pramod.dailyword.framework.transition.isViewsLoaded
+import com.pramod.dailyword.framework.transition.doOnViewLoaded
 import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.*
@@ -63,7 +63,7 @@ class WordDetailedActivity :
         handleNavigator()
         handleRippleAnimationForAudioEffect()
         val start = Calendar.getInstance().timeInMillis
-        isViewsLoaded(
+        doOnViewLoaded(
             binding.wordDetailedDefinationsRecyclerview,
             binding.wordDetailedExamplesRecyclerview,
             binding.chipGroupAntonyms,

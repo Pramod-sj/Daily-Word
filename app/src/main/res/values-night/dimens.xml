@@ -7,4 +7,6 @@
     <item name="alpha_mountains" format="float" type="integer">0.7</item>
 
     <dimen name="card_elevation_word_item">0dp</dimen>
+
+    <dimen name="ad_card_elevation">3dp</dimen>
 </resources>

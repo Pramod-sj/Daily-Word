@@ -21,6 +21,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@color/word_details_background"
         android:layout_height="match_parent"
         android:transitionGroup="true"
         tools:context=".ui.words.WordListActivity">
@@ -37,12 +38,12 @@
                 android:id="@+id/recyclerview_words"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never"
                 android:clipChildren="false"
                 android:clipToPadding="false"
+                android:overScrollMode="never"
                 android:paddingTop="?attr/actionBarSize"
                 android:splitMotionEvents="false"
-                app:applyTopBottomPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
+                app:applyVerticalPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

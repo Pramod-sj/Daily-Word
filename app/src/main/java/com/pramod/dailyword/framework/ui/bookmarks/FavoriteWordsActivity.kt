@@ -11,9 +11,10 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
-import com.pramod.dailyword.framework.transition.isViewsPreDrawn
+import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
@@ -39,6 +40,10 @@ class FavoriteWordsActivity :
     @Inject
     lateinit var prefManager: PrefManager
 
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
+
+
     private val adapter: BookmarkedWordsAdapter by lazy {
         BookmarkedWordsAdapter(itemClickCallback = { i: Int, word: Word ->
             val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
@@ -59,6 +64,8 @@ class FavoriteWordsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
+        binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         bindAdapter()
     }
@@ -94,7 +101,7 @@ class FavoriteWordsActivity :
 
         setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
         supportPostponeEnterTransition()
-        isViewsPreDrawn(binding.recyclerviewWords) {
+        doOnViewPreDrawn(binding.recyclerviewWords) {
             supportStartPostponedEnterTransition()
         }
 
