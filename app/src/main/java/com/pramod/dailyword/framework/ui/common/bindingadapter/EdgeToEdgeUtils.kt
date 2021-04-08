@@ -1,79 +1,90 @@
 package com.pramod.dailyword.framework.ui.common.bindingadapter
 
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 
 class EdgeToEdgeUtils {
     companion object {
 
 
-        @BindingAdapter("app:applyTopBottomPaddingInset")
         @JvmStatic
-        fun applyTopBottomPaddingInset(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.doOnApplyWindowInsets { view, windowInsets, padding, margin ->
-                    view.updatePadding(
-                        top = padding.top + windowInsets.systemWindowInsetTop,
-                        bottom = padding.bottom + windowInsets.systemWindowInsetBottom
-                    )
-                }
+        @BindingAdapter(
+            value = [
+                "app:applyVerticalPaddingInset",
+                "app:applyVerticalMarginInset",
+            ], requireAll = false
+        )
+        fun applyVerticalInset(
+            view: View,
+            applyVerticalPaddingInset: Boolean,
+            applyVerticalMarginInset: Boolean
+        ) {
+            view.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+                view.updatePadding(
+                    top = if (applyVerticalPaddingInset) windowInsets.systemWindowInsetTop + initialPadding.top
+                    else initialPadding.top,
+                    bottom = if (applyVerticalPaddingInset) windowInsets.systemWindowInsetBottom + initialPadding.bottom
+                    else initialPadding.bottom
+                )
             }
         }
 
-        @BindingAdapter("app:applyTopBottomMarginInset")
         @JvmStatic
-        fun applyTopBottomMarginInset(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.doOnApplyWindowInsets { view, windowInsets, padding, margin ->
-                    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        @BindingAdapter(
+            value = [
+                "app:applyTopPaddingInset",
+                "app:applyTopMarginInset",
+            ], requireAll = false
+        )
+        fun applyTopInset(
+            view: View,
+            applyTopPaddingInset: Boolean,
+            applyTopMarginInset: Boolean,
+        ) {
+            view.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+                view.updatePadding(
+                    top = if (applyTopPaddingInset) windowInsets.systemWindowInsetTop + initialPadding.top
+                    else initialPadding.top,
+                    bottom = initialPadding.bottom
+                )
+
+/*                    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                         setMargins(
-                            margin.left,
-                            margin.top + windowInsets.systemWindowInsetTop,
-                            margin.right,
-                            margin.bottom + windowInsets.systemWindowInsetBottom
+                            initialMargin.left,
+                            if (applyVerticalMarginInset || applyTopMarginInset) windowInsets.systemWindowInsetTop else initialMargin.top,
+                            initialMargin.right,
+                            if (applyVerticalMarginInset || applyBottomMarginInset) windowInsets.systemWindowInsetTop else initialMargin.bottom
                         )
-                    }
-                }
+                    }*/
+
             }
         }
 
-        @BindingAdapter("app:applyBottomPaddingInset")
         @JvmStatic
-        fun applyBottomPaddingInsetOnView(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.applyNavigationBarPaddingInsets()
+        @BindingAdapter(
+            value = [
+                "app:applyBottomPaddingInset",
+                "app:applyBottomMarginInset",
+            ], requireAll = false
+        )
+        fun applyBottomInset(
+            view: View,
+            applyBottomPaddingInset: Boolean,
+            applyBottomMarginInset: Boolean
+        ) {
+
+            view.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+
+                view.updatePadding(
+                    top = initialPadding.top,
+                    bottom = if (applyBottomPaddingInset) windowInsets.systemWindowInsetBottom + initialPadding.bottom
+                    else initialPadding.bottom
+                )
             }
         }
 
-        @BindingAdapter("app:applyTopPaddingInset")
-        @JvmStatic
-        fun applyAppBarInset(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.applySystemBarPaddingInsets()
-            }
-        }
-
-
-        @BindingAdapter("app:applyTopMarginInset")
-        @JvmStatic
-        fun applyMarginInsetToTopView(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.applyTopViewMarginInsets()
-            }
-        }
-
-
-        @BindingAdapter("app:applyBottomMarginInset")
-        @JvmStatic
-        fun applyMarginInsetToBottomView(view: View, applyBottomInset: Boolean) {
-            if (applyBottomInset) {
-                view.applyNavigationAndBottomNavigationViewMarginInsets()
-            }
-        }
 
     }
 }
