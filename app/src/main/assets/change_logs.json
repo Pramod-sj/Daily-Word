@@ -1,8 +1,8 @@
 [
   {
-    "version": "2.0.0-Beta-1",
-    "release_name": "\uD83C\uDF89 Feature update 3 \uD83C\uDF89",
-    "date": "02 April 2021",
+    "version": "2.0.0",
+    "release_name": "\uD83C\uDF89 Major update \uD83C\uDF89",
+    "date": "09 April 2021",
     "changes": [
       "Read random words just a click away!",
       "Better and fast audio playing",

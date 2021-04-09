@@ -42,7 +42,7 @@
     <string name="app_git_url">http://www.github.com/pramod-sj/Daily-Word</string>
 
     <string name="app_credit_freepik_url">https://www.flaticon.com/authors/freepik</string>
-    <string name="app_credit_material_icon_url">http://www.materialdesignicons.com</string>
+    <string name="app_credit_material_icon_url">http://materialdesignicons.com</string>
     <string name="app_merriam_webster_icon_url">http://www.merriam-webster.com/word-of-the-day</string>
 
     <string name="made_in">Made with \u2764 in India</string>

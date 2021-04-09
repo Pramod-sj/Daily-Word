@@ -112,7 +112,6 @@ class AudioPlayer(
                             }
                         }
                 }
-
             }
         }
     }
@@ -186,7 +185,7 @@ class AudioPlayer(
 
 
     companion object {
-        val TAG = AudioPlayer::class.java.simpleName
+        private val TAG = AudioPlayer::class.java.simpleName
     }
 
 }

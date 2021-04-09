@@ -23,8 +23,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 202104022
-        versionName "2.0.0-Beta-1"
+        versionCode 202104091
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -54,7 +54,7 @@ android {
 
     buildTypes {
         debug {
-            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         release {
             minifyEnabled false
