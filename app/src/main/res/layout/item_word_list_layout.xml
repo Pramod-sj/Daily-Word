@@ -17,8 +17,8 @@
             type="Boolean" />
 
         <variable
-            name="word"
-            type="com.pramod.dailyword.business.domain.model.Word" />
+            name="wordItem"
+            type="com.pramod.dailyword.framework.ui.common.word.WordListUiModel.WordItem" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -28,7 +28,7 @@
         android:layout_marginBottom="@dimen/margin_small"
         app:cardCornerRadius="0dp"
         app:cardElevation="@dimen/card_elevation_word_item"
-        app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor)),30)}">
+        app:rippleColor="@{wordItem.getCardRippleColor(context)}">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/background_word_list_date"
-                android:backgroundTint="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor)),30)}"
+                android:backgroundTint="@{wordItem.getDateBackgroundColor(context)}"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_small">
@@ -52,15 +52,15 @@
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{CalenderUtil.getDayFromDateString(word.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? word.wordDesaturatedColor:word.wordColor))}"
+                    android:text="@{wordItem.getDay()}"
+                    android:textColor="@{wordItem.getWordColor(context)}"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{CalenderUtil.getMonthFromDateString(word.date,CalenderUtil.DATE_FORMAT)}"
-                    android:textColor="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)?word.wordDesaturatedColor:word.wordColor))}"
+                    android:text="@{wordItem.getMonth()}"
+                    android:textColor="@{wordItem.getWordColor(context)}"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
 
@@ -80,22 +80,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:drawableEnd="@{!hideBadge &amp;&amp; !word.seen ?@drawable/background_circle_12dp:null}"
+                    android:drawableEnd="@{!hideBadge &amp;&amp; !wordItem.word.seen ?@drawable/background_circle_12dp:null}"
                     android:drawablePadding="@dimen/margin_medium"
-                    android:text="@{word.word}" />
+                    android:text="@{wordItem.word.word}" />
 
                 <TextView
                     style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@{word.meanings.get(0)}" />
+                    android:text="@{wordItem.word.meanings.get(0)}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:isGone="@{word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
+                    app:isGone="@{wordItem.word.synonyms.size()==0 &amp;&amp; wordItem.word.antonyms.size()==0}">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                         android:text="@string/synonyms"
                         android:textColor="?android:attr/windowBackground"
                         android:textSize="@dimen/text_tiny"
-                        app:isGone="@{word.synonyms.size()==0 }" />
+                        app:isGone="@{wordItem.word.synonyms.size()==0 }" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                         android:text="@string/antonyms"
                         android:textColor="?android:attr/windowBackground"
                         android:textSize="@dimen/text_tiny"
-                        app:isGone="@{word.antonyms.size()==0}" />
+                        app:isGone="@{wordItem.word.antonyms.size()==0}" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -134,7 +134,7 @@
                 android:layout_centerVertical="true"
                 android:background="?actionBarItemBackground"
                 android:src="@drawable/selector_icon_bookmark"
-                app:selected="@{word.bookmarkedId!=null}" />
+                app:selected="@{wordItem.word.bookmarkedId!=null}" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>

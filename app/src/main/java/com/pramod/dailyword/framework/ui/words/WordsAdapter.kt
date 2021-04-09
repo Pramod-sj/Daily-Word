@@ -53,9 +53,9 @@ class WordsAdapter(
 
         }
 
-        fun bind(word: Word) {
-            binding.itemWordListCardView.transitionName = word.date
-            binding.word = word
+        fun bind(wordItem: WordListUiModel.WordItem) {
+            binding.itemWordListCardView.transitionName = wordItem.word.date
+            binding.wordItem = wordItem
             binding.hideBadge = hideBadges
             binding.executePendingBindings()
         }
@@ -102,7 +102,7 @@ class WordsAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is WordViewHolder) {
             val wordItem = getItem(position) as WordListUiModel.WordItem
-            holder.bind(wordItem.word)
+            holder.bind(wordItem)
         }
     }
 
