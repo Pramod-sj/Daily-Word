@@ -1,8 +1,6 @@
 package com.pramod.dailyword.framework.util
 
 import android.util.Log
-import java.util.*
-import kotlin.collections.ArrayList
 
 class LookupEnum {
     companion object {
@@ -13,7 +11,7 @@ class LookupEnum {
             try {
                 for (i in e.enumConstants!!) {
                     if (i.name == name ||
-                        (ignoreCase && i.name.toLowerCase(Locale.US) == name.toLowerCase(Locale.US))
+                        (ignoreCase && i.name.equals(name, ignoreCase = true))
                     )
                         return i
                 }
@@ -35,9 +33,7 @@ class LookupEnum {
             try {
                 for (i in e.enumConstants!!) {
                     if (!(i.name == name ||
-                                (ignoreCase && i.name.toLowerCase(Locale.US) == name.toLowerCase(
-                                    Locale.US
-                                )))
+                                (ignoreCase && i.name.equals(name, ignoreCase = true)))
                     )
                         enumExcept.add(i)
 

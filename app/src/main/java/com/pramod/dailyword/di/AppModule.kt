@@ -14,6 +14,7 @@ import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.helper.AdsManager
 import com.pramod.dailyword.framework.helper.AppUpdateHelper
+import com.pramod.dailyword.framework.helper.CountryCodeFinder
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.prefmanagers.*
 import dagger.Module
@@ -58,9 +59,11 @@ object AppModule {
     @Provides
     fun provideFBTopicSubscriber(
         @ApplicationContext context: Context,
+        prefManager: PrefManager,
+        countryCodeFinder: CountryCodeFinder,
         ipInfoNetworkDataSource: IPInfoNetworkDataSource
     ): FBTopicSubscriber {
-        return FBTopicSubscriber(context, ipInfoNetworkDataSource)
+        return FBTopicSubscriber(context, prefManager, countryCodeFinder, ipInfoNetworkDataSource)
     }
 
 
@@ -74,8 +77,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFBRemoteConfig(): FBRemoteConfig {
-        return FBRemoteConfig()
+    fun provideFBRemoteConfig(prefManager: PrefManager): FBRemoteConfig {
+        return FBRemoteConfig(prefManager)
     }
 
 
@@ -145,5 +148,16 @@ object AppModule {
         @ApplicationContext context: Context
     ): NotificationHelper {
         return NotificationHelper(context)
+    }
+
+    @Provides
+    fun provideCountryCodeFinder(
+        @ApplicationContext context: Context,
+        ipInfoNetworkDataSource: IPInfoNetworkDataSource
+    ): CountryCodeFinder {
+        return CountryCodeFinder(
+            context,
+            ipInfoNetworkDataSource
+        )
     }
 }

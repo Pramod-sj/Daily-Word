@@ -154,6 +154,9 @@ class CalenderUtil {
             return calender
         }
 
+        /**
+         * @return 01,02,03....31
+         */
         @JvmStatic
         fun getDayFromDateString(date: String?, format: String): String? {
             if (date == null) {

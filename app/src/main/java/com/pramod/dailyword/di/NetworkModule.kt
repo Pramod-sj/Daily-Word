@@ -1,6 +1,6 @@
 package com.pramod.dailyword.di
 
-import com.pramod.dailyword.BuildConfig
+import android.util.Log
 import com.pramod.dailyword.framework.datasource.network.abstraction.IPNetworkService
 import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
 import com.pramod.dailyword.framework.datasource.network.impl.IPNetworkServiceImpl
@@ -17,6 +17,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 
@@ -45,11 +46,21 @@ object NetworkModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideRetrofit(
+    fun provideScalarConverterFactory(): ScalarsConverterFactory {
+        return ScalarsConverterFactory.create()
+    }
+
+
+    @JvmStatic
+    @GsonRetrofitClient
+    @Singleton
+    @Provides
+    fun provideGsonRetrofit(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
         fbRemoteConfig: FBRemoteConfig
     ): Retrofit {
+        Log.i("TAG", "provideGsonRetrofit: ")
         return Retrofit.Builder()
             .baseUrl(fbRemoteConfig.baseUrl())
             .client(okHttpClient)
@@ -58,9 +69,27 @@ object NetworkModule {
     }
 
     @JvmStatic
+    @ScalarRetrofitClient
     @Singleton
     @Provides
-    fun provideWordApiService(retrofit: Retrofit): WordApiService {
+    fun provideScalarRetrofit(
+        okHttpClient: OkHttpClient,
+        scalarsConverterFactory: ScalarsConverterFactory,
+        gsonConverterFactory: GsonConverterFactory,
+        fbRemoteConfig: FBRemoteConfig
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(fbRemoteConfig.baseUrl())
+            .client(okHttpClient)
+            .addConverterFactory(scalarsConverterFactory)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideWordApiService(@GsonRetrofitClient retrofit: Retrofit): WordApiService {
         return retrofit.create(WordApiService::class.java)
     }
 
@@ -80,7 +109,7 @@ object NetworkModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideIPService(retrofit: Retrofit): IPService {
+    fun provideIPService(@ScalarRetrofitClient retrofit: Retrofit): IPService {
         return retrofit.create(IPService::class.java)
     }
 

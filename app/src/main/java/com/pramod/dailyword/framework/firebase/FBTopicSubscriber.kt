@@ -4,26 +4,21 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
-import com.pramod.dailyword.business.domain.model.IPInfo
-import com.pramod.dailyword.framework.util.CommonUtils
+import com.pramod.dailyword.framework.helper.CountryCodeFinder
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.util.LookupEnum
-import com.pramod.dailyword.framework.util.NetworkUtils
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 class FBTopicSubscriber constructor(
     private var context: Context,
+    private val prefManager: PrefManager,
+    private val countryCodeFinder: CountryCodeFinder,
     private val ipInfoNetworkDataSource: IPInfoNetworkDataSource
 ) {
 
-
-    enum class SupportedFBTopicCounties {
-        IN, //India
-        US, //United States
-        GB, //United Kingdom
-    }
 
     enum class OperationStatus {
         SUCCESS,
@@ -35,72 +30,37 @@ class FBTopicSubscriber constructor(
         subscribeTopic(TOPIC_DAILY_WORD_NOTIFICATION)
     }
 
-    fun subscribeToCountry() {
+    fun subscribeToCountry(coroutineScope: CoroutineScope) {
 
-        GlobalScope.launch(Dispatchers.IO) {
-            //Log.i(TAG, "subscribeToCountry: publicIP: $publicIP")
+        coroutineScope.launch(Dispatchers.IO) {
 
-            //two letters
-            val countryCode: String? = if (NetworkUtils.isVPNActive(context)) {
-                var publicIP: String? = null
-                try {
-                    publicIP = ipInfoNetworkDataSource.getPublicIp()
-                } catch (e: Exception) {
-                    Log.i(TAG, "subscribeToCountry: $e")
-                }
+            //two letters country code
+            val countryCode: String? = countryCodeFinder.getCountryCode()
 
-                val isVPNActive = NetworkUtils.isVPNActive(context)
-                Log.i(TAG, "subscribeToCountry: isVPNActive: $isVPNActive")
 
-                if (publicIP != null && !isVPNActive) {
-                    val ipInfo: IPInfo? = ipInfoNetworkDataSource.getIPDetails(publicIP)
-                    if (ipInfo != null && "success" == ipInfo.status) {
-                        ipInfo.countryCode
-                    } else {
-                        CommonUtils.getCountryCodeFromTelephoneManager(context)
-                    }
-
+            val supportedCountryCode =
+                (if (countryCode != null && isCountryCodeSupported(countryCode)) {
+                    //if country code is supported then return country code
+                    countryCode
                 } else {
+                    //else return OTHERS
+                    SupportedFBTopicCounties.OTHERS.name
+                }).toUpperCase(Locale.US)
 
-                    CommonUtils.getCountryCodeFromTelephoneManager(context)
+            //unsubscribe to all other countries if subscribed
 
-                }
-            } else {
-                CommonUtils.getCountryCodeFromTelephoneManager(context)
+            for (countryIsoEnum in LookupEnum.getAllEnumExcept(
+                SupportedFBTopicCounties::class.java,
+                supportedCountryCode
+            )) {
+                unsubscribeTopic(countryIsoEnum.name)
+                Log.i(TAG, "unsubscribeToCountry: ${countryIsoEnum.name}")
             }
 
+            //if country code is supported then
+            Log.i(TAG, "subscribeToCountry: $supportedCountryCode")
+            subscribeTopic(supportedCountryCode)
 
-            countryCode?.let {
-                var countryCodeUpperCase = it.toUpperCase(Locale.US)
-                Log.i(TAG, "subscribeToCountry: $countryCodeUpperCase")
-                if (!SupportedFBTopicCounties.values()
-                        .contains(
-                            LookupEnum.lookUp(
-                                SupportedFBTopicCounties::class.java,
-                                countryCodeUpperCase
-                            )
-                        )
-                ) {
-                    countryCodeUpperCase = SupportedFBTopicCounties.US.name
-                }
-
-
-                //unsubscribe to all other countries if subscribed
-
-                for (countryIsoEnum in LookupEnum.getAllEnumExcept(
-                    SupportedFBTopicCounties::class.java,
-                    countryCodeUpperCase
-                )) {
-                    unsubscribeTopic(countryIsoEnum.name)
-                    Log.i(TAG, "unsubscribeToCountry: ${countryIsoEnum.name}")
-                }
-
-                //if country code is supported then
-                Log.i(TAG, "subscribeToCountry: $countryCodeUpperCase")
-                subscribeTopic(countryCodeUpperCase)
-
-
-            }
         }
 
 
@@ -121,13 +81,13 @@ class FBTopicSubscriber constructor(
                 if (it.isSuccessful) {
                     Log.i(TAG, "subscribeTopic: $topic :Success")
                     listener?.invoke(
-                        "You'll now receive daily word notification every day",
+                        "Successfully subscribed to $topic",
                         OperationStatus.SUCCESS
                     )
                 } else {
                     Log.i(TAG, "subscribeTopic: $topic Failed ${it.exception.toString()}")
                     listener?.invoke(
-                        "There's some issue while registering you for notification service, Try again!",
+                        "Failed to subscribe from $topic. Reason:${it.exception?.message}",
                         OperationStatus.FAILED
                     )
                 }
@@ -143,7 +103,7 @@ class FBTopicSubscriber constructor(
                 if (it.isSuccessful) {
                     Log.i(TAG, "unsubscribeTopic: $topic : Success")
                     listener?.invoke(
-                        "Your notification service is successfully disale",
+                        "Successfully unsubscribed from $topic",
                         OperationStatus.SUCCESS
                     )
                 } else {
@@ -152,7 +112,7 @@ class FBTopicSubscriber constructor(
                         "unsubscribeTopic: $topic : Failed ${it.exception.toString()}"
                     )
                     listener?.invoke(
-                        "There's some issue while disaling notification service, Try again!",
+                        "Failed to unsubscribe from $topic. Reason:${it.exception?.message}",
                         OperationStatus.FAILED
                     )
                 }
@@ -162,24 +122,9 @@ class FBTopicSubscriber constructor(
 
     companion object {
         private val TAG = FBTopicSubscriber::class.simpleName
-        private val TOPIC_DAILY_WORD_NOTIFICATION = "daily_word_notification"
-        private val TOPIC_COUNTRY_CODE = "country_code"
-        private val TOPIC_TEST_DEVICE = "test_device"
-
-        /*fun toggleReceivingDailyWordNotification(
-            notificationPrefManager: NotificationPrefManager,
-            listener: ((String, OperationStatus) -> Unit)? = null
-        ) {
-            if (notificationPrefManager.isNotificationEnabled()) {
-                unsubscribeTopic(TOPIC_DAILY_WORD_NOTIFICATION) { s, operationStatus ->
-                    listener?.invoke(s, operationStatus)
-                }
-            } else {
-                subscribeTopic(TOPIC_DAILY_WORD_NOTIFICATION) { s, operationStatus ->
-                    listener?.invoke(s, operationStatus)
-                }
-            }
-        }*/
+        private const val TOPIC_DAILY_WORD_NOTIFICATION = "daily_word_notification"
+        private const val TOPIC_COUNTRY_CODE = "country_code"
+        private const val TOPIC_TEST_DEVICE = "test_device"
 
     }
 }

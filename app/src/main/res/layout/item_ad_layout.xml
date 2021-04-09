@@ -6,8 +6,6 @@
 
         <import type="com.pramod.dailyword.framework.helper.AdsManager" />
 
-        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
-
         <import type="android.view.View" />
     </data>
 
@@ -25,7 +23,7 @@
             <com.facebook.ads.NativeAdLayout
                 adId="@{AdsManager.NATIVE_BANNER_ID_4}"
                 showAdWithSomeDelay="@{300}"
-                showNativeAd="@{FBRemoteConfig.newInstance().adsEnabled}"
+                showNativeAd="@{true}"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginVertical="@dimen/padding_small"
@@ -38,8 +36,8 @@
                 style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/loading" />
 
         </FrameLayout>

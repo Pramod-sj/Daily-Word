@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.prefmanagers
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
+import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
 
 
 class PrefManager(context: Context) :
@@ -11,7 +12,8 @@ class PrefManager(context: Context) :
     MWCreditDialogContracts,
     IsNewUserContracts,
     LastSavedAppVersionContracts,
-    HideBadgeContracts {
+    HideBadgeContracts,
+    CountryCodeContracts {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -79,9 +81,23 @@ class PrefManager(context: Context) :
         private const val KEY_APP_VERSION = "app_version"
         private const val KEY_SHOW_BADGE = "show_badge"
 
+        /**
+         * country code
+         */
+        private const val KEY_USER_COUNTRY_CODE = "user_country_code"
+
 
         @JvmStatic
         fun getInstance(context: Context): PrefManager = PrefManager(context)
+    }
+
+    override fun setCountryCode(code: String) {
+        sPrefManager.edit().putString(KEY_USER_COUNTRY_CODE, code).apply()
+    }
+
+    override fun getCountryCode(): String {
+        return sPrefManager.getString(KEY_USER_COUNTRY_CODE, SupportedFBTopicCounties.OTHERS.name)
+            ?: SupportedFBTopicCounties.OTHERS.name
     }
 
 
@@ -126,4 +142,14 @@ interface HideBadgeContracts {
     fun toggleHideBadge()
 
     fun getHideBadgeLiveData(): LiveData<Boolean>
+}
+
+interface CountryCodeContracts {
+
+    fun setCountryCode(code: String)
+
+    /**
+     * Default value is OTHERS
+     */
+    fun getCountryCode(): String
 }

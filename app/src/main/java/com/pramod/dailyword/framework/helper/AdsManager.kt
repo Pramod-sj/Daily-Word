@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Handler
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -17,14 +15,14 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BannerNativeAdBinding
 import com.pramod.dailyword.databinding.BannerNativeAdVerticalBinding
 import com.pramod.dailyword.databinding.DialogNativeAdBinding
-import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.CommonUtils
 import java.util.*
 import javax.inject.Inject
 
-class AdsManager @Inject constructor(private val context: Context) {
-    private val fbRemoteConfig = FBRemoteConfig()
+class AdsManager @Inject constructor(
+    private val context: Context
+) {
 
     private val sharedPreferences =
         context.getSharedPreferences(
@@ -60,60 +58,6 @@ class AdsManager @Inject constructor(private val context: Context) {
             return AdsManager(context)
         }
 
-        fun incrementCountAndShowNativeAdDialog(
-            context: Context,
-            closeClickCallback: (() -> Unit)? = null
-        ) {
-            val adManager = newInstance(context)
-            //only increament count when ad are enabled
-            if (adManager.fbRemoteConfig.isAdsEnabled()) {
-                adManager.incrementAdActivityCount()
-                showNativeAdDialog(context, closeClickCallback)
-            }
-        }
-
-        fun showNativeAdDialog(
-            context: Context,
-            closeClickCallback: (() -> Unit)? = null
-        ) {
-            val adsManager = newInstance(context)
-            if (adsManager.getAdActivityCount() % 8 != 0) {
-                Log.i(
-                    TAG,
-                    "Show Ad dialog condition doesn't matches ${adsManager.getAdActivityCount()}"
-                )
-                return
-            }
-
-            val binding: DialogNativeAdBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.dialog_native_ad,
-                null,
-                false
-            )
-            val bottomSheetDialog = BottomSheetDialog(context, R.style.AppTheme_BottomSheetDialog)
-            bottomSheetDialog.setContentView(binding.root)
-
-            /*val builder = MaterialAlertDialogBuilder(context)
-                .setView(binding.root)
-                .setCancelable(false)
-            val alertDialog = builder.create()*/
-
-            binding.nativeAdCloseButton.setOnClickListener {
-                bottomSheetDialog.dismiss()
-                closeClickCallback?.invoke()
-            }
-            val shown = adsManager.showNativeAdOnDialog(binding, {
-                binding.nativeAdLoading.isVisible = false
-                binding.nativeAdLinearLayoutWrapper.isVisible = true
-            }, {
-                bottomSheetDialog.dismiss()
-            })
-            if (shown) {
-                bottomSheetDialog.show()
-            }
-        }
-
 
     }
 
@@ -122,10 +66,6 @@ class AdsManager @Inject constructor(private val context: Context) {
     private var isInterstitialAdShown = false
 
     fun showInterstitialAd(): Boolean {
-        if (!fbRemoteConfig.isAdsEnabled()) {
-            Log.i(TAG, "Ads are disabled")
-            return false
-        }
         interstitialAdView = InterstitialAd(context, null).also {
             it.loadAd(it.buildLoadAdConfig().withAdListener(object : AbstractAdListener() {
                 override fun onAdLoaded(ad: Ad?) {
@@ -157,46 +97,6 @@ class AdsManager @Inject constructor(private val context: Context) {
         return true
     }
 
-
-    /**
-     * Current it can place banner ads at bottom of coordinator layout
-     */
-    private var bannerAdView: AdView? = null
-    fun showBannerAdInCoordinateLayout(layout: CoordinatorLayout): Boolean {
-        if (!fbRemoteConfig.isAdsEnabled()) {
-            Log.i(TAG, "Ads are disabled")
-            return false
-        }
-        bannerAdView = AdView(context, null, AdSize.BANNER_HEIGHT_50)
-            .also {
-                it.loadAd(it.buildLoadAdConfig().withAdListener(object : AdListener {
-                    override fun onAdClicked(p0: Ad?) {
-                        Log.i(TAG, "Banner Ad clicked")
-                    }
-
-                    override fun onError(p0: Ad?, p1: AdError?) {
-                        Log.i(TAG, "Banner Ad ${p1?.errorMessage}")
-                    }
-
-                    override fun onAdLoaded(p0: Ad?) {
-                        Log.i(TAG, "Banner Ad loaded")
-                    }
-
-                    override fun onLoggingImpression(p0: Ad?) {
-                        Log.i(TAG, "Banner Ad logging impression")
-                    }
-
-                }).build())
-            }
-        val layoutParams: CoordinatorLayout.LayoutParams =
-            layout.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParams.gravity = Gravity.BOTTOM + Gravity.CENTER_HORIZONTAL
-        bannerAdView!!.layoutParams = layoutParams
-        layout.addView(bannerAdView)
-        return true
-    }
-
-
     fun showNativeBannerAd(
         adId: String,
         nativeAdLayout: NativeAdLayout,
@@ -204,10 +104,6 @@ class AdsManager @Inject constructor(private val context: Context) {
         verticalBannerAd: Boolean,
         adLoadedCallack: ((error: String?) -> Unit)? = null
     ): Boolean {
-        if (!fbRemoteConfig.isAdsEnabled()) {
-            Log.i(TAG, "Ads are disabled")
-            return false
-        }
 
         NativeBannerAd(context, adId).also {
             it.loadAd(it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
@@ -352,11 +248,6 @@ class AdsManager @Inject constructor(private val context: Context) {
         onAdCompletelyLoadedCallback: (() -> Unit)? = null,
         onAdFailureCallback: ((String) -> Unit)? = null
     ): Boolean {
-        if (!fbRemoteConfig.isAdsEnabled()) {
-            Log.i(TAG, "Ads are disabled")
-            onAdFailureCallback?.invoke("Ads are disabled")
-            return false
-        }
         NativeAd(context, NATIVE_AD_ID).also {
             it.loadAd(
                 it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
@@ -434,9 +325,59 @@ class AdsManager @Inject constructor(private val context: Context) {
         )
     }
 
+
+    fun incrementCountAndShowNativeAdDialog(
+        context: Context,
+        closeClickCallback: (() -> Unit)? = null
+    ) {
+        incrementAdActivityCount()
+        showNativeAdDialog(context, closeClickCallback)
+    }
+
+    fun showNativeAdDialog(
+        context: Context,
+        closeClickCallback: (() -> Unit)? = null
+    ) {
+        if (getAdActivityCount() % 8 != 0) {
+            Log.i(
+                TAG,
+                "Show Ad dialog condition doesn't matches ${getAdActivityCount()}"
+            )
+            return
+        }
+
+        val binding: DialogNativeAdBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.dialog_native_ad,
+            null,
+            false
+        )
+        val bottomSheetDialog = BottomSheetDialog(context, R.style.AppTheme_BottomSheetDialog)
+        bottomSheetDialog.setContentView(binding.root)
+
+        /*val builder = MaterialAlertDialogBuilder(context)
+            .setView(binding.root)
+            .setCancelable(false)
+        val alertDialog = builder.create()*/
+
+        binding.nativeAdCloseButton.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            closeClickCallback?.invoke()
+        }
+        val shown = showNativeAdOnDialog(binding, {
+            binding.nativeAdLoading.isVisible = false
+            binding.nativeAdLinearLayoutWrapper.isVisible = true
+        }, {
+            bottomSheetDialog.dismiss()
+        })
+        if (shown) {
+            bottomSheetDialog.show()
+        }
+    }
+
+
     fun destroyAdsIfActive() {
         interstitialAdView?.destroy()
-        bannerAdView?.destroy()
     }
 }
 
@@ -509,8 +450,10 @@ class AdBindingAdaper {
 
 }
 
-fun Context.showNativeAdDialogWithDelay(delayMillis: Long = 1000) {
-    Handler().postDelayed({
-        AdsManager.incrementCountAndShowNativeAdDialog(this)
-    }, delayMillis)
+fun Context.showNativeAdDialogWithDelay(adEnabled: Boolean, delayMillis: Long = 1000) {
+    if (adEnabled) {
+        Handler().postDelayed({
+            AdsManager(this).incrementCountAndShowNativeAdDialog(this)
+        }, delayMillis)
+    }
 }

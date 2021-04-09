@@ -9,4 +9,7 @@
     <dimen name="card_elevation_word_item">0dp</dimen>
 
     <dimen name="ad_card_elevation">3dp</dimen>
+
+    <dimen name="card_elevation_grid_item">1dp</dimen>
+
 </resources>
