@@ -43,11 +43,28 @@ class WordPaginationRemoteMediator @Inject constructor(
                 LoadType.REFRESH -> null
                 LoadType.APPEND -> {
 
-                    remoteKeyPrefManager.getNextRemoteKey()
-                        ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    if (remoteKeyPrefManager.isReachedToEnd()) {
+                        return MediatorResult.Success(endOfPaginationReached = true)
+                    }
+
+                    if (remoteKeyPrefManager.getNextRemoteKey() == null) {
+                        state.lastItemOrNull()?.let { last ->
+                            CalenderUtil.convertStringToCalender(
+                                last.date,
+                                CalenderUtil.DATE_FORMAT
+                            )?.also { calendar ->
+                                calendar.roll(Calendar.DATE, false)
+                                val nextKey =
+                                    CalenderUtil.convertCalenderToString(
+                                        calendar,
+                                        CalenderUtil.DATE_FORMAT
+                                    )
+                                remoteKeyPrefManager.setNextRemoteKey(nextKey)
+                            }
+                        }
+                    }
 
                     remoteKeyPrefManager.getNextRemoteKey()
-
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             }
@@ -80,6 +97,7 @@ class WordPaginationRemoteMediator @Inject constructor(
                 if (loadType == LoadType.REFRESH) {
                     Log.i(TAG, "LOAD TYPE: REFRESH -- DELETE ALL WORDS")
                     wordCacheDataSource.deleteAll()
+                    remoteKeyPrefManager.setReachedToEnd(false)
                     remoteKeyPrefManager.setNextRemoteKey(null)
                 }
 
@@ -100,8 +118,12 @@ class WordPaginationRemoteMediator @Inject constructor(
                     wordCacheDataSource.addAll(it)
                 }
 
+                val isReachedToEnd = (resource.data?.size ?: 0) < state.config.pageSize
+
+                remoteKeyPrefManager.setReachedToEnd(isReachedToEnd)
+
                 MediatorResult.Success(
-                    endOfPaginationReached = (resource.data?.size ?: 0) < state.config.pageSize
+                    endOfPaginationReached = isReachedToEnd
                 )
             } else {
                 MediatorResult.Error(Exception(resource.message))

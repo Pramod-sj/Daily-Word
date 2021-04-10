@@ -67,7 +67,6 @@ class WordsAdapter(
 
 
     override fun getItemViewType(position: Int): Int {
-        Log.i("TAG", "getItemViewType: " + getItem(position)?.javaClass?.simpleName)
         return when (getItem(position)) {
             is WordListUiModel.AdItem -> ITEM_TYPE_AD
             is WordListUiModel.WordItem -> ITEM_TYPE_WORD

@@ -111,7 +111,7 @@ abstract class AppDB : RoomDatabase() {
 
                 database.execSQL("CREATE TABLE Word (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,attribute TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,wordColor INTEGER NOT NULL,wordDesaturatedColor INTEGER NOT NULL,synonyms TEXT,antonyms TEXT)")
 
-                database.execSQL("INSERT INTO Word (word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms) SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms FROM old_WordOfTheDay")
+                database.execSQL("INSERT INTO Word (word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms) SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,-1,-1,synonyms,antonyms FROM old_WordOfTheDay")
 
                 database.execSQL("CREATE TABLE Seen (seenWord TEXT PRIMARY KEY NOT NULL,seenAt INTEGER NOT NULL)")
 

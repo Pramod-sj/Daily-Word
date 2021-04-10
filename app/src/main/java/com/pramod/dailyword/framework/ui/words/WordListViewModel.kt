@@ -43,8 +43,7 @@ constructor(
             return@map pagingData
                 .map { word ->
                     WordListUiModel.WordItem(0, word)
-                }
-                .insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
+                }.insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
 
                     if (wordItem == null) {
                         // we're at the end of the list

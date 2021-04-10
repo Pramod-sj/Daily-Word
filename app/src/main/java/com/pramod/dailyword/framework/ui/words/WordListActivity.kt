@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class WordListActivity :
-    BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {
+        BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {
 
     override val viewModel: WordListViewModel by viewModels()
 
@@ -40,27 +40,27 @@ class WordListActivity :
 
     private val adapter: WordsAdapter by lazy {
         WordsAdapter(
-            itemClickCallback = { i: Int, word: Word ->
+                itemClickCallback = { i: Int, word: Word ->
 
-                setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+                    setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-                Log.i(TAG, "initAdapter: ")
-                val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
-                val option = ActivityOptions.makeSceneTransitionAnimation(
-                    this@WordListActivity,
-                    view!!,
-                    word.date
-                )
-                openWordDetailsPage(
-                    wordDate = word.date!!,
-                    option = option,
-                    shouldAnimate = windowAnimPrefManager.isEnabled()
-                )
-            },
-            bookmarkCallback = { i: Int, word: Word ->
-                viewModel.toggleBookmark(word)
-            },
-            hideBadges = prefManager.getHideBadge()
+                    Log.i(TAG, "initAdapter: ")
+                    val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
+                    val option = ActivityOptions.makeSceneTransitionAnimation(
+                            this@WordListActivity,
+                            view!!,
+                            word.date
+                    )
+                    openWordDetailsPage(
+                            wordDate = word.date!!,
+                            option = option,
+                            shouldAnimate = windowAnimPrefManager.isEnabled()
+                    )
+                },
+                bookmarkCallback = { i: Int, word: Word ->
+                    viewModel.toggleBookmark(word)
+                },
+                hideBadges = prefManager.getHideBadge()
         )
     }
 
@@ -83,9 +83,9 @@ class WordListActivity :
     private fun initAdapter() {
 
         binding.recyclerviewWords.adapter = adapter.withLoadStateFooter(
-            NetworkStateAdapter {
-                adapter.retry()
-            })
+                NetworkStateAdapter {
+                    adapter.retry()
+                })
 
         viewModel.wordUIModelList.observe(this@WordListActivity) {
             lifecycleScope.launch {

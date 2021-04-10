@@ -15,8 +15,17 @@ class RemoteKeyPrefManager(base: Context) : BasePreferenceManager(PREF_NAME, bas
         return sPrefManager.getString(KEY_NEXT_REMOTE_KEY, null)
     }
 
+    fun setReachedToEnd(end: Boolean) {
+        sPrefManager.edit().putBoolean(KEY_REACHED_TO_END, end).apply()
+    }
+
+    fun isReachedToEnd(): Boolean {
+        return sPrefManager.getBoolean(KEY_REACHED_TO_END,false)
+    }
+
     companion object {
         const val PREF_NAME = "paging_remote_key_pref"
         const val KEY_NEXT_REMOTE_KEY = "next_remote_key"
+        const val KEY_REACHED_TO_END = "reached_to_end"
     }
 }
