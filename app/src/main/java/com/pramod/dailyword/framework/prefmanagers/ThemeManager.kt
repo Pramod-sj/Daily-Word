@@ -11,7 +11,7 @@ import com.pramod.dailyword.framework.util.CommonUtils
 import javax.inject.Inject
 
 class ThemeManager @Inject constructor(context: Context) :
-    BasePreferenceManager(THEME_PREF, context) {
+        BasePreferenceManager(THEME_PREF, context) {
 
     private val defaultTheme = THEME_MODE_DARK
 
@@ -25,9 +25,9 @@ class ThemeManager @Inject constructor(context: Context) :
     }
 
     fun liveData(): LiveData<String> =
-        SPrefStringLiveData(sPrefManager, KEY_THEME_MODE, defaultTheme).map {
-            return@map it ?: defaultTheme
-        }
+            SPrefStringLiveData(sPrefManager, KEY_THEME_MODE, defaultTheme).map {
+                return@map it ?: defaultTheme
+            }
 
     fun applyTheme(themeMode: String = getThemeMode()) {
         if (themeMode != getThemeMode()) {
@@ -53,13 +53,13 @@ class ThemeManager @Inject constructor(context: Context) :
     private var onThemeValueChangedListener: OnThemeValueChangedListener? = null
 
     private val sharedPreferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
-            if (s == KEY_THEME_MODE) {
-                onThemeValueChangedListener?.onThemeValueChanged(
-                    sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
-                )
+            SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
+                if (s == KEY_THEME_MODE) {
+                    onThemeValueChangedListener?.onThemeValueChanged(
+                            sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
+                    )
+                }
             }
-        }
 
     fun registerListener(onThemeValueChangedListener: OnThemeValueChangedListener) {
         this.onThemeValueChangedListener = onThemeValueChangedListener;
@@ -79,7 +79,10 @@ class ThemeManager @Inject constructor(context: Context) :
     companion object {
         val TAG = ThemeManager::class.java.simpleName
 
-        const val THEME_PREF = "theme_pref"
+
+        const val OLD_THEME_PREF = "theme_pref"
+
+        const val THEME_PREF = "app_theme_pref"
 
         const val KEY_THEME_MODE = "theme_mode"
 
