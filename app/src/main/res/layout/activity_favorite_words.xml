@@ -31,7 +31,7 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
@@ -40,14 +40,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:paddingBottom="@{adsEnabled?@dimen/ad_banner_height:0}">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_words"
                     android:layout_width="match_parent"
-                    android:overScrollMode="never"
                     android:layout_height="match_parent"
+                    android:overScrollMode="never"
                     android:paddingHorizontal="@dimen/padding_small"
                     android:splitMotionEvents="false"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
