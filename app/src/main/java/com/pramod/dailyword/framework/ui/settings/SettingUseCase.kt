@@ -8,6 +8,7 @@ interface SettingUseCase {
     fun toggleReminderNotification()
     fun toggleBadgeVisibility()
     fun navigateToFacingNotificationIssue()
+    fun checkForUpdate()
     fun navigateToAbout()
     fun copyFirebaseTokenId()
     fun clearAppData()

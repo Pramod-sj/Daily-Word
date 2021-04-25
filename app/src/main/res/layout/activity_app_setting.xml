@@ -11,6 +11,7 @@
             name="appSettingViewModel"
             type="com.pramod.dailyword.framework.ui.settings.AppSettingViewModel" />
 
+        <import type="com.pramod.dailyword.BuildConfig" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -271,6 +272,25 @@
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
 
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.checkForUpdate()}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="false"
+                            app:subTitle="@{appSettingViewModel.subTitleCheckForUpdate}"
+                            app:title="Check for update"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
@@ -288,6 +308,7 @@
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
+
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

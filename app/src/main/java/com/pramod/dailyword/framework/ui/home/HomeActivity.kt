@@ -11,6 +11,7 @@ import android.text.SpannableString
 import android.util.Log
 import android.util.Pair
 import android.view.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,7 +21,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -63,8 +63,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
-    @Inject
-    lateinit var appUpdateHelper: AppUpdateHelper
+    private val appUpdateHelper: AppUpdateHelperNew by lazy {
+        AppUpdateHelperNew(this, lifecycle)
+    }
 
     @Inject
     lateinit var autoStartPrefManager: AutoStartPrefManager
@@ -121,9 +122,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun loadBackgroundImage() {
         Log.i(TAG, "loadBackgroundImage: ")
         Glide.with(this)
-            .load(BuildConfig.HOME_BACKGROUND_URL)
-            .centerCrop()
-            .into(binding.homeImageViewBuildings)
+                .load(BuildConfig.HOME_BACKGROUND_URL)
+                .centerCrop()
+                .into(binding.homeImageViewBuildings)
     }
 
     private fun initToolbar() {
@@ -139,32 +140,32 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
 
             val bottomMenuDialog = BottomMenuDialog
-                .show(supportFragmentManager)
+                    .show(supportFragmentManager)
             bottomMenuDialog.bottomMenuItemClickListener =
-                object : BottomMenuDialog.BottomMenuItemClickListener {
-                    override fun onMenuItemClick(menuItem: MenuItem) {
-                        when (menuItem.itemId) {
-                            R.id.menu_settings -> {
-                                openSettingPage()
-                            }
-                            R.id.menu_donate -> {
-                                donateBottomDialogFragment = DonateBottomDialogFragment()
-                                donateBottomDialogFragment?.show(
-                                    supportFragmentManager,
-                                    DonateBottomDialogFragment.TAG
-                                )
-                            }
-                            R.id.menu_share -> {
-                                CommonUtils.viewToBitmap(binding.coordinatorLayout)
-                                    ?.let { bitmap ->
-                                        shareApp(bitmap = bitmap)
-                                    } ?: shareApp()
-                            }
+                    object : BottomMenuDialog.BottomMenuItemClickListener {
+                        override fun onMenuItemClick(menuItem: MenuItem) {
+                            when (menuItem.itemId) {
+                                R.id.menu_settings -> {
+                                    openSettingPage()
+                                }
+                                R.id.menu_donate -> {
+                                    donateBottomDialogFragment = DonateBottomDialogFragment()
+                                    donateBottomDialogFragment?.show(
+                                            supportFragmentManager,
+                                            DonateBottomDialogFragment.TAG
+                                    )
+                                }
+                                R.id.menu_share -> {
+                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
+                                            ?.let { bitmap ->
+                                                shareApp(bitmap = bitmap)
+                                            } ?: shareApp()
+                                }
 
-                            R.id.menu_about -> openAboutPage()
+                                R.id.menu_about -> openAboutPage()
+                            }
                         }
                     }
-                }
         }
         viewModel.title().observe(this) {
             CommonBindindAdapters.switchingText(binding.customToolbar.txtViewToolbarTitle, it)
@@ -243,13 +244,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (prefManager.shouldShowMWCreditDialog()) {
             prefManager.changeMWCreditDialogShown(false)
             showBottomSheet(
-                "App Content Credit",
-                resources.getString(R.string.merriam_webster_credit_text),
-                positiveText = "Merriam-Webster",
-                positiveClickCallback = {
-                    openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
-                },
-                negativeText = "Close"
+                    "App Content Credit",
+                    resources.getString(R.string.merriam_webster_credit_text),
+                    positiveText = "Merriam-Webster",
+                    positiveClickCallback = {
+                        openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
+                    },
+                    negativeText = "Close"
             ) {
                 //prompt for auto start settings when credit dialog is dimissed
                 promptAutoStart()
@@ -262,29 +263,29 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun showNotification(word: Word) {
         val notification = notificationHelper.createNotification(
-            title = "Welcome to Daily Word!",
-            body = "Your first word of the day is '${word.word}'",
-            cancelable = true,
-            pendingIntent = PendingIntent.getActivity(
-                applicationContext,
-                NotificationHelper.generateUniqueNotificationId(),
-                Intent(this, HomeActivity::class.java).apply {
-                    putExtra(
-                        FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
-                        Gson().toJson(
-                            FBMessageService.MessagePayload(
-                                date = word.date!!,
-                                deepLink = FBMessageService.DEEP_LINK_TO_WORD_DETAILED
+                title = "Welcome to Daily Word!",
+                body = "Your first word of the day is '${word.word}'",
+                cancelable = true,
+                pendingIntent = PendingIntent.getActivity(
+                        applicationContext,
+                        NotificationHelper.generateUniqueNotificationId(),
+                        Intent(this, HomeActivity::class.java).apply {
+                            putExtra(
+                                    FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
+                                    Gson().toJson(
+                                            FBMessageService.MessagePayload(
+                                                    date = word.date!!,
+                                                    deepLink = FBMessageService.DEEP_LINK_TO_WORD_DETAILED
+                                            )
+                                    )
                             )
-                        )
-                    )
-                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                },
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+                            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        },
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                )
         )
         notificationHelper.showNotification(
-            notification = notification
+                notification = notification
         )
 
     }
@@ -296,7 +297,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 if (!it.isSeen) {
                     viewModel.updateWordSeenStatus(it)
                     if (PrefManager.getInstance(this).getAppLaunchCount() == 1
-                        && !viewModel.firstNotificationShown
+                            && !viewModel.firstNotificationShown
                     ) {
                         viewModel.firstNotificationShown = true
                         showNotification(it)
@@ -313,14 +314,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun intentToWordDetail(view: View? = null, word: Word) {
         val option = view?.let {
             ActivityOptions.makeSceneTransitionAnimation(
-                this,
-                Pair(it, word.date!!)
+                    this,
+                    Pair(it, word.date!!)
             )
         }
         openWordDetailsPage(
-            word.date!!,
-            option,
-            windowAnimPrefManager.isEnabled()
+                word.date!!,
+                option,
+                windowAnimPrefManager.isEnabled()
         )
     }
 
@@ -338,8 +339,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             Log.i(TAG, "shouldShowRatingDialog: succeed: done")
                         } else {
                             Log.i(
-                                TAG,
-                                "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
+                                    TAG,
+                                    "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
                             )
                         }
                     }
@@ -354,18 +355,66 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun initAppUpdate() {
-        appUpdateHelper = AppUpdateHelper(this)
-        appUpdateHelper.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
-            override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
-                Log.i("HomeActivity", "Update available")
-                appUpdateHelper.startImmediateUpdate(appUpdateInfo) {
-                    viewModel.setMessage(Message.SnackBarMessage(it))
-                }
+
+        appUpdateHelper.checkForUpdate(object : AppUpdateHelperNew.CheckingUpdateListener {
+            override fun onUpdateAvailable(latestVersionCode: Long, isUpdateDownloaded: Boolean) {
+                appUpdateHelper.showFlexibleDialog()
             }
 
             override fun onUpdateNotAvailable() {
                 Log.i("HomeActivity", "You're up to date!")
             }
+
+            override fun onFailed(message: String?) {
+                Log.i(TAG, "onFailed: $message")
+            }
+
+        })
+
+        appUpdateHelper.setInstallStatusListener(object : AppUpdateHelperNew.InstallStatusListener() {
+
+            override fun onDownloaded() {
+                super.onDownloaded()
+                Toast.makeText(applicationContext, "Update downloaded successfully", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onInstalled() {
+                super.onInstalled()
+                Toast.makeText(applicationContext, "Successfully installed new updated", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onFailed() {
+                super.onFailed()
+                viewModel.setMessage(
+                        Message.SnackBarMessage(
+                                message = "Installation failed try again",
+                                action = Action(
+                                        name = "Retry",
+                                        callback = {
+                                            appUpdateHelper.startInstallationProcess()
+                                        })
+                        )
+                )
+            }
+        })
+
+        appUpdateHelper.setOnAppUpdateActivityResultListener(object : AppUpdateHelperNew.OnAppUpdateActivityResultListener {
+            override fun onUserApproval() {
+
+            }
+
+            override fun onUserCancelled() {
+                viewModel.setMessage(Message.SnackBarMessage(
+                        message = "Update was cancelled"
+                ))
+            }
+
+            override fun onUpdateFailure() {
+                viewModel.setMessage(Message.SnackBarMessage(
+                        message = "Something went wrong while updating! Please try again."
+                ))
+            }
+
         })
     }
 
@@ -373,27 +422,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
-                    title = "Auto Start",
-                    message =
-                    if (!autoStartPrefManager.isClickedOnSetting())
-                        "Please enable auto start else notification feature won't work properly!"
-                    else
-                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
-                    positiveText = "Setting",
-                    positiveClickCallback = {
-                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
-                        }
-                        autoStartPrefManager.clickedOnSetting()
-                    },
-                    negativeText = "Cancel",
-                    negativeClickCallback = {
+                        title = "Auto Start",
+                        message =
+                        if (!autoStartPrefManager.isClickedOnSetting())
+                            "Please enable auto start else notification feature won't work properly!"
+                        else
+                            "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                        positiveText = "Setting",
+                        positiveClickCallback = {
+                            if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                                viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                            }
+                            autoStartPrefManager.clickedOnSetting()
+                        },
+                        negativeText = "Cancel",
+                        negativeClickCallback = {
 
-                    },
-                    neutralText = "Already Enabled",
-                    neutralClickCallback = {
-                        autoStartPrefManager.clickedOnAlreadyEnabled()
-                    }
+                        },
+                        neutralText = "Already Enabled",
+                        neutralClickCallback = {
+                            autoStartPrefManager.clickedOnAlreadyEnabled()
+                        }
                 )
             }
         }
@@ -409,13 +458,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun deepLinkNotification() {
         val messagePayload: FBMessageService.MessagePayload? =
-            Gson().fromJson(
-                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
-                FBMessageService.MessagePayload::class.java
-            )
+                Gson().fromJson(
+                        intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
+                        FBMessageService.MessagePayload::class.java
+                )
         Log.i(
-            TAG,
-            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
+                TAG,
+                "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
@@ -445,11 +494,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView =
-            NavigationView(this, null, R.style.NavigationItemNoRipple)
+                NavigationView(this, null, R.style.NavigationItemNoRipple)
         navigationView.updatePadding(top = 10, bottom = 15)
         navigationView.overScrollMode = View.OVER_SCROLL_NEVER
         navigationView.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
+                ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
         navigationView.elevation = 0f
         navigationView.inflateMenu(R.menu.home_more_menu)
         navigationView.setNavigationItemSelectedListener {
@@ -460,8 +509,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 R.id.menu_donate -> {
                     donateBottomDialogFragment = DonateBottomDialogFragment()
                     donateBottomDialogFragment?.show(
-                        supportFragmentManager,
-                        DonateBottomDialogFragment.TAG
+                            supportFragmentManager,
+                            DonateBottomDialogFragment.TAG
                     )
                 }
                 R.id.menu_share -> {
@@ -474,8 +523,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             false
         }
         val l = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
         )
         bottomSheetDialog?.setContentView(navigationView, l)
     }
@@ -490,30 +539,30 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             R.id.menu_more -> {
                 item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 val bottomMenuDialog = BottomMenuDialog
-                    .show(supportFragmentManager)
+                        .show(supportFragmentManager)
                 bottomMenuDialog.bottomMenuItemClickListener =
-                    object : BottomMenuDialog.BottomMenuItemClickListener {
-                        override fun onMenuItemClick(menuItem: MenuItem) {
-                            when (menuItem.itemId) {
-                                R.id.menu_settings -> {
-                                    openSettingPage()
-                                }
-                                R.id.menu_donate -> {
-                                    donateBottomDialogFragment = DonateBottomDialogFragment()
-                                    donateBottomDialogFragment?.show(
-                                        supportFragmentManager,
-                                        DonateBottomDialogFragment.TAG
-                                    )
-                                }
-                                R.id.menu_share -> {
-                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
-                                        ?.let { bitmap ->
-                                            shareApp(bitmap = bitmap)
-                                        } ?: shareApp()
+                        object : BottomMenuDialog.BottomMenuItemClickListener {
+                            override fun onMenuItemClick(menuItem: MenuItem) {
+                                when (menuItem.itemId) {
+                                    R.id.menu_settings -> {
+                                        openSettingPage()
+                                    }
+                                    R.id.menu_donate -> {
+                                        donateBottomDialogFragment = DonateBottomDialogFragment()
+                                        donateBottomDialogFragment?.show(
+                                                supportFragmentManager,
+                                                DonateBottomDialogFragment.TAG
+                                        )
+                                    }
+                                    R.id.menu_share -> {
+                                        CommonUtils.viewToBitmap(binding.coordinatorLayout)
+                                                ?.let { bitmap ->
+                                                    shareApp(bitmap = bitmap)
+                                                } ?: shareApp()
+                                    }
                                 }
                             }
                         }
-                    }
 
                 /*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 bottomSheetDialog?.show()*/
