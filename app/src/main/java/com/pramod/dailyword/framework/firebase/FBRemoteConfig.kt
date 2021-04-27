@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.firebase
 
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -9,8 +8,11 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FBRemoteConfig(
+@Singleton
+class FBRemoteConfig @Inject constructor(
     private val prefManager: PrefManager
 ) {
 

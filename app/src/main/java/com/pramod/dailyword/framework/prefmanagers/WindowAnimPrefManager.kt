@@ -2,9 +2,14 @@ package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
 import android.os.Build
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class WindowAnimPrefManager @Inject constructor(val context: Context) : BasePreferenceManager(
+@Singleton
+class WindowAnimPrefManager @Inject constructor(
+    @ApplicationContext val context: Context
+) : BasePreferenceManager(
     PREFERENCES_NAME, context
 ) {
 

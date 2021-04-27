@@ -4,11 +4,15 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSou
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AddBookmarkInteractor (
+@Singleton
+class AddBookmarkInteractor @Inject constructor(
     private val bookmarkCacheDataSource: BookmarkCacheDataSource
 ) {
     fun addBookmark(bookmark: Bookmark): Flow<Resource<Long?>> {

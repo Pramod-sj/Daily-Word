@@ -17,11 +17,14 @@ import com.pramod.dailyword.databinding.BannerNativeAdVerticalBinding
 import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.CommonUtils
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AdsManager @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
 
     private val sharedPreferences =

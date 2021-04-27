@@ -5,12 +5,16 @@ import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Seen
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MarkWordAsSeenInteractor(
+@Singleton
+class MarkWordAsSeenInteractor @Inject constructor(
     private val seenCacheDataSource: SeenCacheDataSource
 ) {
     fun markAsSeen(word: String): Flow<Resource<Long?>> {

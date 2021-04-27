@@ -8,10 +8,19 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.pramod.dailyword.framework.util.CommonUtils
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class ThemeManager @Inject constructor(context: Context) :
-        BasePreferenceManager(THEME_PREF, context) {
+
+@ActivityScoped
+class ThemeManager @Inject constructor(@ActivityContext context: Context) :
+    BasePreferenceManager(THEME_PREF, context) {
 
     private val defaultTheme = THEME_MODE_DARK
 
@@ -25,9 +34,9 @@ class ThemeManager @Inject constructor(context: Context) :
     }
 
     fun liveData(): LiveData<String> =
-            SPrefStringLiveData(sPrefManager, KEY_THEME_MODE, defaultTheme).map {
-                return@map it ?: defaultTheme
-            }
+        SPrefStringLiveData(sPrefManager, KEY_THEME_MODE, defaultTheme).map {
+            return@map it ?: defaultTheme
+        }
 
     fun applyTheme(themeMode: String = getThemeMode()) {
         if (themeMode != getThemeMode()) {
@@ -53,13 +62,13 @@ class ThemeManager @Inject constructor(context: Context) :
     private var onThemeValueChangedListener: OnThemeValueChangedListener? = null
 
     private val sharedPreferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
-                if (s == KEY_THEME_MODE) {
-                    onThemeValueChangedListener?.onThemeValueChanged(
-                            sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
-                    )
-                }
+        SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
+            if (s == KEY_THEME_MODE) {
+                onThemeValueChangedListener?.onThemeValueChanged(
+                    sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
+                )
             }
+        }
 
     fun registerListener(onThemeValueChangedListener: OnThemeValueChangedListener) {
         this.onThemeValueChangedListener = onThemeValueChangedListener;

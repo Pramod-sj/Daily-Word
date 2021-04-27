@@ -5,9 +5,13 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.domain.model.Word
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetWordListInteractor @ExperimentalPagingApi constructor(
+@Singleton
+class GetWordListInteractor @ExperimentalPagingApi @Inject constructor(
     private val wordPaginationRemoteMediator: WordPaginationRemoteMediator,
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 ) {

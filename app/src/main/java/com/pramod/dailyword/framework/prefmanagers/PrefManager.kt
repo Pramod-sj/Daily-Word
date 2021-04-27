@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityScoped
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class PrefManager(context: Context) :
+@Singleton
+class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     BasePreferenceManager(null, context),
     AppLaunchCountContracts,
     MWCreditDialogContracts,

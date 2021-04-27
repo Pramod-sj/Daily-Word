@@ -7,11 +7,15 @@ import com.pramod.dailyword.business.domain.model.IPInfo
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.NetworkUtils
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CountryCodeFinder(
-    private val context: Context,
+@Singleton
+class CountryCodeFinder @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val ipInfoNetworkDataSource: IPInfoNetworkDataSource
 ) {
     suspend fun getCountryCode(): String? {

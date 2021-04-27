@@ -4,8 +4,14 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.cache.abstraction.WordCacheService
 import com.pramod.dailyword.framework.datasource.cache.dao.WordDao
 import com.pramod.dailyword.framework.datasource.cache.mappers.WordCEMapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WordCacheServiceImpl(private val wordDao: WordDao, private val wordCEMapper: WordCEMapper) :
+@Singleton
+class WordCacheServiceImpl @Inject constructor(
+    private val wordDao: WordDao,
+    private val wordCEMapper: WordCEMapper
+) :
     WordCacheService {
     override suspend fun addAll(word: List<Word>): List<Long> {
         return wordDao.addAll(word.map { wordCEMapper.toEntity(it) })

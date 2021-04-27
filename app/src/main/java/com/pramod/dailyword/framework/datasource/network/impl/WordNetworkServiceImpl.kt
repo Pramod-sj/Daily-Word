@@ -5,8 +5,11 @@ import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetwork
 import com.pramod.dailyword.framework.datasource.network.mappers.WordNEMapper
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import com.pramod.dailyword.framework.datasource.network.service.WordApiService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WordNetworkServiceImpl(
+@Singleton
+class WordNetworkServiceImpl @Inject constructor(
     private val wordApiService: WordApiService,
     private val wordNEMapper: WordNEMapper
 ) : WordNetworkService {

@@ -1,11 +1,16 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * This pref class is used to store next remote key to be fetch from server for WordPagingRemoteMediator.kt
  */
-class RemoteKeyPrefManager(base: Context) : BasePreferenceManager(PREF_NAME, base) {
+@Singleton
+class RemoteKeyPrefManager @Inject constructor(@ApplicationContext base: Context) :
+    BasePreferenceManager(PREF_NAME, base) {
 
     fun setNextRemoteKey(nextRemoteKey: String?) {
         editor.putString(KEY_NEXT_REMOTE_KEY, nextRemoteKey).apply()
@@ -20,7 +25,7 @@ class RemoteKeyPrefManager(base: Context) : BasePreferenceManager(PREF_NAME, bas
     }
 
     fun isReachedToEnd(): Boolean {
-        return sPrefManager.getBoolean(KEY_REACHED_TO_END,false)
+        return sPrefManager.getBoolean(KEY_REACHED_TO_END, false)
     }
 
     companion object {

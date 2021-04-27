@@ -12,10 +12,13 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
+@ActivityScoped
 class EdgeToEdgePrefManager @Inject constructor(
-    private val context: Context
+    @ActivityContext private val context: Context
 ) :
     BasePreferenceManager(PREFERENCES_NAME, context) {
 

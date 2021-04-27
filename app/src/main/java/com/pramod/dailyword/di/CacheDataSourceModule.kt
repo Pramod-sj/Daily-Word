@@ -12,39 +12,57 @@ import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkCache
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
 import com.pramod.dailyword.framework.datasource.cache.abstraction.SeenCacheService
 import com.pramod.dailyword.framework.datasource.cache.abstraction.WordCacheService
+import com.pramod.dailyword.framework.datasource.cache.impl.BookmarkCacheServiceImpl
+import com.pramod.dailyword.framework.datasource.cache.impl.BookmarkedWordCacheServiceImpl
+import com.pramod.dailyword.framework.datasource.cache.impl.SeenCacheServiceImpl
+import com.pramod.dailyword.framework.datasource.cache.impl.WordCacheServiceImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(value = [SingletonComponent::class])
-object CacheDataSourceModule {
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideWordCacheDataSource(wordCacheService: WordCacheService): WordCacheDataSource {
-        return WordCacheDataSourceImpl(wordCacheService)
-    }
+interface CacheDataSourceModule {
 
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideBookmarkedWordCacheDataSource(bookmarkedWordCacheService: BookmarkedWordCacheService): BookmarkedWordCacheDataSource {
-        return BookmarkedWordCacheDataSourceImpl(bookmarkedWordCacheService)
-    }
+    @Binds
+    fun provideWordCacheService(wordCacheServiceImpl: WordCacheServiceImpl): WordCacheService
 
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideBookmarkCacheDataSource(bookmarkCacheService: BookmarkCacheService): BookmarkCacheDataSource {
-        return BookmarkCacheDataSourceImpl(bookmarkCacheService)
-    }
+    @Binds
+    fun provideBookmarkCacheService(
+        bookmarkCacheServiceImpl: BookmarkCacheServiceImpl
+    ): BookmarkCacheService
 
-    @Singleton
-    @Provides
-    fun provideSeenCacheDataSource(seenCacheService: SeenCacheService): SeenCacheDataSource {
-        return SeenCacheDataSourceImpl(seenCacheService)
-    }
+
+    @Binds
+    fun provideBookmarkedWordCacheService(
+        bookmarkedWordCacheServiceImpl: BookmarkedWordCacheServiceImpl
+    ): BookmarkedWordCacheService
+
+    @Binds
+    fun provideSeenCacheService(seenCacheServiceImpl: SeenCacheServiceImpl): SeenCacheService
+
+
+    @Binds
+    fun provideWordCacheDataSource(
+        wordCacheDataSourceImpl: WordCacheDataSourceImpl
+    ): WordCacheDataSource
+
+
+    @Binds
+    fun provideBookmarkedWordCacheDataSource(
+        bookmarkedWordCacheDataSourceImpl: BookmarkedWordCacheDataSourceImpl
+    ): BookmarkedWordCacheDataSource
+
+    @Binds
+    fun provideBookmarkCacheDataSource(
+        bookmarkCacheDataSourceImpl: BookmarkCacheDataSourceImpl
+    ): BookmarkCacheDataSource
+
+
+    @Binds
+    fun provideSeenCacheDataSource(
+        seenCacheDataSourceImpl: SeenCacheDataSourceImpl
+    ): SeenCacheDataSource
+
 }

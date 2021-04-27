@@ -1,9 +1,12 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class AutoStartPrefManager @Inject constructor(context: Context) :
+@Singleton
+class AutoStartPrefManager @Inject constructor(@ApplicationContext context: Context) :
     BasePreferenceManager(
         PREFERENCES_NAME, context
     ) {

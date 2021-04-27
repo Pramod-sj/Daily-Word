@@ -10,8 +10,11 @@ import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkedWordDao
 import com.pramod.dailyword.framework.datasource.cache.mappers.BookmarkedWordCEMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookmarkedWordCacheServiceImpl(
+@Singleton
+class BookmarkedWordCacheServiceImpl @Inject constructor(
     private val bookmarkedWordDao: BookmarkedWordDao,
     private val bookmarkedWordCEMapper: BookmarkedWordCEMapper
 ) : BookmarkedWordCacheService {

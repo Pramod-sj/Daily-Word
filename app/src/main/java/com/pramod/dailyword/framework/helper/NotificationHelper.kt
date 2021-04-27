@@ -17,10 +17,13 @@ import androidx.core.app.NotificationCompat.DEFAULT_SOUND
 import androidx.core.app.NotificationCompat.DEFAULT_VIBRATE
 import androidx.core.content.ContextCompat
 import com.pramod.dailyword.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class NotificationHelper @Inject constructor(val context: Context) : ContextWrapper(context) {
+@Singleton
+class NotificationHelper @Inject constructor(@ApplicationContext val context: Context) : ContextWrapper(context) {
     private val notificationManager: NotificationManager =
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

@@ -6,28 +6,33 @@ import com.pramod.dailyword.business.data.network.impl.IPInfoNetworkDataSourceIm
 import com.pramod.dailyword.business.data.network.impl.WordNetworkDataSourceImpl
 import com.pramod.dailyword.framework.datasource.network.abstraction.IPNetworkService
 import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
+import com.pramod.dailyword.framework.datasource.network.impl.IPNetworkServiceImpl
+import com.pramod.dailyword.framework.datasource.network.impl.WordNetworkServiceImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(value = [SingletonComponent::class])
-object NetworkDataSourceModule {
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideWordNetworkDataSource(wordNetworkService: WordNetworkService): WordNetworkDataSource {
-        return WordNetworkDataSourceImpl(wordNetworkService)
-    }
+interface NetworkDataSourceModule {
 
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideIPInfoNetworkDataSource(ipNetworkService: IPNetworkService): IPInfoNetworkDataSource {
-        return IPInfoNetworkDataSourceImpl(ipNetworkService)
-    }
+    @Binds
+    fun provideWordNetworkService(
+        wordNetworkServiceImpl: WordNetworkServiceImpl
+    ): WordNetworkService
+
+
+    @Binds
+    fun provideIPNetworkService(
+        iPNetworkServiceImple: IPNetworkServiceImpl
+    ): IPNetworkService
+
+
+    @Binds
+    fun provideWordNetworkDataSource(wordNetworkDataSourceImpl: WordNetworkDataSourceImpl): WordNetworkDataSource
+
+    @Binds
+    fun provideIPInfoNetworkDataSource(iPInfoNetworkDataSourceImpl: IPInfoNetworkDataSourceImpl): IPInfoNetworkDataSource
 
 }

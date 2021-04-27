@@ -3,11 +3,15 @@ package com.pramod.dailyword.business.interactor.bookmark
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSource
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RemoveBookmarkInteractor (
+@Singleton
+class RemoveBookmarkInteractor @Inject constructor(
     private val bookmarkCacheDataSource: BookmarkCacheDataSource
 ) {
     fun removeBookmark(wordName: String): Flow<Resource<Int?>> {

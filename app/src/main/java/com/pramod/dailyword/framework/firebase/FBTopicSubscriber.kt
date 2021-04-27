@@ -7,13 +7,17 @@ import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataS
 import com.pramod.dailyword.framework.helper.CountryCodeFinder
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.util.LookupEnum
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FBTopicSubscriber constructor(
-    private var context: Context,
+@Singleton
+class FBTopicSubscriber @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val prefManager: PrefManager,
     private val countryCodeFinder: CountryCodeFinder,
     private val ipInfoNetworkDataSource: IPInfoNetworkDataSource

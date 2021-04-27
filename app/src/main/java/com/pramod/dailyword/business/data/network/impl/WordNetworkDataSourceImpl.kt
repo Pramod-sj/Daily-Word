@@ -4,8 +4,11 @@ import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSou
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WordNetworkDataSourceImpl(private val wordNetworkService: WordNetworkService) :
+@Singleton
+class WordNetworkDataSourceImpl @Inject constructor(private val wordNetworkService: WordNetworkService) :
     WordNetworkDataSource {
     override suspend fun getWordOfTheDay(): ApiResponse<Word> {
         return wordNetworkService.getWordOfTheDay()

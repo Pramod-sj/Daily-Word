@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSource
 import com.pramod.dailyword.business.domain.model.Bookmark
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkCacheService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookmarkCacheDataSourceImpl(private val bookmarkCacheService: BookmarkCacheService) :
+@Singleton
+class BookmarkCacheDataSourceImpl @Inject constructor(private val bookmarkCacheService: BookmarkCacheService) :
     BookmarkCacheDataSource {
     override suspend fun insert(bookmark: Bookmark): Long {
         return bookmarkCacheService.insert(bookmark)

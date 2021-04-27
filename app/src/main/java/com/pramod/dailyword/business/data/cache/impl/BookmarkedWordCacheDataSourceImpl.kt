@@ -9,8 +9,11 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookmarkedWordCacheDataSourceImpl(private val bookmarkedWordCacheService: BookmarkedWordCacheService) :
+@Singleton
+class BookmarkedWordCacheDataSourceImpl @Inject constructor(private val bookmarkedWordCacheService: BookmarkedWordCacheService) :
     BookmarkedWordCacheDataSource {
     override fun getWordByDate(date: String): LiveData<Word?> {
         return bookmarkedWordCacheService.getWordByDate(date)

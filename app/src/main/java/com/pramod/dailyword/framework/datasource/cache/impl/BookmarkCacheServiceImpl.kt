@@ -6,8 +6,11 @@ import com.pramod.dailyword.business.domain.model.Bookmark
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkCacheService
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkDao
 import com.pramod.dailyword.framework.datasource.cache.mappers.BookmarkCEMapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookmarkCacheServiceImpl(
+@Singleton
+class BookmarkCacheServiceImpl @Inject constructor(
     private val bookmarkDao: BookmarkDao,
     private val bookmarkCEMapper: BookmarkCEMapper
 ) : BookmarkCacheService {

@@ -28,69 +28,6 @@ import javax.inject.Singleton
 @InstallIn(value = [SingletonComponent::class])
 object AppModule {
 
-    @ExperimentalPagingApi
-    @Provides
-    fun provideWordPagingRemoteMediator(
-        wordCacheDataSource: WordCacheDataSource,
-        wordNetworkDataSource: WordNetworkDataSource,
-        remoteKeyPrefManager: RemoteKeyPrefManager
-    ): WordPaginationRemoteMediator {
-        return WordPaginationRemoteMediator(
-            wordNetworkDataSource,
-            wordCacheDataSource,
-            remoteKeyPrefManager
-        )
-    }
-
-    @Provides
-    fun provideWindowAnimationPrefManager(
-        @ApplicationContext context: Context
-    ): WindowAnimPrefManager {
-        return WindowAnimPrefManager.newInstance(context)
-    }
-
-    @Provides
-    fun provideAutoStartPrefManager(
-        @ApplicationContext context: Context
-    ): AutoStartPrefManager {
-        return AutoStartPrefManager.newInstance(context)
-    }
-
-    @Provides
-    fun provideFBTopicSubscriber(
-        @ApplicationContext context: Context,
-        prefManager: PrefManager,
-        countryCodeFinder: CountryCodeFinder,
-        ipInfoNetworkDataSource: IPInfoNetworkDataSource
-    ): FBTopicSubscriber {
-        return FBTopicSubscriber(context, prefManager, countryCodeFinder, ipInfoNetworkDataSource)
-    }
-
-
-    @Provides
-    fun provideNotificationPrefManager(
-        @ApplicationContext context: Context
-    ): NotificationPrefManager {
-        return NotificationPrefManager.newInstance(context)
-    }
-
-
-    @Provides
-    @Singleton
-    fun provideFBRemoteConfig(prefManager: PrefManager): FBRemoteConfig {
-        return FBRemoteConfig(prefManager)
-    }
-
-
-    @Provides
-    @Singleton
-    fun providePrefManager(
-        @ApplicationContext context: Context
-    ): PrefManager {
-        return PrefManager(context)
-    }
-
-
     @Provides
     @Singleton
     fun provideAudioPlayer(
@@ -101,63 +38,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAdsManager(
-        @ApplicationContext context: Context
-    ): AdsManager {
-        return AdsManager.newInstance(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideHomeScreenBadgeManager(
-        @ApplicationContext context: Context,
-        bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
-        getAllBookmarks: GetAllBookmarks,
-        prefManager: PrefManager
-    ): HomeScreenBadgeManager {
-        return HomeScreenBadgeManager(
-            context,
-            bookmarkedWordCacheDataSource,
-            getAllBookmarks,
-            prefManager
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteKeyPrefManager(@ApplicationContext context: Context): RemoteKeyPrefManager {
-        return RemoteKeyPrefManager(context)
-    }
-
-
-    @Provides
-    @Singleton
-    fun provideAppUpdateHelper(@ApplicationContext context: Context): AppUpdateHelper {
-        return AppUpdateHelper(context)
-    }
-
-    @Provides
-    @Singleton
     fun provideAutoStartPermissionHelper(): AutoStartPermissionHelper {
         return AutoStartPermissionHelper.getInstance()
     }
 
-
-    @Provides
-    fun provideNotificationHelper(
-        @ApplicationContext context: Context
-    ): NotificationHelper {
-        return NotificationHelper(context)
-    }
-
-    @Provides
-    fun provideCountryCodeFinder(
-        @ApplicationContext context: Context,
-        ipInfoNetworkDataSource: IPInfoNetworkDataSource
-    ): CountryCodeFinder {
-        return CountryCodeFinder(
-            context,
-            ipInfoNetworkDataSource
-        )
-    }
 }

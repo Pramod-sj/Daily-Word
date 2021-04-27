@@ -5,11 +5,15 @@ import androidx.lifecycle.map
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSource
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetAllBookmarks(
+@Singleton
+class GetAllBookmarks @Inject constructor(
     private val bookmarkCacheDataSource: BookmarkCacheDataSource
 ) {
 

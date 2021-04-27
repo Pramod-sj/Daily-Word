@@ -4,12 +4,16 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSou
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MarkBookmarkedWordAsSeenInteractor(
+@Singleton
+class MarkBookmarkedWordAsSeenInteractor @Inject constructor(
     private val bookmarkCacheDataSource: BookmarkCacheDataSource
 ) {
     fun markAsSeen(word: String): Flow<Resource<Int?>> {

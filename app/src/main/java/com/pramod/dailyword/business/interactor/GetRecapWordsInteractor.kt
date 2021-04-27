@@ -8,10 +8,14 @@ import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSou
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import com.pramod.dailyword.framework.util.CalenderUtil
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GetRecapWordsInteractor constructor(
+@Singleton
+class GetRecapWordsInteractor @Inject constructor(
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
     private val wordCacheDataSource: WordCacheDataSource,
     private val wordNetworkDataSource: WordNetworkDataSource

@@ -4,8 +4,11 @@ import com.pramod.dailyword.business.domain.model.Seen
 import com.pramod.dailyword.framework.datasource.cache.abstraction.SeenCacheService
 import com.pramod.dailyword.framework.datasource.cache.dao.SeenDao
 import com.pramod.dailyword.framework.datasource.cache.mappers.SeenCEMapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SeenCacheServiceImpl(
+@Singleton
+class SeenCacheServiceImpl @Inject constructor(
     private val seenDao: SeenDao,
     private val seenCEMapper: SeenCEMapper
 ) : SeenCacheService {

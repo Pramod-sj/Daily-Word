@@ -3,8 +3,11 @@ package com.pramod.dailyword.business.data.cache.impl
 import com.pramod.dailyword.business.data.cache.abstraction.SeenCacheDataSource
 import com.pramod.dailyword.business.domain.model.Seen
 import com.pramod.dailyword.framework.datasource.cache.abstraction.SeenCacheService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SeenCacheDataSourceImpl(
+@Singleton
+class SeenCacheDataSourceImpl @Inject constructor(
     private val seenCacheService: SeenCacheService
 ) : SeenCacheDataSource {
     override suspend  fun add(seen: Seen): Long {

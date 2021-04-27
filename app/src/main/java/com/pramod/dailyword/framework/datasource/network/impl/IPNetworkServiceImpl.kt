@@ -4,8 +4,11 @@ import com.pramod.dailyword.business.domain.model.IPInfo
 import com.pramod.dailyword.framework.datasource.network.abstraction.IPNetworkService
 import com.pramod.dailyword.framework.datasource.network.mappers.IPInfoNEMapper
 import com.pramod.dailyword.framework.datasource.network.service.IPService
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class IPNetworkServiceImpl(
+@Singleton
+class IPNetworkServiceImpl @Inject constructor(
     private val ipService: IPService,
     private val ipInfoNEMapper: IPInfoNEMapper
 ) :

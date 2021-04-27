@@ -8,12 +8,16 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheD
 import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
 import com.pramod.dailyword.framework.ui.common.exts.isSunday
 import com.pramod.dailyword.framework.util.CalenderUtil
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeScreenBadgeManager(
-    private val base: Context,
+@Singleton
+class HomeScreenBadgeManager @Inject constructor(
+    @ApplicationContext private val base: Context,
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
     private val getAllBookmarks: GetAllBookmarks,
     private val prefManager: PrefManager

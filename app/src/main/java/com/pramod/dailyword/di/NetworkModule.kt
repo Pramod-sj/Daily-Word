@@ -96,33 +96,8 @@ object NetworkModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideWordNetworkService(
-        wordApiService: WordApiService,
-        wordNEMapper: WordNEMapper
-    ): WordNetworkService {
-        return WordNetworkServiceImpl(
-            wordApiService, wordNEMapper
-        )
-    }
-
-
-    @JvmStatic
-    @Singleton
-    @Provides
     fun provideIPService(@ScalarRetrofitClient retrofit: Retrofit): IPService {
         return retrofit.create(IPService::class.java)
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideIPNetworkService(
-        ipService: IPService,
-        ipInfoNEMapper: IPInfoNEMapper
-    ): IPNetworkService {
-        return IPNetworkServiceImpl(
-            ipService, ipInfoNEMapper
-        )
     }
 
 }

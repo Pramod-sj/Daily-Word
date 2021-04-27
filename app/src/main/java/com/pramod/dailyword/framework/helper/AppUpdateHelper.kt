@@ -8,9 +8,13 @@ import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppUpdateHelper(val context: Context) {
+@Singleton
+class AppUpdateHelper @Inject constructor(@ApplicationContext val context: Context) {
     private val appUpdateManager = AppUpdateManagerFactory.create(context)
     private var onUpdateListener: AppUpdateListener? = null
 
