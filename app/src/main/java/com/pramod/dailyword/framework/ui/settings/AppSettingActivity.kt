@@ -35,9 +35,6 @@ class AppSettingActivity :
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
     @Inject
-    lateinit var notificationPrefManager: NotificationPrefManager
-
-    @Inject
     lateinit var prefManager: PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +44,6 @@ class AppSettingActivity :
         initThemeValue()
         initEdgeToEdgeValue()
         initWindowAnimValue()
-        initNotificationValues()
         initHideBadgeValue()
     }
 
@@ -73,17 +69,6 @@ class AppSettingActivity :
     private fun initHideBadgeValue() {
         prefManager.getHideBadgeLiveData().observe(this) {
             viewModel.hideBadgesValue.value = it
-        }
-    }
-
-    private fun initNotificationValues() {
-
-        notificationPrefManager.getDailyWordNotificationEnabledLiveData().observe(this) {
-            viewModel.dailyWordNotificationValue.value = it
-        }
-
-        notificationPrefManager.getReminderNotificationEnabledLiveData().observe(this) {
-            viewModel.reminderNotificationValue.value = it
         }
     }
 
@@ -113,15 +98,6 @@ class AppSettingActivity :
             override fun toggleEdgeToEdge() {
                 edgeToEdgePrefManager.toggle()
                 restartActivity(true)
-            }
-
-            override fun toggleDailyWordNotification() {
-                notificationPrefManager.toggleDailyWordNotification()
-            }
-
-            override fun toggleReminderNotification() {
-                notificationPrefManager.toggleReminderNotification()
-
             }
 
             override fun toggleBadgeVisibility() {

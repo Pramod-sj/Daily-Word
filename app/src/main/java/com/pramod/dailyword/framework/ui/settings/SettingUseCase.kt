@@ -4,8 +4,6 @@ interface SettingUseCase {
     fun openChooseThemeDialog()
     fun toggleWindowAnimation()
     fun toggleEdgeToEdge()
-    fun toggleDailyWordNotification()
-    fun toggleReminderNotification()
     fun toggleBadgeVisibility()
     fun navigateToFacingNotificationIssue()
     fun navigateToAbout()

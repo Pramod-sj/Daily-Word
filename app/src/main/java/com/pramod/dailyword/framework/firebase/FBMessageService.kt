@@ -8,11 +8,12 @@ import androidx.paging.ExperimentalPagingApi
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
+import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.home.HomeActivity
-import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -27,6 +28,9 @@ class FBMessageService : FirebaseMessagingService() {
 
     @Inject
     lateinit var bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
+
+    @Inject
+    lateinit var notificationPrefManager: NotificationPrefManager
 
     companion object {
         const val EXTRA_NOTIFICATION_PAYLOAD = "notification_payload"
@@ -45,6 +49,7 @@ class FBMessageService : FirebaseMessagingService() {
         Log.i(TAG, "New Token: $p0")
     }
 
+    @ExperimentalCoroutinesApi
     @ExperimentalPagingApi
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
@@ -66,9 +71,24 @@ class FBMessageService : FirebaseMessagingService() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+
             CoroutineScope(Dispatchers.Main).launch {
 
                 var notification: Notification? = null
+
+                //getting first word meaning text
+                val wordMeaning: String? = payload.wordMeaning?.split("||")?.firstOrNull()
+
+                Log.i(TAG, "onMessageReceived: " + Gson().toJson(wordMeaning))
+
+                //if word meaning show in notification is enable then return first
+                //and if word meaning is null then return default body
+                //or if word meaning show in notification is disable return default body
+                val bodyText =
+                    if (notificationPrefManager.isShowingWordMeaningInNotification())
+                        wordMeaning ?: payload.body
+                    else payload.body
+
                 when (payload.noitificationType) {
                     NOTIFICATION_REMINDER -> {
 
@@ -95,7 +115,7 @@ class FBMessageService : FirebaseMessagingService() {
                                 notification = notificationHelper
                                     .createNotification(
                                         title = payload.title,
-                                        body = payload.body,
+                                        body = bodyText,
                                         pendingIntent = pendingIntent
                                     )
                             }
@@ -112,7 +132,7 @@ class FBMessageService : FirebaseMessagingService() {
                         notification = notificationHelper
                             .createNotification(
                                 title = payload.title,
-                                body = payload.body,
+                                body = bodyText,
                                 pendingIntent = pendingIntent
                             )
                     }
@@ -121,7 +141,7 @@ class FBMessageService : FirebaseMessagingService() {
                         notification = notificationHelper
                             .createNotification(
                                 title = payload.title,
-                                body = payload.body,
+                                body = bodyText,
                                 pendingIntent = pendingIntent
                             )
                     }
@@ -140,7 +160,8 @@ class FBMessageService : FirebaseMessagingService() {
         var body: String = "Body",
         var noitificationType: String = NOTIFICATION_NEW_WORD,
         var date: String = CalenderUtil.convertCalenderToString(Calendar.getInstance(Locale.US)),
-        var deepLink: String = DEEP_LINK_TO_HOME_ACTIVITY
+        var deepLink: String = DEEP_LINK_TO_HOME_ACTIVITY,
+        var wordMeaning: String? = null
     )
 
 }

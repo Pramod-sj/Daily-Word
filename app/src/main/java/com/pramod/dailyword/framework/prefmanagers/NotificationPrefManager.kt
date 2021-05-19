@@ -14,6 +14,9 @@ class NotificationPrefManager @Inject constructor(@ApplicationContext context: C
         private const val PREFERENCES_NAME = "notification_preferences"
         private const val KEY_DAILY_WORD_NOTIFICATION_ENABLED = "daily_word_notification_enabled"
         private const val KEY_REMINDER_NOTIFICATION_ENABLED = "reminder_notification_enabled"
+        private const val KEY_SHOW_MEANING_IN_NOTIFICATION = "show_meaning_in_notification"
+
+        private const val DEFAULT_VALUE_SHOW_MEANING_IN_NOTIFICATION = false
 
         fun newInstance(context: Context) = NotificationPrefManager(context)
     }
@@ -61,5 +64,27 @@ class NotificationPrefManager @Inject constructor(@ApplicationContext context: C
             KEY_REMINDER_NOTIFICATION_ENABLED, true
         )
     }
+
+
+    fun toggleShowWordMeaningInNotification() {
+        editor.putBoolean(
+            KEY_SHOW_MEANING_IN_NOTIFICATION,
+            !isShowingWordMeaningInNotification()
+        ).apply()
+    }
+
+    fun isShowingWordMeaningInNotification() = sPrefManager.getBoolean(
+        KEY_SHOW_MEANING_IN_NOTIFICATION,
+        DEFAULT_VALUE_SHOW_MEANING_IN_NOTIFICATION
+    )
+
+    fun getShowWordMeaningInNotificationLiveData(): SPrefBooleanLiveData {
+        return SPrefBooleanLiveData(
+            sPrefManager,
+            KEY_SHOW_MEANING_IN_NOTIFICATION,
+            DEFAULT_VALUE_SHOW_MEANING_IN_NOTIFICATION
+        )
+    }
+
 
 }

@@ -184,8 +184,8 @@
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleDailyWordNotification()}"
-                            app:checked="@{appSettingViewModel.dailyWordNotificationValue}"
+                            android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleDailyWordNotification()}"
+                            app:checked="@{appSettingViewModel.notificationPrefManager.dailyWordNotificationEnabledLiveData}"
                             app:showRadioButton="true"
                             app:subTitle="Receive notification when word of the day is available"
                             app:title="Daily Word Notification"
@@ -202,12 +202,29 @@
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleReminderNotification()}"
-
-                            app:checked="@{appSettingViewModel.reminderNotificationValue}"
+                            android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
+                            app:checked="@{appSettingViewModel.notificationPrefManager.reminderNotificationEnabledLiveData}"
                             app:showRadioButton="true"
                             app:subTitle="Receive a reminding notification"
                             app:title="Reminder Notification"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_extra_large"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleShowWordMeaningInNotification()}"
+                            app:checked="@{appSettingViewModel.notificationPrefManager.showWordMeaningInNotificationLiveData}"
+                            app:showRadioButton="true"
+                            app:subTitle="Show word meaning in notification itself"
+                            app:title="Word meaning in notification"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
