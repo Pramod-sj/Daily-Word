@@ -170,7 +170,10 @@ dependencies {
     //custom lib to play and store audio files
     implementation project(path: ':audioplayer')
 
-
+    //in-app browser
     implementation 'androidx.webkit:webkit:1.4.0'
+
+    //detecting leaks
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
 }

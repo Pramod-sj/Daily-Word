@@ -17,6 +17,7 @@
             android:background="@drawable/background_widget_small_title"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
             android:drawablePadding="3dp"
+            android:drawableTint="@color/white"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:padding="@dimen/padding_medium"

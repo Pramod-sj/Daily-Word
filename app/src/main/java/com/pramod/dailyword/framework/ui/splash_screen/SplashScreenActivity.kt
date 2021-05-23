@@ -11,6 +11,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
+import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
@@ -43,6 +44,7 @@ class SplashScreenActivity :
         animateAppIcon()
         navigateToHomePage()
         setUpAcceptLinks()
+        scheduleWeeklyAlarmAt12PM()
     }
 
     private fun addGradientToAppIcon() {

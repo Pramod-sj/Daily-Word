@@ -404,7 +404,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         appUpdateHelper.onActivityResult(requestCode, resultCode, data)
 
         Log.i(TAG, "onActivityResult: $requestCode:$resultCode")
-        donateBottomDialogFragment?.onActivityResult(requestCode, resultCode, data)
+        //donateBottomDialogFragment?.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun deepLinkNotification() {

@@ -150,6 +150,21 @@
             android:name="com.pramod.dailyword.framework.widget.WidgetDataLoadService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name=".framework.receiver.AlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pramod.dailyword.framework.receiver.AlarmReceiver.ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".framework.receiver.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

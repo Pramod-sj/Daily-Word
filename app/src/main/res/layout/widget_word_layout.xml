@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/background_widget_title"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
+            android:drawableTint="@color/white"
             android:drawablePadding="@dimen/padding_medium"
             android:ellipsize="end"
             android:gravity="center_vertical"
