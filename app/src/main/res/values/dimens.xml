@@ -74,4 +74,7 @@
     <dimen name="ad_card_elevation">12dp</dimen>
 
     <dimen name="card_elevation_grid_item">2dp</dimen>
+
+
+    <dimen name="card_horizontal_margin_tablet">50dp</dimen>
 </resources>

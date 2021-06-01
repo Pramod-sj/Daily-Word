@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.home
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,13 +11,10 @@ import android.util.Log
 import android.util.Pair
 import android.view.*
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -92,7 +88,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private var bottomSheetDialog: BottomSheetDialog? = null
 
-    private var donateBottomDialogFragment: DonateBottomDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         transparentNavBar = true
@@ -106,7 +101,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         setUpViewCallbacks()
         deepLinkNotification()
         //handleWidgetExtras()
-        initBottomSheetMenu()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
         handleShowingCreditAndAutoStartDialog()
@@ -148,11 +142,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 openSettingPage()
                             }
                             R.id.menu_donate -> {
-                                donateBottomDialogFragment = DonateBottomDialogFragment()
+                                var donateBottomDialogFragment: DonateBottomDialogFragment? =
+                                    DonateBottomDialogFragment()
                                 donateBottomDialogFragment?.show(
                                     supportFragmentManager,
                                     DonateBottomDialogFragment.TAG
                                 )
+                                donateBottomDialogFragment?.dialog?.setOnDismissListener {
+                                    Log.i(TAG, "onMenuItemClick: dimiss")
+                                    donateBottomDialogFragment = null
+                                }
                             }
                             R.id.menu_share -> {
                                 CommonUtils.viewToBitmap(binding.coordinatorLayout)
@@ -442,7 +441,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         this.intent = intent
     }
 
-    private fun initBottomSheetMenu() {
+    /*private fun initBottomSheetMenu() {
         bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
         val navigationView =
             NavigationView(this, null, R.style.NavigationItemNoRipple)
@@ -478,9 +477,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         bottomSheetDialog?.setContentView(navigationView, l)
-    }
+    }*/
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -515,12 +514,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                         }
                     }
 
-                /*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                bottomSheetDialog?.show()*/
+                *//*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                bottomSheetDialog?.show()*//*
             }
         }
         return super.onOptionsItemSelected(item)
-    }
+    }*/
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)

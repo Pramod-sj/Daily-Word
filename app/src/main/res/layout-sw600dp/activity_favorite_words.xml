@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
+
+        <variable
+            name="favoriteWordsViewModel"
+            type="com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsViewModel" />
+
+        <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
+
+        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
+
+        <variable
+            name="adsEnabled"
+            type="Boolean" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:context=".ui.bookmarked_words.FavoriteWordsActivity">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="?attr/actionBarSize"
+            app:applyVerticalPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:paddingBottom="@{adsEnabled?@dimen/ad_banner_height:0}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_words"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:splitMotionEvents="false"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                    app:spanCount="3" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/list_placeholder_layout"
+            app:placeHolderImage="@{@drawable/ic_round_bookmarks_24}"
+            app:placeHolderText="@{@string/no_favorite_text_placeholder}"
+            app:placeHolderTitle="@{@string/no_favorite_title_placeholder}"
+            app:show="@{favoriteWordsViewModel.showPlaceHolderLiveData}" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="@dimen/ad_card_elevation"
+            app:isVisible="@{adsEnabled}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:applyBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled()}">
+
+
+                <com.facebook.ads.NativeAdLayout
+                    android:id="@+id/native_ad_container_4"
+                    adId="@{AdsManager.NATIVE_BANNER_ID_2}"
+                    showAdWithSomeDelay="@{500}"
+                    showNativeAd="@{adsEnabled}"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/margin_small"
+                    android:paddingHorizontal="@dimen/margin_medium"
+                    app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
+                    app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
+
+
+                <TextView
+                    android:id="@+id/txtView_ad_loading_4"
+                    style="@style/AppTheme.SubTitleTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:text="@string/loading" />
+
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="@dimen/appbar_alpha"
+            app:applyTopPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled}"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/nestedScrollView">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_round_back_arrow">
+
+                <TextView
+                    style="@style/ToolbarTitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bookmarked_words" />
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
