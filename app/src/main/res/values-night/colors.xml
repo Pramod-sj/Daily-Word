@@ -64,4 +64,5 @@
 
     <color name="word_details_background">#101010</color>
 
+    <color name="radio_track_color">#41FFFFFF</color>
 </resources>

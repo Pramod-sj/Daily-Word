@@ -175,4 +175,8 @@
 
 
     <color name="word_details_background">#F6F7F8</color>
+
+
+    <color name="radio_track_color">#41000000</color>
+
 </resources>

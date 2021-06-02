@@ -81,7 +81,9 @@
                 android:longClickable="false"
                 android:thumb="@drawable/switch_custom_thumb"
                 android:visibility="gone"
-                app:track="@drawable/switch_custom_track" />
+                app:thumbTint="@color/white"
+                app:track="@drawable/switch_custom_track"
+                app:trackTint="@color/radio_track_tint" />
 
         </FrameLayout>
     </RelativeLayout>
