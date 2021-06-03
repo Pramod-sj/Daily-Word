@@ -42,7 +42,9 @@ class WebViewDialogFragment :
         }
 
         binding.txtViewAppBar.text = arguments?.getString(EXTRA_DIALOG_TITLE)
-        binding.webView.loadUrl(arguments?.getString(EXTRA_WEB_PAGE_URL))
+        arguments?.getString(EXTRA_WEB_PAGE_URL)?.let {
+            binding.webView.loadUrl(it)
+        }
         binding.webView.webViewClient = object : WebViewClient() {
 
             override fun onReceivedError(
