@@ -63,5 +63,7 @@ data class DonateItem(
     val drawableId: Int,
     val title: String,
     val amount: String,
-    val color: Int
+    val color: Int,
+    //default value is false
+    val isAlreadyDonated: Boolean = false,
 )

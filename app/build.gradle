@@ -30,6 +30,7 @@ android {
 
         buildConfigField("String", "GOOGLE_LICENSE_KEY", keyProperties['GOOGLE_LICENSE_KEY'])
         buildConfigField("String", "MERCHANT_ID", keyProperties['MERCHANT_ID'])
+        buildConfigField("String", "GOOGLE_IN_APP_RSA_KEY", keyProperties['GOOGLE_IN_APP_RSA_KEY'])
 
         /**
          * Base urls and Endpoints
@@ -90,7 +91,7 @@ dependencies {
     def lifecycle_version = "2.3.1"
     def hilt_viewmodels = "1.0.0-alpha03"
     def hilt_version = "2.33-beta"
-    def billing_version = "3.0.3"
+    def billing_version = "4.0.0"
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -108,8 +109,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.0-beta02'
 
-    //in-app purchase helper lib
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+    //in-app purchase helper lib (this lib doesn't support billing version 3)
+    //implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
     //google core lib mainly using it for in-app update
     implementation 'com.google.android.play:core-ktx:1.8.1'

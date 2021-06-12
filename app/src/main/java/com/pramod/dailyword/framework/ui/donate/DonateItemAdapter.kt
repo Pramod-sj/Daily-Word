@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.ui.donate
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -48,6 +49,7 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
         holder.binding.alphaColor = alphaAppliedColor
         holder.binding.strokeColor =
             CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 90)
+
         holder.binding.executePendingBindings()
     }
 
@@ -57,6 +59,14 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
 
         override fun areContentsTheSame(oldItem: DonateItem, newItem: DonateItem): Boolean =
             oldItem == newItem
+
+        override fun getChangePayload(oldItem: DonateItem, newItem: DonateItem): Any? {
+            return bundleOf(
+                "amount" to newItem.amount,
+                "color" to newItem.color,
+                "isAlreadyDonated" to newItem.isAlreadyDonated,
+            )
+        }
 
     }
 
