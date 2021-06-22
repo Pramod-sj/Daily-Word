@@ -40,6 +40,7 @@ class FBRemoteConfig @Inject constructor(
         private const val REMOTE_CONFIG_KEY_ADS_ENABLED = "ads_enabled"
 
         const val REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL = "lottie_donate_page_thank_you_url"
+        const val REMOTE_CONFIG_KEY_DONATE_PAGE_LOTTIE_URL = "donate_page_lottie_url"
 
         private val default_configs = mapOf(
             REMOTE_CONFIG_KEY_BASE_URL to BuildConfig.API_BASE_URL,
@@ -107,6 +108,15 @@ class FBRemoteConfig @Inject constructor(
         val url = firebaseRemoteConfig.getString(REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL)
         if (url.isEmpty() || url.isBlank()) {
             return BuildConfig.URL_LOTTIE_THANK_YOU
+        }
+        return url
+    }
+
+
+    fun getDonatePageLottieFileUrl(): String {
+        val url = remoteConfig.getString(REMOTE_CONFIG_KEY_DONATE_PAGE_LOTTIE_URL)
+        if (url.isEmpty() || url.isBlank()) {
+            return BuildConfig.URL_LOTTIE_DONATE_PAGE
         }
         return url
     }

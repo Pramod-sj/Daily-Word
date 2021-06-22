@@ -30,6 +30,7 @@ android {
 
         buildConfigField("String", "GOOGLE_LICENSE_KEY", keyProperties['GOOGLE_LICENSE_KEY'])
         buildConfigField("String", "MERCHANT_ID", keyProperties['MERCHANT_ID'])
+        buildConfigField("String", "GOOGLE_IN_APP_RSA_KEY", keyProperties['GOOGLE_IN_APP_RSA_KEY'])
 
         /**
          * Base urls and Endpoints
@@ -47,6 +48,7 @@ android {
         buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
 
         buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
+        buildConfigField("String", "URL_LOTTIE_DONATE_PAGE", endpointProperties["URL_LOTTIE_DONATE_PAGE"])
         /**
          * End
          */
@@ -106,8 +108,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
-    //in-app purchase helper lib
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+    //in-app purchase helper lib (this lib doesn't support billing version 3)
+    //implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
     //google core lib mainly using it for in-app update
     implementation 'com.google.android.play:core-ktx:1.8.1'
@@ -176,4 +178,6 @@ dependencies {
     //detecting leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
+    //billing lib
+    implementation "com.android.billingclient:billing-ktx:$billing_version"
 }
