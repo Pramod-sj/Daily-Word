@@ -16,7 +16,7 @@ class FBRemoteConfig @Inject constructor(
     private val prefManager: PrefManager
 ) {
 
-    private val firebaseRemoteConfig = Firebase.remoteConfig.apply {
+    private val remoteConfig = Firebase.remoteConfig.apply {
         setConfigSettingsAsync(remoteConfigSettings {
             //360 i.e. 1 hour
             minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) 0 else 3600
@@ -49,7 +49,7 @@ class FBRemoteConfig @Inject constructor(
     }
 
     init {
-        firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener {
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.i(TAG, "Remote configs are fetched and activated")
             } else {
@@ -60,7 +60,7 @@ class FBRemoteConfig @Inject constructor(
 
 
     fun isAdsEnabled(): Boolean {
-        val adString = firebaseRemoteConfig.getString(REMOTE_CONFIG_KEY_ADS_ENABLED)
+        val adString = remoteConfig.getString(REMOTE_CONFIG_KEY_ADS_ENABLED)
         try {
             val adsEnabled: AdsEnabled =
                 Gson().fromJson(adString, AdsEnabled::class.java)
@@ -97,7 +97,7 @@ class FBRemoteConfig @Inject constructor(
     }
 
     fun baseUrl(): String {
-        val baseUrl = firebaseRemoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)
+        val baseUrl = remoteConfig.getString(REMOTE_CONFIG_KEY_BASE_URL)
         if (baseUrl.isEmpty() || baseUrl.isBlank()) {
             return BuildConfig.API_BASE_URL
         }
@@ -105,7 +105,7 @@ class FBRemoteConfig @Inject constructor(
     }
 
     fun getThankYouLottieFileUrl(): String {
-        val url = firebaseRemoteConfig.getString(REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL)
+        val url = remoteConfig.getString(REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL)
         if (url.isEmpty() || url.isBlank()) {
             return BuildConfig.URL_LOTTIE_THANK_YOU
         }

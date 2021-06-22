@@ -110,7 +110,7 @@ class DonateBottomDialogFragment :
     }
 
     private fun loadLottieAnimationFileFromUrl() {
-        binding.lottieBoyWorking.setAnimationFromUrl(
+        binding.lottieBoyWorking?.setAnimationFromUrl(
             fbRemoteConfig.getDonatePageLottieFileUrl()
         )
     }
