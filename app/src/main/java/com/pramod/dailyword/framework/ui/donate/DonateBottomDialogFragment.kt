@@ -5,12 +5,16 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.android.billingclient.api.SkuDetails
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
-import com.pramod.dailyword.framework.helper.BillingHelper
+import com.pramod.dailyword.framework.helper.billing.BillingHelper
+import com.pramod.dailyword.framework.helper.billing.BillingListener
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -25,6 +29,8 @@ class DonateBottomDialogFragment :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
+    private val viewModel: DonateViewModel by viewModels()
+
     override fun getBottomSheetBehaviorView(): View {
         return binding.cardBottomSheet
     }
@@ -32,84 +38,80 @@ class DonateBottomDialogFragment :
     private val donateItemAdapter: DonateItemAdapter by lazy {
         DonateItemAdapter { i: Int, donateItem: DonateItem ->
             lifecycleScope.launch {
-               /* if (billingHelper.isPurchased(donateItem.itemProductId)) {
-                    showSnackBarMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
-                } else {*/
-                    if (billingHelper.isInAppPurchaseSupported()) {
-                        billingHelper.purchase(requireActivity(), donateItem.itemProductId)
-                        //billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
-                    } else {
-                        showSnackBarMessage(
-                            Message.SnackBarMessage(
-                                "In-app purchase service not available, you need to update google play service",
-                                duration = Snackbar.LENGTH_LONG
-                            )
+                /* if (billingHelper.isPurchased(donateItem.itemProductId)) {
+                     showSnackBarMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
+                 } else {*/
+                if (billingHelper.isInAppPurchaseSupported()) {
+                    billingHelper.buy(requireActivity(), donateItem.itemProductId)
+                    //billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
+                } else {
+                    viewModel.setMessage(
+                        Message.SnackBarMessage(
+                            "In-app purchase service not available, you need to update google play service",
+                            duration = Snackbar.LENGTH_LONG
                         )
-                    }
+                    )
+                }
                 /*}*/
             }
         }
     }
 
-    private lateinit var billingHelper: BillingHelper
+    private val billingHelper: BillingHelper by lazy {
+        BillingHelper(
+            requireContext(),
+            viewLifecycleOwner,
+            viewModel.donateItemList.value?.map { it.itemProductId } ?: listOf()
+        )
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initBillingHelper()
+        billingHelper.setBillingListener(object : BillingListener {
+            override fun onBillingInitialized() {
+                Log.i(TAG, "onBillingInitialized: ")
+            }
+
+            override fun onBillingError(message: String) {
+                Log.i(TAG, "onBillingError: $message")
+                viewModel.setMessage(Message.SnackBarMessage(message))
+            }
+
+            override fun onSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+                Log.i(TAG, "onSkuDetailsAvailable: ${Gson().toJson(skuDetailsList)}")
+                viewModel.updateDonateItemPrice(skuDetailsList)
+            }
+
+            override fun onPurchased(sku: String) {
+                Log.i(TAG, "onPurchased: $sku")
+                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
+            }
+
+            override fun onPurchasedRestored(sku: String) {
+                Log.i(TAG, "onPurchasedRestored: $sku")
+                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
+            }
+
+            override fun onPurchasePending(sku: String) {
+                Log.i(TAG, "onPurchasePending: $sku")
+                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASE_IN_PROCESS)
+            }
+
+
+        })
         applyBottomInsetToScrollView()
         loadLottieAnimationFileFromUrl()
         binding.donateRecyclerView.adapter = donateItemAdapter
-        donateItemList.observe(this) {
+        viewModel.donateItemList.observe(viewLifecycleOwner) {
             donateItemAdapter.submitList(it)
         }
-    }
-
-    private fun initBillingHelper() {
-
-        billingHelper = BillingHelper.newInstance(
-            requireContext(),
-            viewLifecycleOwner,
-            onBillingInitialized = {
-                Log.i(TAG, "onBillingInitialized: ")
-                donateItemList.value?.let { localDonateItem ->
-
-                    lifecycleScope.launch {
-
-                        val list = ArrayList(localDonateItem.map { it.itemProductId })
-                        val productList = billingHelper.getProductDetailsList(list)
-                        productList?.let {
-                            val localDonateItemMutable = localDonateItem.toMutableList()
-                            for (product in productList) {
-                                localDonateItem.find { product.sku == it.itemProductId }?.let {
-                                    localDonateItemMutable[localDonateItem.indexOf(it)] =
-                                        DonateItem(
-                                            it.itemProductId,
-                                            it.drawableId,
-                                            it.title,
-                                            product.price,
-                                            it.color,
-                                            billingHelper.isPurchased(product.sku)
-                                        )
-                                }
-                            }
-                            donateItemList.value = localDonateItemMutable
-                        }
-
-                    }
-
-                }
-            },
-            onBillingError = {
-                showSnackBarMessage(Message.SnackBarMessage(it))
-            }
-        )
-
+        observeMessage()
     }
 
     private fun loadLottieAnimationFileFromUrl() {
-        binding.lottieThankYou.setAnimationFromUrl(
-            fbRemoteConfig.getThankYouLottieFileUrl()
+        binding.lottieBoyWorking.setAnimationFromUrl(
+            fbRemoteConfig.getDonatePageLottieFileUrl()
         )
     }
 
@@ -124,6 +126,16 @@ class DonateBottomDialogFragment :
         //make bottom sheet dialog draggable when scroll view is not scroll
         bottomSheetBehavior.isDraggable =
             !binding.nestedScrollView.canScrollVertically(-1)
+    }
+
+    private fun observeMessage() {
+        viewModel.message.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                if (it is Message.SnackBarMessage) {
+                    showSnackBarMessage(it)
+                }
+            }
+        }
     }
 
     private fun showSnackBarMessage(it: Message.SnackBarMessage) {

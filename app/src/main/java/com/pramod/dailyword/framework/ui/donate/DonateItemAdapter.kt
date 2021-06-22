@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.ui.donate
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -14,7 +15,7 @@ import com.pramod.dailyword.framework.util.CommonUtils
 
 class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = null) :
     ListAdapter<DonateItem, DonateItemAdapter.DonateItemViewHolder>(
-        DiffCallback()
+        DonateItemComparator
     ) {
 
     inner class DonateItemViewHolder(val binding: ItemDonateLayoutBinding) :
@@ -37,7 +38,6 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
 
     override fun onBindViewHolder(holder: DonateItemViewHolder, position: Int) {
         val donateItem = getItem(position)
-        holder.binding.donateItem = donateItem
         val color = CommonUtils.getColor(holder.binding.root.context, donateItem.color)
         holder.binding.color = color
         val alphaAppliedColor =
@@ -50,24 +50,27 @@ class DonateItemAdapter(val itemClickCallback: ((Int, DonateItem) -> Unit)? = nu
         holder.binding.strokeColor =
             CommonUtils.changeAlpha(holder.binding.root.context, donateItem.color, 90)
 
+        holder.binding.donateItem = donateItem
         holder.binding.executePendingBindings()
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<DonateItem>() {
-        override fun areItemsTheSame(oldItem: DonateItem, newItem: DonateItem): Boolean =
-            oldItem.title == newItem.title
+}
 
-        override fun areContentsTheSame(oldItem: DonateItem, newItem: DonateItem): Boolean =
-            oldItem == newItem
+object DonateItemComparator : DiffUtil.ItemCallback<DonateItem>() {
+    override fun areItemsTheSame(oldItem: DonateItem, newItem: DonateItem): Boolean {
+        return oldItem.title == newItem.title
+    }
 
-        override fun getChangePayload(oldItem: DonateItem, newItem: DonateItem): Any? {
-            return bundleOf(
-                "amount" to newItem.amount,
-                "color" to newItem.color,
-                "isAlreadyDonated" to newItem.isAlreadyDonated,
-            )
-        }
+    override fun areContentsTheSame(oldItem: DonateItem, newItem: DonateItem): Boolean {
+        return oldItem == newItem
+    }
 
+    override fun getChangePayload(oldItem: DonateItem, newItem: DonateItem): Bundle {
+        return bundleOf(
+            "amount" to newItem.amount,
+            "color" to newItem.color,
+            "donateItemState" to newItem.donateItemState,
+        )
     }
 
 }

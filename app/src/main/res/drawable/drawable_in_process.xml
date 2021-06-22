@@ -3,13 +3,13 @@
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/green_500" />
+            <solid android:color="@color/orange_400" />
         </shape>
     </item>
 
     <item
         android:bottom="@dimen/padding_small"
-        android:drawable="@drawable/ic_round_check_24"
+        android:drawable="@drawable/ic_round_access_time_24"
         android:left="@dimen/padding_small"
         android:right="@dimen/padding_small"
         android:top="@dimen/padding_small" />

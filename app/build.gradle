@@ -48,6 +48,7 @@ android {
         buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
 
         buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
+        buildConfigField("String", "URL_LOTTIE_DONATE_PAGE", endpointProperties["URL_LOTTIE_DONATE_PAGE"])
         /**
          * End
          */
