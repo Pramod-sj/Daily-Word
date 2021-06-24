@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.paging.ExperimentalPagingApi
 import com.google.firebase.messaging.FirebaseMessaging
@@ -14,6 +15,7 @@ import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
+import com.pramod.dailyword.framework.ui.common.Action
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.*
@@ -31,12 +33,17 @@ class AppSettingActivity :
 
     override val bindingVariable: Int = BR.appSettingViewModel
 
+    private val appUpdateHelper: AppUpdateHelperNew by lazy {
+        AppUpdateHelperNew(this, lifecycle)
+    }
+
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
     @Inject
     lateinit var prefManager: PrefManager
 
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar(binding.toolbar, null, true)
@@ -45,6 +52,7 @@ class AppSettingActivity :
         initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
+        setUpAppUpdate()
     }
 
     private fun initThemeValue() {
@@ -110,6 +118,35 @@ class AppSettingActivity :
                 )
             }
 
+            override fun checkForUpdate() {
+                viewModel.subTitleCheckForUpdate.value = "Checking for the update..."
+                appUpdateHelper.checkForUpdate(object : AppUpdateHelperNew.CheckingUpdateListener {
+                    override fun onUpdateAvailable(
+                        latestVersionCode: Long,
+                        isUpdateDownloaded: Boolean
+                    ) {
+                        viewModel.subTitleCheckForUpdate.value = if (isUpdateDownloaded) {
+                            AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
+                        } else AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+
+                        appUpdateHelper.showFlexibleDialog()
+                    }
+
+                    override fun onUpdateNotAvailable() {
+                        viewModel.subTitleCheckForUpdate.value =
+                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                        Log.i(TAG, "onUpdateNotAvailable: ")
+                    }
+
+                    override fun onFailed(message: String?) {
+                        viewModel.subTitleCheckForUpdate.value =
+                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                        Log.i(TAG, "onFailed: $message")
+                    }
+
+                })
+            }
+
             override fun navigateToAbout() {
                 openAboutPage()
             }
@@ -146,6 +183,70 @@ class AppSettingActivity :
             }
 
         }
+    }
+
+
+    private fun setUpAppUpdate() {
+
+        appUpdateHelper.setInstallStatusListener(object :
+            AppUpdateHelperNew.InstallStatusListener() {
+
+            override fun onDownloaded() {
+                super.onDownloaded()
+                Toast.makeText(
+                    applicationContext,
+                    "Update downloaded successfully",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            override fun onInstalled() {
+                super.onInstalled()
+                Toast.makeText(
+                    applicationContext,
+                    "Successfully installed new updated",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            override fun onFailed() {
+                super.onFailed()
+                viewModel.setMessage(
+                    Message.SnackBarMessage(
+                        message = "Installation failed try again",
+                        action = Action(
+                            name = "Retry",
+                            callback = {
+                                appUpdateHelper.startInstallationProcess()
+                            })
+                    )
+                )
+            }
+        })
+
+        appUpdateHelper.setOnAppUpdateActivityResultListener(object :
+            AppUpdateHelperNew.OnAppUpdateActivityResultListener {
+            override fun onUserApproval() {
+
+            }
+
+            override fun onUserCancelled() {
+                viewModel.setMessage(
+                    Message.SnackBarMessage(
+                        message = "Update was cancelled"
+                    )
+                )
+            }
+
+            override fun onUpdateFailure() {
+                viewModel.setMessage(
+                    Message.SnackBarMessage(
+                        message = "Something went wrong while updating! Please try again."
+                    )
+                )
+            }
+
+        })
     }
 
 }

@@ -16,7 +16,6 @@ import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
-import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -59,8 +58,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
-    @Inject
-    lateinit var appUpdateHelper: AppUpdateHelper
+    private val appUpdateHelper: AppUpdateHelperNew by lazy {
+        AppUpdateHelperNew(this, lifecycle)
+    }
 
     @Inject
     lateinit var autoStartPrefManager: AutoStartPrefManager
@@ -337,8 +337,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             Log.i(TAG, "shouldShowRatingDialog: succeed: done")
                         } else {
                             Log.i(
-                                TAG,
-                                "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
+                                    TAG,
+                                    "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
                             )
                         }
                     }
@@ -353,18 +353,66 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun initAppUpdate() {
-        appUpdateHelper = AppUpdateHelper(this)
-        appUpdateHelper.checkForUpdate(object : AppUpdateHelper.AppUpdateAvailabilityListener {
-            override fun onUpdateAvailable(appUpdateInfo: AppUpdateInfo) {
-                Log.i("HomeActivity", "Update available")
-                appUpdateHelper.startImmediateUpdate(appUpdateInfo) {
-                    viewModel.setMessage(Message.SnackBarMessage(it))
-                }
+
+        appUpdateHelper.checkForUpdate(object : AppUpdateHelperNew.CheckingUpdateListener {
+            override fun onUpdateAvailable(latestVersionCode: Long, isUpdateDownloaded: Boolean) {
+                appUpdateHelper.showFlexibleDialog()
             }
 
             override fun onUpdateNotAvailable() {
                 Log.i("HomeActivity", "You're up to date!")
             }
+
+            override fun onFailed(message: String?) {
+                Log.i(TAG, "onFailed: $message")
+            }
+
+        })
+
+        appUpdateHelper.setInstallStatusListener(object : AppUpdateHelperNew.InstallStatusListener() {
+
+            override fun onDownloaded() {
+                super.onDownloaded()
+                Toast.makeText(applicationContext, "Update downloaded successfully", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onInstalled() {
+                super.onInstalled()
+                Toast.makeText(applicationContext, "Successfully installed new updated", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onFailed() {
+                super.onFailed()
+                viewModel.setMessage(
+                        Message.SnackBarMessage(
+                                message = "Installation failed try again",
+                                action = Action(
+                                        name = "Retry",
+                                        callback = {
+                                            appUpdateHelper.startInstallationProcess()
+                                        })
+                        )
+                )
+            }
+        })
+
+        appUpdateHelper.setOnAppUpdateActivityResultListener(object : AppUpdateHelperNew.OnAppUpdateActivityResultListener {
+            override fun onUserApproval() {
+
+            }
+
+            override fun onUserCancelled() {
+                viewModel.setMessage(Message.SnackBarMessage(
+                        message = "Update was cancelled"
+                ))
+            }
+
+            override fun onUpdateFailure() {
+                viewModel.setMessage(Message.SnackBarMessage(
+                        message = "Something went wrong while updating! Please try again."
+                ))
+            }
+
         })
     }
 
@@ -372,27 +420,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
-                    title = "Auto Start",
-                    message =
-                    if (!autoStartPrefManager.isClickedOnSetting())
-                        "Please enable auto start else notification feature won't work properly!"
-                    else
-                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
-                    positiveText = "Setting",
-                    positiveClickCallback = {
-                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
-                        }
-                        autoStartPrefManager.clickedOnSetting()
-                    },
-                    negativeText = "Cancel",
-                    negativeClickCallback = {
+                        title = "Auto Start",
+                        message =
+                        if (!autoStartPrefManager.isClickedOnSetting())
+                            "Please enable auto start else notification feature won't work properly!"
+                        else
+                            "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                        positiveText = "Setting",
+                        positiveClickCallback = {
+                            if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                                viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                            }
+                            autoStartPrefManager.clickedOnSetting()
+                        },
+                        negativeText = "Cancel",
+                        negativeClickCallback = {
 
-                    },
-                    neutralText = "Already Enabled",
-                    neutralClickCallback = {
-                        autoStartPrefManager.clickedOnAlreadyEnabled()
-                    }
+                        },
+                        neutralText = "Already Enabled",
+                        neutralClickCallback = {
+                            autoStartPrefManager.clickedOnAlreadyEnabled()
+                        }
                 )
             }
         }
@@ -408,13 +456,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun deepLinkNotification() {
         val messagePayload: FBMessageService.MessagePayload? =
-            Gson().fromJson(
-                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
-                FBMessageService.MessagePayload::class.java
-            )
+                Gson().fromJson(
+                        intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
+                        FBMessageService.MessagePayload::class.java
+                )
         Log.i(
-            TAG,
-            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
+                TAG,
+                "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
