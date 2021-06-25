@@ -17,6 +17,8 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -33,6 +35,9 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -97,15 +102,13 @@ class WordDetailedActivity :
     }
 
     private fun handleRippleAnimationForAudioEffect() {
-
-        themeManager.liveData().observe(this, object : Observer<String> {
-            override fun onChanged(t: String?) {
+        lifecycleScope.launch {
+            themeManager.liveData().asFlow().collect {
                 binding.lottieSpeaker.post {
                     binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
                 }
             }
-        })
-
+        }
     }
 
     private fun invalidateOptionMenuWhenWordAvailable() {
@@ -119,28 +122,27 @@ class WordDetailedActivity :
     private fun setUpExampleRecyclerView() {
         val adapter = ExampleAdapter()
         binding.wordDetailedExamplesRecyclerview.adapter = adapter
-        viewModel.word.observe(this, {
-            it?.let { word ->
+        lifecycleScope.launchWhenCreated {
+            viewModel.wordAsFlow.filterNotNull().collect { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
                     adapter.submitList(word.examples)
                 }
             }
-        })
+        }
     }
 
     private fun setUpDefinitionRecyclerView() {
         val adapter = DefinitionAdapter()
         binding.wordDetailedDefinationsRecyclerview.adapter = adapter
-
-        viewModel.word.observe(this, {
-            it?.let { word ->
+        lifecycleScope.launchWhenCreated {
+            viewModel.wordAsFlow.filterNotNull().collect { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
                 if (word.meanings != null) {
                     adapter.submitList(word.meanings)
                 }
             }
-        })
+        }
     }
 
     private fun handleNavigator() {

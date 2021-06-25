@@ -54,14 +54,23 @@ class RecapWordsActivity :
                 }
             })
 
-            val view = binding.recyclerViewRecapWords.layoutManager!!.findViewByPosition(pos)
-            val option = ActivityOptions.makeSceneTransitionAnimation(
-                this,
-                view!!,
-                word.date
-            )
+            val view = binding.recyclerViewRecapWords.layoutManager?.findViewByPosition(pos)
+            val option = view?.let {
+                ActivityOptions.makeSceneTransitionAnimation(
+                    this,
+                    view,
+                    word.date
+                )
+            }
+            word.date?.let { date ->
+                openWordDetailsPage(
+                    wordDate = date,
+                    option = option,
+                    shouldAnimate = windowAnimPrefManager.isEnabled(),
+                    word = word
+                )
 
-            openWordDetailsPage(word.date!!, option, windowAnimPrefManager.isEnabled())
+            }
         }
         binding.recyclerViewRecapWords.adapter = adapter
         viewModel.words.observe(this) {

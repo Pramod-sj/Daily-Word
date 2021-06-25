@@ -52,11 +52,14 @@ class FavoriteWordsActivity :
                 view!!,
                 word.date
             )
-            openWordDetailsPage(
-                word.date!!,
-                option,
-                windowAnimPrefManager.isEnabled()
-            )
+            word.date?.let { date ->
+                openWordDetailsPage(
+                    wordDate = date,
+                    option = option,
+                    shouldAnimate = windowAnimPrefManager.isEnabled(),
+                    word = word
+                )
+            }
         }, deleteBookmarkCallback = {
             viewModel.removeBookmark(it)
         }, hideBadges = prefManager.getHideBadge())

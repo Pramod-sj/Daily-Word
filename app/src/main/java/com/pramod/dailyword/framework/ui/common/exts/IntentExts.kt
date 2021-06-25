@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
+import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsActivity
 import com.pramod.dailyword.framework.ui.home.HomeActivity
@@ -46,9 +47,9 @@ fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: B
             android.R.anim.fade_out
         )*/
         val option = ActivityOptions.makeCustomAnimation(
-                this,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
+            this,
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
         )
         startActivity(intent, option.toBundle())
     } else {
@@ -61,14 +62,16 @@ fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: B
 
 
 fun Activity.openWordDetailsPage(
-        wordDate: String,
-        option: ActivityOptions? = null,
-        shouldAnimate: Boolean? = false,
-        finish: Boolean = false
+    wordDate: String,
+    option: ActivityOptions? = null,
+    shouldAnimate: Boolean? = false,
+    finish: Boolean = false,
+    word: Word? = null
 ) {
     val intent = Intent(this, WordDetailedActivity::class.java)
     val bundle = Bundle()
     bundle.putString("WORD_DATE", wordDate)
+    bundle.putSerializable("WORD", word)
     intent.putExtras(bundle)
     if (option != null && shouldAnimate == true) {
         startActivity(intent, option.toBundle())
@@ -109,9 +112,9 @@ fun Activity.openAboutPage() {
 }
 
 fun Activity.shareApp(
-        text: String = resources.getString(R.string.share_text) + "\n" + resources.getString(
-                R.string.google_app_url
-        ), bitmap: Bitmap? = null
+    text: String = resources.getString(R.string.share_text) + "\n" + resources.getString(
+        R.string.google_app_url
+    ), bitmap: Bitmap? = null
 ) {
 
     val shareWithImage = Intent.createChooser(Intent().apply {
@@ -138,7 +141,11 @@ fun getUriFromBitmap(context: Context, bitmap: Bitmap): Uri? {
         val file = File(context.externalCacheDir, "${System.currentTimeMillis()}.jpg")
         val fos = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos)
-        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file.absoluteFile)
+        FileProvider.getUriForFile(
+            context,
+            BuildConfig.APPLICATION_ID + ".fileprovider",
+            file.absoluteFile
+        )
     } catch (e: Exception) {
         null
     }

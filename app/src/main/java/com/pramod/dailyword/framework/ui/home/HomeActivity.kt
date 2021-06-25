@@ -331,11 +331,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 Pair(it, word.date!!)
             )
         }
-        openWordDetailsPage(
-            word.date!!,
-            option,
-            windowAnimPrefManager.isEnabled()
-        )
+
+        word.date?.let { date ->
+
+            openWordDetailsPage(
+                wordDate = date,
+                option = option,
+                shouldAnimate = windowAnimPrefManager.isEnabled(),
+                word = word
+            )
+
+        }
     }
 
     private fun shouldShowRatingDialog() {
@@ -495,7 +501,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
-                openWordDetailsPage(messagePayload.date, null)
+                openWordDetailsPage(messagePayload.date, option = null)
             }
             FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
                 openWordListPage()

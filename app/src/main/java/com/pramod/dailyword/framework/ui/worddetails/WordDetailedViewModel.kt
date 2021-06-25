@@ -63,10 +63,12 @@ class WordDetailedViewModel @Inject constructor(
         refreshEvent.value = Unit
     }
 
-    private val _word = MutableLiveData<Word?>()
+    private val _word = MutableLiveData<Word?>(stateHandle.get("WORD"))
 
     val word: LiveData<Word?>
         get() = _word
+
+    val wordAsFlow = word.asFlow()
 
     init {
 

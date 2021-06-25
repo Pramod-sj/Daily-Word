@@ -44,7 +44,7 @@ object ChipGroupBA {
                 binding.chip.text = chipText
                 chipColor?.let {
                     binding.chip.setTextColor(chipColor)
-                    val color = ColorUtils.setAlphaComponent(chipColor, 20)
+                    val color = ColorUtils.setAlphaComponent(chipColor, 15)
                     binding.chip.chipBackgroundColor = ColorStateList.valueOf(color)
                 }
                 binding.chip.setOnClickListener { view ->
@@ -63,6 +63,11 @@ object ChipGroupBA {
                 binding.chip.text = SpannableString("more").also { string ->
                     string.setSpan(UnderlineSpan(), 0, 4, SpannableString.SPAN_INCLUSIVE_INCLUSIVE)
                 }
+
+                chipColor?.let {
+                    binding.chip.setTextColor(ColorUtils.setAlphaComponent(chipColor, 200))
+                }
+
                 binding.chip.textSize = 13f
                 binding.chip.chipBackgroundColor =
                     ColorStateList.valueOf(
