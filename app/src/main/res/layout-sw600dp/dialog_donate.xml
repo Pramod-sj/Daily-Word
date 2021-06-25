@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <com.airbnb.lottie.LottieAnimationView
+                       <!-- <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/lottie_thank_you"
                             android:layout_width="300dp"
                             android:layout_height="80dp"
@@ -66,7 +66,7 @@
                             android:layout_marginHorizontal="@dimen/margin_large"
                             android:layout_marginVertical="@dimen/margin_medium"
                             app:lottie_autoPlay="true"
-                            app:lottie_loop="true" />
+                            app:lottie_loop="true" />-->
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"

@@ -57,7 +57,7 @@
                         android:descendantFocusability="blocksDescendants"
                         android:orientation="vertical">
 
-                        <com.airbnb.lottie.LottieAnimationView
+                        <!--<com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/lottie_boy_working"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
@@ -67,7 +67,7 @@
                             android:layout_marginVertical="@dimen/margin_medium"
                             app:lottie_autoPlay="true"
                             app:lottie_fileName="working_boy.json"
-                            app:lottie_loop="true" />
+                            app:lottie_loop="true" />-->
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"

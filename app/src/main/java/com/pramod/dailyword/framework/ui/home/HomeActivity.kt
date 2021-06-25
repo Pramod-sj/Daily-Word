@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.util.Log
 import android.util.Pair
 import android.view.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.paging.ExperimentalPagingApi
@@ -142,16 +143,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 openSettingPage()
                             }
                             R.id.menu_donate -> {
-                                var donateBottomDialogFragment: DonateBottomDialogFragment? =
-                                    DonateBottomDialogFragment()
-                                donateBottomDialogFragment?.show(
-                                    supportFragmentManager,
-                                    DonateBottomDialogFragment.TAG
-                                )
-                                donateBottomDialogFragment?.dialog?.setOnDismissListener {
-                                    Log.i(TAG, "onMenuItemClick: dimiss")
-                                    donateBottomDialogFragment = null
-                                }
+                                DonateBottomDialogFragment.show(supportFragmentManager)
                             }
                             R.id.menu_share -> {
                                 CommonUtils.viewToBitmap(binding.coordinatorLayout)
@@ -337,8 +329,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             Log.i(TAG, "shouldShowRatingDialog: succeed: done")
                         } else {
                             Log.i(
-                                    TAG,
-                                    "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
+                                TAG,
+                                "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
                             )
                         }
                     }
@@ -369,48 +361,62 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
         })
 
-        appUpdateHelper.setInstallStatusListener(object : AppUpdateHelperNew.InstallStatusListener() {
+        appUpdateHelper.setInstallStatusListener(object :
+            AppUpdateHelperNew.InstallStatusListener() {
 
             override fun onDownloaded() {
                 super.onDownloaded()
-                Toast.makeText(applicationContext, "Update downloaded successfully", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Update downloaded successfully",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             override fun onInstalled() {
                 super.onInstalled()
-                Toast.makeText(applicationContext, "Successfully installed new updated", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Successfully installed new updated",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             override fun onFailed() {
                 super.onFailed()
                 viewModel.setMessage(
-                        Message.SnackBarMessage(
-                                message = "Installation failed try again",
-                                action = Action(
-                                        name = "Retry",
-                                        callback = {
-                                            appUpdateHelper.startInstallationProcess()
-                                        })
-                        )
+                    Message.SnackBarMessage(
+                        message = "Installation failed try again",
+                        action = Action(
+                            name = "Retry",
+                            callback = {
+                                appUpdateHelper.startInstallationProcess()
+                            })
+                    )
                 )
             }
         })
 
-        appUpdateHelper.setOnAppUpdateActivityResultListener(object : AppUpdateHelperNew.OnAppUpdateActivityResultListener {
+        appUpdateHelper.setOnAppUpdateActivityResultListener(object :
+            AppUpdateHelperNew.OnAppUpdateActivityResultListener {
             override fun onUserApproval() {
 
             }
 
             override fun onUserCancelled() {
-                viewModel.setMessage(Message.SnackBarMessage(
+                viewModel.setMessage(
+                    Message.SnackBarMessage(
                         message = "Update was cancelled"
-                ))
+                    )
+                )
             }
 
             override fun onUpdateFailure() {
-                viewModel.setMessage(Message.SnackBarMessage(
+                viewModel.setMessage(
+                    Message.SnackBarMessage(
                         message = "Something went wrong while updating! Please try again."
-                ))
+                    )
+                )
             }
 
         })
@@ -420,27 +426,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
-                        title = "Auto Start",
-                        message =
-                        if (!autoStartPrefManager.isClickedOnSetting())
-                            "Please enable auto start else notification feature won't work properly!"
-                        else
-                            "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
-                        positiveText = "Setting",
-                        positiveClickCallback = {
-                            if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                                viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
-                            }
-                            autoStartPrefManager.clickedOnSetting()
-                        },
-                        negativeText = "Cancel",
-                        negativeClickCallback = {
-
-                        },
-                        neutralText = "Already Enabled",
-                        neutralClickCallback = {
-                            autoStartPrefManager.clickedOnAlreadyEnabled()
+                    title = "Auto Start",
+                    message =
+                    if (!autoStartPrefManager.isClickedOnSetting())
+                        "Please enable auto start else notification feature won't work properly!"
+                    else
+                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                    positiveText = "Setting",
+                    positiveClickCallback = {
+                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
                         }
+                        autoStartPrefManager.clickedOnSetting()
+                    },
+                    negativeText = "Cancel",
+                    negativeClickCallback = {
+
+                    },
+                    neutralText = "Already Enabled",
+                    neutralClickCallback = {
+                        autoStartPrefManager.clickedOnAlreadyEnabled()
+                    }
                 )
             }
         }
@@ -456,13 +462,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun deepLinkNotification() {
         val messagePayload: FBMessageService.MessagePayload? =
-                Gson().fromJson(
-                        intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
-                        FBMessageService.MessagePayload::class.java
-                )
+            Gson().fromJson(
+                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
+                FBMessageService.MessagePayload::class.java
+            )
         Log.i(
-                TAG,
-                "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
+            TAG,
+            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
         when (messagePayload?.deepLink) {
             FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {

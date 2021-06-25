@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.card.MaterialCardView
@@ -20,7 +19,6 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
-import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.exts.configStatusBar
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
@@ -29,11 +27,13 @@ import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeFromF
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeToFloat
 
 abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes val layoutId: Int) :
-    DialogFragment() {
+    DismissibleDialogFragment() {
 
     var topInset: Int = 0
 
-    lateinit var binding: V
+    private var _binding: V? = null
+
+    val binding get() = _binding!!
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
@@ -90,7 +90,7 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        _binding = DataBindingUtil.inflate(
             LayoutInflater.from(requireContext()),
             layoutId,
             container,
@@ -249,10 +249,12 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         bottomSheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
-        super.onDestroy()
+        _binding = null
+        super.onDestroyView()
     }
+
 
     companion object {
         val TAG = ExpandingBottomSheetDialogFragment::class.java.simpleName

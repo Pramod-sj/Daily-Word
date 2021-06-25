@@ -3,22 +3,24 @@ package com.pramod.dailyword.framework.helper.billing
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.annotation.CallSuper
+import androidx.lifecycle.LifecycleObserver
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType.INAPP
-import com.google.gson.Gson
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.Security
-import com.pramod.dailyword.framework.prefmanagers.BasePreferenceManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlin.collections.set
 
 
 class BillingHelper constructor(
-    private val context: Context,
-    private val lifecycleOwner: LifecycleOwner,
+    context: Context,
     private val skus: List<String>,
-) : BasePreferenceManager(PREF_BILLING, context),
+) : BillingListenerHandler(),
     LifecycleObserver,
     BillingClientStateListener,
     PurchasesUpdatedListener {
@@ -29,34 +31,34 @@ class BillingHelper constructor(
     //cache purchases
     private val purchases = mutableMapOf<String, Purchase>()
 
-    private var billingListener: BillingListener? = null
+    private val billingClient: BillingClient = BillingClient.newBuilder(context)
+        .setListener(this)
+        .enablePendingPurchases()
+        .build()
 
-    fun setBillingListener(billingListener: BillingListener) {
-        this.billingListener = billingListener;
-    }
+    private var fetchSkuDetailsJob: Job? = null
 
-
-    private lateinit var billingClient: BillingClient
+    private var purchaseUpdateJob: Job? = null
 
     init {
-        Log.i(TAG, ":init ")
-        lifecycleOwner.lifecycle.addObserver(this)
-    }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
-        Log.d(TAG, "ON_CREATE")
-        billingClient = BillingClient.newBuilder(context)
-            .setListener(this)
-            .enablePendingPurchases()
-            .build()
         if (!billingClient.isReady) {
             billingClient.startConnection(this)
         }
+
+    }
+
+    @CallSuper
+    fun close() {
+        Log.i(TAG, "close: ")
+        fetchSkuDetailsJob?.cancel()
+        purchaseUpdateJob?.cancel()
+        removeListeners()
+        billingClient.endConnection()
     }
 
 
-    fun isInAppPurchaseSupported(): Boolean =
+    private fun isInAppPurchaseSupported(): Boolean =
         billingClient.isFeatureSupported(BillingClient.FeatureType.IN_APP_ITEMS_ON_VR)
             .responseCode != BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED
 
@@ -65,15 +67,19 @@ class BillingHelper constructor(
      * @param activity
      * @param sku
      */
-    suspend fun buy(activity: Activity, sku: String) {
+    override suspend fun buy(activity: Activity, sku: String) {
         if (isInitializedAndReady()) {
             when {
+                !isInAppPurchaseSupported() -> {
+                    emitPurchaseError("In-app purchase service not available, you need to update google play service")
+                }
+
                 isPurchased(sku) -> {
                     if (isPurchasePending(sku)) {
-                        billingListener?.onBillingError("Please wait your purchase is under process, check on this after some time.")
+                        emitPurchaseError("Please wait your purchase is under process, check on this after some time.")
                     } else {
                         Log.i(TAG, "buy: already purchased")
-                        billingListener?.onBillingError("You have already donated this item, Thank you so much :)")
+                        emitPurchaseError("You have already donated this item, Thank you so much ❤")
                     }
                 }
                 else -> {
@@ -169,20 +175,8 @@ class BillingHelper constructor(
     }
 
 
-    @OnLifecycleEvent(value = Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy() {
-        Log.i(TAG, "endConnection: ")
-        billingClient.endConnection()
-    }
-
-
     companion object {
         val TAG = BillingHelper::class.java.simpleName
-
-        const val PREF_BILLING = "billing"
-
-        const val KEY_ACKNOWLEDGE_PURCHASE_PRODUCT_ID = "acknowledge_purchase_product_id";
-
     }
 
     private fun isValidSignature(signedData: String, signature: String): Boolean {
@@ -197,20 +191,19 @@ class BillingHelper constructor(
 
     override fun onBillingServiceDisconnected() {
         Log.i(TAG, "onBillingServiceDisconnected: ")
+        emitBillingClientError("Billing service is disconnected!")
     }
 
     override fun onBillingSetupFinished(p0: BillingResult) {
         Log.i(TAG, "onBillingSetupFinished: ")
         if (p0.responseCode.isBillingResultOk()) {
-            billingListener?.onBillingInitialized()
-            lifecycleOwner.lifecycleScope.launch {
+            emitBillingInitialized()
+            fetchSkuDetailsJob = GlobalScope.launch(Dispatchers.Main) {
                 val skuDetailsList = querySkus()
                 skuDetailsList?.let {
-                    billingListener?.onSkuDetailsAvailable(it)
+                    emitSkuDetails(it)
                 }
-                getAllPurchase()?.let { purchases ->
-                    processPurchase(purchases, true)
-                }
+                processPurchase(getAllPurchase(), true)
             }
             // The BillingClient is ready. You can query purchases here.
         }
@@ -262,27 +255,15 @@ class BillingHelper constructor(
                             billingClient.acknowledgePurchase(acknowledgePurchaseParams)
                         if (result.responseCode.isBillingResultOk()) {
                             //if purchase is acknowledged Grant entitlement to the user
-                            if (isRestored) {
-                                billingListener?.onPurchasedRestored(purchase.skus.first())
-                            } else {
-                                billingListener?.onPurchased(purchase.skus.first())
-                            }
+                            purchased(purchase.skus.first(), isRestored)
                         }
                     } else {
                         // Grant entitlement to the user on item purchase
-                        if (isRestored) {
-                            billingListener?.onPurchasedRestored(purchase.skus.first())
-                        } else {
-                            billingListener?.onPurchased(purchase.skus.first())
-                        }
+                        purchased(purchase.skus.first(), isRestored)
                     }
                 }
                 Purchase.PurchaseState.PENDING -> {
-                    Log.e(
-                        TAG,
-                        "processPurchase: ${Gson().toJson(purchase.skus)}: Purchase State: pending: ${purchase.purchaseState}"
-                    )
-                    billingListener?.onPurchasePending(purchase.skus.first())
+                    purchasePending(purchase.skus.first())
                 }
                 else -> {
                     Log.e(TAG, "processPurchase: Purchase State: ${purchase.purchaseState}")
@@ -314,14 +295,13 @@ class BillingHelper constructor(
     private fun Int.isBillingResultOk(): Boolean = this == BillingClient.BillingResponseCode.OK
 
     //billing client is Initialized and Ready to use
-    private fun isInitializedAndReady() =
-        ::billingClient.isInitialized && billingClient.isReady
+    private fun isInitializedAndReady() = billingClient.isReady
 
     override fun onPurchasesUpdated(
         billingResult: BillingResult,
         purchases: MutableList<Purchase>?
     ) {
-        lifecycleOwner.lifecycleScope.launch {
+        purchaseUpdateJob = GlobalScope.launch(Dispatchers.Main) {
             // To be implemented in a later section.
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
@@ -338,13 +318,120 @@ class BillingHelper constructor(
                 }
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
                     Log.i(TAG, "onPurchasesUpdated: USER_CANCELED")
-                    billingListener?.onBillingError("Purchase wasn't made, you can try again now or later. Thank you :)")
+                    emitPurchaseError("Purchase wasn't made, you can try again now or later. Thank you :)")
                 }
-                else -> billingListener?.onBillingError(billingResult.debugMessage)
+                else -> emitPurchaseError(billingResult.debugMessage)
             }
 
 
         }
     }
+}
+
+
+abstract class BillingListenerHandler {
+
+    private val billingListeners = mutableSetOf<BillingListener>()
+
+    private val purchaseListeners = mutableSetOf<PurchaseListener>()
+
+
+    fun addBillingListener(billingListener: BillingListener) {
+        billingListeners.add(billingListener)
+    }
+
+    fun removeBillingListener(billingListener: BillingListener) {
+        billingListeners.remove(billingListener)
+    }
+
+    fun addPurchaseListener(purchaseListener: PurchaseListener) {
+        purchaseListeners.add(purchaseListener)
+    }
+
+    fun removePurchaseListener(purchaseListener: PurchaseListener) {
+        purchaseListeners.remove(purchaseListener)
+    }
+
+
+    fun purchased(sku: String, isRestored: Boolean) {
+        purchaseListeners.forEach {
+            if (isRestored)
+                it.onPurchasedRestored(sku)
+            else
+                it.onPurchased(sku)
+        }
+    }
+
+    fun purchasePending(sku: String) {
+        purchaseListeners.forEach {
+            it.onPurchasePending(sku)
+        }
+    }
+
+
+    fun emitPurchaseError(message: String) {
+        purchaseListeners.forEach {
+            it.onPurchaseError(message)
+        }
+    }
+
+    fun emitBillingClientError(message: String) {
+        billingListeners.forEach {
+            it.onBillingError(message)
+        }
+        purchaseListeners.forEach {
+            it.onBillingError(message)
+        }
+    }
+
+    fun emitBillingInitialized() {
+        billingListeners.forEach {
+            it.onBillingInitialized()
+        }
+        purchaseListeners.forEach {
+            it.onBillingInitialized()
+        }
+    }
+
+    fun emitSkuDetails(skuDetailsList: List<SkuDetails>) {
+        billingListeners.forEach {
+            it.onSkuDetailsAvailable(skuDetailsList)
+        }
+        purchaseListeners.forEach {
+            it.onSkuDetailsAvailable(skuDetailsList)
+        }
+    }
+
+
+    abstract suspend fun buy(activity: Activity, sku: String)
+
+    fun removeListeners() {
+        billingListeners.clear()
+        purchaseListeners.clear()
+    }
+
+
+}
+
+
+interface BillingListener {
+
+    fun onBillingInitialized()
+
+    fun onBillingError(message: String)
+
+    fun onSkuDetailsAvailable(skuDetailsList: List<SkuDetails>)
+
+}
+
+interface PurchaseListener : BillingListener {
+
+    fun onPurchased(sku: String)
+
+    fun onPurchasedRestored(sku: String)
+
+    fun onPurchasePending(sku: String)
+
+    fun onPurchaseError(message: String)
 
 }

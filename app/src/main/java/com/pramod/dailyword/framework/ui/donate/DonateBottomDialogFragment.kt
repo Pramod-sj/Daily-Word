@@ -9,12 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.SkuDetails
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
-import com.pramod.dailyword.framework.helper.billing.BillingListener
+import com.pramod.dailyword.framework.helper.billing.PurchaseListener
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -24,7 +23,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class DonateBottomDialogFragment :
-    ExpandingBottomSheetDialogFragment<DialogDonateBinding>(R.layout.dialog_donate) {
+    ExpandingBottomSheetDialogFragment<DialogDonateBinding>(R.layout.dialog_donate),
+    PurchaseListener {
+
 
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
@@ -38,68 +39,21 @@ class DonateBottomDialogFragment :
     private val donateItemAdapter: DonateItemAdapter by lazy {
         DonateItemAdapter { i: Int, donateItem: DonateItem ->
             lifecycleScope.launch {
-                /* if (billingHelper.isPurchased(donateItem.itemProductId)) {
-                     showSnackBarMessage(Message.SnackBarMessage("You have already donated this item, Thank you so much :)"))
-                 } else {*/
-                if (billingHelper.isInAppPurchaseSupported()) {
-                    billingHelper.buy(requireActivity(), donateItem.itemProductId)
-                    //billingProcessor.purchase(requireActivity(), donateItem.itemProductId)
-                } else {
-                    viewModel.setMessage(
-                        Message.SnackBarMessage(
-                            "In-app purchase service not available, you need to update google play service",
-                            duration = Snackbar.LENGTH_LONG
-                        )
-                    )
-                }
-                /*}*/
+                billingHelper.buy(requireActivity(), donateItem.itemProductId)
             }
         }
     }
 
-    private val billingHelper: BillingHelper by lazy {
-        BillingHelper(
-            requireContext(),
-            viewLifecycleOwner,
-            viewModel.donateItemList.value?.map { it.itemProductId } ?: listOf()
-        )
-    }
+    private lateinit var billingHelper: BillingHelper
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        billingHelper.setBillingListener(object : BillingListener {
-            override fun onBillingInitialized() {
-                Log.i(TAG, "onBillingInitialized: ")
-            }
-
-            override fun onBillingError(message: String) {
-                Log.i(TAG, "onBillingError: $message")
-                viewModel.setMessage(Message.SnackBarMessage(message))
-            }
-
-            override fun onSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
-                Log.i(TAG, "onSkuDetailsAvailable: ${Gson().toJson(skuDetailsList)}")
-                viewModel.updateDonateItemPrice(skuDetailsList)
-            }
-
-            override fun onPurchased(sku: String) {
-                Log.i(TAG, "onPurchased: $sku")
-                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
-            }
-
-            override fun onPurchasedRestored(sku: String) {
-                Log.i(TAG, "onPurchasedRestored: $sku")
-                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
-            }
-
-            override fun onPurchasePending(sku: String) {
-                Log.i(TAG, "onPurchasePending: $sku")
-                viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASE_IN_PROCESS)
-            }
-
-
-        })
+        billingHelper = BillingHelper(
+            requireContext(),
+            viewModel.donateItemList.value?.map { it.itemProductId } ?: listOf()
+        )
+        billingHelper.addPurchaseListener(this)
         applyBottomInsetToScrollView()
         loadLottieAnimationFileFromUrl()
         binding.donateRecyclerView.adapter = donateItemAdapter
@@ -110,9 +64,9 @@ class DonateBottomDialogFragment :
     }
 
     private fun loadLottieAnimationFileFromUrl() {
-        binding.lottieBoyWorking?.setAnimationFromUrl(
+        /*binding.lottieBoyWorking?.setAnimationFromUrl(
             fbRemoteConfig.getDonatePageLottieFileUrl()
-        )
+        )*/
     }
 
     private fun applyBottomInsetToScrollView() {
@@ -174,9 +128,44 @@ class DonateBottomDialogFragment :
 
     }
 
+    override fun onPurchased(sku: String) {
+        viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
+        viewModel.setMessage(Message.SnackBarMessage("Thank you so much ❤"))
+    }
+
+    override fun onPurchasedRestored(sku: String) {
+        viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
+    }
+
+    override fun onPurchasePending(sku: String) {
+        viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASE_IN_PROCESS)
+        viewModel.setMessage(Message.SnackBarMessage("Thank you so much ❤, your purchase is under process."))
+    }
+
+    override fun onPurchaseError(message: String) {
+        viewModel.setMessage(Message.SnackBarMessage(message))
+    }
+
+    override fun onBillingInitialized() {
+        Log.i(TAG, "onBillingInitialized: ")
+    }
+
+    override fun onBillingError(message: String) {
+        viewModel.setMessage(Message.SnackBarMessage(message))
+    }
+
+    override fun onSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+        viewModel.updateDonateItemPrice(skuDetailsList)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        billingHelper.close()
+    }
+
     companion object {
 
-        val TAG = DonateBottomDialogFragment::class.java.simpleName
+        private val TAG = DonateBottomDialogFragment::class.java.simpleName
 
         fun show(supportFragmentManager: FragmentManager) {
             DonateBottomDialogFragment().show(supportFragmentManager, TAG)
