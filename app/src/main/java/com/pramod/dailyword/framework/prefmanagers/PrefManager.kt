@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +16,9 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     IsNewUserContracts,
     LastSavedAppVersionContracts,
     HideBadgeContracts,
-    CountryCodeContracts {
+    CountryCodeContracts,
+    DonatedContract,
+    SupportUsDialogContract {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -85,6 +86,11 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         private const val KEY_APP_VERSION = "app_version"
         private const val KEY_SHOW_BADGE = "show_badge"
 
+        private const val KEY_IS_DONATED = "is_donated"
+
+        //how many time support us dialog method was called
+        private const val KEY_SUPPORT_US_CALLED_COUNT = "support_us_called_count"
+
         /**
          * country code
          */
@@ -102,6 +108,26 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     override fun getCountryCode(): String {
         return sPrefManager.getString(KEY_USER_COUNTRY_CODE, SupportedFBTopicCounties.OTHERS.name)
             ?: SupportedFBTopicCounties.OTHERS.name
+    }
+
+    override fun setHasDonated(donated: Boolean) {
+        sPrefManager.edit().putBoolean(KEY_IS_DONATED, donated).apply()
+    }
+
+    override fun hasDonated(): Boolean? {
+        return if (sPrefManager.contains(KEY_IS_DONATED)) sPrefManager.getBoolean(
+            KEY_IS_DONATED,
+            false
+        ) else null
+    }
+
+    override fun incrementSupportUsDialogCalledCount() {
+        sPrefManager.edit().putInt(KEY_SUPPORT_US_CALLED_COUNT, getSupportUsDialogCalledCount() + 1)
+            .apply()
+    }
+
+    override fun getSupportUsDialogCalledCount(): Int {
+        return sPrefManager.getInt(KEY_SUPPORT_US_CALLED_COUNT, 0)
     }
 
 
@@ -156,4 +182,16 @@ interface CountryCodeContracts {
      * Default value is OTHERS
      */
     fun getCountryCode(): String
+}
+
+interface DonatedContract {
+    fun setHasDonated(donated: Boolean)
+
+    fun hasDonated(): Boolean?
+}
+
+interface SupportUsDialogContract {
+    fun incrementSupportUsDialogCalledCount()
+
+    fun getSupportUsDialogCalledCount(): Int
 }

@@ -268,4 +268,10 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+
+    <style name="DialogWindowAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_zoom_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_zoom_out_anim</item>
+    </style>
+
 </resources>

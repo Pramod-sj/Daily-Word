@@ -73,6 +73,7 @@ class WordDetailedActivity :
                 supportStartPostponedEnterTransition()
             }
         )
+        shouldShowSupportDevelopmentDialog()
     }
 
     private fun bindAdsInfo() {

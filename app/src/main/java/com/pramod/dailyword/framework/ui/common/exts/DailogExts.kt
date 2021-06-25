@@ -9,20 +9,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AbsListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BottomSheetDialogLayoutBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
+import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 
 
 /*fun Context.showLottieDialog(fileName: String, title: String, body: String) {
@@ -46,13 +51,15 @@ import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 }*/
 
 fun AboutAppActivity.showLib() {
-    val dialog = MaterialAlertDialogBuilder(this)
+    val builder = MaterialAlertDialogBuilder(this)
         .setTitle("Open source libraries")
         .setItems(R.array.libraries_name, null)
-        .create()
-    dialog.setOnShowListener {
 
-        dialog.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.setOnShowListener {
+
+        alertDialog.listView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(
                 view: AbsListView?,
                 firstVisibleItem: Int,
@@ -60,7 +67,8 @@ fun AboutAppActivity.showLib() {
                 totalItemCount: Int
             ) {
                 for (i in 0 until visibleItemCount) {
-                    val textView: TextView = dialog.listView[i].findViewById(android.R.id.text1)
+                    val textView: TextView =
+                        alertDialog.listView[i].findViewById(android.R.id.text1)
                     textView.linksClickable = true
                     textView.movementMethod = LinkMovementMethod.getInstance()
                     textView.background = null
@@ -73,7 +81,7 @@ fun AboutAppActivity.showLib() {
 
         })
     }
-    dialog.show()
+    alertDialog.show()
 
 }
 
@@ -224,8 +232,9 @@ fun Context.showStaticPageDialog(
             neutralClickCallback?.invoke()
         }
     }
-    val dialog = builder.create()
-    dialog.show()
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.show()
 }
 
 
@@ -249,7 +258,7 @@ class DailogHelper {
                 }
             }
 
-            val dialog: MaterialAlertDialogBuilder =
+            val builder: MaterialAlertDialogBuilder =
                 MaterialAlertDialogBuilder(context)
                     .setTitle(title)
                     .setSingleChoiceItems(
@@ -260,19 +269,64 @@ class DailogHelper {
                         selectedItemIndex = i
                     }
             positionText?.let {
-                dialog.setPositiveButton(it) { dialogInterface: DialogInterface, i: Int ->
+                builder.setPositiveButton(it) { dialogInterface: DialogInterface, i: Int ->
                     dialogInterface.dismiss()
                     positiveClickCallback?.invoke(items[selectedItemIndex])
                 }
             }
             negativeText?.let {
-                dialog.setNegativeButton(negativeText) { dialogInterface: DialogInterface, i: Int ->
+                builder.setNegativeButton(negativeText) { dialogInterface: DialogInterface, i: Int ->
                     dialogInterface.dismiss()
                 }
             }
-
-            dialog.show()
+            val alertDialog = builder.create()
+            alertDialog.applyStyleOnAlertDialog()
+            alertDialog.show()
         }
     }
 }
+
+fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
+    val prefManager = PrefManager.getInstance(this)
+    prefManager.incrementSupportUsDialogCalledCount()
+    if (prefManager.getSupportUsDialogCalledCount() % 20 == 0
+        && prefManager.hasDonated() == false
+    ) {
+        showSupportDevelopmentDialog()
+    } else {
+        Log.i(
+            TAG,
+            "shouldShowSupportDevelopmentDialog: not showing:${prefManager.getSupportUsDialogCalledCount() % 20} == 0"
+        )
+    }
+}
+
+
+fun FragmentActivity.showSupportDevelopmentDialog() {
+    val builder = MaterialAlertDialogBuilder(this)
+        .setBackgroundInsetBottom(10)
+        .setBackgroundInsetTop(10)
+        .setBackgroundInsetStart(50)
+        .setBackgroundInsetEnd(50)
+        .setView(R.layout.dialog_support_development)
+        .setNeutralButton(
+            "May be later"
+        ) { dialog, which -> }
+        .setPositiveButton("Donate") { dialog, which ->
+            DonateBottomDialogFragment.show(supportFragmentManager)
+        }
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.show()
+}
+
+
+private fun AlertDialog.applyStyleOnAlertDialog() {
+    window?.let { window ->
+        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.setDimAmount(0.75f);
+        window.setWindowAnimations(R.style.DialogWindowAnimation)
+    }
+}
+
 

@@ -14,6 +14,7 @@ import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListener
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -26,9 +27,11 @@ class DonateBottomDialogFragment :
     ExpandingBottomSheetDialogFragment<DialogDonateBinding>(R.layout.dialog_donate),
     PurchaseListener {
 
-
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
+
+    @Inject
+    lateinit var prefManager: PrefManager
 
     private val viewModel: DonateViewModel by viewModels()
 
@@ -131,10 +134,14 @@ class DonateBottomDialogFragment :
     override fun onPurchased(sku: String) {
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
         viewModel.setMessage(Message.SnackBarMessage("Thank you so much ❤"))
+        //setting has donated to true
+        prefManager.setHasDonated(true)
     }
 
     override fun onPurchasedRestored(sku: String) {
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
+        //setting has donated to true
+        prefManager.setHasDonated(true)
     }
 
     override fun onPurchasePending(sku: String) {
@@ -154,8 +161,12 @@ class DonateBottomDialogFragment :
         viewModel.setMessage(Message.SnackBarMessage(message))
     }
 
-    override fun onSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
         viewModel.updateDonateItemPrice(skuDetailsList)
+    }
+
+    override fun onBillingPurchasesProcessed() {
+
     }
 
     override fun onDestroyView() {

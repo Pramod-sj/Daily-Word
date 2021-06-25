@@ -13,9 +13,9 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
@@ -27,6 +27,8 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.helper.*
+import com.pramod.dailyword.framework.helper.billing.BillingHelper
+import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
@@ -37,11 +39,13 @@ import com.pramod.dailyword.framework.ui.common.*
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
+import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
 import com.pramod.dailyword.framework.widget.BaseWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -78,6 +82,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var homeScreenBadgeManager: HomeScreenBadgeManager
 
+    lateinit var billingHelper: BillingHelper
+
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
             val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
@@ -87,9 +93,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         })
     }
 
-    private var bottomSheetDialog: BottomSheetDialog? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         transparentNavBar = true
         super.onCreate(savedInstanceState)
@@ -97,7 +100,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         loadBackgroundImage()
         initToolbar()
         initAppUpdate()
-        showChangelogActivity()
+        initBillingHelper()
+        showChangelogDialog()
         settingUpAudioIconTint()
         setUpViewCallbacks()
         deepLinkNotification()
@@ -108,13 +112,32 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleBadgeVisibility()
     }
 
+    private fun initBillingHelper() {
+        billingHelper = BillingHelper(
+            this,
+            DONATE_ITEM_LIST.map { it.itemProductId })
+        billingHelper.addPurchaseListener(object : PurchaseListenerImpl() {
+            override fun onBillingPurchasesProcessed() {
+                super.onBillingPurchasesProcessed()
+                lifecycleScope.launch {
+                    prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
+                    shouldShowSupportDevelopmentDialog()
+                }
+            }
+
+            override fun onPurchasedRestored(sku: String) {
+                super.onPurchasedRestored(sku)
+                prefManager.setHasDonated(true)
+            }
+        })
+    }
+
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
     }
 
     private fun loadBackgroundImage() {
-        Log.i(TAG, "loadBackgroundImage: ")
         Glide.with(this)
             .load(BuildConfig.HOME_BACKGROUND_URL)
             .centerCrop()
@@ -223,7 +246,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     }
 
-    private fun showChangelogActivity() {
+    private fun showChangelogDialog() {
         if (prefManager.getLastSavedAppVersion() < BuildConfig.VERSION_CODE) {
             ChangelogDialogFragment.show(supportFragmentManager)
             prefManager.updateLastSavedAppVersion()
@@ -585,6 +608,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             supportStartPostponedEnterTransition()
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        billingHelper.close()
     }
 
 
