@@ -1,5 +1,20 @@
 [
   {
+    "version": "2.1.0",
+    "release_name": "\uD83C\uDF89 Anniversary update \uD83C\uDF89",
+    "date": "25 Jun 2021",
+    "changes": [
+      "Get word meaning in the notification itself!",
+      "Better UI support for tablet devices",
+      "Flexible in-app update (no more force update)",
+      "Minor UI changes",
+      "Fixed crash occurs on the bookmark page",
+      "Fixed memory leak",
+      "Removed irrelevant code",
+      "Updated underlying libraries for better performance"
+    ]
+  },
+  {
     "version": "2.0.0",
     "release_name": "\uD83C\uDF89 Major update \uD83C\uDF89",
     "date": "09 April 2021",
