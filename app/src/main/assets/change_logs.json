@@ -11,7 +11,8 @@
       "Fixed crash occurs on the bookmark page",
       "Fixed memory leak",
       "Removed irrelevant code",
-      "Updated underlying libraries for better performance"
+      "Updated underlying libraries for better performance",
+      "Fixed word paging issue"
     ]
   },
   {
