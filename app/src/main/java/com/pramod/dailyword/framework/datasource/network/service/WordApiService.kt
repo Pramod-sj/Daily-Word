@@ -16,6 +16,15 @@ interface WordApiService {
         @Query("limit") limit: Int
     ): ApiResponse<List<WordNE>>
 
+    //new paging api
+    @GET(BuildConfig.GET_WORDS_PAGING)
+    suspend fun getWordsPaging(
+        @Query("search") search: String,
+        @Query("pageNo") pageNo: Int,
+        @Query("pageSize") pageSize: Int,
+    ): ApiResponse<List<WordNE>>
+
+
     @GET(BuildConfig.GET_RANDOM_WORD)
     suspend fun getRandomWord(): ApiResponse<WordNE>
 }

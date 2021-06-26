@@ -5,7 +5,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.pramod.dailyword.business.domain.model.Word
-import com.pramod.dailyword.business.interactor.GetWordListInteractor
+import com.pramod.dailyword.business.interactor.GetWordPagingInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
@@ -23,7 +23,7 @@ const val PAGE_SIZE = 25
 @HiltViewModel
 class WordListViewModel @Inject
 constructor(
-    private val getWordListInteractor: GetWordListInteractor,
+    private val getWordListInteractor: GetWordPagingInteractor,
     private var toggleBookmarkInteractor: ToggleBookmarkInteractor,
     fbRemoteConfig: FBRemoteConfig
 ) : BaseViewModel() {
@@ -35,6 +35,7 @@ constructor(
     @ExperimentalPagingApi
     val wordUIModelList: LiveData<PagingData<WordListUiModel>> =
         getWordListInteractor.getWordList(
+            search = "",
             pagingConfig = PagingConfig(
                 PAGE_SIZE,
                 enablePlaceholders = false
@@ -43,7 +44,8 @@ constructor(
             return@map pagingData
                 .map { word ->
                     WordListUiModel.WordItem(0, word)
-                }.insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
+                }
+                .insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
 
                     if (wordItem == null) {
                         // we're at the end of the list

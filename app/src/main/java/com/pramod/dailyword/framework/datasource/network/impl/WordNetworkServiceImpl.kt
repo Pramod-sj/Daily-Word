@@ -33,6 +33,21 @@ class WordNetworkServiceImpl @Inject constructor(
         )
     }
 
+    override suspend fun getWordsPaging(
+        search: String,
+        pageNo: Int,
+        pageSize: Int
+    ): ApiResponse<List<Word>> {
+        val apiResponse = wordApiService.getWordsPaging(search, pageNo, pageSize)
+        return ApiResponse(
+            code = apiResponse.code,
+            message = apiResponse.message,
+            data = apiResponse.data?.map {
+                wordNEMapper.fromEntity(it)
+            }
+        )
+    }
+
     override suspend fun getRandomWord(): ApiResponse<Word> {
         val apiResponse = wordApiService.getRandomWord()
         return ApiResponse(

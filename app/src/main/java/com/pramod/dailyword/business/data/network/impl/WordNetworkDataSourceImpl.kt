@@ -18,6 +18,14 @@ class WordNetworkDataSourceImpl @Inject constructor(private val wordNetworkServi
         return wordNetworkService.getWords(startFrom, limit)
     }
 
+    override suspend fun getWordsPaging(
+        search: String,
+        pageNo: Int,
+        pageSize: Int
+    ): ApiResponse<List<Word>> {
+        return wordNetworkService.getWordsPaging(search, pageNo, pageSize)
+    }
+
     override suspend fun getRandomWord(): ApiResponse<Word> {
         return wordNetworkService.getRandomWord()
     }

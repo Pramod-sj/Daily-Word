@@ -11,5 +11,12 @@ interface WordNetworkService {
         limit: Int
     ): ApiResponse<List<Word>>
 
+
+    suspend fun getWordsPaging(
+        search: String,
+        pageNo: Int,
+        pageSize: Int,
+    ): ApiResponse<List<Word>>
+
     suspend fun getRandomWord(): ApiResponse<Word>
 }

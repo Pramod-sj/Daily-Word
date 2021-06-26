@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.pramod.dailyword.business.data.network.paging.WordPaginationRemoteMediator
 import com.pramod.dailyword.business.domain.model.Word
-import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
 import kotlinx.coroutines.flow.Flow
 
 interface BookmarkedWordCacheDataSource {

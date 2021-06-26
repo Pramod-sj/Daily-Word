@@ -3,8 +3,8 @@ package com.pramod.dailyword.framework.datasource.cache.impl
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.*
+import com.pramod.dailyword.business.data.network.paging.WordPaginationRemoteMediator
 import com.pramod.dailyword.business.domain.model.Word
-import com.pramod.dailyword.business.interactor.WordPaginationRemoteMediator
 import com.pramod.dailyword.framework.datasource.cache.abstraction.BookmarkedWordCacheService
 import com.pramod.dailyword.framework.datasource.cache.dao.BookmarkedWordDao
 import com.pramod.dailyword.framework.datasource.cache.mappers.BookmarkedWordCEMapper

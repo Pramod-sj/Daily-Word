@@ -40,6 +40,8 @@ android {
         buildConfigField("String", "WORLD_TIME_BASE_URL", endpointProperties['WORLD_TIME_BASE_URL'])
         buildConfigField("String", "GET_WORD_OF_THE_DAY", endpointProperties['GET_WORD_OF_THE_DAY'])
         buildConfigField("String", "GET_WORDS", endpointProperties['GET_WORDS'])
+        buildConfigField("String", "GET_WORDS_PAGING", endpointProperties['GET_WORDS_PAGING'])
+
         buildConfigField("String", "GET_RANDOM_WORD", endpointProperties['GET_RANDOM_WORD'])
         buildConfigField("String", "PRIVACY_POLICY", endpointProperties['PRIVACY_POLICY'])
         buildConfigField("String", "TERM_AND_CONDITION", endpointProperties['TERM_AND_CONDITION'])
