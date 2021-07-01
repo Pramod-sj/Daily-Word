@@ -3,23 +3,29 @@ package com.pramod.dailyword.framework.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.paging.ExperimentalPagingApi
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.*
-import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
-import com.pramod.dailyword.framework.ui.common.Action
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
+import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,8 +39,8 @@ class AppSettingActivity :
 
     override val bindingVariable: Int = BR.appSettingViewModel
 
-    private val appUpdateHelper: AppUpdateHelperNew by lazy {
-        AppUpdateHelperNew(this, lifecycle)
+    private val appUpdateManager: AppUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
     }
 
     @Inject
@@ -42,6 +48,9 @@ class AppSettingActivity :
 
     @Inject
     lateinit var prefManager: PrefManager
+
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +61,6 @@ class AppSettingActivity :
         initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
-        setUpAppUpdate()
     }
 
     private fun initThemeValue() {
@@ -119,32 +127,86 @@ class AppSettingActivity :
             }
 
             override fun checkForUpdate() {
+
+                if (viewModel.subTitleCheckForUpdate.value == AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING) {
+                    return
+                }
+
                 viewModel.subTitleCheckForUpdate.value = "Checking for the update..."
-                appUpdateHelper.checkForUpdate(object : AppUpdateHelperNew.CheckingUpdateListener {
-                    override fun onUpdateAvailable(
-                        latestVersionCode: Long,
-                        isUpdateDownloaded: Boolean
-                    ) {
-                        viewModel.subTitleCheckForUpdate.value = if (isUpdateDownloaded) {
-                            AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
-                        } else AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
 
-                        appUpdateHelper.showFlexibleDialog()
-                    }
+                appUpdateManager.registerListener(installStateUpdatedListener)
 
-                    override fun onUpdateNotAvailable() {
+                appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
+                    if (appUpdateInfoTask.isSuccessful) {
+
+                        val result = appUpdateInfoTask.result
+
+                        if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+
+                            val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+
+                            if (releaseNote == null) {
+                                //release note will be empty when update is available
+                                //but latest release note is not updated on firebase remote config
+                                appUpdateManager.safeStartUpdateFlowForResult(
+                                    result,
+                                    AppUpdateType.FLEXIBLE,
+                                    this@AppSettingActivity,
+                                    Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                                ) { e ->
+                                    viewModel.setMessage(
+                                        Message.ToastMessage(
+                                            "Something went wrong while updating: reason:${e.message}"
+                                        )
+                                    )
+
+                                }
+                                return@addOnCompleteListener
+                            }
+
+                            viewModel.subTitleCheckForUpdate.value =
+                                if (result.installStatus() == InstallStatus.DOWNLOADED) {
+                                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
+                                } else AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+
+                            showBottomSheet(
+                                title = "A new update version ${releaseNote.versionName} available!",
+                                desc = CommonUtils.formatListAsBulletList(releaseNote.changes),
+                                cancellable = true,
+                                positiveText = "Update",
+                                positiveClickCallback = {
+                                    appUpdateManager.safeStartUpdateFlowForResult(
+                                        result,
+                                        AppUpdateType.FLEXIBLE,
+                                        this@AppSettingActivity,
+                                        Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                                    ) { e ->
+                                        viewModel.setMessage(
+                                            Message.ToastMessage(
+                                                "Something went wrong while updating: reason:${e.message}"
+                                            )
+                                        )
+
+                                    }
+
+                                },
+                                negativeText = "May be later",
+                            )
+
+                        } else {
+                            viewModel.subTitleCheckForUpdate.value =
+                                AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                        }
+
+                    } else {
+
                         viewModel.subTitleCheckForUpdate.value =
                             AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
-                        Log.i(TAG, "onUpdateNotAvailable: ")
-                    }
 
-                    override fun onFailed(message: String?) {
-                        viewModel.subTitleCheckForUpdate.value =
-                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
-                        Log.i(TAG, "onFailed: $message")
+                        viewModel.setMessage(Message.ToastMessage("Failed to check update:" + appUpdateInfoTask.exception?.message))
                     }
+                }
 
-                })
             }
 
             override fun navigateToAbout() {
@@ -185,68 +247,47 @@ class AppSettingActivity :
         }
     }
 
-
-    private fun setUpAppUpdate() {
-
-        appUpdateHelper.setInstallStatusListener(object :
-            AppUpdateHelperNew.InstallStatusListener() {
-
-            override fun onDownloaded() {
-                super.onDownloaded()
-                Toast.makeText(
-                    applicationContext,
-                    "Update downloaded successfully",
-                    Toast.LENGTH_LONG
-                ).show()
+    private val installStateUpdatedListener = InstallStateUpdatedListener { installState ->
+        when (installState.installStatus()) {
+            InstallStatus.DOWNLOADED -> {
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
             }
-
-            override fun onInstalled() {
-                super.onInstalled()
-                Toast.makeText(
-                    applicationContext,
-                    "Successfully installed new updated",
-                    Toast.LENGTH_LONG
-                ).show()
+            InstallStatus.CANCELED -> {
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
             }
-
-            override fun onFailed() {
-                super.onFailed()
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Installation failed try again",
-                        action = Action(
-                            name = "Retry",
-                            callback = {
-                                appUpdateHelper.startInstallationProcess()
-                            })
-                    )
-                )
+            InstallStatus.DOWNLOADING -> {
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING +
+                            " " +
+                            ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()) + "%"
             }
-        })
-
-        appUpdateHelper.setOnAppUpdateActivityResultListener(object :
-            AppUpdateHelperNew.OnAppUpdateActivityResultListener {
-            override fun onUserApproval() {
+            InstallStatus.FAILED -> {
+                viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
+            }
+            InstallStatus.INSTALLED -> {
+                viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
+            }
+            InstallStatus.INSTALLING -> {
 
             }
+            InstallStatus.PENDING -> {
 
-            override fun onUserCancelled() {
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Update was cancelled"
-                    )
-                )
             }
-
-            override fun onUpdateFailure() {
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Something went wrong while updating! Please try again."
-                    )
-                )
+            InstallStatus.REQUIRES_UI_INTENT -> {
+                //no need to implement
             }
+            InstallStatus.UNKNOWN -> {
 
-        })
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appUpdateManager.unregisterListener(installStateUpdatedListener)
     }
 
 }

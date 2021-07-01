@@ -8,10 +8,10 @@ import androidx.paging.ExperimentalPagingApi
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.framework.helper.NotificationHelper
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.util.CalenderUtil
@@ -32,6 +32,8 @@ class FBMessageService : FirebaseMessagingService() {
     @Inject
     lateinit var notificationPrefManager: NotificationPrefManager
 
+    private var job: Job? = null
+
     companion object {
         const val EXTRA_NOTIFICATION_PAYLOAD = "notification_payload"
 
@@ -43,7 +45,8 @@ class FBMessageService : FirebaseMessagingService() {
         const val DEEP_LINK_TO_WORD_LIST = "/home/word_list"
     }
 
-    val TAG = FBMessageService::class.java.simpleName
+    private val TAG = FBMessageService::class.java.simpleName
+
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
         Log.i(TAG, "New Token: $p0")
@@ -68,11 +71,11 @@ class FBMessageService : FirebaseMessagingService() {
                 applicationContext,
                 NotificationHelper.generateUniqueNotificationId(),
                 intentToActivity,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
 
 
-            CoroutineScope(Dispatchers.Main).launch {
+            job = CoroutineScope(Dispatchers.Main).launch {
 
                 var notification: Notification? = null
 
@@ -92,10 +95,6 @@ class FBMessageService : FirebaseMessagingService() {
                 when (payload.noitificationType) {
                     NOTIFICATION_REMINDER -> {
 
-                        Log.i(
-                            TAG,
-                            "onMessageReceived: isReminderNotificationEnabled: " + notificationPrefManager.isReminderNotificationEnabled()
-                        )
                         if (!notificationPrefManager.isReminderNotificationEnabled()) {
                             return@launch
                         }
@@ -154,6 +153,13 @@ class FBMessageService : FirebaseMessagingService() {
 
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job?.cancel()
+    }
+
 
     data class MessagePayload(
         var title: String = "Title",

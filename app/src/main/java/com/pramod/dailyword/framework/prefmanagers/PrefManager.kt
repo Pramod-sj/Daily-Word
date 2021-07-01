@@ -90,6 +90,7 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
 
         //how many time support us dialog method was called
         private const val KEY_SUPPORT_US_CALLED_COUNT = "support_us_called_count"
+        private const val KEY_SHOW_SUPPORT_US_NEVER = "show_support_us_never"
 
         /**
          * country code
@@ -128,6 +129,14 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
 
     override fun getSupportUsDialogCalledCount(): Int {
         return sPrefManager.getInt(KEY_SUPPORT_US_CALLED_COUNT, 0)
+    }
+
+    override fun setNeverShowSupportUsDialog(neverShow: Boolean) {
+        sPrefManager.edit().putBoolean(KEY_SHOW_SUPPORT_US_NEVER, neverShow).apply()
+    }
+
+    override fun getNeverShowSupportUsDialog(): Boolean {
+        return sPrefManager.getBoolean(KEY_SHOW_SUPPORT_US_NEVER,false)
     }
 
 
@@ -194,4 +203,9 @@ interface SupportUsDialogContract {
     fun incrementSupportUsDialogCalledCount()
 
     fun getSupportUsDialogCalledCount(): Int
+
+    fun setNeverShowSupportUsDialog(neverShow: Boolean)
+
+    fun getNeverShowSupportUsDialog(): Boolean
+
 }

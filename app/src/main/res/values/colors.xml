@@ -179,4 +179,6 @@
 
     <color name="radio_track_color">#41000000</color>
 
+
+    <color name="update_card_stroke_color">#3066bb6a</color>
 </resources>

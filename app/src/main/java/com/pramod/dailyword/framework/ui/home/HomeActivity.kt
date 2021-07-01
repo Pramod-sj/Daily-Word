@@ -10,6 +10,7 @@ import android.text.SpannableString
 import android.util.Log
 import android.util.Pair
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -17,15 +18,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
+import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.*
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
@@ -42,6 +52,7 @@ import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.util.*
+import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
 import com.pramod.dailyword.framework.widget.BaseWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,8 +74,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
-    private val appUpdateHelper: AppUpdateHelperNew by lazy {
+    /*private val appUpdateHelper: AppUpdateHelperNew by lazy {
         AppUpdateHelperNew(this, lifecycle)
+    }*/
+
+    private val appUpdateManager: AppUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
     }
 
     @Inject
@@ -83,6 +98,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     lateinit var homeScreenBadgeManager: HomeScreenBadgeManager
 
     lateinit var billingHelper: BillingHelper
+
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
+
 
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
@@ -374,81 +393,19 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun initAppUpdate() {
+        checkForUpdate()
 
-        appUpdateHelper.checkForUpdate(object : AppUpdateHelperNew.CheckingUpdateListener {
-            override fun onUpdateAvailable(latestVersionCode: Long, isUpdateDownloaded: Boolean) {
-                appUpdateHelper.showFlexibleDialog()
+        binding.btnUpdateBtn?.setOnClickListener {
+            when ((it as TextView).text.toString()) {
+                "Install" -> {
+                    appUpdateManager.completeUpdate()
+                }
+                "Update" -> {
+                    checkForUpdate()
+                }
             }
+        }
 
-            override fun onUpdateNotAvailable() {
-                Log.i("HomeActivity", "You're up to date!")
-            }
-
-            override fun onFailed(message: String?) {
-                Log.i(TAG, "onFailed: $message")
-            }
-
-        })
-
-        appUpdateHelper.setInstallStatusListener(object :
-            AppUpdateHelperNew.InstallStatusListener() {
-
-            override fun onDownloaded() {
-                super.onDownloaded()
-                Toast.makeText(
-                    applicationContext,
-                    "Update downloaded successfully",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            override fun onInstalled() {
-                super.onInstalled()
-                Toast.makeText(
-                    applicationContext,
-                    "Successfully installed new updated",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            override fun onFailed() {
-                super.onFailed()
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Installation failed try again",
-                        action = Action(
-                            name = "Retry",
-                            callback = {
-                                appUpdateHelper.startInstallationProcess()
-                            })
-                    )
-                )
-            }
-        })
-
-        appUpdateHelper.setOnAppUpdateActivityResultListener(object :
-            AppUpdateHelperNew.OnAppUpdateActivityResultListener {
-            override fun onUserApproval() {
-
-            }
-
-            override fun onUserCancelled() {
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Update was cancelled"
-                    )
-                )
-            }
-
-            override fun onUpdateFailure() {
-                viewModel.setMessage(
-                    Message.SnackBarMessage(
-                        message = "Something went wrong while updating! Please try again."
-                    )
-                )
-            }
-
-        })
     }
 
     private fun promptAutoStart() {
@@ -483,10 +440,41 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        appUpdateHelper.onActivityResult(requestCode, resultCode, data)
-
         Log.i(TAG, "onActivityResult: $requestCode:$resultCode")
-        //donateBottomDialogFragment?.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE) {
+            //when user clicks update button
+
+            Log.i(TAG, "onActivityResult: $resultCode")
+            when (resultCode) {
+                RESULT_OK -> {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "App download starts...",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }
+                RESULT_CANCELED -> {
+                    //if you want to request the update again just call checkUpdate()
+                    Toast.makeText(
+                        applicationContext,
+                        "Sorry you can't use Daily Word app unless you update!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finishAffinity()
+                }
+                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+                    Toast.makeText(
+                        applicationContext,
+                        "App download failed, we're trying again for you",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    checkForUpdate()
+                }
+            }
+        }
     }
 
     private fun deepLinkNotification() {
@@ -524,86 +512,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         this.intent = intent
     }
 
-    /*private fun initBottomSheetMenu() {
-        bottomSheetDialog = BottomSheetDialog(this, R.style.AppTheme_BottomSheetDialog)
-        val navigationView =
-            NavigationView(this, null, R.style.NavigationItemNoRipple)
-        navigationView.updatePadding(top = 10, bottom = 15)
-        navigationView.overScrollMode = View.OVER_SCROLL_NEVER
-        navigationView.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.transparent))
-        navigationView.elevation = 0f
-        navigationView.inflateMenu(R.menu.home_more_menu)
-        navigationView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.menu_settings -> {
-                    openSettingPage()
-                }
-                R.id.menu_donate -> {
-                    donateBottomDialogFragment = DonateBottomDialogFragment()
-                    donateBottomDialogFragment?.show(
-                        supportFragmentManager,
-                        DonateBottomDialogFragment.TAG
-                    )
-                }
-                R.id.menu_share -> {
-                    CommonUtils.viewToBitmap(binding.coordinatorLayout)?.let { bitmap ->
-                        shareApp(bitmap = bitmap)
-                    } ?: shareApp()
-                }
-            }
-            bottomSheetDialog?.dismiss()
-            false
-        }
-        val l = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        bottomSheetDialog?.setContentView(navigationView, l)
-    }*/
-
-    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.home_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_more -> {
-                item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                val bottomMenuDialog = BottomMenuDialog
-                    .show(supportFragmentManager)
-                bottomMenuDialog.bottomMenuItemClickListener =
-                    object : BottomMenuDialog.BottomMenuItemClickListener {
-                        override fun onMenuItemClick(menuItem: MenuItem) {
-                            when (menuItem.itemId) {
-                                R.id.menu_settings -> {
-                                    openSettingPage()
-                                }
-                                R.id.menu_donate -> {
-                                    donateBottomDialogFragment = DonateBottomDialogFragment()
-                                    donateBottomDialogFragment?.show(
-                                        supportFragmentManager,
-                                        DonateBottomDialogFragment.TAG
-                                    )
-                                }
-                                R.id.menu_share -> {
-                                    CommonUtils.viewToBitmap(binding.coordinatorLayout)
-                                        ?.let { bitmap ->
-                                            shareApp(bitmap = bitmap)
-                                        } ?: shareApp()
-                                }
-                            }
-                        }
-                    }
-
-                *//*item.actionView?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                bottomSheetDialog?.show()*//*
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
-
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
 
@@ -616,9 +524,158 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     }
 
+    private fun checkForUpdate() {
+
+        appUpdateManager.registerListener(installStateUpdatedListener)
+
+        appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
+            if (appUpdateInfoTask.isSuccessful) {
+
+                val result = appUpdateInfoTask.result
+
+                if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+
+                    val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+
+                    if (releaseNote == null) {
+                        //release note will be empty when update is available
+                        //but latest release note is not updated on firebase remote config
+                        viewModel.setAppUpdateModel(null)
+                        appUpdateManager.safeStartUpdateFlowForResult(
+                            result,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                        ) { e ->
+                            viewModel.setMessage(
+                                Message.ToastMessage(
+                                    "Something went wrong while updating: reason:${e.message}"
+                                )
+                            )
+
+                        }
+                        return@addOnCompleteListener
+                    }
+
+                    viewModel.setAppUpdateMessage(
+                        if (result.installStatus() == InstallStatus.DOWNLOADED)
+                            buildUpdateAvailableToInstallSpannableString(releaseNote)
+                        else buildUpdateAvailableToDownloadSpannableString(releaseNote)
+                    )
+
+                    if (releaseNote.isForceUpdate) {
+
+                        showBottomSheet(
+                            title = "A new update version ${releaseNote.versionName} available!",
+                            desc = formatListAsBulletList(releaseNote.changes),
+                            cancellable = false,
+                            positiveText = "Update",
+                            positiveClickCallback = {
+                                appUpdateManager.safeStartUpdateFlowForResult(
+                                    result,
+                                    AppUpdateType.IMMEDIATE,
+                                    this,
+                                    Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE
+                                ) { e ->
+                                    viewModel.setMessage(
+                                        Message.ToastMessage(
+                                            "Something went wrong while updating: reason:${e.message}"
+                                        )
+                                    )
+                                    finishAffinity()
+                                }
+
+                            },
+                            negativeText = "Close App",
+                            negativeClickCallback = {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Sorry but you need to update app",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                finishAffinity()
+                            },
+                        )
+
+                    } else {
+
+                        showBottomSheet(
+                            title = "A new update version ${releaseNote.versionName} available!",
+                            desc = formatListAsBulletList(releaseNote.changes),
+                            cancellable = true,
+                            positiveText = "Update",
+                            positiveClickCallback = {
+                                appUpdateManager.safeStartUpdateFlowForResult(
+                                    result,
+                                    AppUpdateType.FLEXIBLE,
+                                    this,
+                                    Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                                ) { e ->
+                                    viewModel.setMessage(
+                                        Message.ToastMessage(
+                                            "Something went wrong while updating: reason:${e.message}"
+                                        )
+                                    )
+
+                                }
+
+                            },
+                            negativeText = "May be later",
+                        )
+
+                    }
+
+                } else {
+                    Log.i(TAG, "checkForUpdate: no update available")
+                }
+
+            } else {
+                viewModel.setMessage(Message.ToastMessage("Failed to check update:" + appUpdateInfoTask.exception?.message))
+            }
+        }
+    }
+
+    private val installStateUpdatedListener = InstallStateUpdatedListener { installState ->
+        when (installState.installStatus()) {
+            InstallStatus.DOWNLOADED -> {
+                viewModel.setAppUpdateButtonText("Install")
+                fbRemoteConfig.getLatestReleaseNote()?.let {
+                    viewModel.setAppUpdateMessage(buildUpdateAvailableToInstallSpannableString(it))
+                }
+            }
+            InstallStatus.CANCELED -> {
+                viewModel.setAppUpdateButtonText("Update")
+                viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
+            }
+            InstallStatus.DOWNLOADING -> {
+                viewModel.setAppUpdateButtonText("Downloading...")
+                Log.i("TAG", ": downloading update:" + installState.bytesDownloaded())
+            }
+            InstallStatus.FAILED -> {
+                viewModel.setAppUpdateButtonText("Update")
+                viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
+            }
+            InstallStatus.INSTALLED -> {
+                viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
+            }
+            InstallStatus.INSTALLING -> {
+
+            }
+            InstallStatus.PENDING -> {
+
+            }
+            InstallStatus.REQUIRES_UI_INTENT -> {
+                //no need to implement
+            }
+            InstallStatus.UNKNOWN -> {
+
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        billingHelper.close()
+        appUpdateManager.unregisterListener(installStateUpdatedListener)
     }
 
 

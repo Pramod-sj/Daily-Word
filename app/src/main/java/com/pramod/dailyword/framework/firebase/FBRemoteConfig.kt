@@ -42,6 +42,8 @@ class FBRemoteConfig @Inject constructor(
         const val REMOTE_CONFIG_KEY_THANK_YOU_LOTTIE_URL = "lottie_donate_page_thank_you_url"
         const val REMOTE_CONFIG_KEY_DONATE_PAGE_LOTTIE_URL = "donate_page_lottie_url"
 
+        const val REMOTE_CONFIG_KET_LATEST_RELEASE_NOTE = "latest_release_json"
+
         private val default_configs = mapOf(
             REMOTE_CONFIG_KEY_BASE_URL to BuildConfig.API_BASE_URL,
             REMOTE_CONFIG_KEY_ADS_ENABLED to "{\"all\":false,\"in\":false,\"us\":false,\"gb\":false,\"others\":false}"
@@ -120,6 +122,30 @@ class FBRemoteConfig @Inject constructor(
         }
         return url
     }
+
+    fun getLatestReleaseNote(): ReleaseNote? {
+        return Gson().fromJson(
+            remoteConfig.getString(REMOTE_CONFIG_KET_LATEST_RELEASE_NOTE),
+            ReleaseNote::class.java
+        )?.let { releaseNote ->
+            if (releaseNote.versionCode > BuildConfig.VERSION_CODE) {
+                releaseNote
+            } else null
+        }
+    }
+
+
+
+    data class ReleaseNote(
+        @SerializedName("version_code")
+        val versionCode: Long,
+        @SerializedName("version_name")
+        val versionName: String,
+        @SerializedName("changes")
+        val changes: List<String>,
+        @SerializedName("is_force_update")
+        val isForceUpdate: Boolean
+    )
 
 
     data class AdsEnabled(

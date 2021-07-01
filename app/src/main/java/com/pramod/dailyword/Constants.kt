@@ -11,5 +11,10 @@ class Constants {
 
         const val COLOR_ALPHA = 30
         const val COLOR_ALPHA_DONATE_ITEM = 10
+
+        //in-app update request codes
+        const val APP_UPDATE_FLEX_REQUEST_CODE = 1
+        const val APP_UPDATE_IMMEDIATE_REQUEST_CODE = 2
+
     }
 }

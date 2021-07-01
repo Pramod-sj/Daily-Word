@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.ui.common
 
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
 sealed class Message {
@@ -8,7 +9,7 @@ sealed class Message {
 
     data class ToastMessage(
         val message: String,
-        val duration: Int
+        val duration: Int = Toast.LENGTH_SHORT
     ) : Message()
 
     data class SnackBarMessage(

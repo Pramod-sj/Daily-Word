@@ -14,7 +14,7 @@ import com.pramod.dailyword.framework.ui.common.exts.make12AMInstance
 import com.pramod.dailyword.framework.util.CalenderUtil
 import java.util.*
 
-fun safePendingIntentFlag(flag: Int): Int {
+fun safeImmutableFlag(flag: Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         PendingIntent.FLAG_IMMUTABLE or flag
     } else flag
@@ -79,7 +79,7 @@ fun Context.scheduleAlarm(
         this,
         alarmId,
         intent,
-        safePendingIntentFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+        safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
     )
 
 
@@ -99,6 +99,6 @@ fun Context.isAlarmSchedule(alarmId: Int): Boolean {
         this,
         alarmId,
         intent,
-        safePendingIntentFlag(PendingIntent.FLAG_NO_CREATE)
+        safeImmutableFlag(PendingIntent.FLAG_NO_CREATE)
     ) != null
 }

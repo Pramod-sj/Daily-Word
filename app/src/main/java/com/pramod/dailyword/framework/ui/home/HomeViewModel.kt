@@ -118,4 +118,33 @@ class HomeViewModel @Inject constructor(
     }
 
 
+    data class AppUpdateModel(
+        val message: SpannableString?,
+        val downloadPercentage: Int = 0,
+        val buttonText: String = "Update"
+    )
+
+    val appUpdateModel = MutableLiveData<AppUpdateModel?>(null)
+
+    fun setAppUpdateModel(appUpdateModel: AppUpdateModel?) {
+        this.appUpdateModel.value = appUpdateModel
+    }
+
+    fun setAppUpdateMessage(message: SpannableString) {
+        val current = appUpdateModel.value
+        this.appUpdateModel.value =
+            AppUpdateModel(message, current?.downloadPercentage ?: 0)
+    }
+
+    fun setAppUpdateDownloadProgress(downloadProgress: Int) {
+        val current = appUpdateModel.value
+        appUpdateModel.value = AppUpdateModel(current?.message, downloadProgress)
+    }
+
+    fun setAppUpdateButtonText(buttonText: String) {
+        val current = appUpdateModel.value
+        appUpdateModel.value =
+            AppUpdateModel(current?.message, current?.downloadPercentage ?: 0, buttonText)
+    }
+
 }

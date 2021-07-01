@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.text.Spannable
+import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
@@ -85,9 +87,9 @@ fun AboutAppActivity.showLib() {
 
 }
 
-fun Context.showBasicDialog(
+fun Context.showBasicDialogWithSpannable(
     title: String,
-    message: String,
+    message: Spannable,
     positiveText: String? = null,
     positiveClickCallback: (() -> Unit)? = null,
     negativeText: String? = null,
@@ -117,9 +119,33 @@ fun Context.showBasicDialog(
             neutralClickCallback?.invoke()
         }
     }
-    val dialog = builder.create()
-    dialog.show()
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.show()
 }
+
+fun Context.showBasicDialog(
+    title: String,
+    message: String,
+    positiveText: String? = null,
+    positiveClickCallback: (() -> Unit)? = null,
+    negativeText: String? = null,
+    negativeClickCallback: (() -> Unit)? = null,
+    neutralText: String? = null,
+    neutralClickCallback: (() -> Unit)? = null
+) {
+    showBasicDialogWithSpannable(
+        title,
+        SpannableString(message),
+        positiveText,
+        positiveClickCallback,
+        negativeText,
+        negativeClickCallback,
+        neutralText,
+        neutralClickCallback
+    )
+}
+
 
 fun Context.showWebViewDialog(url: String) {
     val dialogWebviewLayoutBinding: DialogWebviewLayoutBinding = DataBindingUtil.inflate(
@@ -147,13 +173,14 @@ fun Context.showWebViewDialog(url: String) {
         }
     }
     dialogWebviewLayoutBinding.webView.loadUrl(url)
-    val dialog = MaterialAlertDialogBuilder(this)
+    val builder = MaterialAlertDialogBuilder(this)
         .setView(dialogWebviewLayoutBinding.root)
-        .create()
 
-    dialog.show()
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.show()
 
-    dialog.window?.setLayout(
+    alertDialog.window?.setLayout(
         ViewGroup.LayoutParams.MATCH_PARENT,
         ViewGroup.LayoutParams.MATCH_PARENT
     )
@@ -163,7 +190,8 @@ fun Context.showWebViewDialog(url: String) {
 
 fun Activity.showBottomSheet(
     title: String,
-    desc: String,
+    desc: Spannable,
+    cancellable: Boolean = true,
     positiveText: String? = null,
     positiveClickCallback: (() -> Unit)? = null,
     negativeText: String? = null,
@@ -178,6 +206,8 @@ fun Activity.showBottomSheet(
         null,
         false
     )
+    bottomSheetDialog.setCancelable(cancellable)
+
     bottomSheetDialog.setContentView(binding.root)
     binding.bottomSheetTitle.text = title
     binding.bottomSheetBody.text = desc
@@ -201,6 +231,29 @@ fun Activity.showBottomSheet(
     bottomSheetDialog.show()
 
 }
+
+fun Activity.showBottomSheet(
+    title: String,
+    desc: String,
+    cancellable: Boolean = true,
+    positiveText: String? = null,
+    positiveClickCallback: (() -> Unit)? = null,
+    negativeText: String? = null,
+    negativeClickCallback: (() -> Unit)? = null,
+    onDismissCallback: (() -> Unit)? = null
+) {
+    showBottomSheet(
+        title,
+        SpannableString(desc),
+        cancellable,
+        positiveText,
+        positiveClickCallback,
+        negativeText,
+        negativeClickCallback,
+        onDismissCallback
+    )
+}
+
 
 fun Context.showStaticPageDialog(
     layoutId: Int,
@@ -289,10 +342,12 @@ class DailogHelper {
 fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
     val prefManager = PrefManager.getInstance(this)
     prefManager.incrementSupportUsDialogCalledCount()
-    if (prefManager.getSupportUsDialogCalledCount() % 20 == 0
-        && prefManager.hasDonated() == false
+    if ((prefManager.getSupportUsDialogCalledCount() % 20 == 0
+                && prefManager.hasDonated() == false) && !prefManager.getNeverShowSupportUsDialog()
     ) {
-        showSupportDevelopmentDialog()
+        showSupportDevelopmentDialog {
+            prefManager.setNeverShowSupportUsDialog(true)
+        }
     } else {
         Log.i(
             TAG,
@@ -302,7 +357,7 @@ fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
 }
 
 
-fun FragmentActivity.showSupportDevelopmentDialog() {
+fun FragmentActivity.showSupportDevelopmentDialog(neverCallback: () -> Unit) {
     val builder = MaterialAlertDialogBuilder(this)
         .setBackgroundInsetBottom(10)
         .setBackgroundInsetTop(10)
@@ -312,7 +367,10 @@ fun FragmentActivity.showSupportDevelopmentDialog() {
         .setNeutralButton(
             "May be later"
         ) { dialog, which -> }
-        .setPositiveButton("Donate") { dialog, which ->
+        .setNegativeButton("Never") { dialog, which ->
+            neverCallback()
+        }
+        .setPositiveButton("Donate now") { dialog, which ->
             DonateBottomDialogFragment.show(supportFragmentManager)
         }
     val alertDialog = builder.create()

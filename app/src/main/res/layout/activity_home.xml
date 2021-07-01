@@ -15,6 +15,8 @@
 
         <import type="com.pramod.dailyword.Constants" />
 
+        <import type="android.text.method.LinkMovementMethod"/>
+
         <variable
             name="isEdgeToEdgeEnabled"
             type="Boolean" />
@@ -76,6 +78,7 @@
             android:background="@android:color/transparent"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:orientation="vertical"
             app:applyTopPaddingInset="@{mainViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/nestedScroll">
@@ -122,6 +125,63 @@
             <include
                 android:id="@+id/customToolbar"
                 layout="@layout/layout_custom_toolbar" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_medium"
+                android:layout_marginVertical="@dimen/margin_small"
+                android:orientation="vertical"
+                app:isGone="@{mainViewModel.appUpdateModel == null}"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/update_card_stroke_color"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_small">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/txtView_update_text"
+                        style="@style/AppTheme.SmallTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_small"
+                        app:setMovementMethod="@{LinkMovementMethod.getInstance()}"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:linksClickable="true"
+                        android:layout_weight="0.75"
+                        android:drawablePadding="@dimen/padding_medium"
+                        android:text="@{mainViewModel.appUpdateModel.message}"
+                        app:drawableStartCompat="@drawable/ic_round_system_update_24"
+                        app:drawableTint="@color/app_icon_tint" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_update_btn"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:text="Update"
+                            android:textSize="@dimen/text_tiny"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -312,6 +372,8 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

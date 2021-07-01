@@ -16,6 +16,8 @@ import android.os.Build
 import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
@@ -28,6 +30,7 @@ import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
@@ -38,6 +41,18 @@ import kotlin.collections.map as map1
 
 object CommonUtils {
 
+    fun formatListAsBulletList(items: List<String>): Spannable {
+        val spannableStringBuilder = SpannableStringBuilder()
+        items.forEachIndexed { index, s ->
+            spannableStringBuilder.append(
+                s, BulletSpan(15), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            if (index < items.size - 1) {
+                spannableStringBuilder.appendLine()
+            }
+        }
+        return spannableStringBuilder.toSpannable()
+    }
 
     fun viewToBitmap(view: View): Bitmap? {
         val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)

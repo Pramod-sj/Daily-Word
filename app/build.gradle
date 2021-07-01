@@ -23,8 +23,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 202106261
-        versionName "2.1.0-Beta-2"
+        versionCode 202107011
+        versionName "2.1.0-Beta-3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -141,7 +141,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation 'com.google.firebase:firebase-config-ktx:21.0.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.1.0'
 
     //paging lib
     implementation 'androidx.paging:paging-runtime-ktx:3.0.0'

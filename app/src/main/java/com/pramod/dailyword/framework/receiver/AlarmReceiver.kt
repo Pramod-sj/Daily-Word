@@ -5,8 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.pramod.dailyword.framework.helper.NotificationHelper
-import com.pramod.dailyword.framework.helper.safePendingIntentFlag
-import com.pramod.dailyword.framework.ui.home.HomeActivity
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -32,7 +31,7 @@ class AlarmReceiver : BroadcastReceiver() {
                         context,
                         REQUEST_CODE_WEEKLY_12_PM_RECAP_WORDS_REMINDER,
                         Intent(context, RecapWordsActivity::class.java),
-                        safePendingIntentFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                        safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
                     )
                 )
                 notificationHelper.showNotification(notification)

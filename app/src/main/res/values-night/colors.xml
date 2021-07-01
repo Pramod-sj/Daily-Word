@@ -65,4 +65,6 @@
     <color name="word_details_background">#101010</color>
 
     <color name="radio_track_color">#41FFFFFF</color>
+
+    <color name="update_card_stroke_color">#30F5F3F3</color>
 </resources>
