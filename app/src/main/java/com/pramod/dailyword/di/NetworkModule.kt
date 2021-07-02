@@ -30,10 +30,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+        /*val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)*/
         return OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            /*.addInterceptor(interceptor)*/
             .build()
     }
 
@@ -61,7 +61,6 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory,
         fbRemoteConfig: FBRemoteConfig
     ): Retrofit {
-        Log.i("TAG", "provideGsonRetrofit: ")
         return Retrofit.Builder()
             .baseUrl(fbRemoteConfig.baseUrl())
             .client(okHttpClient)

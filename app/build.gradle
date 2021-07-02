@@ -23,8 +23,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 202107011
-        versionName "2.1.0-Beta-3"
+        versionCode 202107021
+        versionName "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -169,8 +169,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
     //image loading library
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
     //custom lib to play and store audio files
     implementation project(path: ':audioplayer')

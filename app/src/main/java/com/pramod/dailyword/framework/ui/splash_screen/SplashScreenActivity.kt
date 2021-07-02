@@ -94,14 +94,13 @@ class SplashScreenActivity :
     private fun animateAppIcon() {
         viewModel.animateSplashIcon().observe(this, {
             if (it) {
-                val initialXYDimen = resources.getDimension(R.dimen.splash_icon_big)
-                val finalXYDimen = resources.getDimension(R.dimen.splash_icon_normal)
+
                 CommonUtils.scaleXY(
                     binding.splashAppIcon,
-                    initialXYDimen,
-                    initialXYDimen,
-                    finalXYDimen,
-                    finalXYDimen,
+                    -0.3f,
+                    -0.3f,
+                    1.0f,
+                    1.0f,
                     1000L,
                     {},
                     { viewModel.showSplashText() }

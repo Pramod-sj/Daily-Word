@@ -24,14 +24,15 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.exts.resolveAttrToColor
@@ -225,19 +226,26 @@ object CommonUtils {
     fun isAtLeastAndroidL() = Build.VERSION.SDK_INT >= 21
 
     fun scaleXY(
-        view: View, startX: Float, startY: Float, endX: Float, endY: Float,
+        view: View,
+        @FloatRange(from = -1.0, to = 1.0) startX: Float,
+        @FloatRange(from = -1.0, to = 1.0) startY: Float,
+        @FloatRange(from = -1.0, to = 1.0) endX: Float,
+        @FloatRange(from = -1.0, to = 1.0) endY: Float,
         duration: Long = 1000,
         animStartCallback: () -> Unit,
         animEndCallback: () -> Unit
     ) {
-        val scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 2.5f, 1f)
-        scaleXAnimator.interpolator = AccelerateDecelerateInterpolator()
+        val scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", startX, endX)
+        scaleXAnimator.interpolator = FastOutSlowInInterpolator()
         scaleXAnimator.duration = duration
-        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 2.5f, 1f)
-        scaleYAnimator.interpolator = AccelerateDecelerateInterpolator()
+        val scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", startY, endY)
+        scaleYAnimator.interpolator = FastOutSlowInInterpolator()
         scaleYAnimator.duration = duration
+        val alphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f)
+        alphaAnimator.interpolator = FastOutSlowInInterpolator()
+        alphaAnimator.duration = duration
         val animator = AnimatorSet()
-        animator.playTogether(scaleXAnimator, scaleYAnimator)
+        animator.playTogether(scaleXAnimator, scaleYAnimator, alphaAnimator)
         animator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

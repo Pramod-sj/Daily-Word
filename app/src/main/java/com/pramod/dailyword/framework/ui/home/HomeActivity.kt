@@ -74,10 +74,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
 
-    /*private val appUpdateHelper: AppUpdateHelperNew by lazy {
-        AppUpdateHelperNew(this, lifecycle)
-    }*/
-
     private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }

@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
 import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.*
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
@@ -16,7 +17,7 @@ class SplashScreenViewModel @Inject constructor(
     private val fbTopicSubscriber: FBTopicSubscriber
 ) : BaseViewModel() {
     private val animateSplashIcon = MutableLiveData<Boolean>().apply {
-        value = prefManager.isNewUser()
+        value = true
     }
     private val enabledStartButton = MutableLiveData<Boolean>()
     private val splashScreenTextVisible = MutableLiveData<Boolean>()
@@ -50,7 +51,7 @@ class SplashScreenViewModel @Inject constructor(
                 } else {
                     Handler().postDelayed({
                         goToHomePage()
-                    }, 1000)
+                    }, 500)
                 }
             }
         })
