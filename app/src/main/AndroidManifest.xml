@@ -51,6 +51,7 @@
         <activity
             android:name=".framework.ui.splash_screen.SplashScreenActivity"
             android:screenOrientation="nosensor"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.SplashScreenActivity">
 
             <intent-filter>

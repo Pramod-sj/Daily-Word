@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
 import com.pramod.dailyword.business.domain.model.IPInfo
-import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.NetworkUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -35,10 +34,15 @@ class CountryCodeFinder @Inject constructor(
                 Log.i(TAG, "subscribeToCountry: isVPNActive: $isVPNActive")
 
                 if (publicIP != null && !isVPNActive) {
-                    val ipInfo: IPInfo? = ipInfoNetworkDataSource.getIPDetails(publicIP)
-                    if (ipInfo != null && "success" == ipInfo.status) {
-                        ipInfo.countryCode
-                    } else {
+                    try {
+                        val ipInfo: IPInfo? = ipInfoNetworkDataSource.getIPDetails(publicIP)
+                        if (ipInfo != null && "success" == ipInfo.status) {
+                            ipInfo.countryCode
+                        } else {
+                            //getting code from telephone manager
+                            CommonUtils.getCountryCodeFromTelephoneManager(context)
+                        }
+                    } catch (e: Exception) {
                         //getting code from telephone manager
                         CommonUtils.getCountryCodeFromTelephoneManager(context)
                     }

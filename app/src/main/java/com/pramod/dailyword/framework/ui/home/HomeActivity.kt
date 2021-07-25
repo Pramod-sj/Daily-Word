@@ -645,7 +645,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
             InstallStatus.DOWNLOADING -> {
                 viewModel.setAppUpdateButtonText("Downloading...")
-                Log.i("TAG", ": downloading update:" + installState.bytesDownloaded())
+                viewModel.setAppUpdateDownloadProgress(((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt())
             }
             InstallStatus.FAILED -> {
                 viewModel.setAppUpdateButtonText("Update")
@@ -653,9 +653,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
             InstallStatus.INSTALLED -> {
                 viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
+                Toast.makeText(
+                    applicationContext,
+                    "Successfully install new update!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             InstallStatus.INSTALLING -> {
-
+                Toast.makeText(
+                    applicationContext,
+                    "Installation started!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             InstallStatus.PENDING -> {
 

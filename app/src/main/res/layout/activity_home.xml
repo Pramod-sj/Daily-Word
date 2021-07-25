@@ -15,7 +15,7 @@
 
         <import type="com.pramod.dailyword.Constants" />
 
-        <import type="android.text.method.LinkMovementMethod"/>
+        <import type="android.text.method.LinkMovementMethod" />
 
         <variable
             name="isEdgeToEdgeEnabled"
@@ -132,8 +132,8 @@
                 android:layout_marginHorizontal="@dimen/margin_medium"
                 android:layout_marginVertical="@dimen/margin_small"
                 android:orientation="vertical"
-                app:isGone="@{mainViewModel.appUpdateModel == null}"
                 app:cardElevation="0dp"
+                app:isGone="@{mainViewModel.appUpdateModel == null}"
                 app:strokeColor="@color/update_card_stroke_color"
                 app:strokeWidth="1dp">
 
@@ -150,31 +150,48 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/margin_small"
-                        app:setMovementMethod="@{LinkMovementMethod.getInstance()}"
                         android:layout_marginEnd="@dimen/margin_small"
-                        android:linksClickable="true"
                         android:layout_weight="0.75"
                         android:drawablePadding="@dimen/padding_medium"
+                        android:linksClickable="true"
                         android:text="@{mainViewModel.appUpdateModel.message}"
                         app:drawableStartCompat="@drawable/ic_round_system_update_24"
-                        app:drawableTint="@color/app_icon_tint" />
+                        app:drawableTint="@color/app_icon_tint"
+                        app:setMovementMethod="@{LinkMovementMethod.getInstance()}" />
 
                     <FrameLayout
                         android:layout_width="0dp"
+                        android:animateLayoutChanges="true"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
                         android:layout_weight="0.25">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_update_btn"
                             style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:text="Update"
+                            android:singleLine="true"
+                            android:text="@{mainViewModel.appUpdateModel.buttonText}"
                             android:textSize="@dimen/text_tiny"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_update_download"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="27dp"
+                            android:layout_gravity="center_vertical"
+                            android:backgroundTint="@color/green_200"
+                            android:indeterminate="false"
+                            android:progress="@{mainViewModel.appUpdateModel.downloadPercentage}"
+                            android:progressDrawable="@drawable/drawable_horizontal_progress"
+                            android:progressTint="@color/green_200"
+                            app:isVisible="@{mainViewModel.appUpdateModel.downloadPercentage>0}" />
+
 
                     </FrameLayout>
 

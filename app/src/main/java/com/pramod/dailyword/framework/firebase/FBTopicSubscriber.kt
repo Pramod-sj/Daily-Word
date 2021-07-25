@@ -38,33 +38,38 @@ class FBTopicSubscriber @Inject constructor(
 
         coroutineScope.launch(Dispatchers.IO) {
 
-            //two letters country code
-            val countryCode: String? = countryCodeFinder.getCountryCode()
+            try {
+
+                //two letters country code
+                val countryCode: String? = countryCodeFinder.getCountryCode()
 
 
-            val supportedCountryCode =
-                (if (countryCode != null && isCountryCodeSupported(countryCode)) {
-                    //if country code is supported then return country code
-                    countryCode
-                } else {
-                    //else return OTHERS
-                    SupportedFBTopicCounties.OTHERS.name
-                }).toUpperCase(Locale.US)
+                val supportedCountryCode =
+                    (if (countryCode != null && isCountryCodeSupported(countryCode)) {
+                        //if country code is supported then return country code
+                        countryCode
+                    } else {
+                        //else return OTHERS
+                        SupportedFBTopicCounties.OTHERS.name
+                    }).toUpperCase(Locale.US)
 
-            //unsubscribe to all other countries if subscribed
+                //unsubscribe to all other countries if subscribed
 
-            for (countryIsoEnum in LookupEnum.getAllEnumExcept(
-                SupportedFBTopicCounties::class.java,
-                supportedCountryCode
-            )) {
-                unsubscribeTopic(countryIsoEnum.name)
-                Log.i(TAG, "unsubscribeToCountry: ${countryIsoEnum.name}")
+                for (countryIsoEnum in LookupEnum.getAllEnumExcept(
+                    SupportedFBTopicCounties::class.java,
+                    supportedCountryCode
+                )) {
+                    unsubscribeTopic(countryIsoEnum.name)
+                    Log.i(TAG, "unsubscribeToCountry: ${countryIsoEnum.name}")
+                }
+
+                //if country code is supported then
+                Log.i(TAG, "subscribeToCountry: $supportedCountryCode")
+                subscribeTopic(supportedCountryCode)
+
+            } catch (e: Exception) {
+                Log.i(TAG, "subscribeToCountry: ${e.message}")
             }
-
-            //if country code is supported then
-            Log.i(TAG, "subscribeToCountry: $supportedCountryCode")
-            subscribeTopic(supportedCountryCode)
-
         }
 
 

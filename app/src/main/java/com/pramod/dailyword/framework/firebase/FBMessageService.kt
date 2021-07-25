@@ -10,6 +10,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
+import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
@@ -31,8 +32,6 @@ class FBMessageService : FirebaseMessagingService() {
 
     @Inject
     lateinit var notificationPrefManager: NotificationPrefManager
-
-    private var job: Job? = null
 
     companion object {
         const val EXTRA_NOTIFICATION_PAYLOAD = "notification_payload"
@@ -75,14 +74,14 @@ class FBMessageService : FirebaseMessagingService() {
             )
 
 
-            job = CoroutineScope(Dispatchers.Main).launch {
+            GlobalScope.launch {
 
                 var notification: Notification? = null
 
                 //getting first word meaning text
                 val wordMeaning: String? = payload.wordMeaning?.split("||")?.firstOrNull()
 
-                Log.i(TAG, "onMessageReceived: " + Gson().toJson(wordMeaning))
+                //Log.i(TAG, "onMessageReceived: " + Gson().toJson(wordMeaning))
 
                 //if word meaning show in notification is enable then return first
                 //and if word meaning is null then return default body
@@ -99,18 +98,23 @@ class FBMessageService : FirebaseMessagingService() {
                             return@launch
                         }
 
+                        //Log.i(TAG, "onMessageReceived: reminder notification enabled")
 
-                        val word = bookmarkedWordCacheDataSource.getWordNonLive(
-                            CalenderUtil.convertCalenderToString(
-                                Calendar.getInstance(Locale.US),
-                                CalenderUtil.DATE_FORMAT
-                            )
-                        )
+                        val word: Word? = try {
+                            bookmarkedWordCacheDataSource.getWordNonLive(payload.date)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            null
+                        }
+
+                        Log.i(TAG, "onMessageReceived: ${word?.word} - ${word?.isSeen}")
                         //Log.i(TAG, Gson().toJson(wordOfTheDay))
 
                         //checking whether word seen or not
                         word?.let {
+                            //Log.i(TAG, "onMessageReceived: inside let")
                             if (!it.isSeen) {
+                                //Log.i(TAG, "onMessageReceived: not seen")
                                 notification = notificationHelper
                                     .createNotification(
                                         title = payload.title,
@@ -119,7 +123,6 @@ class FBMessageService : FirebaseMessagingService() {
                                     )
                             }
                         }
-
 
                     }
                     NOTIFICATION_NEW_WORD -> {
@@ -153,13 +156,6 @@ class FBMessageService : FirebaseMessagingService() {
 
         }
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job?.cancel()
-    }
-
 
     data class MessagePayload(
         var title: String = "Title",
