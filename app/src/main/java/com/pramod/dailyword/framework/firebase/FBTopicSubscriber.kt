@@ -67,6 +67,8 @@ class FBTopicSubscriber @Inject constructor(
                 Log.i(TAG, "subscribeToCountry: $supportedCountryCode")
                 subscribeTopic(supportedCountryCode)
 
+                prefManager.setCountryCode(supportedCountryCode)
+
             } catch (e: Exception) {
                 Log.i(TAG, "subscribeToCountry: ${e.message}")
             }
