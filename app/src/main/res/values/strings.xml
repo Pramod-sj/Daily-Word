@@ -113,6 +113,7 @@
     <string name="synonyms">Synonyms</string>
     <string name="antonyms">Antonyms</string>
     <string name="thesaurus">Thesaurus</string>
+    <string name="other_words">Other words</string>
 
     <string name="card_transition_name">container</string>
     <string name="previous_words">Words</string>
@@ -135,6 +136,9 @@
     <string name="syn_info">Synonyms are gathered from Merriam-Webster. Not all words shown through this app will have synonyms, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
 
     <string name="ant_info">Antonyms are gathered from Merriam-Webster. Not all words shown through this app will have antonyms, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
+
+    <string name="other_words_info">Other words are gathered from Merriam-Webster. Not all words shown through this app will have other words, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
+
     <string name="support_development_text">Support</string>
     <string name="app_info_text">App Info</string>
     <string name="designed_amp_developed_by">Designed &amp; Developed by</string>

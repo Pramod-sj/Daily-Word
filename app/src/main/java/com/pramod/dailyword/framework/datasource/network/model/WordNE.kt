@@ -36,4 +36,7 @@ data class WordNE(
 
     @SerializedName("ANTONYMS")
     var antonyms: List<String>?,
+
+    @SerializedName("OTHER_WORDS")
+    var otherWords: List<String>?,
 )

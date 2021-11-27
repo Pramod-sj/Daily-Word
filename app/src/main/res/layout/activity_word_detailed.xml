@@ -180,6 +180,68 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/padding_medium"
                         app:cardCornerRadius="0dp"
+                        app:cardElevation="@dimen/card_elevation_word_details"
+                        app:isGone="@{wordDetailedViewModel.word.otherWords.size()==0}">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipChildren="false"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/padding_medium">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="@dimen/margin_large"
+                                android:paddingVertical="@dimen/padding_medium">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/other_words"
+                                    android:textColor="@color/textColor_highEmphasis" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginHorizontal="@dimen/padding_small"
+                                    android:background="?actionBarItemBackground"
+                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/other_words_info)}"
+                                    android:src="@drawable/ic_info_outline_black_24dp"
+                                    android:tint="@color/app_icon_tint" />
+
+                            </LinearLayout>
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup_other_words"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:paddingHorizontal="@dimen/padding_large"
+                                android:paddingVertical="@dimen/padding_small"
+                                app:chipColor="@{wordColor}"
+                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.otherWords,6)}"
+                                app:chipShowViewMoreButton="@{false}"
+                                app:chipSpacingHorizontal="@dimen/padding_small"
+                                app:chipSpacingVertical="@dimen/padding_medium"
+                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToMerriamWebsterPage(value)}"
+                                app:selectionRequired="false" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/padding_medium"
+                        app:cardCornerRadius="0dp"
                         app:cardElevation="@dimen/card_elevation_word_details">
 
                         <LinearLayout
@@ -320,8 +382,8 @@
                                 android:clipChildren="false"
                                 android:clipToPadding="false"
                                 android:paddingHorizontal="@dimen/padding_large"
-                                app:chipColor="@{wordColor}"
                                 android:paddingVertical="@dimen/padding_small"
+                                app:chipColor="@{wordColor}"
                                 app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.antonyms,6)}"
                                 app:chipShowViewMoreButton="@{wordDetailedViewModel.word.antonyms.size()>6}"
                                 app:chipSpacingHorizontal="@dimen/padding_small"

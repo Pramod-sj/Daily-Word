@@ -26,6 +26,7 @@ class WordNEMapper @Inject constructor() : EntityMapper<WordNE, Word> {
             cal?.timeInMillis,
             dayColor[0],
             dayColor[1],
+            entity.otherWords,
             entity.synonyms,
             entity.antonyms,
             null,

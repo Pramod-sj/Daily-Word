@@ -25,6 +25,8 @@ data class Word(
 
     val wordDesaturatedColor: Int = -1,
 
+    val otherWords: List<String>?,
+
     val synonyms: List<String>?,
 
     val antonyms: List<String>?,
@@ -65,7 +67,7 @@ data class Word(
         if (bookmarkedSeenAt != other.bookmarkedSeenAt) return false
         if (isSeen != other.isSeen) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
-
+        if (otherWords != other.otherWords) return false
         return true
     }
 }

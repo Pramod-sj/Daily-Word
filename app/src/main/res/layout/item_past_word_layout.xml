@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@{pastWordUIModel.showBadge?@drawable/background_circle_12dp:null}"
                 android:drawablePadding="@dimen/margin_medium"
+                android:textColor="@color/textColor_highEmphasis"
                 android:text="@{pastWordUIModel.word.word}"
                 android:textSize="@dimen/text_h5"
                 android:textStyle="bold" />

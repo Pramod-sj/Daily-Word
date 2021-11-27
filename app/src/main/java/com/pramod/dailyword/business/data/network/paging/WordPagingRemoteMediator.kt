@@ -36,8 +36,6 @@ class WordPaginationRemoteMediator(
     ): MediatorResult {
         return try {
 
-            Log.i(TAG, "load: page size to be:${state.config.pageSize}")
-
             val nextLoadKey: Any = when (loadType) {
                 LoadType.REFRESH -> 0
                 LoadType.APPEND -> {
@@ -51,7 +49,7 @@ class WordPaginationRemoteMediator(
 
             val pageNo = nextLoadKey.toString().toIntOrNull() ?: 0
 
-            Log.i(TAG, "load: page no to be fetched:$pageNo")
+            Log.i(TAG, "load: page no to be fetched:$pageNo and size:${state.config.pageSize}")
 
             val resource = wordNetworkDataSource.getWordsPaging(
                 search = search,
@@ -68,6 +66,7 @@ class WordPaginationRemoteMediator(
                 }
 
                 resource.data?.let {
+                    Log.i(TAG, "INSERT COUNT ${it.size}")
                     wordCacheDataSource.addAll(it)
                 }
 

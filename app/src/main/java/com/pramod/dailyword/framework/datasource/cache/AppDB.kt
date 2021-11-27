@@ -18,9 +18,9 @@ import com.pramod.dailyword.framework.datasource.cache.model.WordCE
 
 @TypeConverters(ListConverter::class)
 @Database(
-        entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
-        version = 9,
-        exportSchema = false
+    entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
+    version = 10,
+    exportSchema = false
 )
 abstract class AppDB : RoomDatabase() {
 
@@ -34,12 +34,12 @@ abstract class AppDB : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(AppDB::class) {
                     INSTANCE = Room.databaseBuilder(
-                            context.applicationContext,
-                            AppDB::class.java,
-                            APP_DB_NAME
+                        context.applicationContext,
+                        AppDB::class.java,
+                        APP_DB_NAME
 
-                    ).addMigrations(migration_6_7, migration_7_8, migration_8_9)
-                            .build()
+                    ).addMigrations(migration_6_7, migration_7_8, migration_8_9, migration_9_10)
+                        .build()
                     return INSTANCE!!
                 }
             }
@@ -120,6 +120,20 @@ abstract class AppDB : RoomDatabase() {
                 database.execSQL("ALTER TABLE Bookmark ADD COLUMN bookmarkSeenAt INTEGER")
 
                 database.execSQL("DROP TABLE old_WordOfTheDay")
+
+            }
+        }
+
+        private object migration_9_10 : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                database.execSQL("ALTER TABLE Word RENAME TO old_Word")
+
+                database.execSQL("CREATE TABLE Word (word TEXT PRIMARY KEY NOT NULL,pronounce TEXT,pronounceAudio TEXT,meanings TEXT,didYouKnow TEXT,attribute TEXT,examples TEXT,date TEXT,dateTimeInMillis INTEGER,wordColor INTEGER NOT NULL,wordDesaturatedColor INTEGER NOT NULL,synonyms TEXT,antonyms TEXT,otherWords TEXT)")
+
+                database.execSQL("INSERT INTO Word (word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,wordColor,wordDesaturatedColor,synonyms,antonyms) SELECT word,pronounce,pronounceAudio,meanings,didYouKnow,attribute,examples,date,dateTimeInMillis,-1,-1,synonyms,antonyms FROM old_Word")
+
+                database.execSQL("DROP TABLE old_Word")
 
             }
         }

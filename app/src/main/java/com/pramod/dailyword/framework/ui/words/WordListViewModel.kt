@@ -37,8 +37,7 @@ constructor(
         getWordListInteractor.getWordList(
             search = "",
             pagingConfig = PagingConfig(
-                PAGE_SIZE,
-                enablePlaceholders = false
+                pageSize = PAGE_SIZE
             )
         ).map { pagingData ->
             return@map pagingData

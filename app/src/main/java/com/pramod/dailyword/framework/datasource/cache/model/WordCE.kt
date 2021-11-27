@@ -32,6 +32,8 @@ data class WordCE(
 
     var synonyms: List<String>?,
 
-    var antonyms: List<String>?
+    var antonyms: List<String>?,
+
+    var otherWords: List<String>?
 
 )
