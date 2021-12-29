@@ -11,23 +11,18 @@ import com.pramod.dailyword.databinding.ItemBookmarkedWordLayoutBinding
 
 
 class BookmarkedWordsAdapter(
-        val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
-        val deleteBookmarkCallback: (word: Word) -> Unit,
-        private val hideBadges: Boolean = false
+    val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
+    val deleteBookmarkCallback: (word: Word) -> Unit,
+    private val hideBadges: Boolean = false
 ) : PagingDataAdapter<Word, BookmarkedWordsAdapter.BookmarkedWordViewHolder>(WordItemComparator) {
     private var canStartActivity = true
-
-    companion object {
-        private const val ITEM_TYPE_WORD = 0
-        private const val ITEM_TYPE_AD = 1
-    }
 
     fun setCanStartActivity(canStart: Boolean) {
         canStartActivity = canStart
     }
 
     inner class BookmarkedWordViewHolder(private val binding: ItemBookmarkedWordLayoutBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(word: Word) {
             binding.root.transitionName = word.date
             binding.word = word
@@ -49,20 +44,20 @@ class BookmarkedWordsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkedWordViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return BookmarkedWordViewHolder(
-                DataBindingUtil.inflate(
-                        inflater,
-                        R.layout.item_bookmarked_word_layout,
-                        parent,
-                        false
-                )
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.item_bookmarked_word_layout,
+                parent,
+                false
+            )
         )
     }
 
 
     override fun onBindViewHolder(holder: BookmarkedWordViewHolder, position: Int) {
-        val wordItem = getItem(position)
-                ?: throw IllegalStateException("word cannot be empty for: position : $position")
-        holder.bind(wordItem)
+        getItem(position)?.let { wordItem ->
+            holder.bind(wordItem)
+        }
     }
 
 

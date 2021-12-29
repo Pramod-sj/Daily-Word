@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.ui.words
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ItemAdLayoutBinding
+import com.pramod.dailyword.databinding.ItemEmptyLayoutBinding
 import com.pramod.dailyword.databinding.ItemWordListLayoutBinding
 import com.pramod.dailyword.framework.ui.common.word.WordComparator
 import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
@@ -61,9 +61,10 @@ class WordsAdapter(
         }
     }
 
-    inner class AdViewHolder(binding: ItemAdLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AdViewHolder(binding: ItemAdLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
-    }
+    inner class EmptyViewHolder(binding: ItemEmptyLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
 
     override fun getItemViewType(position: Int): Int {
@@ -93,7 +94,7 @@ class WordsAdapter(
                     false
                 )
             )
-            else -> throw ClassCastException("Unknown viewType $viewType $itemCount")
+            else -> EmptyViewHolder(ItemEmptyLayoutBinding.inflate(inflater, parent, false))
         }
     }
 
