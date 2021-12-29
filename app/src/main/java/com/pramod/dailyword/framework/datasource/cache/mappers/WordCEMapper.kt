@@ -26,6 +26,7 @@ class WordCEMapper @Inject constructor() : EntityMapper<WordCE, Word> {
             cal?.timeInMillis,
             dayColor[0],
             dayColor[1],
+            entity.otherWords,
             entity.synonyms,
             entity.antonyms,
             null,
@@ -50,7 +51,8 @@ class WordCEMapper @Inject constructor() : EntityMapper<WordCE, Word> {
             domain.wordColor,
             domain.wordDesaturatedColor,
             domain.synonyms,
-            domain.antonyms
+            domain.antonyms,
+            domain.otherWords
         )
     }
 }

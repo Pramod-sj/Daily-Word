@@ -31,8 +31,6 @@ object ChipGroupBA {
         onChipClickListener: OnChipClickListener?
     ) {
         chipTextList?.let {
-
-            Log.i("CHIP TEXT", Gson().toJson(it))
             chipGroup.removeAllViews()
             for (chipText in it) {
                 val binding: ItemChipLayoutBinding = DataBindingUtil.inflate(

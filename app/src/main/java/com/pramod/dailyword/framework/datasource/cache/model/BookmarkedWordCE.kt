@@ -27,6 +27,8 @@ data class BookmarkedWordCE(
 
     var antonyms: List<String>?,
 
+    var otherWords: List<String>?,
+
     var bookmarkId: Int?,
 
     var bookmarkedWord: String?,

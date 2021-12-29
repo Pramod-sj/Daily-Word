@@ -26,12 +26,15 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.helper.openGmail
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
 import com.pramod.dailyword.framework.transition.doOnViewLoaded
 import com.pramod.dailyword.framework.transition.removeCallbacks
+import com.pramod.dailyword.framework.ui.common.Action
 import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -173,6 +176,30 @@ class WordDetailedActivity :
 
             override fun navigateToShowThesaurusInfo(title: String, desc: String) {
                 showBottomSheet(title, desc, positiveText = "Okay")
+            }
+
+            override fun navigateToMerriamWebsterPage(value: String) {
+                try {
+                    if (value.contains("-")) {
+                        val word = value.split("-")[0]
+                        openWebsite(resources.getString(R.string.google_search_url) + word)
+                    } else {
+                        throw Exception("Malformed other word:$value")
+                    }
+                } catch (e: Exception) {
+                    viewModel.setMessage(
+                        Message.SnackBarMessage(
+                            message = "Something went wrong! Cause: ${e.message}",
+                            action = Action("Report") {
+                                openGmail(
+                                    arrayOf(resources.getString(R.string.dev_email)),
+                                    "Daily Word issue",
+                                    "Something went wrong! Cause: ${e.message}"
+                                )
+                            }
+                        )
+                    )
+                }
             }
 
         }

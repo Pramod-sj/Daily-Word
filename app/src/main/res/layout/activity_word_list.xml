@@ -21,8 +21,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:background="@color/word_details_background"
         android:layout_height="match_parent"
+        android:background="@color/word_details_background"
         android:transitionGroup="true"
         tools:context=".ui.words.WordListActivity">
 
@@ -69,6 +69,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/words_till_date" />
             </com.google.android.material.appbar.MaterialToolbar>
+
         </com.google.android.material.appbar.AppBarLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

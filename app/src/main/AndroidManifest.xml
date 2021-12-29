@@ -50,8 +50,9 @@
 
         <activity
             android:name=".framework.ui.splash_screen.SplashScreenActivity"
-            android:screenOrientation="nosensor"
+            android:exported="true"
             android:launchMode="singleTop"
+            android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.SplashScreenActivity">
 
             <intent-filter>
@@ -91,7 +92,9 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
 
-        <service android:name="com.pramod.dailyword.framework.firebase.FBMessageService">
+        <service
+            android:name="com.pramod.dailyword.framework.firebase.FBMessageService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -99,7 +102,8 @@
 
         <receiver
             android:name="com.pramod.dailyword.framework.widget.WordWidgetProvider"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET" />
@@ -116,7 +120,8 @@
         </receiver>
         <receiver
             android:name="com.pramod.dailyword.framework.widget.MediumWordWidgetProvider"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET" />
@@ -133,7 +138,8 @@
 
         <receiver
             android:name="com.pramod.dailyword.framework.widget.SmallWordWidgetProvider"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET" />
@@ -160,7 +166,8 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".framework.receiver.BootReceiver"
+        <receiver
+            android:name=".framework.receiver.BootReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
