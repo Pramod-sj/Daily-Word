@@ -63,7 +63,6 @@ class AudioPlayer(
     }
 
 
-    @ExperimentalCoroutinesApi
     fun play(audioUrl: String) {
         CoroutineScope(Dispatchers.Main).launch {
             val cachedAudioCE = cachedAudioDatabase.getAudioDao().get(audioUrl)
