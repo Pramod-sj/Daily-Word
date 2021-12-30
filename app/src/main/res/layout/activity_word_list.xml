@@ -22,6 +22,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:background="@color/word_details_background"
         android:transitionGroup="true"
         tools:context=".ui.words.WordListActivity">
@@ -46,6 +47,10 @@
                 app:applyVerticalPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <include
+            android:id="@+id/incl_placeholder"
+            layout="@layout/list_placeholder_layout" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"

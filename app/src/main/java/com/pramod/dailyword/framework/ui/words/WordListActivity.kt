@@ -10,6 +10,7 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -27,6 +28,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -108,19 +110,40 @@ class WordListActivity :
         }
     }
 
+    private val loadStateListener = { states: CombinedLoadStates ->
+        if (searchView?.query.toString().isNotBlank()) {
+            if (adapter.snapshot().size == 0) {
+                binding.inclPlaceholder.placeHolderText =
+                    "No result found for '${searchView?.query.toString()}'"
+                binding.inclPlaceholder.show = true
+                binding.inclPlaceholder.executePendingBindings()
+            } else {
+                binding.inclPlaceholder.show = false
+                binding.inclPlaceholder.executePendingBindings()
+            }
+        } else {
+            binding.inclPlaceholder.show = false
+            binding.inclPlaceholder.executePendingBindings()
+        }
+    }
+
     private fun setupSwipeToRefresh() {
         binding.swipeToRefresh.setOnRefreshListener {
             adapter.refresh()
         }
-        adapter.addLoadStateListener {
-            binding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
+        adapter.addLoadStateListener(loadStateListener)
+        lifecycleScope.launch {
+            adapter.loadStateFlow.map { it.refresh }.collectLatest {
+                binding.swipeToRefresh.isRefreshing = it == LoadState.Loading
+                if (it is LoadState.NotLoading) {
+                    binding.recyclerviewWords.scrollToPosition(0)
+                }
+            }
         }
     }
 
     override fun onBackPressed() {
-        if (searchView?.isIconified == false) {
-            searchView?.isIconified = true
-        } else finish()
+        if (searchView?.isIconified == false) searchView?.isIconified = true else finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -172,6 +195,7 @@ class WordListActivity :
     override fun onDestroy() {
         queryTextChangedJob?.cancel()
         queryTextChangedJob = null
+        adapter.removeLoadStateListener(loadStateListener)
         super.onDestroy()
     }
 
