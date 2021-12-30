@@ -53,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="@dimen/appbar_alpha"
+            android:animateLayoutChanges="true"
             app:applyTopPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recyclerview_words">
@@ -60,8 +61,8 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                app:collapseIcon="@drawable/ic_round_close_24"
                 android:layout_height="?attr/actionBarSize"
+                android:animateLayoutChanges="true"
                 app:navigationIcon="@drawable/ic_round_back_arrow">
 
                 <TextView
@@ -72,6 +73,7 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

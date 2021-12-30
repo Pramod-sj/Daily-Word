@@ -7,9 +7,8 @@ import android.app.SearchManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.widget.EditText
-import android.widget.SearchView
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
@@ -49,6 +48,8 @@ class WordListActivity :
     @Inject
     lateinit var prefManager: PrefManager
 
+    private var contentInsetStartWithNavigation = 0
+
     private val adapter: WordsAdapter by lazy {
         WordsAdapter(
             itemClickCallback = { i: Int, word: Word ->
@@ -82,6 +83,7 @@ class WordListActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        contentInsetStartWithNavigation = binding.toolbar.contentInsetStartWithNavigation
         setUpToolbar(binding.toolbar, null, true)
         initAdapter()
         setupSwipeToRefresh()
@@ -116,7 +118,9 @@ class WordListActivity :
     }
 
     override fun onBackPressed() {
-        finish()
+        if (searchView?.isIconified == false) {
+            searchView?.isIconified = true
+        } else finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -126,35 +130,43 @@ class WordListActivity :
     }
 
     private var queryTextChangedJob: Job? = null
+    private var searchView: SearchView? = null
     private fun setUpSearchView(menu: Menu) {
         val manager = getSystemService(SEARCH_SERVICE) as SearchManager
-
-        val search: SearchView = menu.findItem(R.id.menu_search).actionView as SearchView
-        search.maxWidth = Integer.MAX_VALUE
-        search.queryHint = "Search by word"
-
-        search.setSearchableInfo(manager.getSearchableInfo(componentName))
-
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                queryTextChangedJob?.cancel()
-                queryTextChangedJob = lifecycleScope.launch {
-                    delay(300)
-                    viewModel.setSearchQuery(query ?: "")
-                }
-                return true
+        val searchMenuItem = menu.findItem(R.id.menu_search)
+        searchView = searchMenuItem?.actionView as? SearchView
+        searchView?.let { search ->
+            search.maxWidth = Integer.MAX_VALUE
+            search.queryHint = "Search by word"
+            search.setOnCloseListener {
+                binding.toolbar.contentInsetStartWithNavigation = contentInsetStartWithNavigation
+                false
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                queryTextChangedJob?.cancel()
-                queryTextChangedJob = lifecycleScope.launch {
-                    delay(300)
-                    viewModel.setSearchQuery(newText ?: "")
-                }
-                return true
+            search.setOnSearchClickListener {
+                binding.toolbar.contentInsetStartWithNavigation = 0
             }
+            search.setSearchableInfo(manager.getSearchableInfo(componentName))
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    queryTextChangedJob?.cancel()
+                    queryTextChangedJob = lifecycleScope.launch {
+                        delay(300)
+                        viewModel.setSearchQuery(query ?: "")
+                    }
+                    return true
+                }
 
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    queryTextChangedJob?.cancel()
+                    queryTextChangedJob = lifecycleScope.launch {
+                        delay(300)
+                        viewModel.setSearchQuery(newText ?: "")
+                    }
+                    return true
+                }
+
+            })
+        }
     }
 
     override fun onDestroy() {
