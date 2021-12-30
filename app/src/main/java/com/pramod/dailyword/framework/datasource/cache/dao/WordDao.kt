@@ -29,4 +29,7 @@ interface WordDao {
     @Query("DELETE FROM Word")
     suspend fun deleteAll(): Int
 
+    @Query("DELETE FROM Word WHERE word NOT IN (SELECT word FROM Word ORDER BY dateTimeInMillis DESC LIMIT :n)")
+    suspend fun deleteAllExceptTop(n: Int): Int
+
 }

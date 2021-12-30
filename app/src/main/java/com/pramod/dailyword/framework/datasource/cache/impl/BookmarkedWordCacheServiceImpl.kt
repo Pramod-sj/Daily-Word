@@ -118,7 +118,7 @@ class BookmarkedWordCacheServiceImpl @Inject constructor(
         remoteMediator: WordPaginationRemoteMediator
     ): Flow<PagingData<Word>> {
         return Pager(pageConfig, remoteMediator = remoteMediator) {
-            bookmarkedWordDao.getWordsPagingSource()
+            bookmarkedWordDao.getWordsPagingSource(remoteMediator.search)
         }.flow.map { pagingData ->
             pagingData.map {
                 bookmarkedWordCEMapper.fromEntity(it)

@@ -44,4 +44,8 @@ class WordCacheServiceImpl @Inject constructor(
     override suspend fun deleteAll(): Int {
         return wordDao.deleteAll()
     }
+
+    override suspend fun deleteAllExceptTop(n: Int): Int {
+        return wordDao.deleteAllExceptTop(n)
+    }
 }

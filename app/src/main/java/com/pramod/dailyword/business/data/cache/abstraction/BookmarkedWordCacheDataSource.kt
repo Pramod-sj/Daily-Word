@@ -45,8 +45,6 @@ interface BookmarkedWordCacheDataSource {
         remoteMediator: WordPaginationRemoteMediator
     ): Flow<PagingData<Word>>
 
-
-    @ExperimentalPagingApi
     fun getBookmarkedWordsPagingSource(
         pagingConfig: PagingConfig,
     ): Flow<PagingData<Word>>

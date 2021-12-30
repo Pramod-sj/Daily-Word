@@ -24,6 +24,14 @@
 
         <item name="android:fontFamily">@font/lato_regular</item>
 
+        <item name="searchViewStyle">@style/SearchViewMy</item>
+        <item name="android:searchViewStyle">@style/SearchViewMy</item>
+
+    </style>
+
+    <style name="SearchViewMy" parent="Widget.AppCompat.Light.SearchView">
+        <item name="submitBackground">@android:color/transparent</item>
+        <item name="queryBackground">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />

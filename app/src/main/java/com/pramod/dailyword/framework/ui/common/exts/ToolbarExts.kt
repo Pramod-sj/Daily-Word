@@ -15,20 +15,14 @@ fun AppCompatActivity.setUpToolbar(
     navIconClickListener: (() -> Unit)? = null
 ) {
     setSupportActionBar(toolbar)
-    supportActionBar?.let {
-        it.title = null
-    }
+    supportActionBar?.let { it.title = null }
     toolbar.title = title
     if (showNavAsBack == true) {
         toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
         toolbar.setNavigationOnClickListener { onBackPressed() }
     }
-    navIcon?.let {
-        toolbar.setNavigationIcon(it)
-    }
+    navIcon?.let { toolbar.setNavigationIcon(it) }
     navIconClickListener?.let {
-        toolbar.setNavigationOnClickListener {
-            navIconClickListener.invoke()
-        }
+        toolbar.setNavigationOnClickListener { navIconClickListener.invoke() }
     }
 }

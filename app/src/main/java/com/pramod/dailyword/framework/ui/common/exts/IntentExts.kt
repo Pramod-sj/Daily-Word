@@ -83,6 +83,7 @@ fun Activity.openWordDetailsPage(
     }
 }
 
+@ExperimentalPagingApi
 fun Activity.openWordListPage() {
     startActivity(Intent(this, WordListActivity::class.java))
 }

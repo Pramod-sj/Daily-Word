@@ -60,6 +60,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                app:collapseIcon="@drawable/ic_round_close_24"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationIcon="@drawable/ic_round_back_arrow">
 

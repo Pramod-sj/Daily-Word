@@ -70,17 +70,6 @@ class WordDetailedActivity :
         setUpDefinitionRecyclerView()
         handleNavigator()
         handleRippleAnimationForAudioEffect()
-        val start = Calendar.getInstance().timeInMillis
-        doOnViewLoaded(
-            binding.wordDetailedDefinationsRecyclerview,
-            binding.wordDetailedExamplesRecyclerview,
-            binding.chipGroupAntonyms,
-            binding.chipGroupSynonyms,
-            loadedCallback = {
-                Log.i(TAG, "onGlobalLayout: " + (Calendar.getInstance().timeInMillis - start))
-                supportStartPostponedEnterTransition()
-            }
-        )
         shouldShowSupportDevelopmentDialog()
     }
 
@@ -101,6 +90,13 @@ class WordDetailedActivity :
                         else word.wordColor
                     )
             }
+            doOnViewLoaded(
+                binding.wordDetailedDefinationsRecyclerview,
+                binding.wordDetailedExamplesRecyclerview,
+                binding.chipGroupAntonyms,
+                binding.chipGroupSynonyms,
+                loadedCallback = { supportStartPostponedEnterTransition() }
+            )
         }
     }
 
