@@ -3,12 +3,14 @@ package com.pramod.dailyword.framework.ui.donate
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.billingclient.api.SkuDetails
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogDonateBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
@@ -52,6 +54,12 @@ class DonateBottomDialogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.post {
+            FirebaseAnalytics.getInstance(requireContext()).logEvent(
+                FirebaseAnalytics.Event.SCREEN_VIEW,
+                bundleOf(FirebaseAnalytics.Param.SCREEN_NAME to DonateBottomDialogFragment::class.simpleName)
+            )
+        }
         billingHelper = BillingHelper(
             requireContext(),
             viewModel.donateItemList.value?.map { it.itemProductId } ?: listOf()

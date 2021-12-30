@@ -18,12 +18,14 @@ import android.webkit.WebViewClient
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BottomSheetDialogLayoutBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
@@ -342,7 +344,7 @@ class DailogHelper {
 fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
     val prefManager = PrefManager.getInstance(this)
     prefManager.incrementSupportUsDialogCalledCount()
-    if ((prefManager.getSupportUsDialogCalledCount() % 20 == 0
+    if ((prefManager.getSupportUsDialogCalledCount() % 10 == 0
                 && prefManager.hasDonated() == false) && !prefManager.getNeverShowSupportUsDialog()
     ) {
         showSupportDevelopmentDialog {
@@ -358,6 +360,10 @@ fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
 
 
 fun FragmentActivity.showSupportDevelopmentDialog(neverCallback: () -> Unit) {
+    FirebaseAnalytics.getInstance(baseContext).logEvent(
+        FirebaseAnalytics.Event.SCREEN_VIEW,
+        bundleOf(FirebaseAnalytics.Param.SCREEN_NAME to "support_development_dialog")
+    )
     val builder = MaterialAlertDialogBuilder(this)
         .setBackgroundInsetBottom(10)
         .setBackgroundInsetTop(10)
@@ -381,8 +387,8 @@ fun FragmentActivity.showSupportDevelopmentDialog(neverCallback: () -> Unit) {
 
 private fun AlertDialog.applyStyleOnAlertDialog() {
     window?.let { window ->
-        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        window.setDimAmount(0.75f);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        window.setDimAmount(0.75f)
         window.setWindowAnimations(R.style.DialogWindowAnimation)
     }
 }
