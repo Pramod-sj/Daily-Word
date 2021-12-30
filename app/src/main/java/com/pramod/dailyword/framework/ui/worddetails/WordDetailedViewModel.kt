@@ -15,6 +15,7 @@ import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteracto
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
+import com.pramod.dailyword.framework.ui.worddetails.uimodel.WordDetailUiModel
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

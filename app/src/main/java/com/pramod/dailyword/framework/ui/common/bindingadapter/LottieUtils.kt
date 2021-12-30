@@ -8,7 +8,7 @@ object LottieUtils {
 
     @JvmStatic
     @BindingAdapter("app:lottie_animate", requireAll = false)
-    fun play(lottieAnimationView: LottieAnimationView, animate: Boolean?) {
+    fun animate(lottieAnimationView: LottieAnimationView, animate: Boolean?) {
         Log.i("LottieUtils", "play: null check pending $animate")
         animate?.let {
             Log.i("LottieUtils", "play: $it")

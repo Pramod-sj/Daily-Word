@@ -31,7 +31,6 @@ class FileDownloader {
         this.okHttpClient = okHttpBuilder.build()
     }
 
-    @ExperimentalCoroutinesApi
     fun download(url: String, dest: File): Flow<FileDownloadStatus> {
         return flow {
             try {

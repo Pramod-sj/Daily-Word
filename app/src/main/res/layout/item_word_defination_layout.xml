@@ -2,26 +2,6 @@
 <layout>
 
     <data>
-
-        <import type="com.pramod.dailyword.framework.prefmanagers.ThemeManager" />
-
-        <import type="com.pramod.dailyword.framework.util.CommonUtils" />
-
-        <variable
-            name="colorResId"
-            type="Integer" />
-
-        <variable
-            name="desaturatedColorResId"
-            type="Integer" />
-
-        <variable
-            name="srNo"
-            type="Integer" />
-
-        <variable
-            name="defination"
-            type="String" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,16 +16,15 @@
             android:layout_height="10dp"
             android:layout_centerVertical="true"
             android:background="@drawable/background_circle"
-            android:backgroundTint="@{CommonUtils.getColor(context,(ThemeManager.isNightModeActive(context)? desaturatedColorResId:colorResId))}"
             android:layout_marginHorizontal="@dimen/padding_medium" />
 
         <TextView
+            android:id="@+id/tv_meaning_text"
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/word_example_dot"
-            android:paddingHorizontal="@dimen/padding_medium"
-            android:text="@{defination}" />
+            android:paddingHorizontal="@dimen/padding_medium"/>
     </RelativeLayout>
 </layout>

@@ -33,10 +33,10 @@ class ExampleAdapter(
 
 
     override fun onBindViewHolder(holder: ExampleViewHolder, position: Int) {
-        holder.binding.colorResId = colorResId
+        /*holder.binding.colorResId = colorResId
         holder.binding.desaturatedColorResId = desaturatedColorResId
         holder.binding.srNo = position + 1
         holder.binding.example = getItem(position)
-        holder.binding.executePendingBindings()
+        holder.binding.executePendingBindings()*/
     }
 }

@@ -34,10 +34,10 @@ class DefinitionAdapter(
 
 
     override fun onBindViewHolder(holder: DefinationViewHolder, position: Int) {
-        holder.binding.colorResId = colorResId
+      /*  holder.binding.colorResId = colorResId
         holder.binding.desaturatedColorResId = desaturatedColorResId
         holder.binding.srNo = position + 1
-        holder.binding.defination = getItem(position)
+        holder.binding.defination = getItem(position)*/
         holder.binding.executePendingBindings()
     }
 

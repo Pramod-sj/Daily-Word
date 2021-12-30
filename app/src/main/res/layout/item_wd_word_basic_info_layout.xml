@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation_word_details">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_word_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/padding_medium">
+
+            <TextView
+                android:id="@+id/tv_word_date_label"
+                style="@style/AppTheme.SubTitleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:background="@drawable/background_home_word"
+                android:ellipsize="marquee"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="@dimen/padding_small"
+                android:singleLine="true"
+                android:text="@{"
+                android:textStyle="bold"
+                app:selected="@{true}" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_word"
+                style="@style/AppTheme.Header1TextStyle.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:drawablePadding="@dimen/padding_medium"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingTop="@dimen/padding_small"
+                android:singleLine="true"
+                android:textIsSelectable="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_word_attribute"
+                    style="@style/AppTheme.TitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_h5"
+                    android:textStyle="italic" />
+
+                <TextView
+                    style="@style/AppTheme.TitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:text="@string/unicode_bullet" />
+
+                <TextView
+                    android:id="@+id/tv_word_pronounce"
+                    style="@style/AppTheme.TitleTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_speaker"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/padding_medium"
+                    android:background="?actionBarItemBackground"
+                    android:padding="12dp"
+                    app:lottie_autoPlay="false"
+                    app:lottie_fallbackRes="@drawable/ic_volume_up_black_24dp"
+                    app:lottie_fileName="lottie_speaker_anim_2.json"
+                    app:lottie_loop="true" />
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_definations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingHorizontal="@dimen/margin_large"
+                android:paddingVertical="@dimen/padding_small"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

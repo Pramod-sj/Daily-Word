@@ -8,7 +8,6 @@ import android.transition.ArcMotion
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionSet
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,8 +16,8 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Observer
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -30,17 +29,16 @@ import com.pramod.dailyword.framework.helper.openGmail
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.transition.TransitionCallback
-import com.pramod.dailyword.framework.transition.doOnViewLoaded
 import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.Action
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.worddetails.adapter.ParentWordDetailAdapter
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -55,6 +53,9 @@ class WordDetailedActivity :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
+    @Inject
+    lateinit var uiMapper: UiMapper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindAdsInfo()
@@ -62,7 +63,34 @@ class WordDetailedActivity :
         initEnterAndReturnTransition()
         keepScreenOn()
         setUpToolbar(binding.toolbar, null, true)
-        setNestedScrollListener()
+
+        val adapter = ParentWordDetailAdapter(
+            audioPlayer = viewModel.audioPlayer,
+            listener = object : WordDetailAdapterItemClickListener {
+                override fun navigateToWeb(url: String) {
+
+                }
+
+                override fun onChipsCardInfoClick(title: String, infoHint: String) {
+
+                }
+
+                override fun onChipsCardViewMoreClick(title: String, list: List<String>) {
+
+                }
+
+                override fun onChipsCardChipClick(url: String) {
+
+                }
+            }
+        )
+        binding.rvWordDetails.adapter = adapter
+        viewModel.word.map { word -> word?.let { uiMapper.toUiModels(it) } }.observe(this) {
+            adapter.submitList(it)
+            binding.rvWordDetails.post { supportStartPostponedEnterTransition() }
+        }
+
+        /*setNestedScrollListener()
         setNavigateMW()
         invalidateOptionMenuWhenWordAvailable()
         setWordColor()
@@ -80,7 +108,7 @@ class WordDetailedActivity :
                 Log.i(TAG, "onGlobalLayout: " + (Calendar.getInstance().timeInMillis - start))
                 supportStartPostponedEnterTransition()
             }
-        )
+        )*/
         shouldShowSupportDevelopmentDialog()
     }
 
@@ -105,13 +133,13 @@ class WordDetailedActivity :
     }
 
     private fun handleRippleAnimationForAudioEffect() {
-        lifecycleScope.launch {
+        /*lifecycleScope.launch {
             themeManager.liveData().asFlow().collect {
                 binding.lottieSpeaker.post {
                     binding.lottieSpeaker.changeLayersColor(R.color.app_icon_tint)
                 }
             }
-        }
+        }*/
     }
 
     private fun invalidateOptionMenuWhenWordAvailable() {
@@ -137,7 +165,7 @@ class WordDetailedActivity :
 
     private fun setUpDefinitionRecyclerView() {
         val adapter = DefinitionAdapter()
-        binding.wordDetailedDefinationsRecyclerview.adapter = adapter
+        /*binding.wordDetailedDefinationsRecyclerview.adapter = adapter
         lifecycleScope.launchWhenCreated {
             viewModel.wordAsFlow.filterNotNull().collect { word ->
                 adapter.setColors(word.wordColor, word.wordDesaturatedColor)
@@ -145,7 +173,7 @@ class WordDetailedActivity :
                     adapter.submitList(word.meanings)
                 }
             }
-        }
+        }*/
     }
 
     private fun handleNavigator() {
@@ -279,16 +307,16 @@ class WordDetailedActivity :
     }
 
     private fun setNestedScrollListener() {
-        binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+      /*  binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
             val distanceToCover =
                 binding.txtViewWordOfTheDay.height + binding.txtViewWordOfTheDayDate.height
             viewModel.setTitleVisibility(distanceToCover < oldScrollY)
-            /*  if (oldScrollY < scrollY) {
+            *//*  if (oldScrollY < scrollY) {
                   mBinding.fabGotToMw.shrink()
               } else {
                   mBinding.fabGotToMw.extend()
-              }*/
-        }
+              }*//*
+        }*/
     }
 
 
@@ -303,14 +331,14 @@ class WordDetailedActivity :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        /*when (item.itemId) {
             R.id.menu_share_word -> {
                 CommonUtils.viewToBitmap(binding.linearLayoutWordInfo)?.let {
                     shareApp(bitmap = it)
                 } ?: shareApp()
             }
             R.id.menu_bookmark -> viewModel.bookmark()
-        }
+        }*/
         return super.onOptionsItemSelected(item)
     }
 
