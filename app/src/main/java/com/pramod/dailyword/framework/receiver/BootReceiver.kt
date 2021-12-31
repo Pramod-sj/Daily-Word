@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 
+@ExperimentalPagingApi
 class BootReceiver : BroadcastReceiver() {
 
 

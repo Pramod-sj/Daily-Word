@@ -9,7 +9,6 @@ import com.pramod.dailyword.business.data.network.utils.ApiResponseHandler
 import com.pramod.dailyword.business.data.network.utils.safeApiCall
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll

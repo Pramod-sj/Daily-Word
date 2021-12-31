@@ -1,7 +1,5 @@
 package com.pramod.dailyword.business.interactor
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.network.NetworkBoundResource
@@ -9,8 +7,6 @@ import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

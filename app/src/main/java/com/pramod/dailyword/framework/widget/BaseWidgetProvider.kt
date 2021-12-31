@@ -9,17 +9,18 @@ import androidx.paging.ExperimentalPagingApi
 import com.google.gson.Gson
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagingApi::class)
 @AndroidEntryPoint
 open class BaseWidgetProvider : AppWidgetProvider() {
     private val TAG = BaseWidgetProvider::class.simpleName
 
+    @OptIn(ExperimentalPagingApi::class)
     @Inject
     lateinit var toggleBookmarkInteractor: ToggleBookmarkInteractor
 
@@ -35,6 +36,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
             "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET"
     }
 
+    @OptIn(ExperimentalPagingApi::class, DelicateCoroutinesApi::class)
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {

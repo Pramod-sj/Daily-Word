@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
@@ -22,13 +21,10 @@ import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.ui.worddetails.WordDetailedActivity
 import com.pramod.dailyword.framework.ui.words.WordListActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.File
 import java.io.FileOutputStream
 
 
-@ExperimentalCoroutinesApi
-@ExperimentalPagingApi
 fun Activity.openSplashScreen(vararg flag: Int) {
     val intent = Intent(this, SplashScreenActivity::class.java)
     flag.forEach {
@@ -37,8 +33,6 @@ fun Activity.openSplashScreen(vararg flag: Int) {
     startActivity(intent)
 }
 
-@ExperimentalCoroutinesApi
-@ExperimentalPagingApi
 fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
     val intent = Intent(this, HomeActivity::class.java)
     if (withFadeAnimation) {
@@ -83,12 +77,10 @@ fun Activity.openWordDetailsPage(
     }
 }
 
-@ExperimentalPagingApi
 fun Activity.openWordListPage() {
     startActivity(Intent(this, WordListActivity::class.java))
 }
 
-@ExperimentalPagingApi
 fun Activity.openBookmarksPage() {
     startActivity(Intent(this, FavoriteWordsActivity::class.java))
 }
@@ -97,10 +89,11 @@ fun Activity.openRecapPage() {
     startActivity(Intent(this, RecapWordsActivity::class.java))
 }
 
-@ExperimentalCoroutinesApi
+
 fun Activity.openRandomWordPage() {
     startActivity(Intent(this, WordDetailedActivity::class.java))
 }
+
 
 fun Activity.openSettingPage() {
     val intent = Intent(this, AppSettingActivity::class.java)
@@ -122,7 +115,7 @@ fun Activity.shareApp(
         action = Intent.ACTION_SEND
 
         if (bitmap == null) {
-            type = "text/plain";
+            type = "text/plain"
             putExtra(Intent.EXTRA_TITLE, "Share Daily Word with your friends and family today!")
         } else {
             putExtra(Intent.EXTRA_STREAM, getUriFromBitmap(this@shareApp, bitmap))

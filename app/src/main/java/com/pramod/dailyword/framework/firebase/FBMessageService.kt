@@ -4,7 +4,6 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.util.Log
-import androidx.paging.ExperimentalPagingApi
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -51,8 +50,6 @@ class FBMessageService : FirebaseMessagingService() {
         Log.i(TAG, "New Token: $p0")
     }
 
-    @ExperimentalCoroutinesApi
-    @ExperimentalPagingApi
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
         val notificationPrefManager = NotificationPrefManager.newInstance(baseContext)

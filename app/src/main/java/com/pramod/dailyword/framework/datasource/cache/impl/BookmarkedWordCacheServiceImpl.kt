@@ -112,7 +112,7 @@ class BookmarkedWordCacheServiceImpl @Inject constructor(
     }
 
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun getWordsPagingSource(
         pageConfig: PagingConfig,
         remoteMediator: WordPaginationRemoteMediator
@@ -126,7 +126,6 @@ class BookmarkedWordCacheServiceImpl @Inject constructor(
         }
     }
 
-    @ExperimentalPagingApi
     override fun getBookmarkedWordsPagingSource(pagingConfig: PagingConfig): Flow<PagingData<Word>> {
         return Pager(pagingConfig) {
             bookmarkedWordDao.getBookmarksPagingDataSource()

@@ -1,12 +1,12 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.activity.viewModels
-import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
@@ -23,10 +23,8 @@ import com.pramod.dailyword.framework.util.GradientUtils
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
-@ExperimentalPagingApi
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashScreenActivity :
     BaseActivity<ActivitySplashScreenBinding, SplashScreenViewModel>(R.layout.activity_splash_screen) {

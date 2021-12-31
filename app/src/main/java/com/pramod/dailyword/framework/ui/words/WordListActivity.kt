@@ -11,7 +11,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -24,7 +23,6 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -33,9 +31,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-
-@ExperimentalCoroutinesApi
-@ExperimentalPagingApi
 @AndroidEntryPoint
 class WordListActivity :
     BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {

@@ -8,7 +8,6 @@ import android.transition.ArcMotion
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionSet
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -41,7 +40,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -335,7 +333,7 @@ class WordDetailedActivity :
 
         fun wasBookmarkStatusChanged(resultCode: Int, data: Bundle?): Boolean {
             if (resultCode == RESULT_OK && data != null) {
-                return data.getBoolean(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, false);
+                return data.getBoolean(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, false)
             }
             return false
         }

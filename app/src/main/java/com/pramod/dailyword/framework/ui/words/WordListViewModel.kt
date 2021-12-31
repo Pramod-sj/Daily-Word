@@ -17,10 +17,8 @@ import javax.inject.Inject
 
 const val PAGE_SIZE = 25
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
-class WordListViewModel @Inject
-constructor(
+class WordListViewModel @Inject constructor(
     private val getWordListInteractor: GetWordPagingInteractor,
     private var toggleBookmarkInteractor: ToggleBookmarkInteractor,
     fbRemoteConfig: FBRemoteConfig
@@ -36,7 +34,7 @@ constructor(
         _searchQuery.tryEmit(query)
     }
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     val wordUIModelList: Flow<PagingData<WordListUiModel>> =
         _searchQuery.flatMapLatest { query ->
             getWordListInteractor.getWordList(

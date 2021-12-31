@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.datasource.cache.abstraction
 
 import androidx.lifecycle.LiveData
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.pramod.dailyword.business.data.network.paging.WordPaginationRemoteMediator
@@ -40,14 +39,11 @@ interface BookmarkedWordCacheService {
 
     suspend fun getJustTopOneWordNonLive(): Word?
 
-    @ExperimentalPagingApi
     fun getWordsPagingSource(
         pagingConfig: PagingConfig,
         remoteMediator: WordPaginationRemoteMediator
     ): Flow<PagingData<Word>>
 
-
-    @ExperimentalPagingApi
     fun getBookmarkedWordsPagingSource(
         pagingConfig: PagingConfig,
     ): Flow<PagingData<Word>>

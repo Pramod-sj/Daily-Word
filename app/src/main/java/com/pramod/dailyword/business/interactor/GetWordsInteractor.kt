@@ -7,7 +7,6 @@ import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.data.network.abstraction.WordNetworkDataSource
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

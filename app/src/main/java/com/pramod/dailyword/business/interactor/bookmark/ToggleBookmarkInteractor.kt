@@ -5,7 +5,6 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheD
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

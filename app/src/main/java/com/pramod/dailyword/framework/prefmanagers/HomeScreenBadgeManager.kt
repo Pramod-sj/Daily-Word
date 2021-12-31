@@ -136,11 +136,11 @@ class HomeScreenBadgeManager @Inject constructor(
 
                         for (word in wordList) {
                             if (!word.isSeen) {
-                                return@map true;
+                                return@map true
                             }
                         }
                     }
-                    return@map false;
+                    return@map false
                 }
             }
             return@switchMap MutableLiveData<Boolean>().apply {

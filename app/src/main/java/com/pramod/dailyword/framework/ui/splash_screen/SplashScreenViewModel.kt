@@ -1,7 +1,7 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
+import android.annotation.SuppressLint
 import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.*
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
@@ -10,6 +10,7 @@ import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@SuppressLint("CustomSplashScreen")
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,

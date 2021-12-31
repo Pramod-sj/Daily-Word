@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.library.audioplayer.AudioPlayer
-import com.pramod.dailyword.framework.helper.PronounceHelper
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,7 +23,6 @@ class WordWidgetProvider : BaseWidgetProvider() {
         const val EXTRA_BOOKMARKED_WORD = "bookmarked_word"
     }
 
-    @ExperimentalCoroutinesApi
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         Log.i(TAG, "onReceive: ${intent?.action}")

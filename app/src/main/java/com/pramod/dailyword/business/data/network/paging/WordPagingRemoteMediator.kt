@@ -12,7 +12,7 @@ import com.pramod.dailyword.framework.datasource.cache.model.BookmarkedWordCE
 import com.pramod.dailyword.framework.prefmanagers.RemoteKeyPrefManager
 import retrofit2.HttpException
 
-@ExperimentalPagingApi
+@OptIn(ExperimentalPagingApi::class)
 class WordPaginationRemoteMediator(
     val search: String,
     private val skipInitialRefresh: Boolean = false,
