@@ -142,8 +142,8 @@ dependencies {
     //firebase libs
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-config-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.4'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.6'
 
     //paging lib
     implementation 'androidx.paging:paging-runtime-ktx:3.1.0'

@@ -1,7 +1,6 @@
 package com.pramod.dailyword.business.data.cache.impl
 
 import androidx.lifecycle.LiveData
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
@@ -81,7 +80,6 @@ class BookmarkedWordCacheDataSourceImpl @Inject constructor(private val bookmark
         return bookmarkedWordCacheService.getJustTopOneWordNonLive()
     }
 
-    @ExperimentalPagingApi
     override fun getWordsPagingSource(
         pagingConfig: PagingConfig,
         remoteMediator: WordPaginationRemoteMediator
@@ -89,7 +87,6 @@ class BookmarkedWordCacheDataSourceImpl @Inject constructor(private val bookmark
         return bookmarkedWordCacheService.getWordsPagingSource(pagingConfig, remoteMediator)
     }
 
-    @ExperimentalPagingApi
     override fun getBookmarkedWordsPagingSource(pagingConfig: PagingConfig): Flow<PagingData<Word>> {
         return bookmarkedWordCacheService.getBookmarkedWordsPagingSource(pagingConfig)
     }

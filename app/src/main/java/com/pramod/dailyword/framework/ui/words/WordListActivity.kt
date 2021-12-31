@@ -1,12 +1,16 @@
 package com.pramod.dailyword.framework.ui.words
 
 //import androidx.paging.ExperimentalPagingApi
+
 import android.app.ActivityOptions
+import android.app.SearchManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -19,7 +23,10 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -37,6 +44,8 @@ class WordListActivity :
 
     @Inject
     lateinit var prefManager: PrefManager
+
+    private var contentInsetStartWithNavigation = 0
 
     private val adapter: WordsAdapter by lazy {
         WordsAdapter(
@@ -69,10 +78,9 @@ class WordListActivity :
         )
     }
 
-    @ExperimentalPagingApi
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        contentInsetStartWithNavigation = binding.toolbar.contentInsetStartWithNavigation
         setUpToolbar(binding.toolbar, null, true)
         initAdapter()
         setupSwipeToRefresh()
@@ -83,8 +91,6 @@ class WordListActivity :
         adapter.setCanStartActivity(true)
     }
 
-    @ExperimentalPagingApi
-    @ExperimentalCoroutinesApi
     private fun initAdapter() {
 
         binding.recyclerviewWords.adapter = adapter.withLoadStateFooter(
@@ -92,25 +98,100 @@ class WordListActivity :
                 adapter.retry()
             })
 
-        viewModel.wordUIModelList.observe(this@WordListActivity) {
-            lifecycleScope.launch {
+        lifecycleScope.launch {
+            viewModel.wordUIModelList.collectLatest {
                 adapter.submitData(it)
             }
         }
+    }
 
+    private val loadStateListener = { states: CombinedLoadStates ->
+        if (searchView?.query.toString().isNotBlank()) {
+            if (adapter.snapshot().size == 0) {
+                binding.inclPlaceholder.placeHolderText =
+                    "No result found for '${searchView?.query.toString()}'"
+                binding.inclPlaceholder.show = true
+                binding.inclPlaceholder.executePendingBindings()
+            } else {
+                binding.inclPlaceholder.show = false
+                binding.inclPlaceholder.executePendingBindings()
+            }
+        } else {
+            binding.inclPlaceholder.show = false
+            binding.inclPlaceholder.executePendingBindings()
+        }
     }
 
     private fun setupSwipeToRefresh() {
         binding.swipeToRefresh.setOnRefreshListener {
             adapter.refresh()
         }
-        adapter.addLoadStateListener {
-            binding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
+        adapter.addLoadStateListener(loadStateListener)
+        lifecycleScope.launch {
+            adapter.loadStateFlow.map { it.refresh }.collectLatest {
+                binding.swipeToRefresh.isRefreshing = it == LoadState.Loading
+                if (it is LoadState.NotLoading) {
+                    binding.recyclerviewWords.scrollToPosition(0)
+                }
+            }
         }
     }
 
     override fun onBackPressed() {
-        finish()
+        if (searchView?.isIconified == false) searchView?.isIconified = true else finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_word_list, menu)
+        menu?.let { setUpSearchView(menu) }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private var queryTextChangedJob: Job? = null
+    private var searchView: SearchView? = null
+    private fun setUpSearchView(menu: Menu) {
+        val manager = getSystemService(SEARCH_SERVICE) as SearchManager
+        val searchMenuItem = menu.findItem(R.id.menu_search)
+        searchView = searchMenuItem?.actionView as? SearchView
+        searchView?.let { search ->
+            search.maxWidth = Integer.MAX_VALUE
+            search.queryHint = "Search by word"
+            search.setOnCloseListener {
+                binding.toolbar.contentInsetStartWithNavigation = contentInsetStartWithNavigation
+                false
+            }
+            search.setOnSearchClickListener {
+                binding.toolbar.contentInsetStartWithNavigation = 0
+            }
+            search.setSearchableInfo(manager.getSearchableInfo(componentName))
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    queryTextChangedJob?.cancel()
+                    queryTextChangedJob = lifecycleScope.launch {
+                        delay(300)
+                        viewModel.setSearchQuery(query ?: "")
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    queryTextChangedJob?.cancel()
+                    queryTextChangedJob = lifecycleScope.launch {
+                        delay(300)
+                        viewModel.setSearchQuery(newText ?: "")
+                    }
+                    return true
+                }
+
+            })
+        }
+    }
+
+    override fun onDestroy() {
+        queryTextChangedJob?.cancel()
+        queryTextChangedJob = null
+        adapter.removeLoadStateListener(loadStateListener)
+        super.onDestroy()
     }
 
     companion object {

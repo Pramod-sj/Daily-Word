@@ -12,9 +12,9 @@ import com.pramod.dailyword.framework.datasource.cache.model.BookmarkedWordCE
 import com.pramod.dailyword.framework.prefmanagers.RemoteKeyPrefManager
 import retrofit2.HttpException
 
-@ExperimentalPagingApi
+@OptIn(ExperimentalPagingApi::class)
 class WordPaginationRemoteMediator(
-    private val search: String,
+    val search: String,
     private val skipInitialRefresh: Boolean = false,
     private val wordNetworkDataSource: WordNetworkDataSource,
     private val wordCacheDataSource: WordCacheDataSource,
@@ -62,7 +62,11 @@ class WordPaginationRemoteMediator(
                 if (loadType == LoadType.REFRESH) {
                     Log.i(TAG, "LOAD TYPE: REFRESH -- DELETE ALL WORDS")
                     remoteKeyPrefManager.setNextRemoteKey(null)
-                    wordCacheDataSource.deleteAll()
+                    if (search.isEmpty()) {
+                        wordCacheDataSource.deleteAll()
+                    } else {
+                        wordCacheDataSource.deleteAllExceptTop(10)
+                    }
                 }
 
                 resource.data?.let {

@@ -36,4 +36,8 @@ class WordCacheDataSourceImpl @Inject constructor(private val wordCacheService: 
     override suspend fun deleteAll(): Int {
         return wordCacheService.deleteAll()
     }
+
+    override suspend fun deleteAllExceptTop(n: Int): Int {
+        return wordCacheService.deleteAllExceptTop(n)
+    }
 }

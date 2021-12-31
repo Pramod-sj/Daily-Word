@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.Glide
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -55,15 +54,12 @@ import com.pramod.dailyword.framework.util.*
 import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
 import com.pramod.dailyword.framework.widget.BaseWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-@ExperimentalCoroutinesApi
-@ExperimentalPagingApi
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.activity_home) {
 
 

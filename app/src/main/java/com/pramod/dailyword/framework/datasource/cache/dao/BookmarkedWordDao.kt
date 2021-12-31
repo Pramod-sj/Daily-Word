@@ -55,8 +55,8 @@ interface BookmarkedWordDao {
         count: Int
     ): Flow<List<BookmarkedWordCE>?>
 
-    @Query("$query_get_all_word ORDER BY dateTimeInMillis DESC")
-    fun getWordsPagingSource(): PagingSource<Int, BookmarkedWordCE>
+    @Query("$query_get_all_word WHERE word LIKE '%' || :query || '%' ORDER BY dateTimeInMillis DESC")
+    fun getWordsPagingSource(query: String): PagingSource<Int, BookmarkedWordCE>
 
     @Query("$query_get_all_word ORDER BY dateTimeInMillis DESC")
     fun getWordsDataSource(): DataSource.Factory<Int, BookmarkedWordCE>

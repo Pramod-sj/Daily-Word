@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-@ExperimentalPagingApi
 @AndroidEntryPoint
 class WidgetDataLoadService : JobService() {
     private val TAG = WidgetDataLoadService::class.simpleName
@@ -35,6 +34,7 @@ class WidgetDataLoadService : JobService() {
     @Inject
     lateinit var wordCacheDataSource: WordCacheDataSource
 
+    @OptIn(ExperimentalPagingApi::class)
     @Inject
     lateinit var bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 
@@ -48,6 +48,7 @@ class WidgetDataLoadService : JobService() {
             baseContext.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun onStartJob(params: JobParameters?): Boolean {
         Log.i(TAG, "onStartJob: ")
         CoroutineScope(Dispatchers.Main).launch {

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
@@ -25,7 +24,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-@ExperimentalPagingApi
 @AndroidEntryPoint
 class FavoriteWordsActivity :
     BaseActivity<ActivityFavoriteWordsBinding, FavoriteWordsViewModel>(R.layout.activity_favorite_words) {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.paging.ExperimentalPagingApi
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -28,7 +27,6 @@ import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,7 +50,6 @@ class AppSettingActivity :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar(binding.toolbar, null, true)
@@ -88,9 +85,6 @@ class AppSettingActivity :
         }
     }
 
-
-    @ExperimentalCoroutinesApi
-    @OptIn(ExperimentalPagingApi::class)
     private fun handleUserCase() {
         viewModel.settingUseCase = object : SettingUseCase {
             override fun openChooseThemeDialog() {

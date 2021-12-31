@@ -1,8 +1,6 @@
 package com.pramod.dailyword.framework.ui.words
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.*
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordPagingInteractor
@@ -11,9 +9,8 @@ import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -21,8 +18,7 @@ import javax.inject.Inject
 const val PAGE_SIZE = 25
 
 @HiltViewModel
-class WordListViewModel @Inject
-constructor(
+class WordListViewModel @Inject constructor(
     private val getWordListInteractor: GetWordPagingInteractor,
     private var toggleBookmarkInteractor: ToggleBookmarkInteractor,
     fbRemoteConfig: FBRemoteConfig
@@ -32,42 +28,50 @@ constructor(
         val TAG = WordListViewModel::class.simpleName
     }
 
-    @ExperimentalPagingApi
-    val wordUIModelList: LiveData<PagingData<WordListUiModel>> =
-        getWordListInteractor.getWordList(
-            search = "",
-            pagingConfig = PagingConfig(
-                pageSize = PAGE_SIZE
-            )
-        ).map { pagingData ->
-            return@map pagingData
-                .map { word ->
-                    WordListUiModel.WordItem(0, word)
-                }
-                .insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
+    private val _searchQuery = MutableStateFlow("")
 
-                    if (wordItem == null) {
-                        // we're at the end of the list
-                        return@insertSeparators null
+    fun setSearchQuery(query: String) {
+        _searchQuery.tryEmit(query)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val wordUIModelList: Flow<PagingData<WordListUiModel>> =
+        _searchQuery.flatMapLatest { query ->
+            getWordListInteractor.getWordList(
+                search = query,
+                pagingConfig = PagingConfig(
+                    pageSize = PAGE_SIZE
+                )
+            ).map { pagingData ->
+                return@map pagingData
+                    .map { word ->
+                        WordListUiModel.WordItem(0, word)
                     }
+                    .insertSeparators { wordItem: WordListUiModel.WordItem?, wordItem2: WordListUiModel.WordItem? ->
 
-                    if (wordItem2 == null) {
-                        // we're at the beginning of the list
-                        return@insertSeparators null
+                        if (wordItem == null) {
+                            // we're at the end of the list
+                            return@insertSeparators null
+                        }
+
+                        if (wordItem2 == null) {
+                            // we're at the beginning of the list
+                            return@insertSeparators null
+                        }
+
+                        val daysElapsed = TimeUnit.DAYS.convert(
+                            wordItem2.word.dateTimeInMillis ?: -1,
+                            TimeUnit.MILLISECONDS
+                        )
+
+                        return@insertSeparators if (fbRemoteConfig.isAdsEnabled() && daysElapsed % 6 == 0L) {
+                            WordListUiModel.AdItem("")
+                        } else {
+                            null
+                        }
                     }
-
-                    val daysElapsed = TimeUnit.DAYS.convert(
-                        wordItem2.word.dateTimeInMillis ?: -1,
-                        TimeUnit.MILLISECONDS
-                    )
-
-                    return@insertSeparators if (fbRemoteConfig.isAdsEnabled() && daysElapsed % 6 == 0L) {
-                        WordListUiModel.AdItem("")
-                    } else {
-                        null
-                    }
-                }
-        }.cachedIn(viewModelScope).asLiveData(Dispatchers.IO)
+            }.cachedIn(viewModelScope)
+        }
 
 
     fun toggleBookmark(word: Word) {

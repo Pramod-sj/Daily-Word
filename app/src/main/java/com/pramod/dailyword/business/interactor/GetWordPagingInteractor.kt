@@ -1,6 +1,5 @@
 package com.pramod.dailyword.business.interactor
 
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
@@ -18,13 +17,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetWordPagingInteractor @ExperimentalPagingApi @Inject constructor(
+class GetWordPagingInteractor @Inject constructor(
     private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
     private val wordNetworkDataSource: WordNetworkDataSource,
     private val wordCacheDataSource: WordCacheDataSource,
     private val remoteKeyPrefManager: RemoteKeyPrefManager
 ) {
-    @ExperimentalPagingApi
+
     fun getWordList(search: String, pagingConfig: PagingConfig): Flow<PagingData<Word>> {
 
         return flow {

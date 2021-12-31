@@ -1,12 +1,5 @@
 package com.pramod.dailyword.di
 
-import android.util.Log
-import com.pramod.dailyword.framework.datasource.network.abstraction.IPNetworkService
-import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
-import com.pramod.dailyword.framework.datasource.network.impl.IPNetworkServiceImpl
-import com.pramod.dailyword.framework.datasource.network.impl.WordNetworkServiceImpl
-import com.pramod.dailyword.framework.datasource.network.mappers.IPInfoNEMapper
-import com.pramod.dailyword.framework.datasource.network.mappers.WordNEMapper
 import com.pramod.dailyword.framework.datasource.network.service.IPService
 import com.pramod.dailyword.framework.datasource.network.service.WordApiService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
@@ -30,10 +23,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        /*val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)*/
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
         return OkHttpClient.Builder()
-            /*.addInterceptor(interceptor)*/
+            .addInterceptor(interceptor)
             .build()
     }
 

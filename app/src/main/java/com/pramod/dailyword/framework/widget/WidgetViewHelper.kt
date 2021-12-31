@@ -6,14 +6,14 @@ import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.os.bundleOf
-import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.home.HomeActivity
 
 class WidgetViewHelper {
-    @ExperimentalPagingApi
+
     companion object {
 
         fun createWordOfTheDayWidget(context: Context, word: Word?): RemoteViews {
@@ -28,7 +28,7 @@ class WidgetViewHelper {
                 views.setTextViewText(R.id.widget_txtView_attribute, word.attribute)
                 views.setTextViewText(R.id.widget_txtView_pronounce, word.pronounce)
                 if (!word.meanings.isNullOrEmpty()) {
-                    views.setTextViewText(R.id.widget_txtView_meanings, word.meanings?.get(0))
+                    views.setTextViewText(R.id.widget_txtView_meanings, word.meanings.get(0))
                 }
                 views.setTextViewText(
                     R.id.widget_txtView_how_to_user_word,
@@ -37,7 +37,7 @@ class WidgetViewHelper {
                 if (!word.examples.isNullOrEmpty()) {
                     views.setTextViewText(
                         R.id.widget_txtView_how_to_user_word_desc,
-                        word.examples?.get(0)
+                        word.examples.get(0)
                     )
                 }
 
@@ -109,7 +109,7 @@ class WidgetViewHelper {
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_TRY_AGAIN_CLICK,
                 tryAgainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
 
@@ -122,7 +122,7 @@ class WidgetViewHelper {
                         bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 

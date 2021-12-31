@@ -16,4 +16,6 @@ interface WordCacheService {
     suspend fun delete(word: String): Int
 
     suspend fun deleteAll(): Int
+
+    suspend fun deleteAllExceptTop(n: Int): Int
 }

@@ -1,11 +1,9 @@
 package com.library.audioplayer
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -31,7 +29,6 @@ class FileDownloader {
         this.okHttpClient = okHttpBuilder.build()
     }
 
-    @ExperimentalCoroutinesApi
     fun download(url: String, dest: File): Flow<FileDownloadStatus> {
         return flow {
             try {

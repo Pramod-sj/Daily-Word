@@ -16,6 +16,7 @@ import com.pramod.dailyword.framework.transition.removeCallbacks
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
+import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,8 +40,41 @@ class RecapWordsActivity :
         binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
         binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
+        setWeeklyInfoText()
         initAdapter()
     }
+
+    private fun setWeeklyInfoText() {
+        viewModel.words.observe(this) { wordList ->
+            binding.tvWeeklyRecapInfo.text = if (!wordList.isNullOrEmpty()) {
+
+                val word1String = wordList.lastOrNull()?.let { word ->
+                    CalenderUtil.getDayName(
+                        word.dateTimeInMillis ?: 0L
+                    ) + " (" + CalenderUtil.convertCalenderToString(
+                        word.dateTimeInMillis ?: 0L,
+                        CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
+                    ) + ")"
+                }
+
+                val word2String = wordList.firstOrNull()?.let { word ->
+                    CalenderUtil.getDayName(
+                        word.dateTimeInMillis ?: 0L
+                    ) + " (" + CalenderUtil.convertCalenderToString(
+                        word.dateTimeInMillis ?: 0L,
+                        CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
+                    ) + ")"
+                }
+
+                String.format(
+                    resources.getString(R.string.weekly_recap_note_with_date_placeholder),
+                    word1String, word2String
+                )
+            } else
+                String.format(resources.getString(R.string.weekly_recap_note))
+        }
+    }
+
 
     private fun initAdapter() {
         val adapter = RecapWordAdapter { pos, word ->
