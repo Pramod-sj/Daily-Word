@@ -118,7 +118,8 @@
     <string name="card_transition_name">container</string>
     <string name="previous_words">Words</string>
     <string name="random_word">Random word</string>
-    <string name="weekly_recap_note">Revise your word knowledge, these list include words of current running week from Monday to Sunday.</string>
+    <string name="weekly_recap_note">Review the new words you learned this week! Here\'s the list from Monday – today, Sunday.</string>
+    <string name="weekly_recap_note_with_date_placeholder">Review the new words you learned this week! Here\'s the list from %s – today, %s.</string>
     <string name="value_continue">Continue</string>
     <string name="support_development">Hello My Dear User, \nThis project is solely handled by me along with my other works thus adding new features takes weeks or months. \nThis app is completely free, donating a small amount will encourage me to keep this project alive.</string>
     <string name="regards">Regards,</string>

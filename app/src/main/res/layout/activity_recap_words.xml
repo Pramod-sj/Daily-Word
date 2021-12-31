@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
-            android:overScrollMode="never"
             android:clipToPadding="false"
+            android:overScrollMode="never"
             android:paddingTop="?attr/actionBarSize"
             app:applyVerticalPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled()}">
 
@@ -55,13 +55,13 @@
                     app:cardElevation="@dimen/card_elevation_max">
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_weekly_recap_info"
                         style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/padding_large"
                         android:gravity="start|center_vertical"
                         android:padding="@dimen/padding_large"
-                        android:text="@string/weekly_recap_note"
                         android:textColor="?android:attr/windowBackground"
                         app:drawableStartCompat="@drawable/ic_info_outline_black_24dp"
                         app:drawableTint="?android:attr/windowBackground" />
