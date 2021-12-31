@@ -150,9 +150,6 @@ class WordListActivity :
         lifecycleScope.launch {
             adapter.loadStateFlow.map { it.refresh }.collectLatest {
                 binding.swipeToRefresh.isRefreshing = it == LoadState.Loading
-                if (it is LoadState.NotLoading) {
-                    binding.recyclerviewWords.scrollToPosition(0)
-                }
             }
         }
     }

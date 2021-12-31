@@ -409,11 +409,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     if (!autoStartPrefManager.isClickedOnSetting())
                         "Please enable auto start else notification feature won't work properly!"
                     else
-                        "It's look like you have went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                        "It's look like you have already went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
                     positiveText = "Setting",
                     positiveClickCallback = {
                         if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually :)"))
+                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually."))
                         }
                         autoStartPrefManager.clickedOnSetting()
                     },

@@ -99,7 +99,7 @@
     <string name="splash_screen_get_started">Get Started</string>
 
 
-    <string name="merriam_webster_credit_text">All the content/data of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content/data.</string>
+    <string name="merriam_webster_credit_text">All the content of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content.</string>
     <string name="favorite">Favorite</string>
     <string name="bookmark">bookmark</string>
     <string name="bookmarked_words">Bookmarks</string>
@@ -125,8 +125,8 @@
     <string name="regards">Regards,</string>
     <string name="developer_string">Developer</string>
 
-    <string name="no_favorite_title_placeholder">Nothing bookmarked yet!</string>
-    <string name="no_favorite_text_placeholder">Hey it looks like you don\'t have any bookmarks yet</string>
+    <string name="no_favorite_title_placeholder">No bookmarks!</string>
+    <string name="no_favorite_text_placeholder">Hey it looks like you don\'t have any bookmarks</string>
 
 
     <string name="no_recap_title_placeholder">No words for quick recap!</string>

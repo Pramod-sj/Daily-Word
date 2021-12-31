@@ -87,7 +87,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="true"
                             app:subTitle="Animate when switching from one window to another"
-                            app:title="Window Animation (Beta)"
+                            app:title="Window animation (Beta)"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -106,7 +106,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="true"
                             app:subTitle="Immersive mode"
-                            app:title="Full Screen (Edge to Edge)"
+                            app:title="Full screen (Edge to Edge)"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -148,7 +148,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="true"
                             app:subTitle="Badges are shown on newly added words &amp; bookmarks"
-                            app:title="Hide Badge"
+                            app:title="Hide badge"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -189,7 +189,7 @@
                             app:checked="@{appSettingViewModel.notificationPrefManager.dailyWordNotificationEnabledLiveData}"
                             app:showRadioButton="true"
                             app:subTitle="Receive notification when word of the day is available"
-                            app:title="Daily Word Notification"
+                            app:title="Daily word notification"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -266,7 +266,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="false"
                             app:subTitle="Not receiving notifications, fix it yourself"
-                            app:title="Facing Notification Issue?"
+                            app:title="Facing notification issue?"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -284,7 +284,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="false"
                             app:subTitle="You'll loose your bookmarks and viewed data information"
-                            app:title="Clear App Data"
+                            app:title="Clear app data"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
