@@ -9,14 +9,17 @@ import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
+import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -38,6 +41,9 @@ class WordListActivity :
     override val viewModel: WordListViewModel by viewModels()
 
     override val bindingVariable: Int = BR.wordListViewModel
+
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
     lateinit var windowAnimPrefManager: WindowAnimPrefManager
@@ -108,12 +114,26 @@ class WordListActivity :
     private val loadStateListener = { states: CombinedLoadStates ->
         if (searchView?.query.toString().isNotBlank()) {
             if (adapter.snapshot().size == 0) {
+                binding.inclPlaceholder.placeHolderTitle =
+                    String.format(
+                        resources.getString(R.string.no_search_result_placeholder),
+                        searchView?.query.toString()
+                    )
                 binding.inclPlaceholder.placeHolderText =
-                    "No result found for '${searchView?.query.toString()}'"
+                    resources.getString(R.string.no_search_result_search_on_web)
                 binding.inclPlaceholder.show = true
+                binding.inclPlaceholder.root.setOnClickListener {
+                    firebaseAnalytics.logEvent(
+                        "not_found_word_search", bundleOf(
+                            "word" to searchView?.query.toString()
+                        )
+                    )
+                    openWebsite(resources.getString(R.string.google_search_url) + searchView?.query.toString())
+                }
                 binding.inclPlaceholder.executePendingBindings()
             } else {
                 binding.inclPlaceholder.show = false
+                binding.inclPlaceholder.root.setOnClickListener {}
                 binding.inclPlaceholder.executePendingBindings()
             }
         } else {
@@ -155,7 +175,7 @@ class WordListActivity :
         searchView = searchMenuItem?.actionView as? SearchView
         searchView?.let { search ->
             search.maxWidth = Integer.MAX_VALUE
-            search.queryHint = "Search by word"
+            search.queryHint = resources.getString(R.string.search_hint)
             search.setOnCloseListener {
                 binding.toolbar.contentInsetStartWithNavigation = contentInsetStartWithNavigation
                 false
