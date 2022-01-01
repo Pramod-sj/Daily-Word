@@ -1,10 +1,11 @@
 [
   {
-    "version": "2.2.0",
-    "release_name": "\uD83C\uDF8A\uD83C\uDF89 Happy 2022 update \uD83C\uDF8A\uD83C\uDF89",
-    "date": "31 Dec 2021",
+    "version": "2.2.1",
+    "release_name": "\uD83C\uDF8A Happy 2022 update \uD83C\uDF8A",
+    "date": "01 Jan 2022",
     "changes": [
       "Added word searching feature",
+      "Added Other word section (Adj, noun, or verb)",
       "Fixed bookmark crash",
       "Updated libs"
     ]
