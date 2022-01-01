@@ -10,7 +10,6 @@ import android.text.SpannableString
 import android.util.Log
 import android.util.Pair
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -24,6 +23,7 @@ import com.google.android.play.core.install.model.ActivityResult
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -108,6 +108,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         transparentNavBar = true
         super.onCreate(savedInstanceState)
         supportPostponeEnterTransition()
+        checkForUpdate()
         loadBackgroundImage()
         initToolbar()
         initAppUpdate()
@@ -146,6 +147,40 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onResume() {
         super.onResume()
         pastWordAdapter.setCanStartActivity(true)
+        appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfo ->
+            if (appUpdateInfo.isSuccessful) {
+                when (appUpdateInfo.result.updateAvailability()) {
+                    UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
+                        fbRemoteConfig.getLatestReleaseNote()?.let { releaseNote ->
+                            if (releaseNote.isForceUpdate) {
+                                appUpdateManager.safeStartUpdateFlowForResult(
+                                    appUpdateInfo = appUpdateInfo.result,
+                                    appUpdateType = AppUpdateType.IMMEDIATE,
+                                    activity = this@HomeActivity,
+                                    requestCode = Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE
+                                ) { e ->
+                                    viewModel.setMessage(
+                                        Message.ToastMessage(
+                                            "Something went wrong during update process: reason:${e.message}"
+                                        )
+                                    )
+                                    finishAffinity()
+                                }
+                            }
+                        }
+                    }
+                    UpdateAvailability.UNKNOWN -> {
+
+                    }
+                    UpdateAvailability.UPDATE_AVAILABLE -> {
+
+                    }
+                    UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
+
+                    }
+                }
+            }
+        }
     }
 
     private fun loadBackgroundImage() {
@@ -305,7 +340,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     )
                     addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
         )
         notificationHelper.showNotification(
@@ -385,19 +420,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun initAppUpdate() {
-        checkForUpdate()
-
-        binding.btnUpdateBtn?.setOnClickListener {
-            when ((it as TextView).text.toString()) {
-                "Install" -> {
-                    appUpdateManager.completeUpdate()
-                }
-                "Update" -> {
-                    checkForUpdate()
-                }
+        binding.btnUpdateBtn.setOnClickListener {
+            lifecycleScope.launch {
+                if (appUpdateManager.requestAppUpdateInfo()
+                        .installStatus() == InstallStatus.DOWNLOADED
+                ) appUpdateManager.completeUpdate()
+                else checkForUpdate()
             }
         }
-
     }
 
     private fun promptAutoStart() {
@@ -517,137 +547,132 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun checkForUpdate() {
-
         appUpdateManager.registerListener(installStateUpdatedListener)
-
-        appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
-            if (appUpdateInfoTask.isSuccessful) {
-
-                val result = appUpdateInfoTask.result
-
-                if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-
-                    val releaseNote = fbRemoteConfig.getLatestReleaseNote()
-
-                    if (releaseNote == null) {
-                        //release note will be empty when update is available
-                        //but latest release note is not updated on firebase remote config
-                        viewModel.setAppUpdateModel(null)
-                        appUpdateManager.safeStartUpdateFlowForResult(
-                            result,
-                            AppUpdateType.FLEXIBLE,
-                            this,
-                            Constants.APP_UPDATE_FLEX_REQUEST_CODE
-                        ) { e ->
-                            viewModel.setMessage(
-                                Message.ToastMessage(
-                                    "Something went wrong while updating: reason:${e.message}"
+        appUpdateManager.appUpdateInfo.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+                if (releaseNote != null) {
+                    when (task.result.updateAvailability()) {
+                        UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
+                            if (task.result.installStatus() == InstallStatus.DOWNLOADED) {
+                                viewModel.setAppUpdateMessage(
+                                    buildUpdateAvailableToInstallSpannableString(releaseNote)
                                 )
-                            )
-
+                                viewModel.setAppUpdateButtonText("Install")
+                                viewModel.setAppUpdateDownloadProgress(100)
+                            }
                         }
-                        return@addOnCompleteListener
+                        UpdateAvailability.UNKNOWN -> {}
+                        UpdateAvailability.UPDATE_AVAILABLE -> {
+                            viewModel.setAppUpdateMessage(
+                                buildUpdateAvailableToDownloadSpannableString(releaseNote)
+                            )
+                            viewModel.setAppUpdateDownloadProgress(0)
+                            viewModel.setAppUpdateButtonText("Update")
+                            if (releaseNote.isForceUpdate) {
+                                showBottomSheet(
+                                    title = "A new update version ${releaseNote.versionName} available!",
+                                    desc = formatListAsBulletList(releaseNote.changes),
+                                    cancellable = false,
+                                    positiveText = "Update",
+                                    positiveClickCallback = {
+                                        appUpdateManager.safeStartUpdateFlowForResult(
+                                            task.result,
+                                            AppUpdateType.IMMEDIATE,
+                                            this@HomeActivity,
+                                            Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE
+                                        ) { e ->
+                                            viewModel.setMessage(
+                                                Message.ToastMessage(
+                                                    "Something went wrong during update process: reason:${e.message}"
+                                                )
+                                            )
+                                            finishAffinity()
+                                        }
+
+                                    },
+                                    negativeText = "Close App",
+                                    negativeClickCallback = {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Sorry but you need to update app",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        finishAffinity()
+                                    },
+                                )
+                            } else {
+                                showBottomSheet(
+                                    title = "A new update version ${releaseNote.versionName} available!",
+                                    desc = formatListAsBulletList(releaseNote.changes),
+                                    cancellable = true,
+                                    positiveText = "Update",
+                                    positiveClickCallback = {
+                                        appUpdateManager.safeStartUpdateFlowForResult(
+                                            task.result,
+                                            AppUpdateType.FLEXIBLE,
+                                            this@HomeActivity,
+                                            Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                                        ) { e ->
+                                            viewModel.setMessage(
+                                                Message.ToastMessage(
+                                                    "Something went wrong during update process: reason:${e.message}"
+                                                )
+                                            )
+
+                                        }
+
+                                    },
+                                    negativeText = "May be later",
+                                )
+
+                            }
+                        }
+                        UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
+                            Log.i(TAG, "checkForUpdate: no update available")
+                        }
                     }
-
-                    viewModel.setAppUpdateMessage(
-                        if (result.installStatus() == InstallStatus.DOWNLOADED)
-                            buildUpdateAvailableToInstallSpannableString(releaseNote)
-                        else buildUpdateAvailableToDownloadSpannableString(releaseNote)
-                    )
-
-                    if (releaseNote.isForceUpdate) {
-
-                        showBottomSheet(
-                            title = "A new update version ${releaseNote.versionName} available!",
-                            desc = formatListAsBulletList(releaseNote.changes),
-                            cancellable = false,
-                            positiveText = "Update",
-                            positiveClickCallback = {
-                                appUpdateManager.safeStartUpdateFlowForResult(
-                                    result,
-                                    AppUpdateType.IMMEDIATE,
-                                    this,
-                                    Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE
-                                ) { e ->
-                                    viewModel.setMessage(
-                                        Message.ToastMessage(
-                                            "Something went wrong while updating: reason:${e.message}"
-                                        )
-                                    )
-                                    finishAffinity()
-                                }
-
-                            },
-                            negativeText = "Close App",
-                            negativeClickCallback = {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Sorry but you need to update app",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finishAffinity()
-                            },
-                        )
-
-                    } else {
-
-                        showBottomSheet(
-                            title = "A new update version ${releaseNote.versionName} available!",
-                            desc = formatListAsBulletList(releaseNote.changes),
-                            cancellable = true,
-                            positiveText = "Update",
-                            positiveClickCallback = {
-                                appUpdateManager.safeStartUpdateFlowForResult(
-                                    result,
-                                    AppUpdateType.FLEXIBLE,
-                                    this,
-                                    Constants.APP_UPDATE_FLEX_REQUEST_CODE
-                                ) { e ->
-                                    viewModel.setMessage(
-                                        Message.ToastMessage(
-                                            "Something went wrong while updating: reason:${e.message}"
-                                        )
-                                    )
-
-                                }
-
-                            },
-                            negativeText = "May be later",
-                        )
-
-                    }
-
                 } else {
-                    Log.i(TAG, "checkForUpdate: no update available")
+                    viewModel.setAppUpdateModel(null)
                 }
-
             } else {
-                viewModel.setMessage(Message.ToastMessage("Failed to check update:" + appUpdateInfoTask.exception?.message))
+                viewModel.setMessage(Message.ToastMessage("Failed to check update:" + task.exception?.message))
             }
+
         }
     }
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { installState ->
         when (installState.installStatus()) {
             InstallStatus.DOWNLOADED -> {
-                viewModel.setAppUpdateButtonText("Install")
+                Log.i(TAG, ": DOWNLOADED")
                 fbRemoteConfig.getLatestReleaseNote()?.let {
                     viewModel.setAppUpdateMessage(buildUpdateAvailableToInstallSpannableString(it))
+                    viewModel.setAppUpdateDownloadProgress(100)
+                    viewModel.setAppUpdateButtonText("Install")
                 }
             }
             InstallStatus.CANCELED -> {
+                Log.i(TAG, ": CANCELED")
+                viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
             }
             InstallStatus.DOWNLOADING -> {
-                viewModel.setAppUpdateButtonText("Downloading...")
-                viewModel.setAppUpdateDownloadProgress(((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt())
+                val downloadPercentage =
+                    ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt()
+                viewModel.setAppUpdateButtonText("$downloadPercentage%")
+                viewModel.setAppUpdateDownloadProgress(downloadPercentage)
             }
             InstallStatus.FAILED -> {
+                Log.i(TAG, ": FAILED")
+                viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
             }
             InstallStatus.INSTALLED -> {
+                Log.i(TAG, ": INSTALLED")
+                viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
                 Toast.makeText(
                     applicationContext,
@@ -656,20 +681,33 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 ).show()
             }
             InstallStatus.INSTALLING -> {
+                viewModel.setAppUpdateDownloadProgress(0)
+                Log.i(TAG, ": INSTALLING")
                 Toast.makeText(
                     applicationContext,
                     "Installation started!",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            InstallStatus.PENDING -> {
-
-            }
+            InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
+                viewModel.setAppUpdateDownloadProgress(0)
+                Log.i(TAG, ": REQUIRES_UI_INTENT")
                 //no need to implement
+                Toast.makeText(
+                    applicationContext,
+                    "UI Intent issue!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             InstallStatus.UNKNOWN -> {
-
+                viewModel.setAppUpdateDownloadProgress(0)
+                Log.i(TAG, ": UNKNOWN")
+                Toast.makeText(
+                    applicationContext,
+                    "Unknown issue!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

@@ -126,6 +126,7 @@
                 android:id="@+id/customToolbar"
                 layout="@layout/layout_custom_toolbar" />
 
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -161,10 +162,10 @@
 
                     <FrameLayout
                         android:layout_width="0dp"
-                        android:animateLayoutChanges="true"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_small"
-                        android:layout_weight="0.25">
+                        android:layout_weight="0.25"
+                        android:animateLayoutChanges="true">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_update_btn"
@@ -179,18 +180,20 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ProgressBar
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:id="@+id/progress_update_download"
-                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            style="@style/Widget.MaterialComponents.LinearProgressIndicator"
                             android:layout_width="match_parent"
-                            android:layout_height="27dp"
+                            android:layout_height="30dp"
                             android:layout_gravity="center_vertical"
-                            android:backgroundTint="@color/green_200"
                             android:indeterminate="false"
                             android:progress="@{mainViewModel.appUpdateModel.downloadPercentage}"
-                            android:progressDrawable="@drawable/drawable_horizontal_progress"
-                            android:progressTint="@color/green_200"
-                            app:isVisible="@{mainViewModel.appUpdateModel.downloadPercentage>0}" />
+                            app:indicatorColor="@color/progress_fg"
+                            app:indicatorDirectionLinear="startToEnd"
+                            app:isVisible="@{mainViewModel.appUpdateModel.downloadPercentage>0}"
+                            app:trackColor="@color/progress_bg"
+                            app:trackCornerRadius="3dp"
+                            app:trackThickness="30dp" />
 
 
                     </FrameLayout>

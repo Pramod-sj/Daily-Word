@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.common
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +45,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
                         Log.i(TAG, "setSnackBarObserver: snackbar message")
                     }
                     is Message.ToastMessage -> {
+                        Toast.makeText(this, it.message, it.duration).show()
                         Log.i(TAG, "setSnackBarObserver: toast message")
                     }
                     is Message.DialogMessage -> {

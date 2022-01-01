@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -58,6 +59,38 @@ class AppSettingActivity :
         initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
+        appUpdateManager.registerListener(installStateUpdatedListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
+            if (appUpdateInfoTask.isSuccessful) {
+                when (appUpdateInfoTask.result.updateAvailability()) {
+                    UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
+                        if (appUpdateInfoTask.result.installStatus() == InstallStatus.DOWNLOADED) {
+                            viewModel.subTitleCheckForUpdate.value =
+                                AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
+                        }
+                    }
+                    UpdateAvailability.UPDATE_AVAILABLE -> {
+                        viewModel.subTitleCheckForUpdate.value =
+                            AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                    }
+                    UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
+                        viewModel.subTitleCheckForUpdate.value =
+                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                    }
+                    UpdateAvailability.UNKNOWN -> {
+                        viewModel.subTitleCheckForUpdate.value =
+                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                    }
+                }
+            } else {
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+            }
+        }
     }
 
     private fun initThemeValue() {
@@ -128,79 +161,76 @@ class AppSettingActivity :
 
                 viewModel.subTitleCheckForUpdate.value = "Checking for the update..."
 
-                appUpdateManager.registerListener(installStateUpdatedListener)
-
                 appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
+
                     if (appUpdateInfoTask.isSuccessful) {
+                        when (appUpdateInfoTask.result.updateAvailability()) {
+                            UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
+                                viewModel.subTitleCheckForUpdate.value = "Update in process..."
 
-                        val result = appUpdateInfoTask.result
-
-                        if (result.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-
-                            val releaseNote = fbRemoteConfig.getLatestReleaseNote()
-
-                            if (releaseNote == null) {
-                                //release note will be empty when update is available
-                                //but latest release note is not updated on firebase remote config
-                                appUpdateManager.safeStartUpdateFlowForResult(
-                                    result,
-                                    AppUpdateType.FLEXIBLE,
-                                    this@AppSettingActivity,
-                                    Constants.APP_UPDATE_FLEX_REQUEST_CODE
-                                ) { e ->
-                                    viewModel.setMessage(
-                                        Message.ToastMessage(
-                                            "Something went wrong while updating: reason:${e.message}"
-                                        )
-                                    )
-
-                                }
-                                return@addOnCompleteListener
-                            }
-
-                            viewModel.subTitleCheckForUpdate.value =
-                                if (result.installStatus() == InstallStatus.DOWNLOADED) {
-                                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
-                                } else AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
-
-                            showBottomSheet(
-                                title = "A new update version ${releaseNote.versionName} available!",
-                                desc = CommonUtils.formatListAsBulletList(releaseNote.changes),
-                                cancellable = true,
-                                positiveText = "Update",
-                                positiveClickCallback = {
+                                if (appUpdateInfoTask.result.installStatus() == InstallStatus.DOWNLOADED) {
+                                    appUpdateManager.completeUpdate()
+                                } else {
                                     appUpdateManager.safeStartUpdateFlowForResult(
-                                        result,
+                                        appUpdateInfoTask.result,
                                         AppUpdateType.FLEXIBLE,
                                         this@AppSettingActivity,
                                         Constants.APP_UPDATE_FLEX_REQUEST_CODE
                                     ) { e ->
                                         viewModel.setMessage(
                                             Message.ToastMessage(
-                                                "Something went wrong while updating: reason:${e.message}"
+                                                "Something went wrong during update process: reason:${e.message}"
                                             )
                                         )
 
                                     }
+                                }
+                            }
+                            UpdateAvailability.UPDATE_AVAILABLE -> {
+                                viewModel.subTitleCheckForUpdate.value =
+                                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                                val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+                                releaseNote?.let {
+                                    showBottomSheet(
+                                        title = "A new update version ${releaseNote.versionName} available!",
+                                        desc = CommonUtils.formatListAsBulletList(releaseNote.changes),
+                                        cancellable = true,
+                                        positiveText = "Update",
+                                        positiveClickCallback = {
+                                            appUpdateManager.safeStartUpdateFlowForResult(
+                                                appUpdateInfoTask.result,
+                                                AppUpdateType.FLEXIBLE,
+                                                this@AppSettingActivity,
+                                                Constants.APP_UPDATE_FLEX_REQUEST_CODE
+                                            ) { e ->
+                                                viewModel.setMessage(
+                                                    Message.ToastMessage(
+                                                        "Something went wrong during update process: reason:${e.message}"
+                                                    )
+                                                )
 
-                                },
-                                negativeText = "May be later",
-                            )
+                                            }
 
-                        } else {
-                            viewModel.subTitleCheckForUpdate.value =
-                                AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                                        },
+                                        negativeText = "May be later",
+                                    )
+                                }
+                            }
+                            UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
+                                viewModel.subTitleCheckForUpdate.value =
+                                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                            }
+                            UpdateAvailability.UNKNOWN -> {
+                                viewModel.subTitleCheckForUpdate.value =
+                                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                            }
                         }
-
                     } else {
-
                         viewModel.subTitleCheckForUpdate.value =
                             AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
-
                         viewModel.setMessage(Message.ToastMessage("Failed to check update:" + appUpdateInfoTask.exception?.message))
                     }
                 }
-
             }
 
             override fun navigateToAbout() {
@@ -265,16 +295,31 @@ class AppSettingActivity :
                 viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
             }
             InstallStatus.INSTALLING -> {
-
+                Toast.makeText(
+                    applicationContext,
+                    "Installation started!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            InstallStatus.PENDING -> {
-
-            }
+            InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
                 //no need to implement
+                Toast.makeText(
+                    applicationContext,
+                    "UI Intent issue!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             InstallStatus.UNKNOWN -> {
-
+                viewModel.subTitleCheckForUpdate.value =
+                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                Toast.makeText(
+                    applicationContext,
+                    "Unknown issue!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

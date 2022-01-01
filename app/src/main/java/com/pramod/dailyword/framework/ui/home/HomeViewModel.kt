@@ -133,18 +133,18 @@ class HomeViewModel @Inject constructor(
     fun setAppUpdateMessage(message: SpannableString) {
         val current = appUpdateModel.value
         this.appUpdateModel.value =
-            AppUpdateModel(message, current?.downloadPercentage ?: 0)
+            current?.copy(message = message) ?: AppUpdateModel(message = message)
     }
 
     fun setAppUpdateDownloadProgress(downloadProgress: Int) {
         val current = appUpdateModel.value
-        appUpdateModel.value = AppUpdateModel(current?.message, downloadProgress)
+        appUpdateModel.value =
+            current?.copy(downloadPercentage = downloadProgress)
     }
 
     fun setAppUpdateButtonText(buttonText: String) {
         val current = appUpdateModel.value
-        appUpdateModel.value =
-            AppUpdateModel(current?.message, current?.downloadPercentage ?: 0, buttonText)
+        appUpdateModel.value = current?.copy(buttonText = buttonText)
     }
 
 }
