@@ -152,7 +152,7 @@ dependencies {
     implementation 'com.facebook.android:audience-network-sdk:6.3.0'
 
     //AutoStarter lib
-    implementation 'com.github.judemanutd:autostarter:1.0.8'
+    implementation 'com.github.judemanutd:autostarter:1.1.0'
 
     //lottie
     implementation 'com.airbnb.android:lottie:3.4.1'
