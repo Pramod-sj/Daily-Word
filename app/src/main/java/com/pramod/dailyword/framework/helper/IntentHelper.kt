@@ -48,12 +48,12 @@ fun Context.openWebsite(url: String) {
         this,
         R.anim.slide_in_right,
         R.anim.slide_out_left
-    );
+    )
     builder.setExitAnimations(
         this,
         android.R.anim.slide_in_left,
         android.R.anim.slide_out_right
-    );
+    )
     val customTabsIntent = builder.build()
     try {
         customTabsIntent.launchUrl(this, Uri.parse(url))

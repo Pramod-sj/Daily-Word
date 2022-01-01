@@ -91,7 +91,7 @@ class WebViewDialogFragment :
     companion object {
         val TAG = WebViewDialogFragment::class.java.simpleName
         private const val EXTRA_DIALOG_TITLE = "title"
-        private const val EXTRA_WEB_PAGE_URL = "url";
+        private const val EXTRA_WEB_PAGE_URL = "url"
 
         fun show(title: String, url: String, fragmentManager: FragmentManager) {
             val dialog = WebViewDialogFragment()

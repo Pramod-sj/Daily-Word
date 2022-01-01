@@ -18,7 +18,7 @@ fun isCountryCodeSupported(code: String): Boolean {
         .contains(
             LookupEnum.lookUp(
                 SupportedFBTopicCounties::class.java,
-                code.toUpperCase(Locale.US)
+                code.uppercase(Locale.US)
             )
         )
 }

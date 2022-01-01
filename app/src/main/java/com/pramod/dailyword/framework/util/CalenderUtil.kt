@@ -32,7 +32,7 @@ class CalenderUtil {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.MINUTE, 0)
                 calendar.set(Calendar.SECOND, 0)
-                calendar.set(Calendar.MILLISECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0)
             }
             return calendar
         }
@@ -76,7 +76,7 @@ class CalenderUtil {
         @JvmStatic
         fun convertStringToCalender(dateString: String?, dateFormat: String): Calendar? {
             if (dateString == null) {
-                return null;
+                return null
             }
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             val date = simpleDateFormat.parse(dateString)
@@ -95,7 +95,7 @@ class CalenderUtil {
             requiredDateFormat: String = DATE_FORMAT_DISPLAY
         ): String? {
             if (dateString == null) {
-                return null;
+                return null
             }
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
             val date = simpleDateFormat.parse(dateString)
@@ -109,7 +109,7 @@ class CalenderUtil {
         @JvmStatic
         fun isYesterday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
             if (dateString == null) {
-                return false;
+                return false
             }
             val cal: Calendar = Calendar.getInstance(Locale.US)
             cal.roll(Calendar.DATE, false)
@@ -119,7 +119,7 @@ class CalenderUtil {
         @JvmStatic
         fun isToday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
             if (dateString == null) {
-                return false;
+                return false
             }
             val cal: Calendar = Calendar.getInstance(Locale.US)
             return convertCalenderToString(cal, dateFormat) == dateString
@@ -160,7 +160,7 @@ class CalenderUtil {
         @JvmStatic
         fun getDayFromDateString(date: String?, format: String): String? {
             if (date == null) {
-                return null;
+                return null
             }
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {

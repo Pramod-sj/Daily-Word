@@ -29,7 +29,7 @@ class BookmarkedWordsAdapter(
             binding.hideBadge = hideBadges
             binding.root.setOnClickListener {
                 if (canStartActivity) {
-                    canStartActivity = false;
+                    canStartActivity = false
                     itemClickCallback?.invoke(bindingAdapterPosition, word)
                 }
             }

@@ -22,7 +22,7 @@ sealed class WordListUiModel {
          * @return word color
          */
         fun getWordColor(context: Context): Int {
-            val isDarkMode = ThemeManager.isNightModeActive(context);
+            val isDarkMode = ThemeManager.isNightModeActive(context)
             val wordColorResId = if (isDarkMode) word.wordDesaturatedColor else word.wordColor
             if (wordColorResId != -1) {
                 return CommonUtils.getColor(context, wordColorResId)

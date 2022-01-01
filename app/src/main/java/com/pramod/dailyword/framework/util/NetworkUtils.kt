@@ -29,7 +29,7 @@ class NetworkUtils {
                         }
                     }
                 } else {
-                    return false;
+                    return false
                 }
             } else {
                 val activeNetworkInfo = connectivityManager.activeNetworkInfo

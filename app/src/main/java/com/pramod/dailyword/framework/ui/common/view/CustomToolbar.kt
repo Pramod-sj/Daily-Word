@@ -32,9 +32,7 @@ class CustomToolbar : FrameLayout {
         context,
         attrs,
         defStyleAttr
-    ) {
-
-    }
+    )
 
     fun applyTitlePosition() {
 

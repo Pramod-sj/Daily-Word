@@ -37,7 +37,7 @@ class WordsAdapter(
         init {
             binding.itemWordListCardView.setOnClickListener {
                 if (canStartActivity) {
-                    canStartActivity = false;
+                    canStartActivity = false
                     itemClickCallback?.invoke(
                         bindingAdapterPosition,
                         (getItem(bindingAdapterPosition) as WordListUiModel.WordItem).word

@@ -33,7 +33,7 @@ abstract class RightDrawableOnTouchListener(view: TextView) : View.OnTouchListen
      * @param keyword
      */
     init {
-        val drawables: Array<Drawable> = view.getCompoundDrawables()
+        val drawables: Array<Drawable> = view.compoundDrawables
         if (drawables.size == 4) drawable = drawables[2]
     }
 }

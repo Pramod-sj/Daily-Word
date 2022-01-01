@@ -13,9 +13,7 @@ class ChangelogAdapter(private val changesList: List<Changes>?) :
 
 
     class ChangelogViewHolder(val binding: ItemChangeLogLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-    }
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChangelogViewHolder {
         val binding: ItemChangeLogLayoutBinding = DataBindingUtil.inflate(

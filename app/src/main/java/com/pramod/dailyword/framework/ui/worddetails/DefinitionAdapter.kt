@@ -14,8 +14,8 @@ class DefinitionAdapter(
 ) : ListAdapter<String, DefinitionAdapter.DefinationViewHolder>(StringComparator) {
 
     fun setColors(colorResId: Int?, desaturatedColorResId: Int?) {
-        this.colorResId = colorResId;
-        this.desaturatedColorResId = desaturatedColorResId;
+        this.colorResId = colorResId
+        this.desaturatedColorResId = desaturatedColorResId
     }
 
 

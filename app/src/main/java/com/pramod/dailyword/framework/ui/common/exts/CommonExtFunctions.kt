@@ -1,4 +1,4 @@
-package com.pramod.dailyword.framework.ui.common.exts;
+package com.pramod.dailyword.framework.ui.common.exts
 
 import android.text.Selection
 import android.text.Spannable
