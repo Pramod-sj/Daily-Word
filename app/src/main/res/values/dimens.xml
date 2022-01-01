@@ -14,20 +14,14 @@
     <dimen name="text_sub_title">15sp</dimen>
 
     <dimen name="text_h1">40sp</dimen>
-    <dimen name="text_h2">35sp</dimen>
     <dimen name="text_h3">30sp</dimen>
-    <dimen name="text_h4">25sp</dimen>
     <dimen name="text_h5">20sp</dimen>
 
-    <dimen name="text_large">20sp</dimen>
-    <dimen name="text_medium">16sp</dimen>
     <dimen name="text_small">13sp</dimen>
     <dimen name="text_tiny">11sp</dimen>
 
 
     <!-- Button Style -->
-    <dimen name="button_radius">30dp</dimen>
-    <dimen name="button_height">60dp</dimen>
 
     <!--Card Style-->
     <dimen name="dialog_corner_radius">12dp</dimen>
@@ -37,14 +31,8 @@
     <dimen name="card_radius">5dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
 
-    <dimen name="card_elevation_min">2dp</dimen>
-    <dimen name="card_no_elevation">0dp</dimen>
     <!--icon size-->
     <dimen name="icon_size">24dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-
-    <dimen name="splash_icon_big">230dp</dimen>
-    <dimen name="splash_icon_normal">130dp</dimen>
 
     <dimen name="its_icon_padding">8dp</dimen>
 
@@ -52,10 +40,6 @@
     <!-- Appbar alpha -->
     <item name="appbar_alpha" format="float" type="dimen">0.95</item>
     <!--end-->
-
-
-    <dimen name="padding_word_list_right">60dp</dimen>
-    <dimen name="padding_no">0dp</dimen>
 
 
     <dimen name="card_elevation_word_details">1dp</dimen>

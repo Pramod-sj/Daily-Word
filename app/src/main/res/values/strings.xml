@@ -4,28 +4,15 @@
     <string name="network_state_btn_retry">Retry</string>
 
 
-    <string name="custom_crash_send_logs">Send logs</string>
-    <string name="custom_crash_clear_app_data">clear app data</string>
-    <string name="custom_crash_restart_app">restart app</string>
     <string name="title_activity_about_app">AboutAppActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_settings">Settings</string>
     <string name="title_about">About</string>
     <string name="app_tag_line">Learn a new word every day</string>
     <string name="dev_name">Pramod S. Jantwal</string>
     <string name="dev_email">pramodsinghjantwal@gmail.com</string>
-    <string name="dev_git_profile">https://avatars.githubusercontent.com/u/21077584?s=460&amp;u=d3a2811a9c999eadb2e53237f034a8ff99267c5a&amp;v=4</string>
     <string name="about_app_others">Others</string>
-    <string name="menu_more">More</string>
-    <string name="menu_settings">Settings</string>
-    <string name="dev_info">Android Developer</string>
 
 
     <string-array name="theme_options">
@@ -48,9 +35,7 @@
     <string name="made_in">Made with \u2764 in India</string>
 
     <!--unicode-->
-    <string name="unicode_rupee_symbol">\u20B9</string>
     <string name="unicode_bullet">\u2022</string>
-    <string name="unicode_heart">\u2764</string>
     <!--end-->
 
     <string name="title_donate">Support Development</string>
@@ -58,8 +43,6 @@
 
     <string name="share_text">Start learning new word every day \nClick below link to download</string>
     <string name="google_app_url">https://play.google.com/store/apps/details?id=com.pramod.dailyword</string>
-    <string name="rating_title">Liked Daily Word?</string>
-    <string name="rating_message">If you liked my app, please take a moment to rate it on Google play store.</string>
     <string name="go_to_merriam_webster">Go to Merriam-Webster</string>
 
 
@@ -100,7 +83,6 @@
 
 
     <string name="merriam_webster_credit_text">All the content of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content.</string>
-    <string name="favorite">Favorite</string>
     <string name="bookmark">bookmark</string>
     <string name="bookmarked_words">Bookmarks</string>
     <string name="what_s_new">What\'s new?</string>
@@ -112,18 +94,14 @@
     <string name="quick_recap">Weekly Recap</string>
     <string name="synonyms">Synonyms</string>
     <string name="antonyms">Antonyms</string>
-    <string name="thesaurus">Thesaurus</string>
     <string name="other_words">Other words</string>
 
-    <string name="card_transition_name">container</string>
     <string name="previous_words">Words</string>
     <string name="random_word">Random word</string>
     <string name="weekly_recap_note">Review the new words you learned this week! Here\'s the list from Monday – today, Sunday.</string>
     <string name="weekly_recap_note_with_date_placeholder">Review the new words you learned this week! Here\'s the list from %s – today, %s.</string>
-    <string name="value_continue">Continue</string>
     <string name="support_development">Hello My Dear User, \nThis project is solely handled by me along with my other works thus adding new features takes weeks or months. \nThis app is completely free, donating a small amount will encourage me to keep this project alive.</string>
     <string name="regards">Regards,</string>
-    <string name="developer_string">Developer</string>
 
     <string name="no_favorite_title_placeholder">No bookmarks!</string>
     <string name="no_favorite_text_placeholder">Hey it looks like you don\'t have any bookmarks</string>
@@ -141,7 +119,6 @@
     <string name="other_words_info">Other words are gathered from Merriam-Webster. Not all words shown through this app will have other words, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
 
     <string name="support_development_text">Support</string>
-    <string name="app_info_text">App Info</string>
     <string name="designed_amp_developed_by">Designed &amp; Developed by</string>
     <string name="custom_toolbar_navigation_button_desc">Navigation Button</string>
     <string name="custom_toolbar_option_menu_desc">Option Menu</string>

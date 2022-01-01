@@ -26,12 +26,6 @@
 
     </style>
 
-    <style name="AppTheme.Widget" parent="Theme.MaterialComponents.Light" />
-
-    <style name="AppTheme.HomeActivity" parent="AppTheme">
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-    </style>
-
     <style name="AppTheme.SplashScreenActivity" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
@@ -49,15 +43,6 @@
         <item name="cornerSize">@dimen/dialog_corner_radius</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 
     <style name="AppTheme.Header5TextStyle">
         <item name="android:textSize">@dimen/text_h5</item>
@@ -66,11 +51,6 @@
 
     <style name="AppTheme.Header5TextStyle.Bold" parent="AppTheme.Header5TextStyle">
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="AppTheme.Header4TextStyle">
-        <item name="android:textSize">@dimen/text_h4</item>
-        <item name="android:textColor">@color/textColor_highEmphasis</item>
     </style>
 
     <style name="AppTheme.Header3TextStyle">
@@ -84,21 +64,12 @@
     </style>
 
 
-    <style name="AppTheme.Header2TextStyle">
-        <item name="android:textSize">@dimen/text_h3</item>
-        <item name="android:textColor">@color/textColor_highEmphasis</item>
-    </style>
-
     <style name="AppTheme.Header1TextStyle">
         <item name="android:textSize">@dimen/text_h1</item>
         <item name="android:textColor">@color/textColor_highEmphasis</item>
     </style>
 
     <style name="AppTheme.Header1TextStyle.Bold" parent="AppTheme.Header1TextStyle">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="AppTheme.Header2TextStyle.Bold" parent="AppTheme.Header2TextStyle">
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -136,18 +107,6 @@
         <item name="android:textSize">@dimen/text_small</item>
     </style>
 
-    <style name="CollapsingToolbar.TextAppearance.Expanded" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/textColor_highEmphasis</item>
-        <item name="android:textStyle">bold</item>'
-        <item name="android:textSize">@dimen/text_h2</item>
-    </style>
-
-
-    <style name="CollapsingToolbar.TextAppearance.Collapse" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="android:textSize">@dimen/text_h5</item>
-        <item name="android:textColor">@color/textColor_highEmphasis</item>
-        <item name="android:textStyle">bold</item>
-    </style>
 
     <style name="ToolbarTitleTextStyle" parent="AppTheme.Header5TextStyle.Bold">
         <item name="android:textColor">@color/textColor_highEmphasis</item>
@@ -158,53 +117,6 @@
         <item name="android:backgroundTint">@color/colorPrimary</item>
     </style>
 
-
-    <style name="HomeToolbarCardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-    </style>
-
-    <style name="AppTheme.Dialog.PositiveButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="height">50dp</item>
-        <item name="android:height">50dp</item>
-        <item name="android:minHeight">50dp</item>
-        <item name="android:maxHeight">50dp</item>
-    </style>
-
-    <style name="AppTheme.Dialog.NegativeButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="height">50dp</item>
-        <item name="android:height">50dp</item>
-        <item name="android:minHeight">50dp</item>
-        <item name="android:maxHeight">50dp</item>
-    </style>
-
-    <style name="AppTheme.Dialog.NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="height">50dp</item>
-        <item name="android:height">50dp</item>
-        <item name="android:minHeight">50dp</item>
-        <item name="android:maxHeight">50dp</item>
-    </style>
-
-
-    <style name="AppTheme.VerticalAdCardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">@dimen/card_radius_max</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">@dimen/card_radius_max</item>
-    </style>
-
-
-    <style name="AppTheme.HomeWordCardBottomSheetShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerSizeTopRight">20dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
 
     <style name="AppTheme.BottomSheetDialog" parent="@style/Theme.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
@@ -217,20 +129,6 @@
     <style name="AppTheme.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
         <!--<item name="shapeAppearanceOverlay">@style/AppTheme.BottomSheetShape</item>-->
         <item name="backgroundTint">@color/bottomSheetDialogNavigationBarColor</item>
-    </style>
-
-    <style name="AppTheme.BottomSheetShape" parent="ShapeAppearance.MaterialComponents.LargeComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">10dp</item>
-        <item name="cornerSizeTopRight">10dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
-
-    <style name="AppTheme.Widget.NavigationView" parent="Widget.Design.NavigationView">
-        <item name="itemIconTint">?attr/colorNavigationItem</item>
-        <item name="itemTextColor">?attr/colorNavigationItem</item>
-        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
 
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
@@ -251,12 +149,6 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">15dp</item>
         <item name="cornerSizeTopRight">15dp</item>
-    </style>
-
-    <style name="HomeCardShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerSizeTopRight">20dp</item>
     </style>
 
     <style name="NavigationItemNoRipple">

@@ -4,19 +4,8 @@
     <color name="colorPrimaryDark">#202020</color>
     <color name="colorAccent">@color/green_400</color>
 
-    <color name="app_logo_tint">@color/white</color>
-
-    <color name="scrollBarColorPrimary">#40ce93d8</color>
-
-    <color name="app_theme_icon_tint">@color/green_200</color>
-    <color name="app_animation_icon_tint">@color/orange_200</color>
-    <color name="navigation_bar_icon_tint">@color/blue_200</color>
-    <color name="notification_icon_tint">@color/red_200</color>
-    <color name="about_icon_tint">@color/purple_200</color>
-
 
     <color name="app_icon_tint">@color/grey_extra_light</color>
-    <color name="ripple_tint">#904C4B4B</color>
 
 
     <!--Text Colors-->
@@ -26,11 +15,7 @@
 
     <color name="home_past_word_color">#282828</color>
 
-    <color name="scroll_thumb_color">#4DBB86FC</color>
-
     <color name="splash_wave_color">#303030</color>
-
-    <color name="home_appbar_color">#323232</color>
 
     <color name="bottomSheetDialogNavigationBarColor">#282828</color>
 
@@ -56,7 +41,6 @@
     <!-- end -->
 
     <!--colorSurface -->
-    <color name="colorSurface">#161616</color>
 
     <color name="setting_stroke">#302F2F</color>
     <color name="setting_background">#202020</color>
