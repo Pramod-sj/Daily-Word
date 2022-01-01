@@ -1,12 +1,12 @@
 package com.pramod.dailyword.framework.ui.common
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     private val layoutId: Int
@@ -42,14 +42,14 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
                 when (it) {
                     is Message.SnackBarMessage -> {
                         handleSnackBarMessage(it)
-                        Log.i(TAG, "setSnackBarObserver: snackbar message")
+                        Timber.i( "setSnackBarObserver: snackbar message")
                     }
                     is Message.ToastMessage -> {
                         Toast.makeText(this, it.message, it.duration).show()
-                        Log.i(TAG, "setSnackBarObserver: toast message")
+                        Timber.i( "setSnackBarObserver: toast message")
                     }
                     is Message.DialogMessage -> {
-                        Log.i(TAG, "setSnackBarObserver: dialog message")
+                        Timber.i( "setSnackBarObserver: dialog message")
                     }
                 }
             }

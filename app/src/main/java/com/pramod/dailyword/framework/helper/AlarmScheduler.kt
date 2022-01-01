@@ -5,13 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.AlarmManagerCompat
 import com.pramod.dailyword.framework.receiver.ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER
 import com.pramod.dailyword.framework.receiver.AlarmReceiver
 import com.pramod.dailyword.framework.ui.common.exts.isSunday
 import com.pramod.dailyword.framework.ui.common.exts.make12AMInstance
 import com.pramod.dailyword.framework.util.CalenderUtil
+import timber.log.Timber
 import java.util.*
 
 fun safeImmutableFlag(flag: Int): Int {
@@ -39,13 +39,13 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
         } else {
             val offset = 7 - (get(Calendar.DAY_OF_WEEK) - 1)
             add(Calendar.DATE, offset)
-            Log.i("TAG", "scheduleWeeklyAlarmAt12PM: $offset")
+            Timber.i( "scheduleWeeklyAlarmAt12PM: $offset")
         }
         make12AMInstance()
     }
 
-    Log.i(
-        "TAG",
+    Timber.i(
+
         "scheduleWeeklyAlarmAt12PM: next alarm to be scheduled: ${
             CalenderUtil.convertCalenderToString(
                 comingSunday12PMCal,
@@ -55,7 +55,7 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
     )
 
     if (!isAlarmSchedule(comingSunday12PMCal.timeInMillis.hashCode())) {
-        Log.i("TAG", "scheduleWeeklyAlarmAt12PM: scheduling 12 PM alarm")
+        Timber.i( "scheduleWeeklyAlarmAt12PM: scheduling 12 PM alarm")
         scheduleAlarm(
             timeInFuture = comingSunday12PMCal.timeInMillis,
             intent = Intent(
@@ -63,7 +63,7 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
             ).setAction(ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER)
         )
     } else {
-        Log.i("TAG", "scheduleWeeklyAlarmAt12PM: not scheduling")
+        Timber.i( "scheduleWeeklyAlarmAt12PM: not scheduling")
     }
 }
 

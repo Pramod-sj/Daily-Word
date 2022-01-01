@@ -1,5 +1,6 @@
 package com.pramod.dailyword.di
 
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.datasource.network.service.IPService
 import com.pramod.dailyword.framework.datasource.network.service.WordApiService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
@@ -23,11 +24,11 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
-        return OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
+        return OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+            }
+        }.build()
     }
 
     @JvmStatic

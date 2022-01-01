@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.firebase
 
 import android.content.Context
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
 import com.pramod.dailyword.framework.helper.CountryCodeFinder
@@ -11,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,12 +46,12 @@ class FBTopicSubscriber @Inject constructor(
 
                 val supportedCountryCode =
                     (if (countryCode != null && isCountryCodeSupported(countryCode)) {
-                        //if country code is supported then return country code
-                        countryCode
-                    } else {
-                        //else return OTHERS
-                        SupportedFBTopicCounties.OTHERS.name
-                    }).toUpperCase(Locale.US)
+                                        //if country code is supported then return country code
+                                        countryCode
+                                    } else {
+                                        //else return OTHERS
+                                        SupportedFBTopicCounties.OTHERS.name
+                                    }).uppercase(Locale.US)
 
                 //unsubscribe to all other countries if subscribed
 
@@ -60,17 +60,17 @@ class FBTopicSubscriber @Inject constructor(
                     supportedCountryCode
                 )) {
                     unsubscribeTopic(countryIsoEnum.name)
-                    Log.i(TAG, "unsubscribeToCountry: ${countryIsoEnum.name}")
+                    Timber.i( "unsubscribeToCountry: ${countryIsoEnum.name}")
                 }
 
                 //if country code is supported then
-                Log.i(TAG, "subscribeToCountry: $supportedCountryCode")
+                Timber.i( "subscribeToCountry: $supportedCountryCode")
                 subscribeTopic(supportedCountryCode)
 
                 prefManager.setCountryCode(supportedCountryCode)
 
             } catch (e: Exception) {
-                Log.i(TAG, "subscribeToCountry: ${e.message}")
+                Timber.i( "subscribeToCountry: ${e.message}")
             }
         }
 
@@ -90,13 +90,13 @@ class FBTopicSubscriber @Inject constructor(
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_DAILY_WORD_NOTIFICATION)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Log.i(TAG, "subscribeTopic: $topic :Success")
+                    Timber.i( "subscribeTopic: $topic :Success")
                     listener?.invoke(
                         "Successfully subscribed to $topic",
                         OperationStatus.SUCCESS
                     )
                 } else {
-                    Log.i(TAG, "subscribeTopic: $topic Failed ${it.exception.toString()}")
+                    Timber.i( "subscribeTopic: $topic Failed ${it.exception.toString()}")
                     listener?.invoke(
                         "Failed to subscribe from $topic. Reason:${it.exception?.message}",
                         OperationStatus.FAILED
@@ -112,14 +112,14 @@ class FBTopicSubscriber @Inject constructor(
         FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Log.i(TAG, "unsubscribeTopic: $topic : Success")
+                    Timber.i( "unsubscribeTopic: $topic : Success")
                     listener?.invoke(
                         "Successfully unsubscribed from $topic",
                         OperationStatus.SUCCESS
                     )
                 } else {
-                    Log.i(
-                        TAG,
+                    Timber.i(
+
                         "unsubscribeTopic: $topic : Failed ${it.exception.toString()}"
                     )
                     listener?.invoke(

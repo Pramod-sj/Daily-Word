@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.recap
 import android.app.ActivityOptions
 import android.os.Bundle
 import android.transition.Transition
-import android.util.Log
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -18,6 +17,7 @@ import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -83,7 +83,7 @@ class RecapWordsActivity :
             window.sharedElementExitTransition.addListener(object : TransitionCallback() {
                 override fun onTransitionEnd(transition: Transition) {
                     super.onTransitionEnd(transition)
-                    Log.i("TAG", "onTransitionEnd: ")
+                    Timber.i( "onTransitionEnd: ")
                     removeCallbacks(this)
                 }
             })

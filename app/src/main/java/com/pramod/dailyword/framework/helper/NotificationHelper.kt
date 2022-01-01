@@ -106,7 +106,7 @@ class NotificationHelper @Inject constructor(@ApplicationContext val context: Co
         if (NotificationPrefManager.newInstance(context).isNotificationEnabled()) {
             notificationManager.notify(notificationId, notification)
         } else {
-            Log.i(TAG, "Notification are disabled, enable it from settings")
+            Log.i( "Notification are disabled, enable it from settings")
         }
 */
         notificationManager.notify(notificationId, notification)

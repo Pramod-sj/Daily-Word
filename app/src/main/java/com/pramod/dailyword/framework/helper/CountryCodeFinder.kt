@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.helper
 
 import android.content.Context
-import android.util.Log
 import com.pramod.dailyword.business.data.network.abstraction.IPInfoNetworkDataSource
 import com.pramod.dailyword.business.domain.model.IPInfo
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -9,6 +8,7 @@ import com.pramod.dailyword.framework.util.NetworkUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,13 +25,13 @@ class CountryCodeFinder @Inject constructor(
                 try {
                     publicIP = ipInfoNetworkDataSource.getPublicIp()
                 } catch (e: Exception) {
-                    Log.i(TAG, "subscribeToCountry: $e")
+                    Timber.i( "subscribeToCountry: $e")
                 }
 
-                Log.i(TAG, "IP: ${publicIP}")
+                Timber.i( "IP: ${publicIP}")
 
                 val isVPNActive = NetworkUtils.isVPNActive(context)
-                Log.i(TAG, "subscribeToCountry: isVPNActive: $isVPNActive")
+                Timber.i( "subscribeToCountry: isVPNActive: $isVPNActive")
 
                 if (publicIP != null && !isVPNActive) {
                     try {

@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
@@ -20,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -93,7 +93,7 @@ class WordDetailedViewModel @Inject constructor(
                 it.data?.let { word ->
                     _word.value = word
 
-                    Log.i(TAG, ": isSeenStatusUpdated:" + isSeenStatusUpdated)
+                    Timber.i( ": isSeenStatusUpdated:" + isSeenStatusUpdated)
 
                     if (!isSeenStatusUpdated) {
                         viewModelScope.launch {
@@ -105,7 +105,7 @@ class WordDetailedViewModel @Inject constructor(
                             word.bookmarkedId?.let {
                                 markBookmarkedWordAsSeenInteractor.markAsSeen(word.word)
                                     .collectLatest {
-                                        Log.i(TAG, ": isSeenStatusUpdated" + Gson().toJson(it))
+                                        Timber.i( ": isSeenStatusUpdated" + Gson().toJson(it))
                                     }
                             }
 

@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.helper
 import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -18,6 +17,7 @@ import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -73,7 +73,7 @@ class AdsManager @Inject constructor(
             it.loadAd(it.buildLoadAdConfig().withAdListener(object : AbstractAdListener() {
                 override fun onAdLoaded(ad: Ad?) {
                     super.onAdLoaded(ad)
-                    Log.i(TAG, "Interstitial Ad Load")
+                    Timber.i( "Interstitial Ad Load")
                     if (it.isAdLoaded && !isInterstitialAdShown) {
                         it.show()
                         isInterstitialAdShown = true
@@ -82,18 +82,18 @@ class AdsManager @Inject constructor(
 
                 override fun onInterstitialDisplayed(ad: Ad?) {
                     super.onInterstitialDisplayed(ad)
-                    Log.i(TAG, "Interstitial Ad displayed")
+                    Timber.i( "Interstitial Ad displayed")
                 }
 
                 override fun onInterstitialDismissed(ad: Ad?) {
                     super.onInterstitialDismissed(ad)
-                    Log.i(TAG, "Interstitial Ad dismissed")
+                    Timber.i( "Interstitial Ad dismissed")
                     isInterstitialAdShown = false
                 }
 
                 override fun onError(ad: Ad?, error: AdError?) {
                     super.onError(ad, error)
-                    Log.i(TAG, "Interstitial Ad Error: ${error?.errorMessage}")
+                    Timber.i( "Interstitial Ad Error: ${error?.errorMessage}")
                 }
             }).build())
         }
@@ -112,23 +112,23 @@ class AdsManager @Inject constructor(
             it.loadAd(it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
                 override fun onAdClicked(p0: Ad?) {
 
-                    Log.i(TAG, "Native ad clicked")
+                    Timber.i( "Native ad clicked")
                 }
 
                 override fun onMediaDownloaded(p0: Ad?) {
-                    Log.i(TAG, "Native ad media downlaoded")
+                    Timber.i( "Native ad media downlaoded")
 
                 }
 
                 override fun onError(p0: Ad?, p1: AdError?) {
-                    Log.i(TAG, "Native ad Error: ${p1?.errorMessage}")
+                    Timber.i( "Native ad Error: ${p1?.errorMessage}")
                     adLoadedCallack?.invoke(p1?.errorMessage ?: "Error while loading adding")
                 }
 
                 override fun onAdLoaded(p0: Ad?) {
-                    Log.i(TAG, "Native ad loaded")
+                    Timber.i( "Native ad loaded")
                     if (p0 == null) {
-                        Log.i(TAG, "Native ad loaded is null")
+                        Timber.i( "Native ad loaded is null")
                         return
                     }
                     adLoadedCallack?.invoke(null)
@@ -141,14 +141,14 @@ class AdsManager @Inject constructor(
                 }
 
                 override fun onLoggingImpression(p0: Ad?) {
-                    Log.i(TAG, "Native ad logging impression")
+                    Timber.i( "Native ad logging impression")
 
                 }
 
             }).build())
         }
 
-        return true;
+        return true
     }
 
     private fun inflateBannerNativeView(
@@ -255,13 +255,13 @@ class AdsManager @Inject constructor(
             it.loadAd(
                 it.buildLoadAdConfig().withAdListener(object : NativeAdListener {
                     override fun onAdClicked(p0: Ad?) {
-                        Log.i(TAG, "Native Ad clicked")
+                        Timber.i( "Native Ad clicked")
                     }
 
                     override fun onMediaDownloaded(p0: Ad?) {
-                        Log.i(TAG, "Native Ad media downloaded")
+                        Timber.i( "Native Ad media downloaded")
                         if (p0 == null || p0 != it) {
-                            Log.i(TAG, "Native Ad media downloaded is null")
+                            Timber.i( "Native Ad media downloaded is null")
                             onAdFailureCallback?.invoke("Native Ad media downloaded is null")
                             return
                         }
@@ -270,14 +270,14 @@ class AdsManager @Inject constructor(
                     }
 
                     override fun onError(p0: Ad?, p1: AdError?) {
-                        Log.i(TAG, "Native Ad error ${p1.toString()}")
+                        Timber.i( "Native Ad error ${p1.toString()}")
                         onAdFailureCallback?.invoke(p1.toString())
                     }
 
                     override fun onAdLoaded(p0: Ad?) {
-                        Log.i(TAG, "Native Ad loaded")
+                        Timber.i( "Native Ad loaded")
                         if (p0 == null || p0 != it) {
-                            Log.i(TAG, "Native Ad media loaded is null")
+                            Timber.i( "Native Ad media loaded is null")
                             onAdFailureCallback?.invoke("Native Ad media loaded is null")
                             return
                         }
@@ -285,14 +285,13 @@ class AdsManager @Inject constructor(
                     }
 
                     override fun onLoggingImpression(p0: Ad?) {
-                        Log.i(TAG, "Native Ad logging impression")
+                        Timber.i( "Native Ad logging impression")
                     }
 
-                })
-                    .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL).build()
+                }).withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL).build()
             )
         }
-        return true;
+        return true
     }
 
     private fun inflateNativeAdDialogView(
@@ -342,8 +341,8 @@ class AdsManager @Inject constructor(
         closeClickCallback: (() -> Unit)? = null
     ) {
         if (getAdActivityCount() % 8 != 0) {
-            Log.i(
-                TAG,
+            Timber.i(
+
                 "Show Ad dialog condition doesn't matches ${getAdActivityCount()}"
             )
             return
@@ -404,7 +403,7 @@ class AdBindingAdaper {
             verticalAd: Boolean = false
         ) {
             if (showNativeAd) {
-                Log.i("TAG", "showNativeAd: " + nativeAdLayout.getTag(R.id.isLoadingAd))
+                Timber.i( "showNativeAd: " + nativeAdLayout.getTag(R.id.isLoadingAd))
                 val isCalled =
                     nativeAdLayout.getTag(R.id.isLoadingAd) == "${nativeAdLayout.id}_showNativeAd_called"
                 if (!isCalled) {

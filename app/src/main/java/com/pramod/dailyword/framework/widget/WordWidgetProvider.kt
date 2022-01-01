@@ -2,9 +2,9 @@ package com.pramod.dailyword.framework.widget
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.library.audioplayer.AudioPlayer
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,11 +25,11 @@ class WordWidgetProvider : BaseWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        Log.i(TAG, "onReceive: ${intent?.action}")
+        Timber.i("onReceive: ${intent?.action}")
         intent?.let {
             when (it.action) {
                 ACTION_PLAY_AUDIO_FROM_WIDGET -> {
-                    Log.i(TAG, "onReceive: Playing")
+                    Timber.i("onReceive: Playing")
                     it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
                         audioPlayer.play(audioUrl)
                     }

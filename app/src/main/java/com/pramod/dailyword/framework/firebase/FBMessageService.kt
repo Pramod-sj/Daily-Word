@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.firebase
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -17,6 +16,7 @@ import com.pramod.dailyword.framework.ui.home.HomeActivity
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ class FBMessageService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        Log.i(TAG, "New Token: $p0")
+        Timber.i( "New Token: $p0")
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {
@@ -56,7 +56,7 @@ class FBMessageService : FirebaseMessagingService() {
         p0.let {
             val payload: MessagePayload =
                 Gson().fromJson(Gson().toJson(p0.data), MessagePayload::class.java)
-            Log.i(TAG, Gson().toJson(payload))
+            Timber.i( Gson().toJson(payload))
             val notificationHelper = NotificationHelper(applicationContext)
 
             val intentToActivity = Intent(applicationContext, HomeActivity::class.java)
@@ -78,7 +78,7 @@ class FBMessageService : FirebaseMessagingService() {
                 //getting first word meaning text
                 val wordMeaning: String? = payload.wordMeaning?.split("||")?.firstOrNull()
 
-                //Log.i(TAG, "onMessageReceived: " + Gson().toJson(wordMeaning))
+                //Log.i( "onMessageReceived: " + Gson().toJson(wordMeaning))
 
                 //if word meaning show in notification is enable then return first
                 //and if word meaning is null then return default body
@@ -95,7 +95,7 @@ class FBMessageService : FirebaseMessagingService() {
                             return@launch
                         }
 
-                        //Log.i(TAG, "onMessageReceived: reminder notification enabled")
+                        //Log.i( "onMessageReceived: reminder notification enabled")
 
                         val word: Word? = try {
                             bookmarkedWordCacheDataSource.getWordNonLive(payload.date)
@@ -104,14 +104,14 @@ class FBMessageService : FirebaseMessagingService() {
                             null
                         }
 
-                        Log.i(TAG, "onMessageReceived: ${word?.word} - ${word?.isSeen}")
-                        //Log.i(TAG, Gson().toJson(wordOfTheDay))
+                        Timber.i( "onMessageReceived: ${word?.word} - ${word?.isSeen}")
+                        //Log.i( Gson().toJson(wordOfTheDay))
 
                         //checking whether word seen or not
                         word?.let {
-                            //Log.i(TAG, "onMessageReceived: inside let")
+                            //Log.i( "onMessageReceived: inside let")
                             if (!it.isSeen) {
-                                //Log.i(TAG, "onMessageReceived: not seen")
+                                //Log.i( "onMessageReceived: not seen")
                                 notification = notificationHelper
                                     .createNotification(
                                         title = payload.title,

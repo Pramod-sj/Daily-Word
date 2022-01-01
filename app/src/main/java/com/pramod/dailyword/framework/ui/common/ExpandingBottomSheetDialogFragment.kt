@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.annotation.FloatRange
 import androidx.annotation.LayoutRes
@@ -25,6 +24,7 @@ import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRange
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeFromFloat
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeToFloat
+import timber.log.Timber
 
 abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes val layoutId: Int) :
     DismissibleDialogFragment() {
@@ -115,7 +115,7 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
     }
 
     private fun insertHorizontalRule() {
-        val horizontalRule = AppCompatImageView(requireContext());
+        val horizontalRule = AppCompatImageView(requireContext())
         horizontalRule.setImageResource(R.drawable.ic_round_horizontal_rule_24)
         horizontalRule.imageTintList =
             ColorStateList.valueOf(requireActivity().getContextCompatColor(R.color.app_icon_tint))
@@ -216,7 +216,7 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
     private fun applyRadiusBasedOnSlideOffset(slideOffset: Float) {
         if (getBottomSheetBehaviorView() is MaterialCardView) {
 
-            val radiusInPixel = 35f;
+            val radiusInPixel = 35f
             val newCornerRadius = convertNumberRangeToAnotherRangeFromFloat(
                 slideOffset,
                 0.8f to 1f,
@@ -235,8 +235,8 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
                 .build()
             (getBottomSheetBehaviorView() as MaterialCardView).shapeAppearanceModel = newShape
         } else {
-            Log.e(
-                TAG,
+            Timber.e(
+
                 "applyRadiusBasedOnSlideOffset: not a card view, hence cannot apply radius manipulation"
             )
         }

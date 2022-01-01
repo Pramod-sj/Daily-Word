@@ -1,16 +1,15 @@
 package com.pramod.dailyword.framework.util
 
 import android.app.Activity
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.exts.showBasicDialogWithSpannable
+import timber.log.Timber
 
 
 fun Activity.buildUpdateAvailableToDownloadSpannableString(releaseNote: FBRemoteConfig.ReleaseNote): SpannableString {
@@ -33,7 +32,7 @@ private fun Activity.buildSpannableMessage(
         setSpan(
             object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    Log.i("HomeActivity.TAG", "onClick: ")
+                    Timber.i("HomeActivity.TAG", "onClick: ")
                     showBasicDialogWithSpannable(
                         title = "Changelog",
                         message = CommonUtils.formatListAsBulletList(releaseNote.changes),

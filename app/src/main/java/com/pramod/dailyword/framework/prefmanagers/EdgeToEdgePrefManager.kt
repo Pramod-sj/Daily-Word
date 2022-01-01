@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import android.util.Log
 import android.view.View
 import android.view.Window
 import androidx.annotation.ColorInt
@@ -14,6 +13,7 @@ import androidx.core.graphics.ColorUtils
 import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
+import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScoped
@@ -48,7 +48,7 @@ class EdgeToEdgePrefManager @Inject constructor(
     }
 
     fun toggle() {
-        Log.i("EDGE TO EDGE TOGGLE", (!isEnabled()).toString())
+        Timber.i("EDGE TO EDGE TOGGLE", (!isEnabled()).toString())
         editor.putBoolean(
             KEY_EDGE_TO_EDGE_ENABLED,
             !isEnabled()
@@ -69,7 +69,7 @@ class EdgeToEdgePrefManager @Inject constructor(
         transparentNavBar: Boolean? = false
     ) {
         val edgeToEdgeEnabled = if (forceApply == true) true else isEnabled()
-        Log.i(TAG, "applyEdgeToEdgeIfEnabled: $edgeToEdgeEnabled")
+        Timber.i( "applyEdgeToEdgeIfEnabled: $edgeToEdgeEnabled")
         applyEdgeToEdgePreference(window, edgeToEdgeEnabled, transparentNavBar)
     }
 

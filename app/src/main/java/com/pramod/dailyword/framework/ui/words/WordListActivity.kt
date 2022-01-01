@@ -5,7 +5,6 @@ package com.pramod.dailyword.framework.ui.words
 import android.app.ActivityOptions
 import android.app.SearchManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
@@ -31,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class WordListActivity :
 
                 setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-                Log.i(TAG, "initAdapter: ")
+                Timber.i( "initAdapter: ")
                 val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
                 val option = view?.let {
                     ActivityOptions.makeSceneTransitionAnimation(

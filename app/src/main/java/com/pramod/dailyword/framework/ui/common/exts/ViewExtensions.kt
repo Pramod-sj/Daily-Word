@@ -1,23 +1,23 @@
 package com.pramod.dailyword.framework.ui.common.exts
 
 
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import timber.log.Timber
 
 fun View.applySystemBarPaddingInsets() {
     this.doOnApplyWindowInsets { view, insets, padding, _ ->
-        Log.i(TAG, "applySystemBarPaddingInsets: ")
+        Timber.i( "applySystemBarPaddingInsets: ")
         view.updatePadding(top = padding.top + insets.systemWindowInsetTop)
     }
 }
 
 fun View.applyNavigationBarPaddingInsets() {
     this.doOnApplyWindowInsets { view, insets, padding, _ ->
-        Log.i(TAG, "applyNavigationBarPaddingInsets: ")
+        Timber.i( "applyNavigationBarPaddingInsets: ")
         view.updatePadding(bottom = padding.bottom + insets.systemWindowInsetBottom)
     }
 }
@@ -65,7 +65,7 @@ fun View.applyVerticalInsets() {
 const val TAG = "Debug"
 
 fun View.doOnApplyWindowInsets(f: (View, WindowInsets, InitialPadding, InitialMargin) -> Unit) {
-    Log.i(TAG, "doOnApplyWindowInsets: ")
+    Timber.i( "doOnApplyWindowInsets: ")
     // Create a snapshot of the view's padding/margin state
     val initialPadding = recordInitialPaddingForView(this)
     val initialMargin = recordInitialMarginForView(this)

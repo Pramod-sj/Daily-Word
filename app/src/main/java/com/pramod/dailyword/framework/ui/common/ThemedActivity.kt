@@ -2,7 +2,6 @@ package com.pramod.dailyword.framework.ui.common
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -61,7 +61,7 @@ abstract class ThemedActivity : AppCompatActivity() {
         statusBarColorResId: Int,
         matchingBackgroundColor: Boolean
     ) {
-        Log.i("BASE ACTIVITY", makeLight.toString())
+        Timber.i("BASE ACTIVITY", makeLight.toString())
         val oldFlags = window.decorView.systemUiVisibility
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             var flags = oldFlags
@@ -82,7 +82,7 @@ abstract class ThemedActivity : AppCompatActivity() {
                     else (if (makeLight) R.color.white else R.color.black)
                 )
             }
-            Log.i("STATUS BAR COLOR", window.statusBarColor.toString())
+            Timber.i("STATUS BAR COLOR", window.statusBarColor.toString())
         } else {
             window.statusBarColor = resources.getColor(com.pramod.dailyword.R.color.black)
         }

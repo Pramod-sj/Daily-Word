@@ -1,10 +1,10 @@
 package com.pramod.dailyword.business.data.network.utils
 
-import android.util.Log
 import com.pramod.dailyword.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -51,7 +51,7 @@ suspend fun <T> safeApiCall(
                 is HttpException -> {
                     val code = throwable.code()
                     val errorResponse = convertErrorBody(throwable)
-                    Log.i("ApiExtension", "safeApiCall: $errorResponse ")
+                    Timber.i("ApiExtension", "safeApiCall: $errorResponse ")
                     ApiResult.GenericError(
                         code,
                         errorResponse

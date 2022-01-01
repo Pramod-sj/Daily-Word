@@ -10,13 +10,13 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.DynamicDrawableSpan
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.button.MaterialButton
 import com.pramod.dailyword.R
+import timber.log.Timber
 
 class MaterialProgressButton : MaterialButton {
     private val TEXT_FADE_ANIMATION_DURATION: Long = 200
@@ -45,7 +45,7 @@ class MaterialProgressButton : MaterialButton {
     }
 
     fun showProgress(show: Boolean?) {
-        Log.i(TAG, "showProgress: $isEnabled")
+        Timber.i( "showProgress: $isEnabled")
         if (show == null) {
             return
         }

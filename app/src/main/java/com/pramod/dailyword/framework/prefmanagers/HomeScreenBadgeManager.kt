@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
@@ -11,6 +10,7 @@ import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -104,7 +104,7 @@ class HomeScreenBadgeManager @Inject constructor(
             if (!hideBadge) {
                 return@switchMap getAllBookmarks.getBookmarks()
                     .map {
-                        Log.i(TAG, "showBadgeOnBookmark: " + Gson().toJson(it))
+                        Timber.i( "showBadgeOnBookmark: " + Gson().toJson(it))
                         return@map it.data.let { bookmarkList ->
                             if (bookmarkList != null) {
                                 for (b in bookmarkList) {

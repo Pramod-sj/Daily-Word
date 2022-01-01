@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
-import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -25,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.helper.RightDrawableOnTouchListener
 import com.pramod.dailyword.framework.util.CommonUtils
+import timber.log.Timber
 
 
 object CommonBindindAdapters {
@@ -73,7 +73,7 @@ object CommonBindindAdapters {
     @JvmStatic
     @BindingAdapter("switchText")
     fun switchText(textView: TextView, text: String?) {
-        Log.d("TEXT", textView.text.toString() + "==" + text + ":TEXT")
+        Timber.d("TEXT", textView.text.toString() + "==" + text + ":TEXT")
         if (text == null) {
             return
         }
@@ -150,7 +150,7 @@ object CommonBindindAdapters {
 
     @JvmStatic
     @BindingAdapter("hapticVibrate")
-    public fun hapticVibrate(view: View, vibrate: Boolean) {
+    fun hapticVibrate(view: View, vibrate: Boolean) {
         if (vibrate) view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
     }
 
@@ -209,7 +209,7 @@ object CommonBindindAdapters {
             override fun onDrawableTouch(event: MotionEvent?): Boolean {
                 onTextDrawableClickListener?.onRightDrawableClick()
                 hapticVibrate(textView, true)
-                event?.action = MotionEvent.ACTION_CANCEL;
+                event?.action = MotionEvent.ACTION_CANCEL
                 return false
             }
         })
@@ -225,9 +225,9 @@ object CommonBindindAdapters {
     fun switchText(switcher: TextSwitcher, text: SpannableString?) {
         if (text == null) return
         val tag = switcher.getTag(R.id.animText_tag) as String?
-        if (tag == null || !equals(tag, text)) {
+        if (tag == null || !equals( text)) {
             switcher.setText(text)
-            switcher.setTag(R.id.animText_tag, tag)
+            switcher.tag = R.id.animText_tag
         }
     }
 

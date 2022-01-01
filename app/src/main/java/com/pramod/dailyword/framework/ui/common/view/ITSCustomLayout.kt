@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
@@ -21,6 +20,7 @@ import androidx.databinding.InverseBindingListener
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.CustomItsLayoutBinding
 import com.pramod.dailyword.framework.util.CommonUtils
+import timber.log.Timber
 
 class ITSCustomLayout : LinearLayout {
     private lateinit var customItsLayoutBinding: CustomItsLayoutBinding
@@ -167,7 +167,7 @@ class ITSCustomLayout : LinearLayout {
 
     private fun applyTitleTextStyle() {
         customItsLayoutBinding.txtViewCustomTitle.apply {
-            Log.i("TAG", "applyTitleTextStyle: $titleTextStyle")
+            Timber.i( "applyTitleTextStyle: $titleTextStyle")
             val tf = when (titleTextStyle) {
                 0 -> Typeface.ITALIC
                 1 -> Typeface.BOLD

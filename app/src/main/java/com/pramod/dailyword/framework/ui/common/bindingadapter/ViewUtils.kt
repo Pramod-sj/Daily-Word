@@ -1,12 +1,12 @@
 package com.pramod.dailyword.framework.ui.common.bindingadapter
 
 import android.content.Context
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 class ViewUtils {
@@ -45,7 +45,7 @@ class ViewUtils {
         @JvmStatic
         @BindingAdapter("app:paddingBottom")
         fun setPaddingBottom(view: View, dimen: Float) {
-            Log.i("TAG", "setPaddingBottom: $dimen")
+            Timber.i( "setPaddingBottom: $dimen")
             view.updatePadding(
                 bottom = dimen.roundToInt()
             )

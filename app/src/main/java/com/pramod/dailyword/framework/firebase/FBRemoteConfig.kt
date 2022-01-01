@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.firebase
 
-import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -8,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -53,9 +53,9 @@ class FBRemoteConfig @Inject constructor(
     init {
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
-                Log.i(TAG, "Remote configs are fetched and activated")
+                Timber.i( "Remote configs are fetched and activated")
             } else {
-                Log.i(TAG, "Remote configs are not fetch : Error ${it.exception.toString()}")
+                Timber.i( "Remote configs are not fetch : Error ${it.exception.toString()}")
             }
         }
     }
@@ -133,7 +133,6 @@ class FBRemoteConfig @Inject constructor(
             } else null
         }
     }
-
 
 
     data class ReleaseNote(

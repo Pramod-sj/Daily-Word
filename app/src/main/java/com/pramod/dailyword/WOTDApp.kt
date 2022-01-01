@@ -8,6 +8,8 @@ import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.util.CustomExceptionHandler
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
+
 
 @HiltAndroidApp
 class WOTDApp : Application() {
@@ -23,6 +25,9 @@ class WOTDApp : Application() {
     override fun onCreate() {
         appPrefManager.incrementAppLaunchCount()
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         themeManager.applyTheme()
         //setUpCustomCrashHandler()
         initAds()
@@ -44,7 +49,7 @@ class WOTDApp : Application() {
     }
 
     private fun initAds() {
-        AdSettings.addTestDevice("4f19fa27-300a-4786-b9b0-30febb7ad630");
+        AdSettings.addTestDevice("4f19fa27-300a-4786-b9b0-30febb7ad630")
         AudienceNetworkAds.initialize(this)
     }
 

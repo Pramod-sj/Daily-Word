@@ -6,10 +6,10 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 
 class DividerItemDecoration(
     context: Context,
@@ -159,8 +159,8 @@ class DividerItemDecoration(
         val a = context.obtainStyledAttributes(ATTRS)
         mDivider = a.getDrawable(0)
         if (mDivider == null) {
-            Log.w(
-                TAG, "@android:attr/listDivider was not set in the theme used for this "
+            Timber.w(
+                 "@android:attr/listDivider was not set in the theme used for this "
                         + "DividerItemDecoration. Please set that attribute all call setDrawable()"
             )
         }

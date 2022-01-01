@@ -4,14 +4,13 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import timber.log.Timber
 import java.io.File
 
 const val TAG_GLIDE_UTILS = "GlideUtils"
@@ -70,7 +69,7 @@ fun Context.preloadImage(
                 target: Target<File>?,
                 isFirstResource: Boolean
             ): Boolean {
-                Log.i(TAG_GLIDE_UTILS, "onLoadFailed: " + e?.message)
+                Timber.i("onLoadFailed: " + e?.message)
                 Handler(Looper.getMainLooper()).post {
                     preloadCallback.invoke(false)
                 }
@@ -84,7 +83,7 @@ fun Context.preloadImage(
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                Log.i(TAG_GLIDE_UTILS, "onResourceReady: ")
+                Timber.i("onResourceReady: ")
                 Handler(Looper.getMainLooper()).post {
                     preloadCallback.invoke(true)
                 }

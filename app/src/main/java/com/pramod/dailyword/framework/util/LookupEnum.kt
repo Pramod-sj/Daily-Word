@@ -1,6 +1,6 @@
 package com.pramod.dailyword.framework.util
 
-import android.util.Log
+import timber.log.Timber
 
 class LookupEnum {
     companion object {
@@ -17,7 +17,7 @@ class LookupEnum {
                 }
 
             } catch (e: Exception) {
-                Log.i(TAG, "lookUp: $e")
+                Timber.i( "lookUp: $e")
                 return null
             }
             return null
@@ -40,7 +40,7 @@ class LookupEnum {
                 }
 
             } catch (e: Exception) {
-                Log.i(TAG, "lookUp: $e")
+                Timber.i( "lookUp: $e")
             }
             return enumExcept
         }

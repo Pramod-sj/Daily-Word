@@ -21,7 +21,6 @@ import android.text.style.BulletSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -36,6 +35,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.exts.resolveAttrToColor
+import timber.log.Timber
 import java.util.*
 import kotlin.collections.map as map1
 
@@ -78,7 +78,7 @@ object CommonUtils {
         height = if (height > 0) height else 1
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
     }
@@ -270,7 +270,8 @@ object CommonUtils {
     @JvmStatic
     fun capitalizeFirstLetter(text: String): String {
         return text.split(" ").map1 {
-            it.toLowerCase(Locale.getDefault()).capitalize()
+            it.lowercase(Locale.getDefault())
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         }.joinToString()
     }
 
@@ -438,7 +439,7 @@ object CommonUtils {
             val inputStream = context.assets.open(fileName)
             json = String(inputStream.readBytes())
         } catch (e: Exception) {
-            Log.e("loadJsonFromAssest", "loadJsonFromAssest: ", e)
+            Timber.e("loadJsonFromAssest", "loadJsonFromAssest: ", e)
             return json
         }
         return json

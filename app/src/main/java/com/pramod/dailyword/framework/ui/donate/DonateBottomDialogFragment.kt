@@ -1,7 +1,6 @@
 package com.pramod.dailyword.framework.ui.donate
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
@@ -22,6 +21,7 @@ import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -162,7 +162,7 @@ class DonateBottomDialogFragment :
     }
 
     override fun onBillingInitialized() {
-        Log.i(TAG, "onBillingInitialized: ")
+        Timber.i( "onBillingInitialized: ")
     }
 
     override fun onBillingError(message: String) {

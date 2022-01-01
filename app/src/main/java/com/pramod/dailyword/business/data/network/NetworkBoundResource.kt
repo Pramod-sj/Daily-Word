@@ -1,9 +1,9 @@
 package com.pramod.dailyword.business.data.network
 
-import android.util.Log
 import com.pramod.dailyword.business.data.network.utils.handleApiException
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 abstract class NetworkBoundResource<RequestType, ResponseType> {
 
@@ -16,7 +16,7 @@ abstract class NetworkBoundResource<RequestType, ResponseType> {
 
         val flow: Flow<Resource<ResponseType?>> = if (shouldFetchFromNetwork(data)) {
 
-            Log.i(TAG, "asFlow: fetching from network")
+            Timber.i( "asFlow: fetching from network")
             emit(Resource.loading(data))
 
             try {
@@ -24,10 +24,10 @@ abstract class NetworkBoundResource<RequestType, ResponseType> {
                 if (apiResponse.code == "200") {
                     val resData = apiResponse.data
                     if (resData != null) {
-                        Log.i(TAG, "asFlow: saving into cached")
+                        Timber.i( "asFlow: saving into cached")
                         saveIntoCache(resData)
                     }
-                    Log.i(TAG, "asFlow: fetching from cached")
+                    Timber.i( "asFlow: fetching from cached")
                     fetchFromCache().map { Resource.success(it) }
                 } else {
                     fetchFromCache().map {
@@ -40,14 +40,14 @@ abstract class NetworkBoundResource<RequestType, ResponseType> {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.i(
-                    TAG,
+                Timber.i(
+
                     "asFlow: network call failed ${e.message} fetching from cache"
                 )
                 fetchFromCache().map { Resource.error(handleApiException(e), it) }
             }
         } else {
-            Log.i(TAG, "asFlow: fetching from cache")
+            Timber.i( "asFlow: fetching from cache")
             fetchFromCache().map { Resource.success(it) }
         }
 

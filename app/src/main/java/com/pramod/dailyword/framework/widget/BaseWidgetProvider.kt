@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import com.google.gson.Gson
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
@@ -14,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,7 +40,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            Log.i(TAG, "onReceive: " + it.action)
+            Timber.i( "onReceive: " + it.action)
             when (it.action) {
                 Intent.ACTION_TIME_CHANGED -> {
                     context?.let { context ->
@@ -66,7 +66,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
                             word?.let { bookmarked_word ->
                                 toggleBookmarkInteractor.toggle(bookmarked_word)
                                     .collectLatest {
-                                        Log.i(TAG, "toggle: " + Gson().toJson(it))
+                                        Timber.i( "toggle: " + Gson().toJson(it))
                                     }
                                 //run data fetch job to get updated data
                                 runTodayWordFetchJob(context)
@@ -84,7 +84,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
 
     override fun onEnabled(context: Context?) {
         super.onEnabled(context)
-        Log.i(TAG, "onEnabled: ")
+        Timber.i( "onEnabled: ")
         context?.let {
             runTodayWordFetchJob(it)
             setRepeatingDailyAlarmToFetch(it)
@@ -92,7 +92,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context?) {
-        Log.i(TAG, "onDisabled: ")
+        Timber.i( "onDisabled: ")
         context?.let {
             stopTodayWordFetchJob(it)
             cancelRepeatingAlarm(it)
@@ -109,7 +109,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
         context?.let { context1 ->
             runTodayWordFetchJob(context1)
         }
-        Log.i(TAG, "onUpdate: function executed")
+        Timber.i( "onUpdate: function executed")
     }
 
 }

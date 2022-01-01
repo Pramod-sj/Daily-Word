@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
-import android.util.Log
 import android.util.Pair
 import android.view.*
 import android.widget.Toast
@@ -55,6 +54,7 @@ import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
 import com.pramod.dailyword.framework.widget.BaseWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -401,17 +401,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     val reviewFlow = manager.launchReviewFlow(this, requestInfo)
                     reviewFlow.addOnCompleteListener { reviewFlowResult ->
                         if (reviewFlowResult.isSuccessful) {
-                            Log.i(TAG, "shouldShowRatingDialog: succeed: done")
+                            Timber.i("shouldShowRatingDialog: succeed: done")
                         } else {
-                            Log.i(
-                                TAG,
+                            Timber.i(
+
                                 "shouldShowRatingDialog: failed:" + reviewFlowResult.exception.toString()
                             )
                         }
                     }
 
                 } else {
-                    Log.i(TAG, "shouldShowRatingDialog: failed:" + it.exception.toString())
+                    Timber.i("shouldShowRatingDialog: failed:" + it.exception.toString())
                 }
             }
 
@@ -462,11 +462,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.i(TAG, "onActivityResult: $requestCode:$resultCode")
+        Timber.i("onActivityResult: $requestCode:$resultCode")
         if (requestCode == Constants.APP_UPDATE_IMMEDIATE_REQUEST_CODE) {
             //when user clicks update button
 
-            Log.i(TAG, "onActivityResult: $resultCode")
+            Timber.i("onActivityResult: $resultCode")
             when (resultCode) {
                 RESULT_OK -> {
 
@@ -505,8 +505,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
                 FBMessageService.MessagePayload::class.java
             )
-        Log.i(
-            TAG,
+        Timber.i(
+
             "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
         when (messagePayload?.deepLink) {
@@ -629,7 +629,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             }
                         }
                         UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
-                            Log.i(TAG, "checkForUpdate: no update available")
+                            Timber.i("checkForUpdate: no update available")
                         }
                     }
                 } else {
@@ -645,7 +645,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private val installStateUpdatedListener = InstallStateUpdatedListener { installState ->
         when (installState.installStatus()) {
             InstallStatus.DOWNLOADED -> {
-                Log.i(TAG, ": DOWNLOADED")
+                Timber.i(": DOWNLOADED")
                 fbRemoteConfig.getLatestReleaseNote()?.let {
                     viewModel.setAppUpdateMessage(buildUpdateAvailableToInstallSpannableString(it))
                     viewModel.setAppUpdateDownloadProgress(100)
@@ -653,7 +653,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 }
             }
             InstallStatus.CANCELED -> {
-                Log.i(TAG, ": CANCELED")
+                Timber.i(": CANCELED")
                 viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
@@ -665,13 +665,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 viewModel.setAppUpdateDownloadProgress(downloadPercentage)
             }
             InstallStatus.FAILED -> {
-                Log.i(TAG, ": FAILED")
+                Timber.i(": FAILED")
                 viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
             }
             InstallStatus.INSTALLED -> {
-                Log.i(TAG, ": INSTALLED")
+                Timber.i(": INSTALLED")
                 viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
                 Toast.makeText(
@@ -682,7 +682,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
             InstallStatus.INSTALLING -> {
                 viewModel.setAppUpdateDownloadProgress(0)
-                Log.i(TAG, ": INSTALLING")
+                Timber.i(": INSTALLING")
                 Toast.makeText(
                     applicationContext,
                     "Installation started!",
@@ -692,7 +692,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
                 viewModel.setAppUpdateDownloadProgress(0)
-                Log.i(TAG, ": REQUIRES_UI_INTENT")
+                Timber.i(": REQUIRES_UI_INTENT")
                 //no need to implement
                 Toast.makeText(
                     applicationContext,
@@ -702,7 +702,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
             InstallStatus.UNKNOWN -> {
                 viewModel.setAppUpdateDownloadProgress(0)
-                Log.i(TAG, ": UNKNOWN")
+                Timber.i(": UNKNOWN")
                 Toast.makeText(
                     applicationContext,
                     "Unknown issue!",

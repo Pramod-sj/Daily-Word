@@ -3,19 +3,14 @@ package com.pramod.dailyword.framework.prefmanagers
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.pramod.dailyword.framework.util.CommonUtils
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
-import dagger.hilt.android.scopes.FragmentScoped
+import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
 @ActivityScoped
@@ -53,9 +48,9 @@ class ThemeManager @Inject constructor(@ActivityContext context: Context) :
                 }
             }
         }
-        Log.i(TAG, "before: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
+        Timber.i( "before: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
         AppCompatDelegate.setDefaultNightMode(mode)
-        Log.i(TAG, "after: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
+        Timber.i( "after: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
 
     }
 
@@ -71,13 +66,13 @@ class ThemeManager @Inject constructor(@ActivityContext context: Context) :
         }
 
     fun registerListener(onThemeValueChangedListener: OnThemeValueChangedListener) {
-        this.onThemeValueChangedListener = onThemeValueChangedListener;
+        this.onThemeValueChangedListener = onThemeValueChangedListener
         sPrefManager.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
     fun unregisterListener() {
         sPrefManager.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
-        this.onThemeValueChangedListener = null;
+        this.onThemeValueChangedListener = null
     }
 
     interface OnThemeValueChangedListener {

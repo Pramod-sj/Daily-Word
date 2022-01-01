@@ -2,7 +2,6 @@ package com.pramod.dailyword.framework.helper.billing
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType.INAPP
@@ -12,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 import kotlin.collections.set
 
@@ -50,7 +50,7 @@ class BillingHelper constructor(
     }
 
     fun close() {
-        Log.i(TAG, "close: ")
+        Timber.i( "close: ")
         fetchSkuDetailsJob?.cancel()
         purchaseUpdateJob?.cancel()
         removeListeners()
@@ -78,7 +78,7 @@ class BillingHelper constructor(
                     if (isPurchasePending(sku)) {
                         emitPurchaseError("Please wait your purchase is under process, check on this after some time.")
                     } else {
-                        Log.i(TAG, "buy: already purchased")
+                        Timber.i( "buy: already purchased")
                         emitPurchaseError("You have already donated this item, Thank you so much ❤")
                     }
                 }
@@ -129,7 +129,7 @@ class BillingHelper constructor(
     private fun isValidSignature(signedData: String, signature: String): Boolean {
         return try {
             val base64Key = BuildConfig.GOOGLE_IN_APP_RSA_KEY
-            Security.verifyPurchase(base64Key, signedData, signature);
+            Security.verifyPurchase(base64Key, signedData, signature)
         } catch (e: IOException) {
             false
         }
@@ -137,12 +137,12 @@ class BillingHelper constructor(
 
 
     override fun onBillingServiceDisconnected() {
-        Log.i(TAG, "onBillingServiceDisconnected: ")
+        Timber.i( "onBillingServiceDisconnected: ")
         emitBillingClientError("Billing service is disconnected!")
     }
 
     override fun onBillingSetupFinished(p0: BillingResult) {
-        Log.i(TAG, "onBillingSetupFinished: ")
+        Timber.i( "onBillingSetupFinished: ")
         if (p0.responseCode.isBillingResultOk()) {
             emitBillingInitialized()
             fetchSkuDetailsJob = GlobalScope.launch(Dispatchers.Main) {
@@ -163,7 +163,7 @@ class BillingHelper constructor(
     //fetch skus and cache in skuDetails map
     private suspend fun querySkus(): List<SkuDetails>? {
         if (!isInitializedAndReady()) {
-            Log.i(TAG, "querySkus: Not initialized or read")
+            Timber.i( "querySkus: Not initialized or read")
             return null
         }
         val skuDetailsList = skus.toSkuDetailsList(INAPP)
@@ -205,7 +205,7 @@ class BillingHelper constructor(
             // To be implemented in a later section.
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
-                    Log.i(TAG, "onPurchasesUpdated: OK")
+                    Timber.i( "onPurchasesUpdated: OK")
                     purchases?.let {
                         processPurchase(
                             purchases,
@@ -215,7 +215,7 @@ class BillingHelper constructor(
                     }
                 }
                 BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
-                    Log.i(TAG, "onPurchasesUpdated: ITEM_ALREADY_OWNED")
+                    Timber.i( "onPurchasesUpdated: ITEM_ALREADY_OWNED")
                     purchases?.let {
                         processPurchase(
                             purchases,
@@ -225,7 +225,7 @@ class BillingHelper constructor(
                     }
                 }
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
-                    Log.i(TAG, "onPurchasesUpdated: USER_CANCELED")
+                    Timber.i( "onPurchasesUpdated: USER_CANCELED")
                     emitPurchaseError("Purchase wasn't made, you can try again now or later. Thank you :)")
                 }
                 else -> emitPurchaseError(billingResult.debugMessage)
@@ -252,7 +252,7 @@ class BillingHelper constructor(
                     if (!isValidSignature(purchase.originalJson, purchase.signature)) {
                         // Invalid purchase
                         // show error to user
-                        Log.i(TAG, "processPurchase: invalid purchase")
+                        Timber.i( "processPurchase: invalid purchase")
                         continue
                     }
                     // else purchase is valid
@@ -276,7 +276,7 @@ class BillingHelper constructor(
                     purchasePending(purchase.skus.first())
                 }
                 else -> {
-                    Log.e(TAG, "processPurchase: Purchase State: ${purchase.purchaseState}")
+                    Timber.e( "processPurchase: Purchase State: ${purchase.purchaseState}")
                 }
             }
 
@@ -294,7 +294,7 @@ class BillingHelper constructor(
                 ConsumeParams.newBuilder()
                     .setPurchaseToken(it.purchaseToken)
                     .build()
-            ) { p0, p1 -> Log.i(TAG, "onConsumeResponse: ") }
+            ) { p0, p1 -> Timber.i( "onConsumeResponse: ") }
         }
     }
 

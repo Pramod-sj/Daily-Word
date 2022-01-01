@@ -2,7 +2,6 @@ package com.pramod.dailyword.framework.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -28,6 +27,7 @@ import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -135,7 +135,7 @@ class AppSettingActivity :
 
             override fun toggleWindowAnimation() {
                 windowAnimPrefManager.toggle()
-                Log.i(TAG, "toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
+                Timber.i( "toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
             }
 
             override fun toggleEdgeToEdge() {

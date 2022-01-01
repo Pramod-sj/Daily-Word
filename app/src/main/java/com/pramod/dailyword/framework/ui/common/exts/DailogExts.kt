@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
+import timber.log.Timber
 
 
 /*fun Context.showLottieDialog(fileName: String, title: String, body: String) {
@@ -156,7 +156,7 @@ fun Context.showWebViewDialog(url: String) {
         null,
         false
     )
-    Log.i("URL", url)
+    Timber.i("URL", url)
 
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
         dialogWebviewLayoutBinding.webView.settings
@@ -351,8 +351,8 @@ fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
             prefManager.setNeverShowSupportUsDialog(true)
         }
     } else {
-        Log.i(
-            TAG,
+        Timber.i(
+
             "shouldShowSupportDevelopmentDialog: not showing:${prefManager.getSupportUsDialogCalledCount() % 20} == 0"
         )
     }

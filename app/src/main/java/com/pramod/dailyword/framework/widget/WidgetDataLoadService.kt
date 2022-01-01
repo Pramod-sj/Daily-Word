@@ -5,7 +5,6 @@ import android.app.job.JobService
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import com.google.gson.Gson
 import com.pramod.dailyword.R
@@ -23,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -43,14 +43,14 @@ class WidgetDataLoadService : JobService() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i(TAG, "onCreate: Widget Data Load Service Created")
+        Timber.i( "onCreate: Widget Data Load Service Created")
         appWidgetManager =
             baseContext.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager
     }
 
     @OptIn(ExperimentalPagingApi::class)
     override fun onStartJob(params: JobParameters?): Boolean {
-        Log.i(TAG, "onStartJob: ")
+        Timber.i( "onStartJob: ")
         CoroutineScope(Dispatchers.Main).launch {
 
             try {
@@ -110,7 +110,7 @@ class WidgetDataLoadService : JobService() {
 
                     }.getResult()
 
-                    Log.i(TAG, "onStartJob: " + Gson().toJson(resource))
+                    Timber.i( "onStartJob: " + Gson().toJson(resource))
 
                     if (resource.status == Status.SUCCESS) {
                         if (resource.data != null && resource.data.isNotEmpty()) {
@@ -226,7 +226,7 @@ class WidgetDataLoadService : JobService() {
                 }
 
             } catch (e: Exception) {
-                Log.i(TAG, "onStartJob: Exception: $e")
+                Timber.i( "onStartJob: Exception: $e")
             } finally {
                 jobFinished(params, false)
             }
@@ -236,12 +236,12 @@ class WidgetDataLoadService : JobService() {
     }
 
     override fun onStopJob(params: JobParameters?): Boolean {
-        Log.i(TAG, "onStopJob: ")
+        Timber.i( "onStopJob: ")
         return false
     }
 
     override fun onDestroy() {
-        Log.i(TAG, "onDestroy: Widget Data Load Service Destroyed!")
+        Timber.i( "onDestroy: Widget Data Load Service Destroyed!")
         super.onDestroy()
     }
 }

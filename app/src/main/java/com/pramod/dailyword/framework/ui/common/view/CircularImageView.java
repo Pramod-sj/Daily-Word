@@ -12,10 +12,12 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
+
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.pramod.dailyword.R;
+
+import timber.log.Timber;
 
 public class CircularImageView extends AppCompatImageView {
 
@@ -253,7 +255,7 @@ public class CircularImageView extends AppCompatImageView {
             return bitmap;
         } catch (OutOfMemoryError e) {
             // Simply return null of failed bitmap creations
-            Log.e(getClass().toString(), "Encountered OutOfMemoryError while generating bitmap!");
+            Timber.e(getClass().toString(), "Encountered OutOfMemoryError while generating bitmap!");
             return null;
         }
     }
