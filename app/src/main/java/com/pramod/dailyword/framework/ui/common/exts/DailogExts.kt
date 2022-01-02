@@ -344,7 +344,8 @@ class DailogHelper {
 fun FragmentActivity.shouldShowSupportDevelopmentDialog() {
     val prefManager = PrefManager.getInstance(this)
     prefManager.incrementSupportUsDialogCalledCount()
-    if ((prefManager.getSupportUsDialogCalledCount() % 10 == 0
+    val frequency = if (prefManager.getAppLaunchCount() > 50) 10 else 20
+    if ((prefManager.getSupportUsDialogCalledCount() % frequency == 0
                 && prefManager.hasDonated() == false) && !prefManager.getNeverShowSupportUsDialog()
     ) {
         showSupportDevelopmentDialog {
