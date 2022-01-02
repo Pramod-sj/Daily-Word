@@ -6,6 +6,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogChangelogBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
@@ -25,7 +26,8 @@ class ChangelogDialogFragment :
 
     private val adapter: ChangelogAdapter by lazy {
         if (fbRemoteConfig.getReleases().isNotEmpty()) {
-            ChangelogAdapter(fbRemoteConfig.getReleases())
+            ChangelogAdapter(
+                fbRemoteConfig.getReleases().filter { it.versionCode <= BuildConfig.VERSION_CODE })
         } else {
             val type = TypeToken.getParameterized(List::class.java, Release::class.java).type
             val changelogList = Gson().fromJson<List<Release>>(
