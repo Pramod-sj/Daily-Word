@@ -40,11 +40,11 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
 
 
     override fun incrementAppLaunchCount() {
-        val launchCount = sPrefManager.getInt(APP_LAUNCH_COUNT, 0) + 1
+        val launchCount = getAppLaunchCount() + 1
         editor.putInt(APP_LAUNCH_COUNT, launchCount).apply()
     }
 
-    override fun getAppLaunchCount(): Int = sPrefManager.getInt(APP_LAUNCH_COUNT, 1)
+    override fun getAppLaunchCount(): Int = sPrefManager.getInt(APP_LAUNCH_COUNT, 0)
 
     /**
      * setting def value 1 because if app count return 0

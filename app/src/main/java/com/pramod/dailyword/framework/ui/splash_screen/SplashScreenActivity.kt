@@ -11,6 +11,7 @@ import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
 import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
@@ -23,6 +24,7 @@ import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -33,11 +35,15 @@ class SplashScreenActivity :
 
     override val bindingVariable: Int = BR.splashScreenViewModel
 
+    @Inject
+    lateinit var appPrefManager: PrefManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         forceEdgeToEdge(true)
         transparentNavBar = true
         lightStatusBar(matchingBackgroundColor = true)
         super.onCreate(savedInstanceState)
+        appPrefManager.incrementAppLaunchCount()
         //addGradientToAppIcon()
         animateAppIcon()
         navigateToHomePage()
@@ -71,14 +77,14 @@ class SplashScreenActivity :
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
                     isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
-                        Timber.i( "isImageCached: $isCached")
+                        Timber.i("isImageCached: $isCached")
                         if (isCached) {
                             openHomePage(withFadeAnimation = true, finish = true)
                         } else {
                             binding.btnGetStarted.showProgress(true)
                             preloadImage(BuildConfig.HOME_BACKGROUND_URL) {
                                 binding.btnGetStarted.showProgress(false)
-                                Timber.i( "preloadImage: $it")
+                                Timber.i("preloadImage: $it")
                                 openHomePage(withFadeAnimation = true, finish = true)
                             }
                         }

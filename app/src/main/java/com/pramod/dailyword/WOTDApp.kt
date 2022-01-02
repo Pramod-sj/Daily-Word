@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.facebook.ads.AdSettings
 import com.facebook.ads.AudienceNetworkAds
-import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.util.CustomExceptionHandler
 import dagger.hilt.android.HiltAndroidApp
@@ -18,12 +17,7 @@ class WOTDApp : Application() {
         return@lazy ThemeManager.newInstance(this)
     }
 
-    private val appPrefManager: PrefManager by lazy {
-        return@lazy PrefManager(this)
-    }
-
     override fun onCreate() {
-        appPrefManager.incrementAppLaunchCount()
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
