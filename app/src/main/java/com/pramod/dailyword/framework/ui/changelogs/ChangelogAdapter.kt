@@ -8,7 +8,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemChangeLogLayoutBinding
 
 
-class ChangelogAdapter(private val changesList: List<Changes>?) :
+class ChangelogAdapter(private val releaseList: List<Release>?) :
     RecyclerView.Adapter<ChangelogAdapter.ChangelogViewHolder>() {
 
 
@@ -25,10 +25,10 @@ class ChangelogAdapter(private val changesList: List<Changes>?) :
         return ChangelogViewHolder(binding)
     }
 
-    override fun getItemCount() = changesList?.size ?: 0
+    override fun getItemCount() = releaseList?.size ?: 0
 
     override fun onBindViewHolder(holder: ChangelogViewHolder, position: Int) {
-        holder.binding.changes = changesList?.get(position)
+        holder.binding.changes = releaseList?.get(position)
         holder.binding.executePendingBindings()
     }
 

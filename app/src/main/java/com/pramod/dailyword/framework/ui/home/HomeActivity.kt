@@ -151,7 +151,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             if (appUpdateInfo.isSuccessful) {
                 when (appUpdateInfo.result.updateAvailability()) {
                     UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
-                        fbRemoteConfig.getLatestReleaseNote()?.let { releaseNote ->
+                        fbRemoteConfig.getLatestRelease()?.let { releaseNote ->
                             if (releaseNote.isForceUpdate) {
                                 appUpdateManager.safeStartUpdateFlowForResult(
                                     appUpdateInfo = appUpdateInfo.result,
@@ -550,7 +550,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         appUpdateManager.registerListener(installStateUpdatedListener)
         appUpdateManager.appUpdateInfo.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+                val releaseNote = fbRemoteConfig.getLatestRelease()
                 if (releaseNote != null) {
                     when (task.result.updateAvailability()) {
                         UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
@@ -571,7 +571,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             viewModel.setAppUpdateButtonText("Update")
                             if (releaseNote.isForceUpdate) {
                                 showBottomSheet(
-                                    title = "A new update version ${releaseNote.versionName} available!",
+                                    title = "A new update version ${releaseNote.versionName} is available!",
                                     desc = formatListAsBulletList(releaseNote.changes),
                                     cancellable = false,
                                     positiveText = "Update",
@@ -603,7 +603,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 )
                             } else {
                                 showBottomSheet(
-                                    title = "A new update version ${releaseNote.versionName} available!",
+                                    title = "A new update version ${releaseNote.versionName} is available!",
                                     desc = formatListAsBulletList(releaseNote.changes),
                                     cancellable = true,
                                     positiveText = "Update",
@@ -646,7 +646,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         when (installState.installStatus()) {
             InstallStatus.DOWNLOADED -> {
                 Timber.i(": DOWNLOADED")
-                fbRemoteConfig.getLatestReleaseNote()?.let {
+                fbRemoteConfig.getLatestRelease()?.let {
                     viewModel.setAppUpdateMessage(buildUpdateAvailableToInstallSpannableString(it))
                     viewModel.setAppUpdateDownloadProgress(100)
                     viewModel.setAppUpdateButtonText("Install")

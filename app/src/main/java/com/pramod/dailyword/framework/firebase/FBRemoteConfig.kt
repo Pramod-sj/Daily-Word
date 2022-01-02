@@ -5,8 +5,10 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.ui.changelogs.Release
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -53,9 +55,9 @@ class FBRemoteConfig @Inject constructor(
     init {
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
-                Timber.i( "Remote configs are fetched and activated")
+                Timber.i("Remote configs are fetched and activated")
             } else {
-                Timber.i( "Remote configs are not fetch : Error ${it.exception.toString()}")
+                Timber.i("Remote configs are not fetch : Error ${it.exception.toString()}")
             }
         }
     }
@@ -123,28 +125,21 @@ class FBRemoteConfig @Inject constructor(
         return url
     }
 
-    fun getLatestReleaseNote(): ReleaseNote? {
-        return Gson().fromJson(
-            remoteConfig.getString(REMOTE_CONFIG_KET_LATEST_RELEASE_NOTE),
-            ReleaseNote::class.java
-        )?.let { releaseNote ->
-            if (releaseNote.versionCode > BuildConfig.VERSION_CODE) {
-                releaseNote
-            } else null
+    fun getReleases(): List<Release> {
+        return try {
+            val type = TypeToken.getParameterized(List::class.java, Release::class.java).type
+            Gson().fromJson(remoteConfig.getString("releases"), type)
+        } catch (_: Exception) {
+            listOf()
         }
     }
 
-
-    data class ReleaseNote(
-        @SerializedName("version_code")
-        val versionCode: Long,
-        @SerializedName("version_name")
-        val versionName: String,
-        @SerializedName("changes")
-        val changes: List<String>,
-        @SerializedName("is_force_update")
-        val isForceUpdate: Boolean
-    )
+    fun getLatestRelease(): Release? {
+        return getReleases().maxByOrNull { it.versionCode }?.let { note ->
+            if (note.versionCode > BuildConfig.VERSION_CODE) note
+            else null
+        }
+    }
 
 
     data class AdsEnabled(

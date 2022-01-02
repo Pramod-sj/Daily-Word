@@ -1,6 +1,7 @@
 [
   {
-    "version": "2.2.1",
+    "version_name": "2.2.1",
+    "version_code": 202201010,
     "release_name": "\uD83C\uDF8A Happy 2022 update \uD83C\uDF8A",
     "date": "01 Jan 2022",
     "changes": [
@@ -8,10 +9,12 @@
       "Added Other word section (Adj, noun, or verb)",
       "Fixed bookmark crash",
       "Updated libs"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "2.1.0",
+    "version_name": "2.1.0",
+    "version_code": 202107251,
     "release_name": "\uD83C\uDF89 Anniversary update \uD83C\uDF89",
     "date": "25 Jul 2021",
     "changes": [
@@ -24,10 +27,12 @@
       "Updated underlying libraries for better performance",
       "Fixed word paging issue",
       "Minor UI changes"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "2.0.0",
+    "version_name": "2.0.0",
+    "version_code": 202104111,
     "release_name": "\uD83C\uDF89 Major update \uD83C\uDF89",
     "date": "09 Apr 2021",
     "changes": [
@@ -39,10 +44,12 @@
       "3 Different Widgets (2x1, 3x2, 5x3)",
       "Major UI Changes",
       "Performance improvement"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.3.0",
+    "version_name": "1.3.0",
+    "version_code": 202012021,
     "release_name": "🐞 Bug fix update 🐞",
     "date": "02 Dec 2020",
     "changes": [
@@ -50,10 +57,12 @@
       "Minor UI Changes",
       "Added copy word button",
       "Added 'Guidelines to fix notification issue'\nGo to Setting -> Facing Notification Issue -> Follow guidelines to fix notification issue"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.2.0",
+    "version_name": "1.2.0",
+    "version_code": 202009221,
     "release_name": "\uD83C\uDF89 Feature update 2 \uD83C\uDF89",
     "date": "22 Sep 2020",
     "changes": [
@@ -61,36 +70,44 @@
       "Change log page - checkout what's new!",
       "Read more button",
       "Minor bug fixes"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.1.1",
+    "version_name": "1.1.1",
+    "version_code": 202009021,
     "release_name": "\uD83D\uDC1E Major bug fix update \uD83D\uDC1E",
     "date": "02 Sep 2020",
     "changes": [
       "Fixed notification issue",
       "Added sections in Settings Page"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.1.0",
+    "version_name": "1.1.0",
+    "version_code": 202008161,
     "release_name": "\uD83C\uDF89Feature update\uD83C\uDF89",
     "date": "16 Aug 2020",
     "changes": [
       "Added Bookmark feature",
       "Reminding notification only when user didn't read word"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.0.1",
+    "version_name": "1.0.1",
+    "version_code": 202007152,
     "release_name": "Minor bug fix update",
     "date": "15 Jul 2020",
     "changes": [
       "Hot fixes"
-    ]
+    ],
+    "is_force_update": false
   },
   {
-    "version": "1.0.0",
+    "version_name": "1.0.0",
+    "version_code": 202007151,
     "release_name": "Initial Release",
     "date": "15 Jul 2020",
     "changes": [
@@ -100,14 +117,7 @@
       "Dark mode",
       "Edge to Edge functionality",
       "List of all words till date (From date of App release)"
-    ]
+    ],
+    "is_force_update": false
   }
 ]
-
-
-
-
-
-
-
-

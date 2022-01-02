@@ -7,7 +7,7 @@
 
         <variable
             name="changes"
-            type="com.pramod.dailyword.framework.ui.changelogs.Changes" />
+            type="com.pramod.dailyword.framework.ui.changelogs.Release" />
     </data>
 
     <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="@{changes.version}"
+                android:text="@{changes.versionName}"
                 android:textColor="@color/textColor_highEmphasis"
                 android:textStyle="bold" />
 

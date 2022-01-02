@@ -7,18 +7,18 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
-import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.ui.changelogs.Release
 import com.pramod.dailyword.framework.ui.common.exts.showBasicDialogWithSpannable
 import timber.log.Timber
 
 
-fun Activity.buildUpdateAvailableToDownloadSpannableString(releaseNote: FBRemoteConfig.ReleaseNote): SpannableString {
+fun Activity.buildUpdateAvailableToDownloadSpannableString(releaseNote: Release): SpannableString {
     val message =
         "A new update v${releaseNote.versionName} is available to download, click to view changelog."
     return buildSpannableMessage(message, releaseNote)
 }
 
-fun Activity.buildUpdateAvailableToInstallSpannableString(releaseNote: FBRemoteConfig.ReleaseNote): SpannableString {
+fun Activity.buildUpdateAvailableToInstallSpannableString(releaseNote: Release): SpannableString {
     val message =
         "A new update v${releaseNote.versionName} is ready to install, click to view changelog."
     return buildSpannableMessage(message, releaseNote)
@@ -26,7 +26,7 @@ fun Activity.buildUpdateAvailableToInstallSpannableString(releaseNote: FBRemoteC
 
 private fun Activity.buildSpannableMessage(
     message: String,
-    releaseNote: FBRemoteConfig.ReleaseNote
+    releaseNote: Release
 ): SpannableString {
     return SpannableString(message).apply {
         setSpan(

@@ -7,16 +7,20 @@ import android.text.style.BulletSpan
 import androidx.core.text.toSpannable
 import com.google.gson.annotations.SerializedName
 
-class Changes {
-
-    var version: String? = null
-
+data class Release(
+    @SerializedName("version_code")
+    val versionCode: Long,
+    @SerializedName("version_name")
+    val versionName: String,
     @SerializedName("release_name")
-    var releaseName: String? = null
-
-    var date: String? = null
-
-    var changes: List<String> = ArrayList()
+    val releaseName: String,
+    @SerializedName("release_date")
+    val date: String,
+    @SerializedName("changes")
+    val changes: List<String>,
+    @SerializedName("is_force_update")
+    val isForceUpdate: Boolean
+) {
 
     fun getHtmlFormattedChanges(): String {
         val stringBuilder = StringBuilder()

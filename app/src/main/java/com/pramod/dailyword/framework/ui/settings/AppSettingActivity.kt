@@ -189,7 +189,7 @@ class AppSettingActivity :
                             UpdateAvailability.UPDATE_AVAILABLE -> {
                                 viewModel.subTitleCheckForUpdate.value =
                                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
-                                val releaseNote = fbRemoteConfig.getLatestReleaseNote()
+                                val releaseNote = fbRemoteConfig.getLatestRelease()
                                 releaseNote?.let {
                                     showBottomSheet(
                                         title = "A new update version ${releaseNote.versionName} available!",
