@@ -58,7 +58,7 @@ class WidgetViewHelper {
                     context,
                     Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
                     playAudioIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 views.setOnClickPendingIntent(R.id.widget_img_pronounce, pendingIntentPlayAudio)
                 //end
@@ -90,7 +90,7 @@ class WidgetViewHelper {
                     context,
                     Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_BOOKMARK,
                     bookmarkIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 views.setOnClickPendingIntent(R.id.widget_bookmark, pendingIntentBookmark)
                 //end
@@ -195,7 +195,7 @@ class WidgetViewHelper {
                     context,
                     Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_BOOKMARK,
                     bookmarkIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 views.setOnClickPendingIntent(R.id.widget_bookmark, pendingIntentBookmark)
                 //end
@@ -217,7 +217,7 @@ class WidgetViewHelper {
                     context,
                     Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
                     playAudioIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 views.setOnClickPendingIntent(R.id.widget_img_pronounce, pendingIntentPlayAudio)
                 //end
@@ -235,7 +235,7 @@ class WidgetViewHelper {
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_TRY_AGAIN_CLICK,
                 tryAgainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
 
@@ -248,7 +248,7 @@ class WidgetViewHelper {
                         bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 
@@ -306,8 +306,7 @@ class WidgetViewHelper {
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_TRY_AGAIN_CLICK,
-                tryAgainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                tryAgainIntent, safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
 
@@ -321,7 +320,7 @@ class WidgetViewHelper {
                             bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                         )
                     },
-                PendingIntent.FLAG_UPDATE_CURRENT
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 

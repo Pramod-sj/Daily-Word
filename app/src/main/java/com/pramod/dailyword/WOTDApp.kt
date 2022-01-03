@@ -23,7 +23,7 @@ class WOTDApp : Application() {
             Timber.plant(Timber.DebugTree())
         }
         themeManager.applyTheme()
-        //setUpCustomCrashHandler()
+        //setUpCusomCrashHandler()
         initAds()
     }
 

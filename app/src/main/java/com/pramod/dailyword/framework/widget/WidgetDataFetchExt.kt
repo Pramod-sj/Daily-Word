@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.paging.ExperimentalPagingApi
 import com.pramod.dailyword.Constants
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import java.util.*
 
 
@@ -41,7 +42,7 @@ fun BaseWidgetProvider.setRepeatingDailyAlarmToFetch(context: Context) {
         context,
         Constants.REQUEST_CODE_PENDING_INTENT_ALARM,
         intent,
-        0
+        safeImmutableFlag(0)
     )
 
     val cal = Calendar.getInstance(Locale.US)
@@ -70,7 +71,7 @@ fun BaseWidgetProvider.cancelRepeatingAlarm(context: Context) {
         context,
         Constants.REQUEST_CODE_PENDING_INTENT_ALARM,
         intent,
-        0
+        safeImmutableFlag(0)
     )
     alarmManager.cancel(pendingIntent)
 }
