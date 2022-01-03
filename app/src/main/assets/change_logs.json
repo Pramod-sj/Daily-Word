@@ -1,5 +1,16 @@
 [
   {
+    "version_name": "2.2.3",
+    "version_code": 202201030,
+    "release_name": "Android S crash fix",
+    "date": "03 Jan 2022",
+    "changes": [
+      "Fix Android S crash and widget not loading issue",
+      "Happy 2022 Update"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "2.2.2",
     "version_code": 202201020,
     "release_name": "\uD83C\uDF8A Happy 2022 update \uD83C\uDF8A",
