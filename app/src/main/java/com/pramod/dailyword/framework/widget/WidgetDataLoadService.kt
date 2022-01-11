@@ -34,7 +34,6 @@ class WidgetDataLoadService : JobService() {
     @Inject
     lateinit var wordCacheDataSource: WordCacheDataSource
 
-    @OptIn(ExperimentalPagingApi::class)
     @Inject
     lateinit var bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 

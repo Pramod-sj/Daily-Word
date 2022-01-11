@@ -1,69 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_linearLayout_wotd"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/background_widget"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
         <TextView
+            android:id="@+id/tv_title"
+            style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_widget_title"
+            android:layout_gravity="center_vertical"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
             android:drawablePadding="@dimen/padding_medium"
             android:drawableTint="@color/white"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingVertical="@dimen/padding_medium"
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/dark_textColor_highEmphasis"
             android:textStyle="bold" />
 
         <LinearLayout
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginVertical="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
+                android:padding="4dp"
                 android:src="@drawable/ic_baseline_bookmark_border_24"
-                android:visibility="invisible"
-                app:tint="@color/white" />
+                android:tint="@color/white" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_retry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginVertical="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
+                android:padding="4dp"
                 android:src="@drawable/ic_round_refresh_24"
-                app:tint="@color/white" />
-
+                android:tint="@color/white" />
 
         </LinearLayout>
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_widget_inner">
 
         <LinearLayout
             android:id="@+id/widget_placeholder"
@@ -92,12 +94,9 @@
         <LinearLayout
             android:id="@+id/widget_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_medium"
-            android:paddingBottom="@dimen/padding_large"
-            android:visibility="invisible">
+            android:padding="@dimen/padding_medium">
 
             <TextView
                 android:id="@+id/widget_txtView_word_of_the_day"
@@ -105,8 +104,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:text="Testing"
-                android:textColor="@color/dark_textColor_highEmphasis" />
+                android:textColor="@color/dark_textColor_highEmphasis"
+                tools:text="layman" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -121,9 +120,9 @@
                     style="@style/AppTheme.TitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attribute"
                     android:textColor="@color/dark_textColor_highEmphasis"
-                    android:textStyle="italic" />
+                    android:textStyle="italic"
+                    tools:text="Attribute " />
 
                 <TextView
                     style="@style/AppTheme.TitleTextStyle"
@@ -139,8 +138,8 @@
                     style="@style/AppTheme.TitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pronounce"
-                    android:textColor="@color/dark_textColor_highEmphasis" />
+                    android:textColor="@color/dark_textColor_highEmphasis"
+                    tools:text="Pronounce" />
 
                 <ImageView
                     android:id="@+id/widget_img_pronounce"
@@ -148,8 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/padding_medium"
                     android:background="@drawable/background_circle_ripple"
-                    android:backgroundTint="@color/widget_background"
-                    android:padding="@dimen/padding_medium"
+                    android:padding="8dp"
                     android:src="@drawable/ic_volume_up_black_24dp"
                     android:tint="@color/dark_textColor_highEmphasis" />
 
@@ -157,15 +155,17 @@
 
             <TextView
                 android:id="@+id/widget_txtView_meanings"
-                style="@style/AppTheme.TitleTextStyle"
+                style="@style/AppTheme.SubTitleTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:text="Meaning"
-                android:textColor="@color/dark_textColor_highEmphasis" />
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:textColor="@color/dark_textColor_highEmphasis"
+                tools:text=": a person who is not a member of the clergy" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:orientation="vertical">
@@ -175,18 +175,22 @@
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="How to use testing"
                     android:textColor="@color/dark_textColor_highEmphasis"
                     android:textSize="@dimen/text_sub_title"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="How to use testing" />
 
                 <TextView
                     android:id="@+id/widget_txtView_how_to_user_word_desc"
                     style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Testing example sentences"
-                    android:textColor="@color/dark_textColor_mediumEmphasis" />
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="3"
+                    android:minLines="2"
+                    android:textColor="@color/dark_textColor_mediumEmphasis"
+                    tools:text="A banquet was held in honor of the faithful laymen who have volunteered their time and services to the church.  " />
             </LinearLayout>
         </LinearLayout>
 
@@ -200,6 +204,5 @@
             android:indeterminateTint="@color/white" />
 
     </FrameLayout>
-
 
 </LinearLayout>

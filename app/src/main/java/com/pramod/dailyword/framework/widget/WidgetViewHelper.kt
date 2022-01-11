@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.widget
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.os.bundleOf
@@ -11,14 +12,62 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.home.HomeActivity
+import timber.log.Timber
+import kotlin.math.ceil
+
 
 class WidgetViewHelper {
 
     companion object {
+        /**
+         * Returns number of cells needed for given size of the widget.
+         *
+         * @param size Widget size in dp.
+         * @return Size in number of cells.
+         */
+        private fun getCellsForSize(size: Int): Int {
+            return ceil(((size + 30) / 70).toDouble()).toInt()
+        }
+
+
+        fun isTablet(context: Context): Boolean {
+            return ((context.resources.configuration.screenLayout
+                    and Configuration.SCREENLAYOUT_SIZE_MASK)
+                    >= Configuration.SCREENLAYOUT_SIZE_LARGE)
+        }
+
+        fun getRemoteViews(
+            context: Context,
+            word: Word?,
+            width: Int,
+            height: Int
+        ): RemoteViews {
+            val rowCell = getCellsForSize(height)
+            val colCell = getCellsForSize(width)
+
+            Timber.i("Col:%s ; Rows:%s", colCell, rowCell)
+            return if (isTablet(context)) {
+                if (rowCell in 1 until 3 || colCell in 1 until 4) {
+                    createWordOfTheDayWidgetMedium(context, word)
+                } else {
+                    createWordOfTheDayWidget(context, word)
+                }
+            } else {
+                if (rowCell in 1 until 2 || colCell in 1 until 3) {
+                    createWordOfTheDayWidgetSmall(context, word)
+                } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
+                    createWordOfTheDayWidgetMedium(context, word)
+                } else {
+                    createWordOfTheDayWidget(context, word)
+                }
+            }
+
+        }
+
 
         fun createWordOfTheDayWidget(context: Context, word: Word?): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_content, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -154,7 +203,7 @@ class WidgetViewHelper {
 
         fun createWordOfTheDayWidgetMedium(context: Context, word: Word?): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_medium)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_medium_revamp)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_content, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -284,7 +333,7 @@ class WidgetViewHelper {
 
         fun createWordOfTheDayWidgetSmall(context: Context, word: Word?): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_small)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_small_revamp)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_content, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
