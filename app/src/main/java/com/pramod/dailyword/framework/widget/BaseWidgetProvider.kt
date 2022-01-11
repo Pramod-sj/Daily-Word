@@ -1,24 +1,30 @@
 package com.pramod.dailyword.framework.widget
 
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.os.Bundle
 import androidx.paging.ExperimentalPagingApi
 import com.google.gson.Gson
+import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 open class BaseWidgetProvider : AppWidgetProvider() {
     private val TAG = BaseWidgetProvider::class.simpleName
+
+    @Inject
+    lateinit var bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource
 
     @OptIn(ExperimentalPagingApi::class)
     @Inject
@@ -40,7 +46,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            Timber.i( "onReceive: " + it.action)
+            Timber.i("onReceive: " + it.action)
             when (it.action) {
                 Intent.ACTION_TIME_CHANGED -> {
                     context?.let { context ->
@@ -66,7 +72,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
                             word?.let { bookmarked_word ->
                                 toggleBookmarkInteractor.toggle(bookmarked_word)
                                     .collectLatest {
-                                        Timber.i( "toggle: " + Gson().toJson(it))
+                                        Timber.i("toggle: " + Gson().toJson(it))
                                     }
                                 //run data fetch job to get updated data
                                 runTodayWordFetchJob(context)
@@ -84,7 +90,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
 
     override fun onEnabled(context: Context?) {
         super.onEnabled(context)
-        Timber.i( "onEnabled: ")
+        Timber.i("onEnabled: ")
         context?.let {
             runTodayWordFetchJob(it)
             setRepeatingDailyAlarmToFetch(it)
@@ -92,7 +98,7 @@ open class BaseWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context?) {
-        Timber.i( "onDisabled: ")
+        Timber.i("onDisabled: ")
         context?.let {
             stopTodayWordFetchJob(it)
             cancelRepeatingAlarm(it)
@@ -109,7 +115,39 @@ open class BaseWidgetProvider : AppWidgetProvider() {
         context?.let { context1 ->
             runTodayWordFetchJob(context1)
         }
-        Timber.i( "onUpdate: function executed")
+        Timber.i("onUpdate: function executed")
     }
 
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+
+        val height: Int
+        val width: Int
+        if (context!!.resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            || context.resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+        ) {
+            width = newOptions?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: 0
+            height = newOptions?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 0
+        } else {
+            width = newOptions?.getInt(OPTION_APPWIDGET_MAX_WIDTH) ?: 0
+            height = newOptions?.getInt(OPTION_APPWIDGET_MIN_HEIGHT) ?: 0
+        }
+
+        Timber.i("Width:%s ; Height:%s", width, height)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val word = bookmarkedWordCacheDataSource.getWordNonLive(
+                CalenderUtil.convertCalenderToString(Calendar.getInstance(Locale.US))
+            )
+            appWidgetManager?.updateAppWidget(
+                appWidgetId,
+                WidgetViewHelper.getRemoteViews(context, word, width, height)
+            )
+        }
+    }
 }

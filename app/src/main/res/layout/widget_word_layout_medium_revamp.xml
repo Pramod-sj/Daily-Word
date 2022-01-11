@@ -2,57 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_linearLayout_wotd"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/background_widget"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_widget_title"
             android:drawableStart="@drawable/ic_vocabulary_24dp"
             android:drawablePadding="@dimen/padding_medium"
             android:drawableTint="@color/white"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingVertical="@dimen/padding_medium"
+            android:paddingHorizontal="6dp"
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/dark_textColor_highEmphasis"
+            android:textSize="@dimen/text_small"
             android:textStyle="bold" />
 
         <LinearLayout
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginVertical="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_bookmark_border_24"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:tint="@color/white" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/widget_retry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginVertical="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_large"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_round_refresh_24"
                 app:tint="@color/white" />
@@ -63,7 +61,11 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_widget_inner"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/padding_small">
 
         <LinearLayout
             android:id="@+id/widget_placeholder"
@@ -72,13 +74,13 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/margin_extra_large">
+            android:padding="@dimen/padding_medium">
 
             <ImageView
                 android:id="@+id/widget_placeHolder_imageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/margin_medium"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="@dimen/margin_small"
                 app:tint="@color/dark_textColor_highEmphasis" />
 
             <TextView
@@ -86,31 +88,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_textColor_highEmphasis"
-                android:textSize="@dimen/text_sub_title" />
+                android:textSize="@dimen/text_small" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/widget_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_medium"
-            android:paddingBottom="@dimen/padding_large"
+            android:padding="@dimen/padding_small"
             android:visibility="invisible">
 
             <TextView
                 android:id="@+id/widget_txtView_word_of_the_day"
-                style="@style/AppTheme.Header3TextStyle.Bold"
+                style="@style/AppTheme.Header5TextStyle.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
+                android:singleLine="true"
                 android:text="Testing"
                 android:textColor="@color/dark_textColor_highEmphasis" />
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:gravity="center_vertical"
@@ -118,7 +123,7 @@
 
                 <TextView
                     android:id="@+id/widget_txtView_attribute"
-                    style="@style/AppTheme.TitleTextStyle"
+                    style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Attribute"
@@ -126,7 +131,7 @@
                     android:textStyle="italic" />
 
                 <TextView
-                    style="@style/AppTheme.TitleTextStyle"
+                    style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -136,7 +141,7 @@
 
                 <TextView
                     android:id="@+id/widget_txtView_pronounce"
-                    style="@style/AppTheme.TitleTextStyle"
+                    style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pronounce"
@@ -144,50 +149,26 @@
 
                 <ImageView
                     android:id="@+id/widget_img_pronounce"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginHorizontal="@dimen/padding_medium"
-                    android:background="@drawable/background_circle_ripple"
-                    android:backgroundTint="@color/widget_background"
-                    android:padding="@dimen/padding_medium"
                     android:src="@drawable/ic_volume_up_black_24dp"
                     android:tint="@color/dark_textColor_highEmphasis" />
 
             </LinearLayout>
 
+
             <TextView
                 android:id="@+id/widget_txtView_meanings"
-                style="@style/AppTheme.TitleTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:text="Meaning"
-                android:textColor="@color/dark_textColor_highEmphasis" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+                style="@style/AppTheme.SmallTextStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:orientation="vertical">
+                android:layout_marginBottom="@dimen/margin_small"
+                android:ellipsize="end"
+                android:textColor="@color/dark_textColor_highEmphasis" />
 
-                <TextView
-                    android:id="@+id/widget_txtView_how_to_user_word"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="How to use testing"
-                    android:textColor="@color/dark_textColor_highEmphasis"
-                    android:textSize="@dimen/text_sub_title"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/widget_txtView_how_to_user_word_desc"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Testing example sentences"
-                    android:textColor="@color/dark_textColor_mediumEmphasis" />
-            </LinearLayout>
         </LinearLayout>
 
         <ProgressBar
