@@ -1,0 +1,122 @@
+package com.pramod.dailyword.framework.widget
+
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Context
+import com.google.gson.Gson
+import com.pramod.dailyword.R
+import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
+import com.pramod.dailyword.business.data.network.Status
+import com.pramod.dailyword.business.interactor.GetWordsInteractor
+import com.pramod.dailyword.framework.util.NetworkUtils
+import com.pramod.dailyword.framework.widget.pref.WidgetSizePref
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.firstOrNull
+import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class UpdateWidgetViewHelper @Inject constructor(
+    private val bookmarkedWordCacheDataSource: BookmarkedWordCacheDataSource,
+    private val widgetSizePref: WidgetSizePref,
+    private val appWidgetManager: AppWidgetManager,
+    @ApplicationContext private val context: Context,
+    private val getWordsInteractor: GetWordsInteractor
+) {
+
+    suspend fun updateWidgetUi(
+        shouldCallApi: Boolean
+    ) {
+        val widgetSize = widgetSizePref.getWidgetSize() ?: return
+
+        val widgetComponent = ComponentName(context, DailyWordWidgetProvider::class.java)
+
+        try {
+
+            val topWord = bookmarkedWordCacheDataSource.getTopOneWord().firstOrNull()
+
+            if (topWord == null || shouldCallApi) {
+
+                if (!NetworkUtils.isNetworkActive(context)) {
+                    appWidgetManager.updateAppWidget(
+                        widgetComponent,
+                        WidgetViewHelper.getResponsiveErrorRemoteView(
+                            context,
+                            R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
+                            "Please check your internet",
+                            width = widgetSize.width,
+                            height = widgetSize.height
+                        )
+                    )
+                    return
+                }
+
+                //show progress loader
+                appWidgetManager.updateAppWidget(
+                    widgetComponent,
+                    WidgetViewHelper.getResponsiveLoadingRemoteView(
+                        context,
+                        widgetSize.width,
+                        widgetSize.height
+                    )
+                )
+
+                val latestWordResource =
+                    getWordsInteractor.getWords(1, true)
+                        .firstOrNull { it.status != Status.LOADING }
+
+                Timber.i("onStartJob: " + Gson().toJson(latestWordResource))
+
+                if (latestWordResource?.status == Status.SUCCESS && latestWordResource.data?.isNullOrEmpty() == false) {
+                    val word = latestWordResource.data.first()
+                    appWidgetManager.updateAppWidget(
+                        widgetComponent,
+                        WidgetViewHelper.getRemoteViews(
+                            context,
+                            word,
+                            widgetSize.width,
+                            widgetSize.height
+                        )
+                    )
+                } else {
+                    appWidgetManager.updateAppWidget(
+                        widgetComponent,
+                        WidgetViewHelper.getResponsiveErrorRemoteView(
+                            context,
+                            R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
+                            latestWordResource?.error?.message
+                                ?: "Something went wrong! try again.",
+                            width = widgetSize.width,
+                            height = widgetSize.height
+                        )
+                    )
+                }
+            } else {
+                appWidgetManager.updateAppWidget(
+                    widgetComponent,
+                    WidgetViewHelper.getRemoteViews(
+                        context,
+                        topWord,
+                        widgetSize.width,
+                        widgetSize.height
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            Timber.i("onStartJob: Exception: $e")
+            appWidgetManager.updateAppWidget(
+                widgetComponent,
+                WidgetViewHelper.getResponsiveErrorRemoteView(
+                    context,
+                    R.drawable.ic_info_outline_black_24dp,
+                    "Unable to fetch the word, try opening the app.",
+                    widgetSize.width,
+                    widgetSize.height
+                )
+            )
+        } finally {
+        }
+
+    }
+}

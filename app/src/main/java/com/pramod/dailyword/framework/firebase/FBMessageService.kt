@@ -12,7 +12,7 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
-import com.pramod.dailyword.framework.ui.home.HomeActivity
+import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -47,7 +47,7 @@ class FBMessageService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        Timber.i( "New Token: $p0")
+        Timber.i("New Token: $p0")
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {
@@ -56,10 +56,10 @@ class FBMessageService : FirebaseMessagingService() {
         p0.let {
             val payload: MessagePayload =
                 Gson().fromJson(Gson().toJson(p0.data), MessagePayload::class.java)
-            Timber.i( Gson().toJson(payload))
+            Timber.i(Gson().toJson(payload))
             val notificationHelper = NotificationHelper(applicationContext)
 
-            val intentToActivity = Intent(applicationContext, HomeActivity::class.java)
+            val intentToActivity = Intent(applicationContext, SplashScreenActivity::class.java)
             intentToActivity.putExtra(EXTRA_NOTIFICATION_PAYLOAD, Gson().toJson(p0.data))
             intentToActivity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
@@ -70,8 +70,7 @@ class FBMessageService : FirebaseMessagingService() {
                 safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
 
-
-            GlobalScope.launch {
+            CoroutineScope(Dispatchers.Main).launch {
 
                 var notification: Notification? = null
 
@@ -104,7 +103,7 @@ class FBMessageService : FirebaseMessagingService() {
                             null
                         }
 
-                        Timber.i( "onMessageReceived: ${word?.word} - ${word?.isSeen}")
+                        Timber.i("onMessageReceived: ${word?.word} - ${word?.isSeen}")
                         //Log.i( Gson().toJson(wordOfTheDay))
 
                         //checking whether word seen or not

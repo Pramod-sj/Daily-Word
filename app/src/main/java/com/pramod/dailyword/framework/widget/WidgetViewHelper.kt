@@ -11,7 +11,7 @@ import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
-import com.pramod.dailyword.framework.ui.home.HomeActivity
+import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import timber.log.Timber
 import kotlin.math.ceil
 
@@ -64,6 +64,53 @@ class WidgetViewHelper {
 
         }
 
+        fun getResponsiveLoadingRemoteView(
+            context: Context,
+            width: Int,
+            height: Int
+        ): RemoteViews {
+            val rowCell = getCellsForSize(height)
+            val colCell = getCellsForSize(width)
+            return if (isTablet(context)) {
+                if (rowCell in 1 until 3 || colCell in 1 until 4) {
+                    createLoadingWidgetMedium(context)
+                } else {
+                    createLoadingWidget(context)
+                }
+            } else {
+                if (rowCell in 1 until 2 || colCell in 1 until 3) {
+                    createLoadingWidgetSmall(context)
+                } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
+                    createLoadingWidgetMedium(context)
+                } else {
+                    createLoadingWidget(context)
+                }
+            }
+        }
+
+
+        fun getResponsiveErrorRemoteView(
+            context: Context, resId: Int, message: String, width: Int, height: Int
+        ): RemoteViews {
+            val rowCell = getCellsForSize(height)
+            val colCell = getCellsForSize(width)
+            return if (isTablet(context)) {
+                if (rowCell in 1 until 3 || colCell in 1 until 4) {
+                    createPlaceHolderWidgetMedium(context, resId, message)
+                } else {
+                    createPlaceHolderWidget(context, resId, message)
+                }
+            } else {
+                if (rowCell in 1 until 2 || colCell in 1 until 3) {
+                    createPlaceHolderWidgetSmall(context, resId, message)
+                } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
+                    createPlaceHolderWidgetMedium(context, resId, message)
+                } else {
+                    createPlaceHolderWidget(context, resId, message)
+                }
+            }
+        }
+
 
         fun createWordOfTheDayWidget(context: Context, word: Word?): RemoteViews {
             val views =
@@ -91,13 +138,13 @@ class WidgetViewHelper {
                 }
 
                 //pronounce audio pending intent
-                val playAudioIntent = Intent(context, WordWidgetProvider::class.java)
+                val playAudioIntent = Intent(context, DailyWordWidgetProvider::class.java)
                 playAudioIntent.action =
-                    WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
+                    DailyWordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
                 playAudioIntent.putExtras(
                     bundleOf(
                         Pair(
-                            WordWidgetProvider.EXTRA_AUDIO_URL,
+                            DailyWordWidgetProvider.EXTRA_AUDIO_URL,
                             word.pronounceAudio
                         )
                     )
@@ -122,17 +169,17 @@ class WidgetViewHelper {
                 //end
 
                 //bookmark pending intent
-                val bookmarkIntent = Intent(context, WordWidgetProvider::class.java)
+                val bookmarkIntent = Intent(context, DailyWordWidgetProvider::class.java)
                 bookmarkIntent.putExtras(
                     bundleOf(
                         Pair(
-                            WordWidgetProvider.EXTRA_BOOKMARKED_WORD,
+                            DailyWordWidgetProvider.EXTRA_BOOKMARKED_WORD,
                             word.word
                         )
                     )
                 )
                 bookmarkIntent.action =
-                    BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
+                    DailyWordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
 
 
                 val pendingIntentBookmark = PendingIntent.getBroadcast(
@@ -150,9 +197,9 @@ class WidgetViewHelper {
             }
 
 
-            val tryAgainIntent = Intent(context, WordWidgetProvider::class.java)
+            val tryAgainIntent = Intent(context, DailyWordWidgetProvider::class.java)
             tryAgainIntent.action =
-                BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+                DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
 
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,
@@ -166,9 +213,9 @@ class WidgetViewHelper {
             val pendingIntentForWidgetClick = PendingIntent.getActivity(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
-                Intent(context, HomeActivity::class.java).apply {
+                Intent(context, SplashScreenActivity::class.java).apply {
                     putExtras(
-                        bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
+                        bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
                 safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
@@ -180,7 +227,7 @@ class WidgetViewHelper {
 
         fun createPlaceHolderWidget(context: Context, resId: Int, message: String): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -193,7 +240,7 @@ class WidgetViewHelper {
 
         fun createLoadingWidget(context: Context): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.VISIBLE)
@@ -228,17 +275,17 @@ class WidgetViewHelper {
                 //end
 
                 //bookmark pending intent
-                val bookmarkIntent = Intent(context, WordWidgetProvider::class.java)
+                val bookmarkIntent = Intent(context, DailyWordWidgetProvider::class.java)
                 bookmarkIntent.putExtras(
                     bundleOf(
                         Pair(
-                            WordWidgetProvider.EXTRA_BOOKMARKED_WORD,
+                            DailyWordWidgetProvider.EXTRA_BOOKMARKED_WORD,
                             word.word
                         )
                     )
                 )
                 bookmarkIntent.action =
-                    BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
+                    DailyWordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
 
                 val pendingIntentBookmark = PendingIntent.getBroadcast(
                     context,
@@ -250,13 +297,13 @@ class WidgetViewHelper {
                 //end
 
                 //pronounce audio pending intent
-                val playAudioIntent = Intent(context, WordWidgetProvider::class.java)
+                val playAudioIntent = Intent(context, DailyWordWidgetProvider::class.java)
                 playAudioIntent.action =
-                    WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
+                    DailyWordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
                 playAudioIntent.putExtras(
                     bundleOf(
                         Pair(
-                            WordWidgetProvider.EXTRA_AUDIO_URL,
+                            DailyWordWidgetProvider.EXTRA_AUDIO_URL,
                             word.pronounceAudio
                         )
                     )
@@ -276,9 +323,9 @@ class WidgetViewHelper {
             }
 
 
-            val tryAgainIntent = Intent(context, WordWidgetProvider::class.java)
+            val tryAgainIntent = Intent(context, DailyWordWidgetProvider::class.java)
             tryAgainIntent.action =
-                BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+                DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
 
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,
@@ -292,9 +339,9 @@ class WidgetViewHelper {
             val pendingIntentForWidgetClick = PendingIntent.getActivity(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
-                Intent(context, HomeActivity::class.java).apply {
+                Intent(context, SplashScreenActivity::class.java).apply {
                     putExtras(
-                        bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
+                        bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
                 safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
@@ -310,7 +357,7 @@ class WidgetViewHelper {
             message: String
         ): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_medium)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_medium_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -323,7 +370,7 @@ class WidgetViewHelper {
 
         fun createLoadingWidgetMedium(context: Context): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_medium)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_medium_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.VISIBLE)
@@ -348,9 +395,9 @@ class WidgetViewHelper {
                 views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)
             }
 
-            val tryAgainIntent = Intent(context, WordWidgetProvider::class.java)
+            val tryAgainIntent = Intent(context, DailyWordWidgetProvider::class.java)
             tryAgainIntent.action =
-                BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+                DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
 
             val pendingIntentTryAgain = PendingIntent.getBroadcast(
                 context,
@@ -363,10 +410,10 @@ class WidgetViewHelper {
             val pendingIntentForWidgetClick = PendingIntent.getActivity(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
-                Intent(context, HomeActivity::class.java)
+                Intent(context, SplashScreenActivity::class.java)
                     .apply {
                         putExtras(
-                            bundleOf(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
+                            bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                         )
                     },
                 safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
@@ -383,7 +430,7 @@ class WidgetViewHelper {
             message: String
         ): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_small)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_small_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -396,7 +443,7 @@ class WidgetViewHelper {
 
         fun createLoadingWidgetSmall(context: Context): RemoteViews {
             val views =
-                RemoteViews(context.packageName, R.layout.widget_word_layout_small)
+                RemoteViews(context.packageName, R.layout.widget_word_layout_small_revamp)
             views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
             views.setViewVisibility(R.id.widget_progress, View.VISIBLE)
