@@ -17,9 +17,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_vocabulary_24dp"
+            android:drawableStart="@drawable/ic_vocabulary_24dp_white"
             android:drawablePadding="@dimen/padding_medium"
-            android:drawableTint="@color/white"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:paddingHorizontal="6dp"
