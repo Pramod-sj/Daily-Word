@@ -71,9 +71,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         intent?.let {
-            context!!
             Timber.i("onReceive: " + it.action)
-            Timber.i("onReceive: " + getWidthAndHeight(context, it.extras).toString())
             //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
             when (it.action) {
                 Intent.ACTION_TIME_CHANGED -> {
