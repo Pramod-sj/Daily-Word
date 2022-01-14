@@ -21,6 +21,7 @@ import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.ui.worddetails.WordDetailedActivity
 import com.pramod.dailyword.framework.ui.words.WordListActivity
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 
@@ -34,7 +35,12 @@ fun Activity.openSplashScreen(vararg flag: Int) {
 }
 
 fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
-    val intent = Intent(this, HomeActivity::class.java)
+    val intent = Intent(this, HomeActivity::class.java).apply {
+        this@openHomePage.intent.extras?.let {
+            Timber.i("openHomePage: $it")
+            putExtras(it)
+        }
+    }
     if (withFadeAnimation) {
         /*overridePendingTransition(
             android.R.anim.fade_in,
@@ -143,5 +149,45 @@ fun getUriFromBitmap(context: Context, bitmap: Bitmap): Uri? {
     } catch (e: Exception) {
         null
     }
+}
+
+inline fun <T1 : Any, T2 : Any, R : Any> safeLet(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {
+    return if (p1 != null && p2 != null) block(p1, p2) else null
+}
+
+inline fun <T1 : Any, T2 : Any, T3 : Any, R : Any> safeLet(
+    p1: T1?,
+    p2: T2?,
+    p3: T3?,
+    block: (T1, T2, T3) -> R?
+): R? {
+    return if (p1 != null && p2 != null && p3 != null) block(p1, p2, p3) else null
+}
+
+inline fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, R : Any> safeLet(
+    p1: T1?,
+    p2: T2?,
+    p3: T3?,
+    p4: T4?,
+    block: (T1, T2, T3, T4) -> R?
+): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null) block(p1, p2, p3, p4) else null
+}
+
+inline fun <T1 : Any, T2 : Any, T3 : Any, T4 : Any, T5 : Any, R : Any> safeLet(
+    p1: T1?,
+    p2: T2?,
+    p3: T3?,
+    p4: T4?,
+    p5: T5?,
+    block: (T1, T2, T3, T4, T5) -> R?
+): R? {
+    return if (p1 != null && p2 != null && p3 != null && p4 != null && p5 != null) block(
+        p1,
+        p2,
+        p3,
+        p4,
+        p5
+    ) else null
 }
 

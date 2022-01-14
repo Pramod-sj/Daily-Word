@@ -49,9 +49,10 @@ import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
+import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.*
 import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
-import com.pramod.dailyword.framework.widget.BaseWidgetProvider
+import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -116,12 +117,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         showChangelogDialog()
         settingUpAudioIconTint()
         setUpViewCallbacks()
-        deepLinkNotification()
+        handledeepLinkNotificationAndWidgetClick()
         //handleWidgetExtras()
         setUpRecyclerViewAdapter()
         shouldShowRatingDialog()
         handleShowingCreditAndAutoStartDialog()
         handleBadgeVisibility()
+        refreshWidget()
     }
 
     private fun initBillingHelper() {
@@ -328,7 +330,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             pendingIntent = PendingIntent.getActivity(
                 applicationContext,
                 NotificationHelper.generateUniqueNotificationId(),
-                Intent(this, HomeActivity::class.java).apply {
+                Intent(this, SplashScreenActivity::class.java).apply {
                     putExtra(
                         FBMessageService.EXTRA_NOTIFICATION_PAYLOAD,
                         Gson().toJson(
@@ -499,31 +501,36 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         }
     }
 
-    private fun deepLinkNotification() {
+    private fun handledeepLinkNotificationAndWidgetClick() {
         val messagePayload: FBMessageService.MessagePayload? =
             Gson().fromJson(
                 intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
                 FBMessageService.MessagePayload::class.java
             )
         Timber.i(
-
             "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
         )
-        when (messagePayload?.deepLink) {
-            FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
-                openWordDetailsPage(messagePayload.date, option = null)
-            }
-            FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
-                openWordListPage()
-            }
-            else -> {
 
+        val widgetClickWordDate =
+            intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+        if (widgetClickWordDate != null) {
+            openWordDetailsPage(widgetClickWordDate, option = null)
+        } else
+            when (messagePayload?.deepLink) {
+                FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
+                    openWordDetailsPage(messagePayload.date, option = null)
+                }
+                FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
+                    openWordListPage()
+                }
+                else -> {
+
+                }
             }
-        }
     }
 
     private fun handleWidgetExtras() {
-        val date = intent.extras?.getString(BaseWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+        val date = intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
         date?.let {
             openWordDetailsPage(it, null)
         }
@@ -709,6 +716,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun refreshWidget() {
+        Intent().also { intent ->
+            intent.action = DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+            sendBroadcast(intent)
         }
     }
 

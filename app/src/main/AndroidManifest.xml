@@ -102,7 +102,7 @@
         </service>
 
         <receiver
-            android:name="com.pramod.dailyword.framework.widget.WordWidgetProvider"
+            android:name="com.pramod.dailyword.framework.widget.DailyWordWidgetProvider"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

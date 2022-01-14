@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_linearLayout_wotd"
     android:layout_width="match_parent"
@@ -53,19 +52,13 @@
             android:orientation="vertical"
             android:padding="@dimen/padding_medium">
 
-            <ImageView
-                android:id="@+id/widget_placeHolder_imageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="@dimen/margin_small"
-                app:tint="@color/dark_textColor_highEmphasis" />
-
             <TextView
                 android:id="@+id/widget_placeHolder_imageView_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:textColor="@color/dark_textColor_highEmphasis"
-                android:textSize="@dimen/text_small" />
+                android:textSize="10sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +79,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="dlkjsdfjfldskfjlsdsdsdsd"
                 android:textColor="@color/dark_textColor_highEmphasis" />
 
             <LinearLayout

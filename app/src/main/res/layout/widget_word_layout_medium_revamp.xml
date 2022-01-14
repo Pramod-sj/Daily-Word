@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_linearLayout_wotd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -81,12 +82,13 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="@dimen/margin_small"
-                app:tint="@color/dark_textColor_highEmphasis" />
+                android:tint="@color/dark_textColor_highEmphasis" />
 
             <TextView
                 android:id="@+id/widget_placeHolder_imageView_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:textColor="@color/dark_textColor_highEmphasis"
                 android:textSize="@dimen/text_small" />
         </LinearLayout>
@@ -126,7 +128,8 @@
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attribute"
+                    android:singleLine="true"
+                    tools:text="Attribute"
                     android:textColor="@color/dark_textColor_highEmphasis"
                     android:textStyle="italic" />
 
@@ -144,7 +147,8 @@
                     style="@style/AppTheme.SubTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pronounce"
+                    android:singleLine="true"
+                    tools:text="Pronounce"
                     android:textColor="@color/dark_textColor_highEmphasis" />
 
                 <ImageView

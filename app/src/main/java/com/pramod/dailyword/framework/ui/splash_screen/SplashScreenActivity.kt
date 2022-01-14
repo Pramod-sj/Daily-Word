@@ -22,6 +22,7 @@ import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.GradientUtils
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
+import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,6 +50,7 @@ class SplashScreenActivity :
         navigateToHomePage()
         setUpAcceptLinks()
         scheduleWeeklyAlarmAt12PM()
+        Timber.i("onCreate: " + intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE))
     }
 
     private fun addGradientToAppIcon() {
