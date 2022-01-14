@@ -112,6 +112,7 @@
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
+                <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET" />
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
 

@@ -4,6 +4,8 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
+import androidx.core.os.persistableBundleOf
 import com.pramod.dailyword.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -16,7 +18,7 @@ class WidgetDataFetchHelper @Inject constructor(
     private val jobScheduler: JobScheduler
 ) {
 
-    fun runTodayWordFetchJob() {
+    fun runTodayWordFetchJob(shouldCallApi: Boolean = true) {
         if (isTodayWordFetchJobSchedule()) {
             Timber.i("Job already schedule or running")
             return
@@ -25,7 +27,14 @@ class WidgetDataFetchHelper @Inject constructor(
         val jobInfo = JobInfo.Builder(
             Constants.JOB_ID_FETCH_DATA_FOR_WIDGET,
             ComponentName(context, WidgetDataLoadService::class.java)
-        ).setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+        ).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                setExtras(
+                    persistableBundleOf(
+                        WidgetDataLoadService.EXTRA_SHOULD_CALL_API to shouldCallApi
+                    )
+                )
+        }.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
             .setRequiresCharging(false)
             .setRequiresDeviceIdle(false)
             .setOverrideDeadline(0)

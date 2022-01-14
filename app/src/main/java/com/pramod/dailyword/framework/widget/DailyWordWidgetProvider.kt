@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.widget.Toast
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Status
@@ -57,6 +56,14 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         const val ACTION_PLAY_AUDIO_FROM_WIDGET =
             "com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET"
 
+
+        /**
+         * This action will only make a network call when no word present in local,
+         * it is introduce to load word from cache into widget when user open [HomeActivity]
+         */
+        const val ACTION_SILENT_REFRESH_WIDGET =
+            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET"
+
         const val EXTRA_AUDIO_URL = "audio_url"
         const val EXTRA_BOOKMARKED_WORD = "bookmarked_word"
     }
@@ -67,7 +74,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
             context!!
             Timber.i("onReceive: " + it.action)
             Timber.i("onReceive: " + getWidthAndHeight(context, it.extras).toString())
-            Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
             when (it.action) {
                 Intent.ACTION_TIME_CHANGED -> {
                     //stopping currently running job and starting again
@@ -99,6 +106,10 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                     it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
                         audioPlayer.play(audioUrl)
                     }
+                }
+
+                ACTION_SILENT_REFRESH_WIDGET -> {
+                    widgetDataFetchHelper.runTodayWordFetchJob(false)
                 }
                 else -> {
                 }
