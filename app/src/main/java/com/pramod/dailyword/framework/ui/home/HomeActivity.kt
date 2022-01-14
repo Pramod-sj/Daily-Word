@@ -123,7 +123,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         shouldShowRatingDialog()
         handleShowingCreditAndAutoStartDialog()
         handleBadgeVisibility()
-        refreshWidget()
+        silentRefreshWidget()
     }
 
     private fun initBillingHelper() {
@@ -719,9 +719,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         }
     }
 
-    private fun refreshWidget() {
+    private fun silentRefreshWidget() {
         Intent().also { intent ->
-            intent.action = DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
+            intent.action = DailyWordWidgetProvider.ACTION_SILENT_REFRESH_WIDGET
             sendBroadcast(intent)
         }
     }
