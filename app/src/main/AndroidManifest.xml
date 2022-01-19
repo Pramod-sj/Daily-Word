@@ -113,6 +113,7 @@
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET" />
+                <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_RANDOM_WORD" />
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
 
@@ -123,6 +124,11 @@
 
         <service
             android:name="com.pramod.dailyword.framework.widget.WidgetDataLoadService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service
+            android:name=".framework.widget.WidgetRandomWordLoadService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 

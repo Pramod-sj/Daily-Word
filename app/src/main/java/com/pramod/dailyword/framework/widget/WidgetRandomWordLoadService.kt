@@ -2,7 +2,6 @@ package com.pramod.dailyword.framework.widget
 
 import android.app.job.JobParameters
 import android.app.job.JobService
-import android.os.Build
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,12 +11,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WidgetDataLoadService : JobService() {
-    private val TAG = WidgetDataLoadService::class.simpleName
-
-    companion object {
-        const val EXTRA_SHOULD_CALL_API = "should_call_api"
-    }
+class WidgetRandomWordLoadService : JobService() {
+    private val TAG = WidgetRandomWordLoadService::class.simpleName
 
     @Inject
     lateinit var updateWidgetViewHelper: UpdateWidgetViewHelper
@@ -27,10 +22,7 @@ class WidgetDataLoadService : JobService() {
     override fun onStartJob(params: JobParameters?): Boolean {
         Timber.i("onStartJob: ")
         updateUiJob = CoroutineScope(Dispatchers.Main).launch {
-            val shouldCallApi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                params?.extras?.getBoolean(EXTRA_SHOULD_CALL_API, true) ?: true
-            } else true
-            updateWidgetViewHelper.fetchTodayWordAndUpdateWidgetUi(shouldCallApi)
+            updateWidgetViewHelper.fetchRandomWordAndUpdateWidgetUi()
             jobFinished(params, false)
         }
         return true //returning true so the work is handle in by the coroutine job (i.e. updateUiJob)

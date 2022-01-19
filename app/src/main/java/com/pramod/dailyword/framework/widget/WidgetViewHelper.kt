@@ -192,6 +192,30 @@ class WidgetViewHelper {
                 //end
 
 
+                //bookmark pending intent
+                val randomWordIntent = Intent(context, DailyWordWidgetProvider::class.java)
+                randomWordIntent.putExtras(
+                    bundleOf(
+                        Pair(
+                            DailyWordWidgetProvider.EXTRA_BOOKMARKED_WORD,
+                            word.word
+                        )
+                    )
+                )
+                randomWordIntent.action =
+                    DailyWordWidgetProvider.ACTION_RANDOM_WORD
+
+
+                val pendingIntentRandomWord = PendingIntent.getBroadcast(
+                    context,
+                    Constants.REQUEST_CODE_PENDING_INTENT_ON_SHOW_RANDOM,
+                    randomWordIntent,
+                    safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                )
+                views.setOnClickPendingIntent(R.id.widget_random_word, pendingIntentRandomWord)
+                //end
+
+
             } else {
                 views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)
             }

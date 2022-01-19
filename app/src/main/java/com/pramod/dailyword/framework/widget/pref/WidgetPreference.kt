@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class WidgetSizePref @Inject constructor(
+class WidgetPreference @Inject constructor(
     @ApplicationContext context: Context
 ) : BasePreferenceManager(PREF_NAME, context) {
 
@@ -17,6 +17,7 @@ class WidgetSizePref @Inject constructor(
     companion object {
         const val PREF_NAME = "widget"
         const val KEY_WIDGET_SIZE = "widget_size"
+        const val KEY_CURRENT_WORD_SHOWN = "current_word_shown"
     }
 
     fun setWidgetSize(widgetSize: WidgetSize) {
@@ -27,6 +28,14 @@ class WidgetSizePref @Inject constructor(
         return sPrefManager.getString(KEY_WIDGET_SIZE, null)?.let {
             Gson().fromJson(it, WidgetSize::class.java)
         }
+    }
+
+    fun setCurrentWordShown(wordName: String) {
+        editor.putString(KEY_CURRENT_WORD_SHOWN, wordName).apply()
+    }
+
+    fun getCurrentWordShown(): String? {
+        return sPrefManager.getString(KEY_CURRENT_WORD_SHOWN, null)
     }
 
 }

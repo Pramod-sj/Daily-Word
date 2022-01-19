@@ -720,10 +720,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun silentRefreshWidget() {
-        Intent().also { intent ->
-            intent.action = DailyWordWidgetProvider.ACTION_SILENT_REFRESH_WIDGET
-            sendBroadcast(intent)
+        val shouldSilentRefresh =
+            this.intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE) == null
+        if (shouldSilentRefresh) {
+            Intent().also { intent ->
+                intent.action = DailyWordWidgetProvider.ACTION_SILENT_REFRESH_WIDGET
+                sendBroadcast(intent)
+            }
         }
+
     }
 
     override fun onDestroy() {
