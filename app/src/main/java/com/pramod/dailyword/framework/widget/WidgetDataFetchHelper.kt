@@ -20,9 +20,11 @@ class WidgetDataFetchHelper @Inject constructor(
 
     fun runTodayWordFetchJob(shouldCallApi: Boolean = true) {
         if (isTodayWordFetchJobSchedule()) {
-            Timber.i("Job already schedule or running")
+            Timber.i("Todays word Job already schedule or running")
             return
         }
+
+        if (isRandomWordJobSchedule()) stopRandomWordJob() //cancelling random word job
 
         val jobInfo = JobInfo.Builder(
             Constants.JOB_ID_FETCH_DATA_FOR_WIDGET,
@@ -53,4 +55,32 @@ class WidgetDataFetchHelper @Inject constructor(
         jobScheduler.cancel(Constants.JOB_ID_FETCH_DATA_FOR_WIDGET)
     }
 
+    fun runRandomWordJob() {
+        if (isRandomWordJobSchedule()) {
+            Timber.i("Random word Job already schedule or running")
+            return
+        }
+
+        if (isTodayWordFetchJobSchedule()) stopTodayWordFetchJob() //cancelling random word job
+
+        val jobInfo = JobInfo.Builder(
+            Constants.JOB_ID_FETCH_RANDOM_WORD_FOR_WIDGET,
+            ComponentName(context, WidgetRandomWordLoadService::class.java)
+        ).setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+            .setRequiresCharging(false)
+            .setRequiresDeviceIdle(false)
+            .setOverrideDeadline(0)
+            .build()
+
+        jobScheduler.schedule(jobInfo)
+
+    }
+
+    fun isRandomWordJobSchedule(): Boolean {
+        return jobScheduler.allPendingJobs.any { it.id == Constants.JOB_ID_FETCH_RANDOM_WORD_FOR_WIDGET }
+    }
+
+    fun stopRandomWordJob() {
+        jobScheduler.cancel(Constants.JOB_ID_FETCH_RANDOM_WORD_FOR_WIDGET)
+    }
 }

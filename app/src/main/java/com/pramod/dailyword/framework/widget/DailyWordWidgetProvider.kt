@@ -11,13 +11,11 @@ import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
-import com.pramod.dailyword.framework.ui.common.exts.safeLet
-import com.pramod.dailyword.framework.widget.pref.WidgetSizePref
+import com.pramod.dailyword.framework.ui.common.exts.goAsync
+import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,7 +33,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
     lateinit var updateWidgetViewHelper: UpdateWidgetViewHelper
 
     @Inject
-    lateinit var widgetSizePref: WidgetSizePref
+    lateinit var widgetPreference: WidgetPreference
 
     @Inject
     lateinit var widgetDataFetchHelper: WidgetDataFetchHelper
@@ -64,6 +62,12 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         const val ACTION_SILENT_REFRESH_WIDGET =
             "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET"
 
+        /**
+         * This action will show random word whenever triggered
+         */
+        const val ACTION_RANDOM_WORD =
+            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_RANDOM_WORD"
+
         const val EXTRA_AUDIO_URL = "audio_url"
         const val EXTRA_BOOKMARKED_WORD = "bookmarked_word"
     }
@@ -74,6 +78,21 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
             Timber.i("onReceive: " + it.action)
             //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
             when (it.action) {
+                ACTION_APPWIDGET_OPTIONS_CHANGED -> {
+                    context?.let {
+
+                        goAsync(Dispatchers.Main) {
+                            val wordName = widgetPreference.getCurrentWordShown()
+                            if (wordName != null) {
+                                updateWidgetViewHelper.localFetchWordByNameAndUpdateWidgetUi(
+                                    wordName
+                                )
+                            } else {
+                                widgetDataFetchHelper.runTodayWordFetchJob()
+                            }
+                        }
+                    }
+                }
                 Intent.ACTION_TIME_CHANGED -> {
                     //stopping currently running job and starting again
                     widgetDataFetchHelper.stopTodayWordFetchJob()
@@ -88,17 +107,21 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                 }
 
                 ACTION_BOOKMARK_FROM_WIDGET -> {
-                    CoroutineScope(Dispatchers.Main).launch {
+                    goAsync(Dispatchers.Main) {
                         val word = it.getStringExtra(EXTRA_BOOKMARKED_WORD)
                         word?.let { bookmarked_word ->
                             toggleBookmarkInteractor.toggle(bookmarked_word).collectLatest {
                                 Timber.i("toggle: " + Gson().toJson(it))
-                                if (it.status != Status.LOADING)
-                                    updateWidgetViewHelper.updateWidgetUi(false)
+                                if (it.status != Status.LOADING) {
+                                    updateWidgetViewHelper.localFetchWordByNameAndUpdateWidgetUi(
+                                        bookmarked_word
+                                    )
+                                }
                             }
                         }
                     }
                 }
+
                 ACTION_PLAY_AUDIO_FROM_WIDGET -> {
                     Timber.i("onReceive: Playing")
                     it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
@@ -106,11 +129,11 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                     }
                 }
 
-                ACTION_SILENT_REFRESH_WIDGET -> {
-                    widgetDataFetchHelper.runTodayWordFetchJob(false)
-                }
-                else -> {
-                }
+                ACTION_SILENT_REFRESH_WIDGET -> widgetDataFetchHelper.runTodayWordFetchJob(false)
+
+                ACTION_RANDOM_WORD -> widgetDataFetchHelper.runRandomWordJob()
+
+                else -> Unit
             }
         }
     }
@@ -128,25 +151,6 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         super.onDisabled(context)
     }
 
-    override fun onUpdate(
-        context: Context?,
-        appWidgetManager: AppWidgetManager?,
-        appWidgetIds: IntArray?
-    ) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-        safeLet(appWidgetIds?.firstOrNull(), context) { appWidgetId, notNullContext ->
-            widgetSizePref.setWidgetSize(
-                getWidthAndHeight(
-                    notNullContext,
-                    appWidgetManager?.getAppWidgetOptions(appWidgetId)
-                )
-            )
-
-            widgetDataFetchHelper.runTodayWordFetchJob()
-        }
-        Timber.i("onUpdate: function executed")
-    }
-
     override fun onAppWidgetOptionsChanged(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
@@ -154,17 +158,16 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        val widgetSize = getWidthAndHeight(context!!, newOptions)
-        widgetSizePref.setWidgetSize(widgetSize) //storing current widget size in shared pref
-        CoroutineScope(Dispatchers.IO).launch {
-            updateWidgetViewHelper.updateWidgetUi(false)
+        context?.let {
+            val widgetSize = getWidgetWidthAndHeight(context, newOptions)
+            widgetPreference.setWidgetSize(widgetSize) //storing current widget size in shared pref
         }
     }
 
-    private fun getWidthAndHeight(
+    private fun getWidgetWidthAndHeight(
         context: Context,
         newOptions: Bundle?
-    ): WidgetSizePref.WidgetSize {
+    ): WidgetPreference.WidgetSize {
         val width: Int
         val height: Int
         if (context.resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -176,7 +179,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
             width = newOptions?.getInt(OPTION_APPWIDGET_MAX_WIDTH) ?: 0
             height = newOptions?.getInt(OPTION_APPWIDGET_MIN_HEIGHT) ?: 0
         }
-        return WidgetSizePref.WidgetSize(width, height)
+        return WidgetPreference.WidgetSize(width, height)
     }
 
 }
