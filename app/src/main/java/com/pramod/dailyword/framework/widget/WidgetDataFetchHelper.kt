@@ -52,6 +52,7 @@ class WidgetDataFetchHelper @Inject constructor(
     }
 
     fun stopTodayWordFetchJob() {
+        Timber.i("Cancel TodayWordFetchJob")
         jobScheduler.cancel(Constants.JOB_ID_FETCH_DATA_FOR_WIDGET)
     }
 
@@ -81,6 +82,7 @@ class WidgetDataFetchHelper @Inject constructor(
     }
 
     fun stopRandomWordJob() {
+        Timber.i("Cancel RandomWordJob")
         jobScheduler.cancel(Constants.JOB_ID_FETCH_RANDOM_WORD_FOR_WIDGET)
     }
 }

@@ -52,7 +52,6 @@
         <activity
             android:name=".framework.ui.splash_screen.SplashScreenActivity"
             android:exported="true"
-            android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme.SplashScreenActivity">
 
@@ -81,7 +80,6 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".framework.ui.home.HomeActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />

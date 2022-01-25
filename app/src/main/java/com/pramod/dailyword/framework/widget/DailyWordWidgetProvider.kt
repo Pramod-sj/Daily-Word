@@ -12,6 +12,7 @@ import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import com.pramod.dailyword.framework.ui.common.exts.goAsync
+import com.pramod.dailyword.framework.ui.common.exts.safeLet
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -46,11 +47,11 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         const val EXTRA_INTENT_TO_HOME_WORD_DATE = "word_date"
 
         const val ACTION_AUTO_UPDATE_WIDGET =
-            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_AUTO_UPDATE_WIDGET"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_AUTO_UPDATE_WIDGET"
         const val ACTION_TRY_AGAIN_FROM_WIDGET =
-            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET"
         const val ACTION_BOOKMARK_FROM_WIDGET =
-            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET"
         const val ACTION_PLAY_AUDIO_FROM_WIDGET =
             "com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET"
 
@@ -60,13 +61,13 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
          * it is introduce to load word from cache into widget when user open [HomeActivity]
          */
         const val ACTION_SILENT_REFRESH_WIDGET =
-            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_SILENT_REFRESH_WIDGET"
 
         /**
          * This action will show random word whenever triggered
          */
         const val ACTION_RANDOM_WORD =
-            "com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_RANDOM_WORD"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_RANDOM_WORD"
 
         const val EXTRA_AUDIO_URL = "audio_url"
         const val EXTRA_BOOKMARKED_WORD = "bookmarked_word"
@@ -78,6 +79,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
             Timber.i("onReceive: " + it.action)
             //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
             when (it.action) {
+
                 ACTION_APPWIDGET_OPTIONS_CHANGED -> {
                     context?.let {
 
@@ -93,6 +95,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                         }
                     }
                 }
+
                 Intent.ACTION_TIME_CHANGED -> {
                     //stopping currently running job and starting again
                     widgetDataFetchHelper.stopTodayWordFetchJob()
@@ -102,7 +105,8 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                     widgetPeriodicAlarmScheduler.setRepeatingDailyAlarmToFetch()
                 }
 
-                ACTION_TRY_AGAIN_FROM_WIDGET, ACTION_AUTO_UPDATE_WIDGET -> {
+                ACTION_TRY_AGAIN_FROM_WIDGET, ACTION_AUTO_UPDATE_WIDGET,
+                ACTION_APPWIDGET_UPDATE, ACTION_APPWIDGET_ENABLED -> {
                     widgetDataFetchHelper.runTodayWordFetchJob()
                 }
 
@@ -148,7 +152,23 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         Timber.i("onDisabled: ")
         widgetDataFetchHelper.stopTodayWordFetchJob()
         widgetPeriodicAlarmScheduler.cancelRepeatingAlarm()
+        widgetPreference.removeAll()
         super.onDisabled(context)
+    }
+
+    override fun onUpdate(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetIds: IntArray?
+    ) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        safeLet(
+            context,
+            appWidgetIds?.firstOrNull()
+                ?.let { appWidgetManager?.getAppWidgetOptions(it) }) { nonNullContext, bundle ->
+            val widgetSize = getWidgetWidthAndHeight(nonNullContext, bundle)
+            widgetPreference.setWidgetSize(widgetSize) //saving current widget size in shared pref
+        }
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -158,9 +178,10 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        Timber.i("onAppWidgetOptionsChanged: ")
         context?.let {
             val widgetSize = getWidgetWidthAndHeight(context, newOptions)
-            widgetPreference.setWidgetSize(widgetSize) //storing current widget size in shared pref
+            widgetPreference.setWidgetSize(widgetSize) //saving current widget size in shared pref
         }
     }
 

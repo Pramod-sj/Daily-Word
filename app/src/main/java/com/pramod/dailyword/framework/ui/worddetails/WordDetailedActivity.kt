@@ -40,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -325,6 +326,14 @@ class WordDetailedActivity :
         val data = Intent()
         data.putExtra(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, viewModel.isBookmarkStatusChanged)
         setResult(RESULT_OK, data)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Timber.i("onNewIntent:" + intent?.getStringExtra("WORD_DATE"))
+        intent?.getStringExtra("WORD_DATE")?.let {
+            viewModel.fetchWord(it)
+        }
     }
 
     companion object {

@@ -30,6 +30,7 @@ class WidgetDataLoadService : JobService() {
             val shouldCallApi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 params?.extras?.getBoolean(EXTRA_SHOULD_CALL_API, true) ?: true
             } else true
+            Timber.i("onStartJob: shouldCallApi: $shouldCallApi")
             updateWidgetViewHelper.fetchTodayWordAndUpdateWidgetUi(shouldCallApi)
             jobFinished(params, false)
         }

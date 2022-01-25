@@ -140,6 +140,7 @@ class UpdateWidgetViewHelper @Inject constructor(
     }
 
     suspend fun fetchTodayWordAndUpdateWidgetUi(shouldCallApi: Boolean) {
+
         val widgetSize = widgetPreference.getWidgetSize() ?: return
 
         val widgetComponent = ComponentName(context, DailyWordWidgetProvider::class.java)
@@ -173,6 +174,8 @@ class UpdateWidgetViewHelper @Inject constructor(
                         widgetSize.height
                     )
                 )
+
+                Timber.i("onStartJob: Calling api")
 
                 val latestWordResource = getWordsInteractor.getWords(1, true)
                     .firstOrNull { it.status != Status.LOADING }

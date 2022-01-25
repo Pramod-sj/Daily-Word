@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -69,8 +70,8 @@ class SplashScreenActivity :
         } catch (e: Exception) {
             //if exception occur fallback to normal icon
             binding.splashAppIcon.setImageResource(R.drawable.ic_vocabulary)
-            binding.splashAppIcon.imageTintList =
-                ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
+            binding.splashAppIcon.imageTintList
+            ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
         }
     }
 
@@ -142,6 +143,11 @@ class SplashScreenActivity :
             }
         )
         binding.acceptConditionTextView.showLinks(termsAndConditionLink, privacyPolicyLink)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Timber.i("onNewIntent: ")
     }
 
     companion object {
