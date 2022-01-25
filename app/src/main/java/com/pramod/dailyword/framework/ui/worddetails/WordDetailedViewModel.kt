@@ -39,11 +39,18 @@ class WordDetailedViewModel @Inject constructor(
 
     var isBookmarkStatusChanged = false
 
-    private val wordDate = stateHandle.get<String>("WORD_DATE").also {
+    private var _wordDate = stateHandle.get<String>("WORD_DATE").also {
         if (it == null) {
             homeScreenBadgeManager.updatedRandomWordReadOn()
         }
     }
+
+    fun fetchWord(wordDate: String) {
+        _wordDate = wordDate
+        refresh()
+    }
+
+    val wordDate: String? = _wordDate
 
 
     //this will be false when user open this activity first
@@ -93,7 +100,7 @@ class WordDetailedViewModel @Inject constructor(
                 it.data?.let { word ->
                     _word.value = word
 
-                    Timber.i( ": isSeenStatusUpdated:" + isSeenStatusUpdated)
+                    Timber.i(": isSeenStatusUpdated:" + isSeenStatusUpdated)
 
                     if (!isSeenStatusUpdated) {
                         viewModelScope.launch {
@@ -105,7 +112,7 @@ class WordDetailedViewModel @Inject constructor(
                             word.bookmarkedId?.let {
                                 markBookmarkedWordAsSeenInteractor.markAsSeen(word.word)
                                     .collectLatest {
-                                        Timber.i( ": isSeenStatusUpdated" + Gson().toJson(it))
+                                        Timber.i(": isSeenStatusUpdated" + Gson().toJson(it))
                                     }
                             }
 

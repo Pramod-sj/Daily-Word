@@ -38,4 +38,7 @@ class WidgetPreference @Inject constructor(
         return sPrefManager.getString(KEY_CURRENT_WORD_SHOWN, null)
     }
 
+    fun removeAll() {
+        sPrefManager.edit().clear().apply()
+    }
 }

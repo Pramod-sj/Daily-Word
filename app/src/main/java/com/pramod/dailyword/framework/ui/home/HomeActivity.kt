@@ -539,6 +539,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         this.intent = intent
+        val widgetClickWordDate =
+            intent?.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+
+        Timber.i("onNewIntent: " + widgetClickWordDate)
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {

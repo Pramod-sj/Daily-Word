@@ -238,11 +238,14 @@ class WidgetViewHelper {
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
                 Intent(context, SplashScreenActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     putExtras(
                         bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                safeImmutableFlag(PendingIntent.FLAG_CANCEL_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 
@@ -359,16 +362,18 @@ class WidgetViewHelper {
             )
             views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
 
-
             val pendingIntentForWidgetClick = PendingIntent.getActivity(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
                 Intent(context, SplashScreenActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     putExtras(
                         bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                     )
                 },
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                safeImmutableFlag(PendingIntent.FLAG_CANCEL_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 
@@ -436,11 +441,14 @@ class WidgetViewHelper {
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
                 Intent(context, SplashScreenActivity::class.java)
                     .apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         putExtras(
                             bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
                         )
                     },
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                safeImmutableFlag(PendingIntent.FLAG_CANCEL_CURRENT)
             )
             views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 
