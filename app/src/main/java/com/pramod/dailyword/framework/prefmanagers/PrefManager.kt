@@ -1,9 +1,16 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
+import androidx.annotation.IntRange
 import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BACKGROUND_ALPHA
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BODY_BACKGROUND_ALPHA
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.KEY_VISIBLE_WIDGET_CONTROL
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.KEY_WIDGET_BACKGROUND_ALPHA
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.KEY_WIDGET_BODY_BACKGROUND_ALPHA
+import com.pramod.dailyword.framework.widget.pref.Controls
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +25,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     HideBadgeContracts,
     CountryCodeContracts,
     DonatedContract,
-    SupportUsDialogContract {
+    SupportUsDialogContract,
+    WidgetSettingPreference {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -136,7 +144,45 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     }
 
     override fun getNeverShowSupportUsDialog(): Boolean {
-        return sPrefManager.getBoolean(KEY_SHOW_SUPPORT_US_NEVER,false)
+        return sPrefManager.getBoolean(KEY_SHOW_SUPPORT_US_NEVER, false)
+    }
+
+
+    override fun getVisibleWidgetControls(): Set<String> {
+        return sPrefManager.getStringSet(
+            KEY_VISIBLE_WIDGET_CONTROL,
+            setOf(Controls.BOOKMARK.label, Controls.RANDOM_WORD.label)
+        ) ?: setOf()
+    }
+
+    override fun setVisibleWidgetControls(controls: Set<String>) {
+        editor.putStringSet(KEY_VISIBLE_WIDGET_CONTROL, controls).apply()
+    }
+
+    override fun clearVisibleWidgetControls() {
+        editor.remove(KEY_VISIBLE_WIDGET_CONTROL).apply()
+    }
+
+    override fun getWidgetBodyAlpha(): Int {
+        return sPrefManager.getInt(
+            KEY_WIDGET_BODY_BACKGROUND_ALPHA,
+            DEFAULT_WIDGET_BODY_BACKGROUND_ALPHA
+        )
+    }
+
+    override fun setWidgetBodyAlpha(@IntRange(from = 0, to = 100) alpha: Int) {
+        editor.putInt(KEY_WIDGET_BODY_BACKGROUND_ALPHA, alpha).apply()
+    }
+
+    override fun getWidgetBackgroundAlpha(): Int {
+        return sPrefManager.getInt(
+            KEY_WIDGET_BACKGROUND_ALPHA,
+            DEFAULT_WIDGET_BACKGROUND_ALPHA
+        )
+    }
+
+    override fun setWidgetBackgroundAlpha(@IntRange(from = 50, to = 100) alpha: Int) {
+        editor.putInt(KEY_WIDGET_BACKGROUND_ALPHA, alpha).apply()
     }
 
 
@@ -207,5 +253,31 @@ interface SupportUsDialogContract {
     fun setNeverShowSupportUsDialog(neverShow: Boolean)
 
     fun getNeverShowSupportUsDialog(): Boolean
+}
 
+
+interface WidgetSettingPreference {
+    companion object {
+
+        const val KEY_VISIBLE_WIDGET_CONTROL = "visible_widget_control"
+        const val KEY_WIDGET_BODY_BACKGROUND_ALPHA = "widget_body_background_alpha"
+        const val KEY_WIDGET_BACKGROUND_ALPHA = "widget_background_alpha"
+
+        const val DEFAULT_WIDGET_BODY_BACKGROUND_ALPHA = 80
+        const val DEFAULT_WIDGET_BACKGROUND_ALPHA = 90
+    }
+
+    fun getVisibleWidgetControls(): Set<String>
+
+    fun setVisibleWidgetControls(controls: Set<String>)
+
+    fun clearVisibleWidgetControls()
+
+    fun getWidgetBodyAlpha(): Int
+
+    fun setWidgetBodyAlpha(@IntRange(from = 0, to = 100) alpha: Int)
+
+    fun getWidgetBackgroundAlpha(): Int
+
+    fun setWidgetBackgroundAlpha(@IntRange(from = 50, to = 100) alpha: Int)
 }

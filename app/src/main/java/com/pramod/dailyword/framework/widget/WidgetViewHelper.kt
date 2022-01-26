@@ -11,19 +11,19 @@ import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
+import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRange
 import com.pramod.dailyword.framework.widget.pref.Controls
-import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.ceil
 
-fun RemoteViews.applyControlVisibility(widgetPreference: WidgetPreference): RemoteViews {
+fun RemoteViews.applyControlVisibility(widgetSettingPreference: WidgetSettingPreference): RemoteViews {
 
-    val visibleControls = widgetPreference.getVisibleWidgetControls()
+    val visibleControls = widgetSettingPreference.getVisibleWidgetControls()
 
     if (visibleControls.any { it == Controls.BOOKMARK.label }) {
         setViewVisibility(R.id.widget_bookmark, View.VISIBLE)
@@ -42,7 +42,7 @@ fun RemoteViews.applyControlVisibility(widgetPreference: WidgetPreference): Remo
 @Singleton
 class WidgetViewHelper @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val widgetPreference: WidgetPreference
+    private val widgetSettingPreference: WidgetSettingPreference
 ) {
 
     /**
@@ -89,7 +89,7 @@ class WidgetViewHelper @Inject constructor(
             //setting alpha of widget widget
             setInt(
                 R.id.iv_body_bg, "setImageAlpha", convertNumberRangeToAnotherRange(
-                    oldValue = widgetPreference.getWidgetBodyAlpha().toFloat(),
+                    oldValue = widgetSettingPreference.getWidgetBodyAlpha().toFloat(),
                     oldRange = 0 to 100,
                     newRange = 0 to 255
                 )
@@ -97,12 +97,12 @@ class WidgetViewHelper @Inject constructor(
             setInt(
                 R.id.iv_bg, "setImageAlpha",
                 convertNumberRangeToAnotherRange(
-                    oldValue = widgetPreference.getWidgetBackgroundAlpha().toFloat(),
+                    oldValue = widgetSettingPreference.getWidgetBackgroundAlpha().toFloat(),
                     oldRange = 0 to 100,
                     newRange = 0 to 255
                 )
             )
-            applyControlVisibility(widgetPreference)
+            applyControlVisibility(widgetSettingPreference)
         }
 
     }
@@ -131,7 +131,7 @@ class WidgetViewHelper @Inject constructor(
             //setting alpha of widget widget
             setInt(
                 R.id.iv_body_bg, "setImageAlpha", convertNumberRangeToAnotherRange(
-                    oldValue = widgetPreference.getWidgetBodyAlpha().toFloat(),
+                    oldValue = widgetSettingPreference.getWidgetBodyAlpha().toFloat(),
                     oldRange = 0 to 100,
                     newRange = 0 to 255
                 )
@@ -139,12 +139,12 @@ class WidgetViewHelper @Inject constructor(
             setInt(
                 R.id.iv_bg, "setImageAlpha",
                 convertNumberRangeToAnotherRange(
-                    oldValue = widgetPreference.getWidgetBackgroundAlpha().toFloat(),
+                    oldValue = widgetSettingPreference.getWidgetBackgroundAlpha().toFloat(),
                     oldRange = 0 to 100,
                     newRange = 0 to 255
                 )
             )
-            applyControlVisibility(widgetPreference)
+            applyControlVisibility(widgetSettingPreference)
         }
     }
 
@@ -173,7 +173,7 @@ class WidgetViewHelper @Inject constructor(
                 //setting alpha of widget widget
                 setInt(
                     R.id.iv_body_bg, "setImageAlpha", convertNumberRangeToAnotherRange(
-                        oldValue = widgetPreference.getWidgetBodyAlpha().toFloat(),
+                        oldValue = widgetSettingPreference.getWidgetBodyAlpha().toFloat(),
                         oldRange = 0 to 100,
                         newRange = 0 to 255
                     )
@@ -181,12 +181,12 @@ class WidgetViewHelper @Inject constructor(
                 setInt(
                     R.id.iv_bg, "setImageAlpha",
                     convertNumberRangeToAnotherRange(
-                        oldValue = widgetPreference.getWidgetBackgroundAlpha().toFloat(),
+                        oldValue = widgetSettingPreference.getWidgetBackgroundAlpha().toFloat(),
                         oldRange = 0 to 100,
                         newRange = 0 to 255
                     )
                 )
-                applyControlVisibility(widgetPreference)
+                applyControlVisibility(widgetSettingPreference)
             }
     }
 
