@@ -386,7 +386,7 @@ fun FragmentActivity.showSupportDevelopmentDialog(neverCallback: () -> Unit) {
 }
 
 
-private fun AlertDialog.applyStyleOnAlertDialog() {
+fun AlertDialog.applyStyleOnAlertDialog() {
     window?.let { window ->
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         window.setDimAmount(0.75f)
@@ -403,8 +403,6 @@ fun Context.showCheckboxDialog(
     onPositiveClickCallback: (newSelectedItems: List<String>) -> Unit = {},
     negativeText: String = "Cancel",
     onNegativeClickCallback: () -> Unit = {},
-    neutralText: String = "Default",
-    onNeutralClickCallback: () -> Unit = {},
 ) {
     val selected = selectedItems.toMutableSet()
     val builder: MaterialAlertDialogBuilder =
@@ -421,13 +419,13 @@ fun Context.showCheckboxDialog(
                 onPositiveClickCallback(selected.toList())
             }.setNegativeButton(negativeText) { dialog, which ->
                 onNegativeClickCallback()
-            }.setNeutralButton(neutralText) { dialog, which ->
-                onNeutralClickCallback()
             }
 
     val alertDialog = builder.create()
     alertDialog.applyStyleOnAlertDialog()
     alertDialog.show()
 }
+
+
 
 
