@@ -2,8 +2,10 @@ package com.pramod.dailyword.framework.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -16,6 +18,7 @@ import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
+import com.pramod.dailyword.databinding.DialogWidgetBackgroundOpacityBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.restartActivity
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
@@ -275,7 +278,7 @@ class AppSettingActivity :
             }
 
             override fun showWidgetBackgroundDialog() {
-
+                showWidgetBgControlDialog()
             }
 
             override fun showWidgetControlsDialog() {
@@ -288,10 +291,6 @@ class AppSettingActivity :
                         widgetPrefManager.setVisibleWidgetControls(it.toSet())
                         refreshWidget()
                     },
-                    onNeutralClickCallback = {
-                        widgetPrefManager.clearVisibleWidgetControls()
-                        refreshWidget()
-                    }
                 )
             }
 
@@ -355,5 +354,25 @@ class AppSettingActivity :
         super.onDestroy()
         appUpdateManager.unregisterListener(installStateUpdatedListener)
     }
+
+    fun showWidgetBgControlDialog() {
+        val binding =
+            DialogWidgetBackgroundOpacityBinding.inflate(LayoutInflater.from(this), null, false)
+        binding.sliderWidgetBodyBgControl.value = widgetPrefManager.getWidgetBodyAlpha().toFloat()
+        binding.sliderWidgetBgControl.value = widgetPrefManager.getWidgetBackgroundAlpha().toFloat()
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle("Control Background Opacity")
+            .setView(binding.root)
+            .setPositiveButton("Apply") { dialog, which ->
+                widgetPrefManager.setWidgetBodyAlpha(binding.sliderWidgetBodyBgControl.value.toInt())
+                widgetPrefManager.setWidgetBackgroundAlpha(binding.sliderWidgetBgControl.value.toInt())
+                refreshWidget()
+            }.setNegativeButton("Cancel") { dialog, which ->
+
+            }.create()
+        dialog.applyStyleOnAlertDialog()
+        dialog.show()
+    }
+
 
 }

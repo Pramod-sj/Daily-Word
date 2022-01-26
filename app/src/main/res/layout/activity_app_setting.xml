@@ -264,8 +264,8 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.showWidgetBackgroundDialog()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
-                            app:subTitle="Change background transparency"
-                            app:title="Background"
+                            app:subTitle="Change widget background transparent value"
+                            app:title="Background Opacity Control"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -276,8 +276,8 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.showWidgetControlsDialog()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
-                            app:subTitle="Add or remove controls on widgets"
-                            app:title="Controls"
+                            app:subTitle="Add or remove controls (i.e. Bookmark and Random word buttons) from widget"
+                            app:title="Widget Controls"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
