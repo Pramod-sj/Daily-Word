@@ -12,9 +12,28 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
+import com.pramod.dailyword.framework.widget.pref.Controls
+import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import timber.log.Timber
 import kotlin.math.ceil
 
+fun RemoteViews.applyControlVisibility(widgetPreference: WidgetPreference): RemoteViews {
+
+    val visibleControls = widgetPreference.getVisibleWidgetControls()
+
+    if (visibleControls.any { it == Controls.BOOKMARK.label }) {
+        setViewVisibility(R.id.widget_bookmark, View.VISIBLE)
+    } else {
+        setViewVisibility(R.id.widget_bookmark, View.GONE)
+    }
+    if (visibleControls.any { it == Controls.RANDOM_WORD.label }) {
+        setViewVisibility(R.id.widget_random_word, View.VISIBLE)
+    } else {
+        setViewVisibility(R.id.widget_random_word, View.GONE)
+    }
+
+    return this
+}
 
 class WidgetViewHelper {
 
@@ -46,7 +65,7 @@ class WidgetViewHelper {
             val colCell = getCellsForSize(width)
 
             Timber.i("Col:%s ; Rows:%s", colCell, rowCell)
-            return if (isTablet(context)) {
+            return (if (isTablet(context)) {
                 if (rowCell in 1 until 3 || colCell in 1 until 4) {
                     createWordOfTheDayWidgetMedium(context, word)
                 } else {
@@ -60,6 +79,9 @@ class WidgetViewHelper {
                 } else {
                     createWordOfTheDayWidget(context, word)
                 }
+            }).apply {
+                //setting alpha of widget widget
+                setInt(R.id.iv_bg, "setImageAlpha", 100)
             }
 
         }
@@ -71,7 +93,7 @@ class WidgetViewHelper {
         ): RemoteViews {
             val rowCell = getCellsForSize(height)
             val colCell = getCellsForSize(width)
-            return if (isTablet(context)) {
+            return (if (isTablet(context)) {
                 if (rowCell in 1 until 3 || colCell in 1 until 4) {
                     createLoadingWidgetMedium(context)
                 } else {
@@ -85,6 +107,9 @@ class WidgetViewHelper {
                 } else {
                     createLoadingWidget(context)
                 }
+            }).apply {
+                //setting alpha of widget widget
+                setInt(R.id.iv_bg, "setImageAlpha", 100)
             }
         }
 
@@ -94,7 +119,7 @@ class WidgetViewHelper {
         ): RemoteViews {
             val rowCell = getCellsForSize(height)
             val colCell = getCellsForSize(width)
-            return if (isTablet(context)) {
+            return (if (isTablet(context)) {
                 if (rowCell in 1 until 3 || colCell in 1 until 4) {
                     createPlaceHolderWidgetMedium(context, resId, message)
                 } else {
@@ -108,7 +133,11 @@ class WidgetViewHelper {
                 } else {
                     createPlaceHolderWidget(context, resId, message)
                 }
-            }
+            })
+                .apply {
+                    //setting alpha of widget widget
+                    setInt(R.id.iv_bg, "setImageAlpha", 100)
+                }
         }
 
 
@@ -136,7 +165,6 @@ class WidgetViewHelper {
                         word.examples.get(0)
                     )
                 }
-
                 //pronounce audio pending intent
                 val playAudioIntent = Intent(context, DailyWordWidgetProvider::class.java)
                 playAudioIntent.action =

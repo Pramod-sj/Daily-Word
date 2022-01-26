@@ -17,7 +17,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
-import com.pramod.dailyword.framework.helper.*
+import com.pramod.dailyword.framework.helper.restartActivity
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -25,6 +25,9 @@ import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
+import com.pramod.dailyword.framework.widget.pref.Controls
+import com.pramod.dailyword.framework.widget.pref.WidgetPreference
+import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
 import dev.doubledot.doki.ui.DokiActivity
 import timber.log.Timber
@@ -47,6 +50,9 @@ class AppSettingActivity :
 
     @Inject
     lateinit var prefManager: PrefManager
+
+    @Inject
+    lateinit var widgetPrefManager: WidgetPreference
 
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
@@ -135,7 +141,7 @@ class AppSettingActivity :
 
             override fun toggleWindowAnimation() {
                 windowAnimPrefManager.toggle()
-                Timber.i( "toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
+                Timber.i("toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
             }
 
             override fun toggleEdgeToEdge() {
@@ -264,6 +270,27 @@ class AppSettingActivity :
                     negativeText = "Cancel",
                     negativeClickCallback = {
 
+                    }
+                )
+            }
+
+            override fun showWidgetBackgroundDialog() {
+
+            }
+
+            override fun showWidgetControlsDialog() {
+                showCheckboxDialog(
+                    title = "Widget Controls",
+                    items = Controls.values().map { it.label },
+                    selectedItems = widgetPrefManager.getVisibleWidgetControls().toList(),
+                    positiveText = "Apply",
+                    onPositiveClickCallback = {
+                        widgetPrefManager.setVisibleWidgetControls(it.toSet())
+                        refreshWidget()
+                    },
+                    onNeutralClickCallback = {
+                        widgetPrefManager.clearVisibleWidgetControls()
+                        refreshWidget()
                     }
                 )
             }

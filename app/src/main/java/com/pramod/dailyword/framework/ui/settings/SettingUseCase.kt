@@ -10,4 +10,6 @@ interface SettingUseCase {
     fun navigateToAbout()
     fun copyFirebaseTokenId()
     fun clearAppData()
+    fun showWidgetBackgroundDialog()
+    fun showWidgetControlsDialog()
 }

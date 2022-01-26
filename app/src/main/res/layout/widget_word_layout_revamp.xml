@@ -72,9 +72,15 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fl_widget_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_widget_inner">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_widget_inner" />
 
         <LinearLayout
             android:id="@+id/widget_placeholder"
@@ -130,9 +136,9 @@
                     android:id="@+id/widget_txtView_attribute"
                     style="@style/AppTheme.TitleTextStyle"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:layout_height="wrap_content"
                     android:textColor="@color/dark_textColor_highEmphasis"
                     android:textStyle="italic"
                     tools:text="Attribute " />
@@ -150,9 +156,9 @@
                     android:id="@+id/widget_txtView_pronounce"
                     style="@style/AppTheme.TitleTextStyle"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:layout_height="wrap_content"
                     android:textColor="@color/dark_textColor_highEmphasis"
                     tools:text="Pronounce" />
 

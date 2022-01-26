@@ -395,3 +395,39 @@ private fun AlertDialog.applyStyleOnAlertDialog() {
 }
 
 
+fun Context.showCheckboxDialog(
+    title: String,
+    items: List<String>,
+    selectedItems: List<String>,
+    positiveText: String = "Okay",
+    onPositiveClickCallback: (newSelectedItems: List<String>) -> Unit = {},
+    negativeText: String = "Cancel",
+    onNegativeClickCallback: () -> Unit = {},
+    neutralText: String = "Default",
+    onNeutralClickCallback: () -> Unit = {},
+) {
+    val selected = selectedItems.toMutableSet()
+    val builder: MaterialAlertDialogBuilder =
+        MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setMultiChoiceItems(
+                items.toTypedArray(),
+                items.map { it in selectedItems }.toBooleanArray()
+            ) { dialog, which, isChecked ->
+                val item = items[which]
+                if (isChecked) selected.add(item)
+                else selected.remove(item)
+            }.setPositiveButton(positiveText) { dialog, which ->
+                onPositiveClickCallback(selected.toList())
+            }.setNegativeButton(negativeText) { dialog, which ->
+                onNegativeClickCallback()
+            }.setNeutralButton(neutralText) { dialog, which ->
+                onNeutralClickCallback()
+            }
+
+    val alertDialog = builder.create()
+    alertDialog.applyStyleOnAlertDialog()
+    alertDialog.show()
+}
+
+

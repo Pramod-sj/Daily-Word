@@ -8,7 +8,9 @@ import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
 import android.util.Pair
-import android.view.*
+import android.view.HapticFeedbackConstants
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -34,29 +36,35 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
-import com.pramod.dailyword.framework.helper.*
+import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
+import com.pramod.dailyword.framework.helper.openWebsite
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.AutoStartPrefManager
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
-import com.pramod.dailyword.framework.ui.common.*
+import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
 import com.pramod.dailyword.framework.ui.common.exts.*
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
-import com.pramod.dailyword.framework.util.*
+import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
+import com.pramod.dailyword.framework.util.buildUpdateAvailableToDownloadSpannableString
+import com.pramod.dailyword.framework.util.buildUpdateAvailableToInstallSpannableString
+import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
+import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 
@@ -726,13 +734,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun silentRefreshWidget() {
         val shouldSilentRefresh =
             this.intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE) == null
-        if (shouldSilentRefresh) {
-            Intent().also { intent ->
-                intent.action = DailyWordWidgetProvider.ACTION_SILENT_REFRESH_WIDGET
-                sendBroadcast(intent)
-            }
-        }
-
+        if (shouldSilentRefresh) refreshWidget()
     }
 
     override fun onDestroy() {
