@@ -285,10 +285,10 @@ class AppSettingActivity :
                 showCheckboxDialog(
                     title = "Widget Controls",
                     items = Controls.values().map { it.label },
-                    selectedItems = widgetPrefManager.getVisibleWidgetControls().toList(),
+                    selectedItems = prefManager.getVisibleWidgetControls().toList(),
                     positiveText = "Apply",
                     onPositiveClickCallback = {
-                        widgetPrefManager.setVisibleWidgetControls(it.toSet())
+                        prefManager.setVisibleWidgetControls(it.toSet())
                         refreshWidget()
                     },
                 )
@@ -358,14 +358,14 @@ class AppSettingActivity :
     fun showWidgetBgControlDialog() {
         val binding =
             DialogWidgetBackgroundOpacityBinding.inflate(LayoutInflater.from(this), null, false)
-        binding.sliderWidgetBodyBgControl.value = widgetPrefManager.getWidgetBodyAlpha().toFloat()
-        binding.sliderWidgetBgControl.value = widgetPrefManager.getWidgetBackgroundAlpha().toFloat()
+        binding.sliderWidgetBodyBgControl.value = prefManager.getWidgetBodyAlpha().toFloat()
+        binding.sliderWidgetBgControl.value = prefManager.getWidgetBackgroundAlpha().toFloat()
         val dialog = MaterialAlertDialogBuilder(this)
             .setTitle("Control Background Opacity")
             .setView(binding.root)
             .setPositiveButton("Apply") { dialog, which ->
-                widgetPrefManager.setWidgetBodyAlpha(binding.sliderWidgetBodyBgControl.value.toInt())
-                widgetPrefManager.setWidgetBackgroundAlpha(binding.sliderWidgetBgControl.value.toInt())
+                prefManager.setWidgetBodyAlpha(binding.sliderWidgetBodyBgControl.value.toInt())
+                prefManager.setWidgetBackgroundAlpha(binding.sliderWidgetBgControl.value.toInt())
                 refreshWidget()
             }.setNegativeButton("Cancel") { dialog, which ->
 
