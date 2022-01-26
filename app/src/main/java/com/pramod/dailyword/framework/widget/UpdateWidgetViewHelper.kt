@@ -41,7 +41,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     word,
                     widgetSize.width,
                     widgetSize.height
-                )
+                ).applyControlVisibility(widgetPreference)
             )
         } catch (e: Exception) {
             Timber.i("onStartJob: Exception: $e")
@@ -53,7 +53,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     "Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
-                )
+                ).applyControlVisibility(widgetPreference)
             )
         } finally {
         }
@@ -75,19 +75,16 @@ class UpdateWidgetViewHelper @Inject constructor(
                         "Please check your internet",
                         width = widgetSize.width,
                         height = widgetSize.height
-                    )
+                    ).applyControlVisibility(widgetPreference)
                 )
                 return
             }
 
             //show progress loader
             appWidgetManager.updateAppWidget(
-                widgetComponent,
-                WidgetViewHelper.getResponsiveLoadingRemoteView(
-                    context,
-                    widgetSize.width,
-                    widgetSize.height
-                )
+                widgetComponent, WidgetViewHelper.getResponsiveLoadingRemoteView(
+                    context, widgetSize.width, widgetSize.height
+                ).applyControlVisibility(widgetPreference)
             )
 
             val latestWordResource =
@@ -107,7 +104,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                         word,
                         widgetSize.width,
                         widgetSize.height
-                    )
+                    ).applyControlVisibility(widgetPreference)
                 )
             } else {
                 appWidgetManager.updateAppWidget(
@@ -119,7 +116,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                             ?: "Something went wrong! try again.",
                         width = widgetSize.width,
                         height = widgetSize.height
-                    )
+                    ).applyControlVisibility(widgetPreference)
                 )
             }
         } catch (e: Exception) {
@@ -132,7 +129,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     "Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
-                )
+                ).applyControlVisibility(widgetPreference)
             )
         } finally {
         }
@@ -160,7 +157,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                             "Please check your internet",
                             width = widgetSize.width,
                             height = widgetSize.height
-                        )
+                        ).applyControlVisibility(widgetPreference)
                     )
                     return
                 }
@@ -172,7 +169,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                         context,
                         widgetSize.width,
                         widgetSize.height
-                    )
+                    ).applyControlVisibility(widgetPreference)
                 )
 
                 Timber.i("onStartJob: Calling api")
@@ -194,7 +191,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                             word,
                             widgetSize.width,
                             widgetSize.height
-                        )
+                        ).applyControlVisibility(widgetPreference)
                     )
                 } else {
                     appWidgetManager.updateAppWidget(
@@ -206,7 +203,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                                 ?: "Something went wrong! try again.",
                             width = widgetSize.width,
                             height = widgetSize.height
-                        )
+                        ).applyControlVisibility(widgetPreference)
                     )
                 }
             } else {
@@ -217,7 +214,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                         topWord,
                         widgetSize.width,
                         widgetSize.height
-                    )
+                    ).applyControlVisibility(widgetPreference)
                 )
             }
         } catch (e: Exception) {
@@ -230,7 +227,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     "Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
-                )
+                ).applyControlVisibility(widgetPreference)
             )
         } finally {
         }

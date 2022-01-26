@@ -35,13 +35,19 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fl_widget_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/background_widget_inner_small"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/padding_small">
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background_widget_inner" />
 
         <LinearLayout
             android:id="@+id/widget_placeholder"

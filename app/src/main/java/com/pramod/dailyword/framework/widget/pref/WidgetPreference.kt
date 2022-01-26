@@ -7,6 +7,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+enum class Controls(val label: String) {
+    BOOKMARK("Bookmark"),
+    RANDOM_WORD("Random Word")
+}
+
 @Singleton
 class WidgetPreference @Inject constructor(
     @ApplicationContext context: Context
@@ -18,6 +23,8 @@ class WidgetPreference @Inject constructor(
         const val PREF_NAME = "widget"
         const val KEY_WIDGET_SIZE = "widget_size"
         const val KEY_CURRENT_WORD_SHOWN = "current_word_shown"
+
+        const val KEY_VISIBLE_WIDGET_CONTROL = "visible_widget_control"
     }
 
     fun setWidgetSize(widgetSize: WidgetSize) {
@@ -36,6 +43,21 @@ class WidgetPreference @Inject constructor(
 
     fun getCurrentWordShown(): String? {
         return sPrefManager.getString(KEY_CURRENT_WORD_SHOWN, null)
+    }
+
+    fun getVisibleWidgetControls(): Set<String> {
+        return sPrefManager.getStringSet(
+            KEY_VISIBLE_WIDGET_CONTROL,
+            setOf(Controls.BOOKMARK.label, Controls.RANDOM_WORD.label)
+        ) ?: setOf()
+    }
+
+    fun setVisibleWidgetControls(controls: Set<String>) {
+        editor.putStringSet(KEY_VISIBLE_WIDGET_CONTROL, controls).apply()
+    }
+
+    fun clearVisibleWidgetControls() {
+        editor.remove(KEY_VISIBLE_WIDGET_CONTROL).apply()
     }
 
     fun removeAll() {
