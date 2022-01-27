@@ -23,8 +23,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 202201260
-        versionName "2.2.4"
+        versionCode 202201261
+        versionName "2.3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -90,7 +90,7 @@ android {
 dependencies {
 
     def lifecycle_version = "2.4.0"
-    def hilt_version = "2.35"
+    def hilt_version = "2.36"
     def billing_version = "4.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
