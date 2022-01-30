@@ -1,13 +1,14 @@
 [
   {
     "version_name": "2.3.0",
-    "version_code": 2022012630,
+    "version_code": 202201300,
     "release_name": "Widget Update",
-    "date": "26 Jan 2022",
+    "date": "30 Jan 2022",
     "changes": [
       "Fixed widget not loading issue",
-      "Added single responsive widget with revamped design, random word button and widget settings",
-      "Note: Please delete old widget and add the new widget on your home screen"
+      "Added single responsive widget with revamped design and widget settings",
+      "Random word on widget itself!",
+      "Note: Please remove old widget and add the new one for smooth functioning."
     ],
     "is_force_update": false
   },
