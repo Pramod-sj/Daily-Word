@@ -7,8 +7,8 @@
     "changes": [
       "Fixed widget not loading issue",
       "Added single responsive widget with revamped design and widget settings",
-      "Random word on widget itself!",
-      "Note: Please remove old widget and add the new one for smooth functioning."
+      "Random word on the widget itself!",
+      "Please remove the old widget and add the new one for smooth functioning."
     ],
     "is_force_update": false
   },
