@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_bg"
@@ -15,13 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="7dp">
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="3dp">
 
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="2dp">
 
 
             <ImageView
@@ -35,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/widget_retry"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/margin_small"
                 android:src="@drawable/ic_round_refresh_24"
@@ -48,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
             android:clipChildren="false"
             android:clipToPadding="false">
 
@@ -85,6 +87,7 @@
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="3dp"
                 android:visibility="invisible">
 
                 <TextView
@@ -135,6 +138,17 @@
                         tools:text="Pronounce" />
 
                 </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/widget_txtView_meanings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/dark_textColor_highEmphasis"
+                    android:textSize="@dimen/text_tiny"
+                    tools:text="This is the meaning" />
 
             </LinearLayout>
 

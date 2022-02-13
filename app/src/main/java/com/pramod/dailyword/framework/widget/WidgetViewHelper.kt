@@ -79,7 +79,7 @@ class WidgetViewHelper @Inject constructor(
             }
         } else {
             if (rowCell in 1 until 2 || colCell in 1 until 3) {
-                createWordOfTheDayWidgetSmall(context, word)
+                createWordOfTheDayWidgetSmall(context, word, rowCell)
             } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
                 createWordOfTheDayWidgetMedium(context, word)
             } else {
@@ -489,18 +489,28 @@ class WidgetViewHelper @Inject constructor(
     }
 
 
-    private fun createWordOfTheDayWidgetSmall(context: Context, word: Word?): RemoteViews {
+    private fun createWordOfTheDayWidgetSmall(
+        context: Context,
+        word: Word?,
+        row: Int
+    ): RemoteViews {
         val views =
             RemoteViews(context.packageName, R.layout.widget_word_layout_small_revamp)
         views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_content, View.VISIBLE)
         views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
 
+        views.setViewVisibility(
+            R.id.widget_txtView_meanings,
+            if (row >= 3) View.VISIBLE else View.GONE
+        )
+
         if (word != null) {
 
             views.setTextViewText(R.id.widget_txtView_word_of_the_day, word.word)
             views.setTextViewText(R.id.widget_txtView_attribute, word.attribute)
             views.setTextViewText(R.id.widget_txtView_pronounce, word.pronounce)
+            views.setTextViewText(R.id.widget_txtView_meanings, word.meanings?.firstOrNull())
 
         } else {
             views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)

@@ -13,6 +13,7 @@ import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import com.pramod.dailyword.framework.ui.common.exts.goAsync
 import com.pramod.dailyword.framework.ui.common.exts.safeLet
+import com.pramod.dailyword.framework.util.safeNetworkCall
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -75,25 +76,23 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        intent?.let {
-            Timber.i("onReceive: " + it.action)
+        safeLet(intent, context) { i, c ->
+            Timber.i("onReceive: " + i.action)
             //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
-            when (it.action) {
+            when (i.action) {
 
                 ACTION_APPWIDGET_OPTIONS_CHANGED -> {
-                    context?.let {
-
-                        goAsync(Dispatchers.Main) {
-                            val wordName = widgetPreference.getCurrentWordShown()
-                            if (wordName != null) {
-                                updateWidgetViewHelper.localFetchWordByNameAndUpdateWidgetUi(
-                                    wordName
-                                )
-                            } else {
-                                widgetDataFetchHelper.runTodayWordFetchJob()
-                            }
+                    goAsync(Dispatchers.Main) {
+                        val wordName = widgetPreference.getCurrentWordShown()
+                        if (wordName != null) {
+                            updateWidgetViewHelper.localFetchWordByNameAndUpdateWidgetUi(
+                                wordName
+                            )
+                        } else {
+                            widgetDataFetchHelper.runTodayWordFetchJob()
                         }
                     }
+
                 }
 
                 Intent.ACTION_TIME_CHANGED -> {
@@ -107,12 +106,14 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
 
                 ACTION_TRY_AGAIN_FROM_WIDGET, ACTION_AUTO_UPDATE_WIDGET,
                 ACTION_APPWIDGET_UPDATE, ACTION_APPWIDGET_ENABLED -> {
-                    widgetDataFetchHelper.runTodayWordFetchJob()
+                    c.safeNetworkCall {
+                        widgetDataFetchHelper.runTodayWordFetchJob()
+                    }
                 }
 
                 ACTION_BOOKMARK_FROM_WIDGET -> {
                     goAsync(Dispatchers.Main) {
-                        val word = it.getStringExtra(EXTRA_BOOKMARKED_WORD)
+                        val word = i.getStringExtra(EXTRA_BOOKMARKED_WORD)
                         word?.let { bookmarked_word ->
                             toggleBookmarkInteractor.toggle(bookmarked_word).collectLatest {
                                 Timber.i("toggle: " + Gson().toJson(it))
@@ -128,15 +129,18 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
 
                 ACTION_PLAY_AUDIO_FROM_WIDGET -> {
                     Timber.i("onReceive: Playing")
-                    it.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
-                        audioPlayer.play(audioUrl)
+                    c.safeNetworkCall {
+                        i.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
+                            audioPlayer.play(audioUrl)
+                        }
                     }
                 }
 
                 ACTION_SILENT_REFRESH_WIDGET -> widgetDataFetchHelper.runTodayWordFetchJob(false)
 
-                ACTION_RANDOM_WORD -> widgetDataFetchHelper.runRandomWordJob()
-
+                ACTION_RANDOM_WORD -> c.safeNetworkCall {
+                    widgetDataFetchHelper.runRandomWordJob()
+                }
                 else -> Unit
             }
         }

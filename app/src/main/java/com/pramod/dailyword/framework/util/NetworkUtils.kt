@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.widget.Toast
 
 class NetworkUtils {
     companion object {
@@ -64,4 +65,14 @@ class NetworkUtils {
 
         }
     }
+}
+
+fun Context.safeNetworkCall(callback: () -> Unit) {
+    if (!NetworkUtils.isNetworkActive(this)) {
+        Toast.makeText(
+            this, "Please check your internet connection!", Toast.LENGTH_SHORT
+        ).show()
+        return
+    }
+    callback()
 }

@@ -36,8 +36,10 @@ class WidgetDataFetchHelper @Inject constructor(
                         WidgetDataLoadService.EXTRA_SHOULD_CALL_API to shouldCallApi
                     )
                 )
-        }.setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
-            .setRequiresCharging(false)
+        }.setRequiredNetworkType(
+            if (shouldCallApi) JobInfo.NETWORK_TYPE_ANY
+            else JobInfo.NETWORK_TYPE_NONE
+        ).setRequiresCharging(false)
             .setRequiresDeviceIdle(false)
             .setOverrideDeadline(0)
             .build()
@@ -67,7 +69,7 @@ class WidgetDataFetchHelper @Inject constructor(
         val jobInfo = JobInfo.Builder(
             Constants.JOB_ID_FETCH_RANDOM_WORD_FOR_WIDGET,
             ComponentName(context, WidgetRandomWordLoadService::class.java)
-        ).setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+        ).setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setRequiresCharging(false)
             .setRequiresDeviceIdle(false)
             .setOverrideDeadline(0)
