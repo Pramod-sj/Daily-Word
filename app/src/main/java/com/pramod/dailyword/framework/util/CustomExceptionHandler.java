@@ -2,6 +2,8 @@ package com.pramod.dailyword.framework.util;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -16,7 +18,7 @@ public class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread thread, Throwable throwable) {
+    public void uncaughtException(@NonNull Thread thread, Throwable throwable) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         throwable.printStackTrace(printWriter);

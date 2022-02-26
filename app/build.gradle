@@ -48,9 +48,6 @@ android {
         buildConfigField("String", "GET_PUBLIC_IP", endpointProperties['GET_PUBLIC_IP'])
         buildConfigField("String", "GET_IP_DETAILS", endpointProperties['GET_IP_DETAILS'])
         buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
-
-        buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
-        buildConfigField("String", "URL_LOTTIE_DONATE_PAGE", endpointProperties["URL_LOTTIE_DONATE_PAGE"])
         /**
          * End
          */
@@ -58,10 +55,12 @@ android {
 
     buildTypes {
         debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }

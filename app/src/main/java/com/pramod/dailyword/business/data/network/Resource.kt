@@ -1,5 +1,8 @@
 package com.pramod.dailyword.business.data.network
 
+import androidx.annotation.Keep
+
+@Keep
 class Resource<T>(
     val data: T? = null,
     val status: Status,
@@ -20,6 +23,7 @@ class Resource<T>(
     }
 }
 
+@Keep
 enum class Status {
     LOADING,
     SUCCESS,

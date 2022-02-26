@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.ui.donate
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
 import com.pramod.dailyword.R
 
@@ -11,6 +12,7 @@ enum class DonateItemState {
     PURCHASED
 }
 
+@Keep
 data class DonateItem(
     val itemProductId: String,
     val drawableId: Int,

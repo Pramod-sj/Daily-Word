@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.firebase
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import androidx.annotation.Keep
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -15,7 +16,9 @@ import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -153,6 +156,7 @@ class FBMessageService : FirebaseMessagingService() {
         }
     }
 
+    @Keep
     data class MessagePayload(
         var title: String = "Title",
         var body: String = "Body",

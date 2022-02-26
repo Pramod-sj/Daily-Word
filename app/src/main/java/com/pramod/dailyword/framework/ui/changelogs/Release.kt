@@ -4,9 +4,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
+import androidx.annotation.Keep
 import androidx.core.text.toSpannable
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class Release(
     @SerializedName("version_code")
     val versionCode: Long,

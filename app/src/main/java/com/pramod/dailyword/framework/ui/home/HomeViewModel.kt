@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.home
 
 import android.text.SpannableString
+import androidx.annotation.Keep
 import androidx.lifecycle.*
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Status
@@ -14,7 +15,6 @@ import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -118,6 +118,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
+    @Keep
     data class AppUpdateModel(
         val message: SpannableString?,
         val downloadPercentage: Int = 0,
