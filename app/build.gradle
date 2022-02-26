@@ -48,9 +48,6 @@ android {
         buildConfigField("String", "GET_PUBLIC_IP", endpointProperties['GET_PUBLIC_IP'])
         buildConfigField("String", "GET_IP_DETAILS", endpointProperties['GET_IP_DETAILS'])
         buildConfigField("String", "HOME_BACKGROUND_URL", endpointProperties['HOME_BACKGROUND_URL'])
-
-        buildConfigField("String", "URL_LOTTIE_THANK_YOU", endpointProperties['URL_LOTTIE_THANK_YOU'])
-        buildConfigField("String", "URL_LOTTIE_DONATE_PAGE", endpointProperties["URL_LOTTIE_DONATE_PAGE"])
         /**
          * End
          */
@@ -89,9 +86,9 @@ android {
 
 dependencies {
 
-    def lifecycle_version = "2.4.0"
+    def lifecycle_version = "2.4.1"
     def hilt_version = "2.36"
-    def billing_version = "4.0.0"
+    def billing_version = "4.1.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -104,11 +101,11 @@ dependencies {
 
 
     //ui related libs
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     //in-app purchase helper lib (this lib doesn't support billing version 3)
@@ -118,7 +115,7 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
     //preference library
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     //data binding
     kapt "com.android.databinding:compiler:3.6.1"
@@ -142,8 +139,8 @@ dependencies {
     //firebase libs
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-config-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.6'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.8'
 
     //paging lib
     implementation 'androidx.paging:paging-runtime-ktx:3.1.0'
