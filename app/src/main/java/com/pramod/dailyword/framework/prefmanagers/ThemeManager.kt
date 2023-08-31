@@ -48,16 +48,16 @@ class ThemeManager @Inject constructor(@ActivityContext context: Context) :
                 }
             }
         }
-        Timber.i( "before: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
+        Timber.i("before: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
         AppCompatDelegate.setDefaultNightMode(mode)
-        Timber.i( "after: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
+        Timber.i("after: applyTheme: " + AppCompatDelegate.getDefaultNightMode())
 
     }
 
     private var onThemeValueChangedListener: OnThemeValueChangedListener? = null
 
     private val sharedPreferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { _: SharedPreferences, s: String ->
+        SharedPreferences.OnSharedPreferenceChangeListener { _, s: String? ->
             if (s == KEY_THEME_MODE) {
                 onThemeValueChangedListener?.onThemeValueChanged(
                     sPrefManager.getString(KEY_THEME_MODE, defaultTheme) ?: defaultTheme
@@ -103,6 +103,7 @@ class ThemeManager @Inject constructor(@ActivityContext context: Context) :
                 Configuration.UI_MODE_NIGHT_YES -> {
                     true
                 }
+
                 else -> false
             }
         }
