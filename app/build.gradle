@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp'
+    id 'kotlin-kapt'
 }
 
 def keyPropertiesFile = rootProject.file("key.properties")
@@ -16,13 +17,12 @@ def endpointProperties = new Properties()
 endpointProperties.load(new FileInputStream(endPointPropertiesFile))
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "30.0.3"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.pramod.dailyword"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 34
         versionCode 202202260
         versionName "2.3.1"
 
@@ -65,30 +65,31 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         dataBinding = true
     }
 
-// To inline the bytecode built with JVM target 1.8 into
-// bytecode that is being built with JVM target 1.6. (e.g. navArgs)
-
-
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
 
+    namespace 'com.pramod.dailyword'
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
 
-    def lifecycle_version = "2.4.1"
-    def hilt_version = "2.36"
-    def billing_version = "4.1.0"
+    def lifecycle_version = '2.6.1'
+    def billing_version = '6.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -96,29 +97,30 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 
     //ui related libs
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
 
     //in-app purchase helper lib (this lib doesn't support billing version 3)
     //implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
     //google core lib mainly using it for in-app update
-    implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
+    implementation 'com.google.android.play:review-ktx:2.0.1'
 
     //preference library
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
     //data binding
-    kapt "com.android.databinding:compiler:3.6.1"
+    ksp "com.android.databinding:compiler:3.6.1"
 
     //retrofit libs
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -129,7 +131,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-paging:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
     //android lifecycle libs
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -137,13 +139,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     //firebase libs
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
-    implementation 'com.google.firebase:firebase-config-ktx:21.0.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.8'
+    implementation 'com.google.firebase:firebase-messaging:23.2.1'
+    implementation 'com.google.firebase:firebase-config-ktx:21.4.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.1'
 
     //paging lib
-    implementation 'androidx.paging:paging-runtime-ktx:3.1.0'
+    implementation 'androidx.paging:paging-runtime-ktx:3.2.0'
 
     //FAN lib
     implementation 'com.facebook.android:audience-network-sdk:6.3.0'
@@ -160,7 +162,7 @@ dependencies {
     }
 
     //in-app browser lib
-    implementation "androidx.browser:browser:1.4.0"
+    implementation 'androidx.browser:browser:1.6.0'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
@@ -168,14 +170,14 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
 
     //image loading library
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    ksp 'com.github.bumptech.glide:compiler:4.12.0'
 
     //custom lib to play and store audio files
     implementation project(path: ':audioplayer')
 
     //in-app browser
-    implementation 'androidx.webkit:webkit:1.4.0'
+    implementation 'androidx.webkit:webkit:1.7.0'
 
     //detecting leaks
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'

@@ -36,7 +36,7 @@ class SplashScreenViewModel @Inject constructor(
 
 
         splashScreenTextVisible.observeForever(object : Observer<Boolean> {
-            override fun onChanged(t: Boolean?) {
+            override fun onChanged(t: Boolean) {
                 splashScreenTextVisible.removeObserver(this)
                 if (prefManager.isNewUser()) {
                     splashScreenText.value = "Hi, There!"
