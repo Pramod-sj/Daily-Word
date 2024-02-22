@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.app.AlarmManagerCompat
 import com.pramod.dailyword.framework.receiver.ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER
 import com.pramod.dailyword.framework.receiver.AlarmReceiver
@@ -39,7 +40,7 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
         } else {
             val offset = 7 - (get(Calendar.DAY_OF_WEEK) - 1)
             add(Calendar.DATE, offset)
-            Timber.i( "scheduleWeeklyAlarmAt12PM: $offset")
+            Timber.i("scheduleWeeklyAlarmAt12PM: $offset")
         }
         make12AMInstance()
     }
@@ -55,7 +56,7 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
     )
 
     if (!isAlarmSchedule(comingSunday12PMCal.timeInMillis.hashCode())) {
-        Timber.i( "scheduleWeeklyAlarmAt12PM: scheduling 12 PM alarm")
+        Timber.i("scheduleWeeklyAlarmAt12PM: scheduling 12 PM alarm")
         scheduleAlarm(
             timeInFuture = comingSunday12PMCal.timeInMillis,
             intent = Intent(
@@ -63,7 +64,7 @@ fun Context.scheduleWeeklyAlarmAt12PM() {
             ).setAction(ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER)
         )
     } else {
-        Timber.i( "scheduleWeeklyAlarmAt12PM: not scheduling")
+        Timber.i("scheduleWeeklyAlarmAt12PM: not scheduling")
     }
 }
 
@@ -73,7 +74,6 @@ fun Context.scheduleAlarm(
     alarmId: Int = timeInFuture.hashCode(),
     intent: Intent
 ) {
-    val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     val pendingIntent = PendingIntent.getBroadcast(
         this,
@@ -82,12 +82,10 @@ fun Context.scheduleAlarm(
         safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
     )
 
-
-    AlarmManagerCompat.setExactAndAllowWhileIdle(
-        alarmManager,
-        AlarmManager.RTC_WAKEUP,
-        timeInFuture,
-        pendingIntent
+    setCompactExactAndAllowWhileIdle(
+        type = AlarmManager.RTC_WAKEUP,
+        triggerAtMillis = timeInFuture,
+        operation = pendingIntent
     )
 
 }
@@ -101,4 +99,37 @@ fun Context.isAlarmSchedule(alarmId: Int): Boolean {
         intent,
         safeImmutableFlag(PendingIntent.FLAG_NO_CREATE)
     ) != null
+}
+
+
+fun Context.setCompactExactAndAllowWhileIdle(
+    type: Int,
+    triggerAtMillis: Long,
+    operation: PendingIntent
+) {
+    val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        when {
+            // If permission is granted, proceed with scheduling exact alarms.
+            alarmManager.canScheduleExactAlarms() -> {
+                AlarmManagerCompat.setExactAndAllowWhileIdle(
+                    alarmManager,
+                    type,
+                    triggerAtMillis,
+                    operation
+                )
+            }
+
+            else -> {
+                // Ask users to go to exact alarm page in system settings. c
+                startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+            }
+        }
+    } else {
+        AlarmManagerCompat.setExactAndAllowWhileIdle(
+            alarmManager,
+            type, triggerAtMillis, operation
+        )
+    }
 }
