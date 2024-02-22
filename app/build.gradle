@@ -17,12 +17,13 @@ def endpointProperties = new Properties()
 endpointProperties.load(new FileInputStream(endPointPropertiesFile))
 
 android {
+
     compileSdk 34
 
     defaultConfig {
         applicationId "com.pramod.dailyword"
-        minSdkVersion 21
-        targetSdkVersion 34
+        minSdk 21
+        targetSdk 34
         versionCode 202202260
         versionName "2.3.1"
 
@@ -88,13 +89,13 @@ kapt {
 
 dependencies {
 
-    def lifecycle_version = '2.6.1'
+    def lifecycle_version = '2.7.0'
     def billing_version = '6.0.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -102,12 +103,12 @@ dependencies {
 
 
     //ui related libs
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
 
     //in-app purchase helper lib (this lib doesn't support billing version 3)
     //implementation 'com.anjlab.android.iab.v3:library:1.0.44'
@@ -128,24 +129,24 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
     //room libs
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-paging:$room_version"
-    ksp "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
+    implementation "androidx.room:room-paging:2.6.1"
+    ksp "androidx.room:room-compiler:2.6.1"
 
     //android lifecycle libs
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     //firebase libs
-    implementation 'com.google.firebase:firebase-messaging:23.2.1'
-    implementation 'com.google.firebase:firebase-config-ktx:21.4.1'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.1'
+    implementation 'com.google.firebase:firebase-messaging:23.4.1'
+    implementation 'com.google.firebase:firebase-config-ktx:21.6.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.5.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.2'
 
     //paging lib
-    implementation 'androidx.paging:paging-runtime-ktx:3.2.0'
+    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
 
     //FAN lib
     implementation 'com.facebook.android:audience-network-sdk:6.3.0'
@@ -154,7 +155,7 @@ dependencies {
     implementation 'com.github.judemanutd:autostarter:1.1.0'
 
     //lottie
-    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation 'com.airbnb.android:lottie:6.2.0'
 
     //doki i.e. Don't kill my app
     implementation('dev.doubledot.doki:library:0.0.1@aar') {
@@ -162,12 +163,11 @@ dependencies {
     }
 
     //in-app browser lib
-    implementation 'androidx.browser:browser:1.6.0'
+    implementation 'androidx.browser:browser:1.7.0'
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    //implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
-    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+    implementation "com.google.dagger:hilt-android:2.50"
+    kapt "com.google.dagger:hilt-compiler:2.50"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.1.0'
 
     //image loading library
     implementation 'com.github.bumptech.glide:glide:4.16.0'
@@ -177,7 +177,7 @@ dependencies {
     implementation project(path: ':audioplayer')
 
     //in-app browser
-    implementation 'androidx.webkit:webkit:1.7.0'
+    implementation 'androidx.webkit:webkit:1.10.0'
 
     //detecting leaks
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
@@ -185,7 +185,7 @@ dependencies {
     //billing lib
     implementation "com.android.billingclient:billing-ktx:$billing_version"
 
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
 
     implementation "com.jakewharton.timber:timber:5.0.1"
 }
