@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -7,10 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
-
-    <!--
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".WOTDApp"
@@ -23,7 +21,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -80,6 +79,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".framework.ui.home.HomeActivity"
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".framework.ui.notification_consent.NotificationConsentActivity"
             android:screenOrientation="nosensor"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustNothing" />
