@@ -1,5 +1,6 @@
 package com.pramod.dailyword.di
 
+import com.pramod.dailyword.framework.prefmanagers.DisableBatteryOptimizationPermissionPref
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference
 import dagger.Module
@@ -13,6 +14,11 @@ object PreferenceModule {
 
     @Provides
     fun provideWidgetSettingPreference(prefManager: PrefManager): WidgetSettingPreference {
+        return prefManager
+    }
+
+    @Provides
+    fun provideDisableBatteryOptimizationPref(prefManager: PrefManager): DisableBatteryOptimizationPermissionPref {
         return prefManager
     }
 

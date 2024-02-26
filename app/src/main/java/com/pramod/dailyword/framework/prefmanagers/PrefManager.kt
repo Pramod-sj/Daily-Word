@@ -27,7 +27,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     DonatedContract,
     SupportUsDialogContract,
     WidgetSettingPreference,
-    NotificationPermissionPref {
+    NotificationPermissionPref,
+    DisableBatteryOptimizationPermissionPref {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -227,6 +228,20 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         ).commit()
     }
 
+    override fun isDisableBatteryOptimizationDismissed(): Boolean {
+        return sPrefManager.getBoolean(
+            DisableBatteryOptimizationPermissionPref.KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED,
+            false
+        )
+    }
+
+    override fun markDisableBatteryOptimizationDismissed() {
+        editor.putBoolean(
+            DisableBatteryOptimizationPermissionPref.KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED,
+            true
+        ).commit()
+    }
+
 
 }
 
@@ -347,5 +362,18 @@ interface NotificationPermissionPref {
     fun markFullNotificationMessageDismissed()
 
     fun markNotificationPermissionAsked()
+
+}
+
+
+interface DisableBatteryOptimizationPermissionPref {
+
+    companion object {
+        const val KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED =
+            "disable_battery_optimization_message_dismissed"
+    }
+
+    fun isDisableBatteryOptimizationDismissed(): Boolean
+    fun markDisableBatteryOptimizationDismissed()
 
 }
