@@ -334,25 +334,6 @@
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{()->appSettingViewModel.settingUseCase.navigateToFacingNotificationIssue()}"
-                            app:onLongClick="@{()->appSettingViewModel.settingUseCase.copyFirebaseTokenId()}"
-                            app:showIconBackground="false"
-                            app:showRadioButton="false"
-                            app:subTitle="Not receiving notifications, fix it yourself"
-                            app:title="Facing notification issue?"
-                            app:titlePaddingStart="@dimen/margin_small"
-                            app:titleStyle="bold"
-                            app:titleTextSize="@dimen/text_sub_title" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
-                            android:background="@color/setting_stroke" />
-
-                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.settingUseCase.clearAppData()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
