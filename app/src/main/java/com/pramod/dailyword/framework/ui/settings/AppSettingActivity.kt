@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -28,7 +27,13 @@ import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.DailogHelper
+import com.pramod.dailyword.framework.ui.common.exts.applyStyleOnAlertDialog
+import com.pramod.dailyword.framework.ui.common.exts.openAboutPage
+import com.pramod.dailyword.framework.ui.common.exts.openSplashScreen
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
+import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
+import com.pramod.dailyword.framework.ui.common.exts.showCheckboxDialog
 import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
 import com.pramod.dailyword.framework.ui.notification_consent.NotificationPermissionHandler
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -37,8 +42,6 @@ import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
-import dev.doubledot.doki.ui.DokiActivity
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -170,12 +173,6 @@ class AppSettingActivity :
 
             override fun toggleBadgeVisibility() {
                 prefManager.toggleHideBadge()
-            }
-
-            override fun navigateToFacingNotificationIssue() {
-                DokiActivity.start(
-                    this@AppSettingActivity
-                )
             }
 
             override fun checkForUpdate() {

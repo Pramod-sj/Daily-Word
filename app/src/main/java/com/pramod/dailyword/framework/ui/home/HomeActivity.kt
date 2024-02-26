@@ -3,9 +3,12 @@ package com.pramod.dailyword.framework.ui.home
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
+import android.provider.Settings
 import android.text.SpannableString
 import android.util.Pair
 import android.view.HapticFeedbackConstants
@@ -118,6 +121,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var notificationPermissionHandler: NotificationPermissionHandler
 
+    @Inject
+    lateinit var batteryOptimizationPermissionHandler: BatteryOptimizationPermissionHandler
+
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
             val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
@@ -148,6 +154,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         silentRefreshWidget()
         handleNotificationPermissionLaunch()
         handlePermissionChangedScenario()
+        handleNavigationToDisableBatteryOptimization()
+    }
+
+    private fun handleNavigationToDisableBatteryOptimization() {
+        viewModel.navigateToBatteryOptimizationPage.observe(this) {
+            it.getContentIfNotHandled()?.let {
+                batteryOptimizationPermissionHandler.launch()
+            }
+        }
     }
 
     private fun handlePermissionChangedScenario() {

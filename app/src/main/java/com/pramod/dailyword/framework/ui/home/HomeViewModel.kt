@@ -25,7 +25,8 @@ class HomeViewModel @Inject constructor(
     private val badgeManager: HomeScreenBadgeManager,
     private val prefManager: PrefManager,
     val audioPlayer: AudioPlayer,
-    val notificationChecker: NotificationChecker
+    private val notificationChecker: NotificationChecker,
+    private val batteryOptimizationChecker: BatteryOptimizationChecker
 ) : BaseViewModel() {
 
     companion object {
@@ -35,9 +36,18 @@ class HomeViewModel @Inject constructor(
     val canShowNotificationEnableMessage: LiveData<Boolean>
         get() = notificationChecker.canShowNotificationEnableMessage
 
+    val canShowDisableBatteryOptimizationMessage: LiveData<Boolean>
+        get() = batteryOptimizationChecker.canShowDisableBatteryOptimizationMessage
+
+
     private val _showNotificationPermissionDialog = MutableLiveData<Event<Unit>>()
     val showNotificationPermissionDialog: LiveData<Event<Unit>>
         get() = _showNotificationPermissionDialog
+
+    private val _navigateToBatteryOptimizationPage = MutableLiveData<Event<Unit>>()
+    val navigateToBatteryOptimizationPage: LiveData<Event<Unit>>
+        get() = _navigateToBatteryOptimizationPage
+
 
     private val title = MutableLiveData<SpannableString>()
 
@@ -163,4 +173,13 @@ class HomeViewModel @Inject constructor(
     fun enableNotificationAllowClick() {
         _showNotificationPermissionDialog.value = Event.init(Unit)
     }
+
+    fun navigateToBatteryOptimizationPage() {
+        _navigateToBatteryOptimizationPage.value = Event.init(Unit)
+    }
+
+    fun removeBatteryOptimizationMessage() {
+        batteryOptimizationChecker.markNotInterestedForBatteryOptimization()
+    }
+
 }
