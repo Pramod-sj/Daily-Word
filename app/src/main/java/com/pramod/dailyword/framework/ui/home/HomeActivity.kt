@@ -50,10 +50,22 @@ import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
+import com.pramod.dailyword.framework.ui.common.exts.openAboutPage
+import com.pramod.dailyword.framework.ui.common.exts.openBookmarksPage
+import com.pramod.dailyword.framework.ui.common.exts.openRandomWordPage
+import com.pramod.dailyword.framework.ui.common.exts.openRecapPage
+import com.pramod.dailyword.framework.ui.common.exts.openSettingPage
+import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
+import com.pramod.dailyword.framework.ui.common.exts.openWordListPage
+import com.pramod.dailyword.framework.ui.common.exts.shareApp
+import com.pramod.dailyword.framework.ui.common.exts.shouldShowSupportDevelopmentDialog
+import com.pramod.dailyword.framework.ui.common.exts.showBasicDialog
+import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationPermissionHandler
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
@@ -103,6 +115,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
+    @Inject
+    lateinit var notificationPermissionHandler: NotificationPermissionHandler
 
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
@@ -132,6 +146,31 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleShowingCreditAndAutoStartDialog()
         handleBadgeVisibility()
         silentRefreshWidget()
+        handleNotificationPermissionLaunch()
+        handlePermissionChangedScenario()
+    }
+
+    private fun handlePermissionChangedScenario() {
+        lifecycleScope.launch {
+            notificationPermissionHandler.isNotificationPermissionGranted.collect {
+                if (it) {
+                    if (prefManager.getAppLaunchCount() == 1 && !viewModel.firstNotificationShown) {
+                        viewModel.wordOfTheDay.value?.let { word ->
+                            viewModel.firstNotificationShown = true
+                            showNotification(word)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleNotificationPermissionLaunch() {
+        viewModel.showNotificationPermissionDialog.observe(this) {
+            it.getContentIfNotHandled()?.let {
+                notificationPermissionHandler.launch()
+            }
+        }
     }
 
     private fun initBillingHelper() {
@@ -179,12 +218,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             }
                         }
                     }
+
                     UpdateAvailability.UNKNOWN -> {
 
                     }
+
                     UpdateAvailability.UPDATE_AVAILABLE -> {
 
                     }
+
                     UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
 
                     }
@@ -221,9 +263,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             R.id.menu_settings -> {
                                 openSettingPage()
                             }
+
                             R.id.menu_donate -> {
                                 DonateBottomDialogFragment.show(supportFragmentManager)
                             }
+
                             R.id.menu_share -> {
                                 CommonUtils.viewToBitmap(binding.coordinatorLayout)
                                     ?.let { bitmap ->
@@ -361,23 +405,28 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun setUpRecyclerViewAdapter() {
         binding.mainRecyclerviewPastWords.adapter = pastWordAdapter
-        viewModel.wordOfTheDay.observe(this, {
+        viewModel.wordOfTheDay.observe(this) {
             it?.let {
                 if (!it.isSeen) {
                     viewModel.updateWordSeenStatus(it)
                     if (PrefManager.getInstance(this).getAppLaunchCount() == 1
                         && !viewModel.firstNotificationShown
                     ) {
-                        viewModel.firstNotificationShown = true
-                        showNotification(it)
+
+                        val isLaunched = notificationPermissionHandler.launch()
+
+                        if (!isLaunched) {
+                            viewModel.firstNotificationShown = true
+                            showNotification(it)
+                        }
                     }
                 }
             }
-        })
+        }
 
-        viewModel.last6DayWords.observe(this, {
+        viewModel.last6DayWords.observe(this) {
             pastWordAdapter.submitList(it)
-        })
+        }
     }
 
     private fun intentToWordDetail(view: View? = null, word: Word) {
@@ -487,6 +536,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     ).show()
 
                 }
+
                 RESULT_CANCELED -> {
                     //if you want to request the update again just call checkUpdate()
                     Toast.makeText(
@@ -496,6 +546,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     ).show()
                     finishAffinity()
                 }
+
                 ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
                     Toast.makeText(
                         applicationContext,
@@ -528,9 +579,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 FBMessageService.DEEP_LINK_TO_WORD_DETAILED -> {
                     openWordDetailsPage(messagePayload.date, option = null)
                 }
+
                 FBMessageService.DEEP_LINK_TO_WORD_LIST -> {
                     openWordListPage()
                 }
+
                 else -> {
 
                 }
@@ -538,7 +591,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun handleWidgetExtras() {
-        val date = intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+        val date =
+            intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
         date?.let {
             openWordDetailsPage(it, null)
         }
@@ -581,6 +635,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 viewModel.setAppUpdateDownloadProgress(100)
                             }
                         }
+
                         UpdateAvailability.UNKNOWN -> {}
                         UpdateAvailability.UPDATE_AVAILABLE -> {
                             viewModel.setAppUpdateMessage(
@@ -647,6 +702,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
                             }
                         }
+
                         UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
                             Timber.i("checkForUpdate: no update available")
                         }
@@ -666,29 +722,37 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             InstallStatus.DOWNLOADED -> {
                 Timber.i(": DOWNLOADED")
                 fbRemoteConfig.getLatestRelease()?.let {
-                    viewModel.setAppUpdateMessage(buildUpdateAvailableToInstallSpannableString(it))
+                    viewModel.setAppUpdateMessage(
+                        buildUpdateAvailableToInstallSpannableString(
+                            it
+                        )
+                    )
                     viewModel.setAppUpdateDownloadProgress(100)
                     viewModel.setAppUpdateButtonText("Install")
                 }
             }
+
             InstallStatus.CANCELED -> {
                 Timber.i(": CANCELED")
                 viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
             }
+
             InstallStatus.DOWNLOADING -> {
                 val downloadPercentage =
                     ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt()
                 viewModel.setAppUpdateButtonText("$downloadPercentage%")
                 viewModel.setAppUpdateDownloadProgress(downloadPercentage)
             }
+
             InstallStatus.FAILED -> {
                 Timber.i(": FAILED")
                 viewModel.setAppUpdateDownloadProgress(0)
                 viewModel.setAppUpdateButtonText("Update")
                 viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
             }
+
             InstallStatus.INSTALLED -> {
                 Timber.i(": INSTALLED")
                 viewModel.setAppUpdateDownloadProgress(0)
@@ -699,6 +763,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             InstallStatus.INSTALLING -> {
                 viewModel.setAppUpdateDownloadProgress(0)
                 Timber.i(": INSTALLING")
@@ -708,6 +773,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
                 viewModel.setAppUpdateDownloadProgress(0)
@@ -719,6 +785,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             InstallStatus.UNKNOWN -> {
                 viewModel.setAppUpdateDownloadProgress(0)
                 Timber.i(": UNKNOWN")

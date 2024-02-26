@@ -159,6 +159,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_large"
@@ -171,18 +172,35 @@
                         android:background="@color/setting_card_color"
                         android:orientation="vertical">
 
-                        <TextView
-                            style="@style/AppTheme.SmallTextStyle"
-                            android:layout_width="wrap_content"
+                        <FrameLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_medium"
-                            android:layout_marginTop="@dimen/margin_medium"
-                            android:padding="@dimen/padding_medium"
-                            android:text="@string/notification"
-                            android:textAllCaps="true"
-                            android:textColor="@color/colorPrimary" />
+                            android:layout_marginTop="@dimen/margin_medium">
+
+                            <TextView
+                                style="@style/AppTheme.SmallTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_medium"
+                                android:padding="@dimen/padding_medium"
+                                android:text="@string/notification"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorPrimary" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/iv_notification_alert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end|center_vertical"
+                                android:layout_marginHorizontal="16dp"
+                                android:contentDescription="Notification not enabled!"
+                                android:src="@drawable/ic_round_error_outline_24"
+                                app:tint="@color/red_200" />
+
+                        </FrameLayout>
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:id="@+id/notification_daily_toggle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleDailyWordNotification()}"
@@ -201,6 +219,7 @@
                             android:background="@color/setting_stroke" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:id="@+id/notification_reminder_toggle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
@@ -219,6 +238,7 @@
                             android:background="@color/setting_stroke" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:id="@+id/notification_meaning_toggle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleShowWordMeaningInNotification()}"

@@ -26,7 +26,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     CountryCodeContracts,
     DonatedContract,
     SupportUsDialogContract,
-    WidgetSettingPreference {
+    WidgetSettingPreference,
+    NotificationPermissionPref {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -105,7 +106,6 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
          */
         private const val KEY_USER_COUNTRY_CODE = "user_country_code"
 
-
         @JvmStatic
         fun getInstance(context: Context): PrefManager = PrefManager(context)
     }
@@ -183,6 +183,48 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
 
     override fun setWidgetBackgroundAlpha(@IntRange(from = 50, to = 100) alpha: Int) {
         editor.putInt(KEY_WIDGET_BACKGROUND_ALPHA, alpha).apply()
+    }
+
+    override fun isSmallNotificationMessageDismissed(): Boolean {
+        return sPrefManager.getBoolean(
+            NotificationPermissionPref.KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED,
+            false
+        )
+    }
+
+    override fun isFullNotificationMessageDismissed(): Boolean {
+        return sPrefManager.getBoolean(
+            NotificationPermissionPref.KEY_FULL_NOTIFICATION_MESSAGE_DISMISSED,
+            false
+        )
+    }
+
+    override fun isNotificationPermissionAsked(): Boolean {
+        return sPrefManager.getBoolean(
+            NotificationPermissionPref.KEY_IS_FIRST_NOTIFICATION_PERMISSION_ASKED,
+            false
+        )
+    }
+
+    override fun markSmallNotificationMessageDismissed() {
+        editor.putBoolean(
+            NotificationPermissionPref.KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED,
+            true
+        ).commit()
+    }
+
+    override fun markFullNotificationMessageDismissed() {
+        editor.putBoolean(
+            NotificationPermissionPref.KEY_FULL_NOTIFICATION_MESSAGE_DISMISSED,
+            true
+        ).commit()
+    }
+
+    override fun markNotificationPermissionAsked() {
+        editor.putBoolean(
+            NotificationPermissionPref.KEY_IS_FIRST_NOTIFICATION_PERMISSION_ASKED,
+            true
+        ).commit()
     }
 
 
@@ -280,4 +322,30 @@ interface WidgetSettingPreference {
     fun getWidgetBackgroundAlpha(): Int
 
     fun setWidgetBackgroundAlpha(@IntRange(from = 50, to = 100) alpha: Int)
+}
+
+interface NotificationPermissionPref {
+
+    companion object {
+        const val KEY_IS_FIRST_NOTIFICATION_PERMISSION_ASKED =
+            "is_first_notification_permission_asked"
+        const val KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED =
+            "small_notification_message_dismissed"
+        const val KEY_FULL_NOTIFICATION_MESSAGE_DISMISSED =
+            "full_notification_message_dismissed"
+    }
+
+
+    fun isSmallNotificationMessageDismissed(): Boolean
+
+    fun isFullNotificationMessageDismissed(): Boolean
+
+    fun isNotificationPermissionAsked(): Boolean
+
+    fun markSmallNotificationMessageDismissed()
+
+    fun markFullNotificationMessageDismissed()
+
+    fun markNotificationPermissionAsked()
+
 }

@@ -126,7 +126,6 @@
                 android:id="@+id/customToolbar"
                 layout="@layout/layout_custom_toolbar" />
 
-
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,6 +201,70 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="5dp"
+                app:cardBackgroundColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}"
+                app:cardElevation="0dp"
+                app:isGone="@{!mainViewModel.canShowNotificationEnableMessage}"
+                app:contentPadding="6dp"
+                app:strokeColor="@color/enable_notification_stroke_color"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Please allow us to send daily word notification"
+                        android:textColor="@color/red_200"
+                        android:textSize="@dimen/text_small"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="65dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="4dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:onClick="@{(v)->mainViewModel.enableNotificationNeverClick()}"
+                        android:text="Never"
+                        android:textAllCaps="false"
+                        android:textColor="@color/red_200"
+                        app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="4dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:onClick="@{(v)->mainViewModel.enableNotificationAllowClick()}"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:text="Allow"
+                        android:textAllCaps="false" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -392,7 +455,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </com.google.android.material.appbar.AppBarLayout>
 
