@@ -3,8 +3,10 @@ package com.pramod.dailyword.framework.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -25,14 +27,21 @@ import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.Message
-import com.pramod.dailyword.framework.ui.common.exts.*
+import com.pramod.dailyword.framework.ui.common.exts.DailogHelper
+import com.pramod.dailyword.framework.ui.common.exts.applyStyleOnAlertDialog
+import com.pramod.dailyword.framework.ui.common.exts.openAboutPage
+import com.pramod.dailyword.framework.ui.common.exts.openSplashScreen
+import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
+import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
+import com.pramod.dailyword.framework.ui.common.exts.showCheckboxDialog
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationPermissionHandler
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
-import dev.doubledot.doki.ui.DokiActivity
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -60,6 +69,12 @@ class AppSettingActivity :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
+    @Inject
+    lateinit var notificationChecker: NotificationChecker
+
+    @Inject
+    lateinit var notificationPermissionHandler: NotificationPermissionHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar(binding.toolbar, null, true)
@@ -68,6 +83,7 @@ class AppSettingActivity :
         initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
+        bindNotificationEnabledState()
         appUpdateManager.registerListener(installStateUpdatedListener)
     }
 
@@ -82,14 +98,17 @@ class AppSettingActivity :
                                 AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
                         }
                     }
+
                     UpdateAvailability.UPDATE_AVAILABLE -> {
                         viewModel.subTitleCheckForUpdate.value =
                             AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
                     }
+
                     UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
                         viewModel.subTitleCheckForUpdate.value =
                             AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
                     }
+
                     UpdateAvailability.UNKNOWN -> {
                         viewModel.subTitleCheckForUpdate.value =
                             AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
@@ -156,12 +175,6 @@ class AppSettingActivity :
                 prefManager.toggleHideBadge()
             }
 
-            override fun navigateToFacingNotificationIssue() {
-                DokiActivity.start(
-                    this@AppSettingActivity
-                )
-            }
-
             override fun checkForUpdate() {
 
                 if (viewModel.subTitleCheckForUpdate.value == AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING) {
@@ -195,6 +208,7 @@ class AppSettingActivity :
                                     }
                                 }
                             }
+
                             UpdateAvailability.UPDATE_AVAILABLE -> {
                                 viewModel.subTitleCheckForUpdate.value =
                                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
@@ -225,10 +239,12 @@ class AppSettingActivity :
                                     )
                                 }
                             }
+
                             UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
                                 viewModel.subTitleCheckForUpdate.value =
                                     AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
                             }
+
                             UpdateAvailability.UNKNOWN -> {
                                 viewModel.subTitleCheckForUpdate.value =
                                     AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
@@ -303,23 +319,28 @@ class AppSettingActivity :
                 viewModel.subTitleCheckForUpdate.value =
                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
             }
+
             InstallStatus.CANCELED -> {
                 viewModel.subTitleCheckForUpdate.value =
                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
                 viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
             }
+
             InstallStatus.DOWNLOADING -> {
                 viewModel.subTitleCheckForUpdate.value =
                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING +
                             " " +
                             ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()) + "%"
             }
+
             InstallStatus.FAILED -> {
                 viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
             }
+
             InstallStatus.INSTALLED -> {
                 viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
             }
+
             InstallStatus.INSTALLING -> {
                 Toast.makeText(
                     applicationContext,
@@ -327,6 +348,7 @@ class AppSettingActivity :
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
                 viewModel.subTitleCheckForUpdate.value =
@@ -338,6 +360,7 @@ class AppSettingActivity :
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
             InstallStatus.UNKNOWN -> {
                 viewModel.subTitleCheckForUpdate.value =
                     AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
@@ -374,5 +397,27 @@ class AppSettingActivity :
         dialog.show()
     }
 
+    private fun bindNotificationEnabledState() {
+        notificationChecker.isNotificationEnabled.observe(this) {
+            binding.notificationDailyToggle.setEnabled(it, 0.5f)
+            binding.notificationMeaningToggle.setEnabled(it, 0.5f)
+            binding.notificationReminderToggle.setEnabled(it, 0.5f)
+            if (!it) {
+                binding.ivNotificationAlert.isVisible = true
+                binding.cardNotification.setOnClickListener { notificationPermissionHandler.launch() }
+                binding.cardNotification.isEnabled = true
+            } else {
+                binding.ivNotificationAlert.isVisible = false
+                binding.cardNotification.isEnabled = false
+            }
+        }
+    }
 
+
+}
+
+
+internal fun View.setEnabled(enabled: Boolean, alphaValue: Float = 0.5f) {
+    isEnabled = enabled
+    alpha = if (enabled) 1f else alphaValue
 }

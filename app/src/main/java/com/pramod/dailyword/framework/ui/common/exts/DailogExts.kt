@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AbsListView
@@ -22,6 +21,8 @@ import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -158,9 +159,11 @@ fun Context.showWebViewDialog(url: String) {
     )
     Timber.i("URL", url)
 
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-        dialogWebviewLayoutBinding.webView.settings
-            .forceDark = WebSettings.FORCE_DARK_ON
+    if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+        WebSettingsCompat.setAlgorithmicDarkeningAllowed(
+            dialogWebviewLayoutBinding.webView.settings,
+            true
+        )
     }
 
     dialogWebviewLayoutBinding.webView.webViewClient = object : WebViewClient() {

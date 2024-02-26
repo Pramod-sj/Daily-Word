@@ -17,6 +17,7 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
 import com.pramod.dailyword.framework.ui.common.exts.openHomePage
+import com.pramod.dailyword.framework.ui.common.exts.openNotificationConsentPage
 import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -76,7 +77,7 @@ class SplashScreenActivity :
     }
 
     private fun navigateToHomePage() {
-        viewModel.navigateToHomePage().observe(this, {
+        viewModel.navigateToHomePage().observe(this) {
             it.getContentIfNotHandled()?.let { startNavigate ->
                 if (startNavigate) {
                     isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
@@ -95,11 +96,30 @@ class SplashScreenActivity :
 
                 }
             }
-        })
+        }
+        viewModel.navigateToNotificationConsent.observe(this) {
+            it.getContentIfNotHandled()?.let { startNavigate ->
+                if (startNavigate) {
+                    isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
+                        Timber.i("isImageCached: $isCached")
+                        if (isCached) {
+                            openNotificationConsentPage(withFadeAnimation = true, finish = true)
+                        } else {
+                            binding.btnGetStarted.showProgress(true)
+                            preloadImage(BuildConfig.HOME_BACKGROUND_URL) {
+                                binding.btnGetStarted.showProgress(false)
+                                Timber.i("preloadImage: $it")
+                                openNotificationConsentPage(withFadeAnimation = true, finish = true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun animateAppIcon() {
-        viewModel.animateSplashIcon().observe(this, {
+        viewModel.animateSplashIcon().observe(this) {
             if (it) {
 
                 CommonUtils.scaleXY(
@@ -115,7 +135,7 @@ class SplashScreenActivity :
             } else {
                 viewModel.showSplashText()
             }
-        })
+        }
     }
 
     private fun setUpAcceptLinks() {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
+import androidx.transition.TransitionManager
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -28,6 +29,9 @@ class ViewUtils {
         @BindingAdapter("app:isGone")
         @JvmStatic
         fun isGone(view: View, isGone: Boolean) {
+            (view.parent as? ViewGroup)?.let { viewGroup ->
+                TransitionManager.beginDelayedTransition(viewGroup)
+            }
             if (isGone) {
                 view.visibility = View.GONE
             } else {
@@ -45,7 +49,7 @@ class ViewUtils {
         @JvmStatic
         @BindingAdapter("app:paddingBottom")
         fun setPaddingBottom(view: View, dimen: Float) {
-            Timber.i( "setPaddingBottom: $dimen")
+            Timber.i("setPaddingBottom: $dimen")
             view.updatePadding(
                 bottom = dimen.roundToInt()
             )

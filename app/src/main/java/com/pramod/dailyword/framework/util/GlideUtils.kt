@@ -27,7 +27,7 @@ fun Context.isImageCached(url: String, cacheCallback: (isCached: Boolean) -> Uni
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
-                target: Target<Drawable>?,
+                target: Target<Drawable>,
                 isFirstResource: Boolean
             ): Boolean {
                 Handler(Looper.getMainLooper()).post {
@@ -37,10 +37,10 @@ fun Context.isImageCached(url: String, cacheCallback: (isCached: Boolean) -> Uni
             }
 
             override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
+                resource: Drawable,
+                model: Any,
                 target: Target<Drawable>?,
-                dataSource: DataSource?,
+                dataSource: DataSource,
                 isFirstResource: Boolean
             ): Boolean {
                 Handler(Looper.getMainLooper()).post {
@@ -66,7 +66,7 @@ fun Context.preloadImage(
             override fun onLoadFailed(
                 e: GlideException?,
                 model: Any?,
-                target: Target<File>?,
+                target: Target<File>,
                 isFirstResource: Boolean
             ): Boolean {
                 Timber.i("onLoadFailed: " + e?.message)
@@ -77,10 +77,10 @@ fun Context.preloadImage(
             }
 
             override fun onResourceReady(
-                resource: File?,
-                model: Any?,
+                resource: File,
+                model: Any,
                 target: Target<File>?,
-                dataSource: DataSource?,
+                dataSource: DataSource,
                 isFirstResource: Boolean
             ): Boolean {
                 Timber.i("onResourceReady: ")

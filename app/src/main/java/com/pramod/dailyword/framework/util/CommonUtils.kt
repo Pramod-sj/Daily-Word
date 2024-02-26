@@ -36,7 +36,8 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.exts.resolveAttrToColor
 import timber.log.Timber
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import kotlin.collections.map as map1
 
 
@@ -55,7 +56,7 @@ object CommonUtils {
         return spannableStringBuilder.toSpannable()
     }
 
-    fun viewToBitmap(view: View): Bitmap? {
+    fun viewToBitmap(view: View): Bitmap {
         val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(returnedBitmap)
         val bgDrawable = view.background
@@ -193,31 +194,31 @@ object CommonUtils {
         return typedValue.data
     }
 
-/*
-        fun createWorkerRequest(
-            workerClass: Class<out ListenableWorker>,
-            scheduleAtCalendar: Calendar?,
-            retryTimeInMinutes: Long = 30
-        ): OneTimeWorkRequest {
+    /*
+            fun createWorkerRequest(
+                workerClass: Class<out ListenableWorker>,
+                scheduleAtCalendar: Calendar?,
+                retryTimeInMinutes: Long = 30
+            ): OneTimeWorkRequest {
 
-            val contraints: Constraints =
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-            val oneTimeWorkRequestBuilder = OneTimeWorkRequest.Builder(workerClass)
-                .setBackoffCriteria(BackoffPolicy.LINEAR, retryTimeInMinutes, TimeUnit.MINUTES)
-                .setConstraints(contraints)
-            scheduleAtCalendar?.let {
-                var initialDelay =
-                    scheduleAtCalendar.timeInMillis - Calendar.getInstance().timeInMillis
-                if (initialDelay < 0) {
-                    scheduleAtCalendar.roll(Calendar.DATE, true)
-                    initialDelay =
+                val contraints: Constraints =
+                    Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val oneTimeWorkRequestBuilder = OneTimeWorkRequest.Builder(workerClass)
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, retryTimeInMinutes, TimeUnit.MINUTES)
+                    .setConstraints(contraints)
+                scheduleAtCalendar?.let {
+                    var initialDelay =
                         scheduleAtCalendar.timeInMillis - Calendar.getInstance().timeInMillis
+                    if (initialDelay < 0) {
+                        scheduleAtCalendar.roll(Calendar.DATE, true)
+                        initialDelay =
+                            scheduleAtCalendar.timeInMillis - Calendar.getInstance().timeInMillis
+                    }
+                    Log.i("INITITAL DELAY", initialDelay.toString())
+                    oneTimeWorkRequestBuilder.setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
                 }
-                Log.i("INITITAL DELAY", initialDelay.toString())
-                oneTimeWorkRequestBuilder.setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            }
-            return oneTimeWorkRequestBuilder.build()
-        }*/
+                return oneTimeWorkRequestBuilder.build()
+            }*/
 
 
     fun isAtLeastAndroidP() = Build.VERSION.SDK_INT >= 28
@@ -247,19 +248,15 @@ object CommonUtils {
         val animator = AnimatorSet()
         animator.playTogether(scaleXAnimator, scaleYAnimator, alphaAnimator)
         animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onAnimationRepeat(animation: Animator) {}
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 animEndCallback.invoke()
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onAnimationCancel(animation: Animator) {}
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 animStartCallback.invoke()
             }
 
@@ -351,17 +348,13 @@ object CommonUtils {
         )
         objectAnimator.duration = duration
         objectAnimator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
-            }
+            override fun onAnimationRepeat(animation: Animator) {}
 
-            override fun onAnimationEnd(animation: Animator?) {
-            }
+            override fun onAnimationEnd(animation: Animator) {}
 
-            override fun onAnimationCancel(animation: Animator?) {
-            }
+            override fun onAnimationCancel(animation: Animator) {}
 
-            override fun onAnimationStart(animation: Animator?) {
-            }
+            override fun onAnimationStart(animation: Animator) {}
 
         })
         objectAnimator.start()
@@ -373,18 +366,16 @@ object CommonUtils {
         )
         objectAnimator.duration = duration
         objectAnimator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 view.isVisible = false
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
-            }
+            override fun onAnimationCancel(animation: Animator) {}
 
-            override fun onAnimationStart(animation: Animator?) {
-            }
+            override fun onAnimationStart(animation: Animator) {}
 
         })
         objectAnimator.start()
@@ -455,9 +446,11 @@ object CommonUtils {
             telephonyManager.simCountryIso != null -> {
                 telephonyManager.simCountryIso
             }
+
             telephonyManager.networkCountryIso != null -> {
                 telephonyManager.networkCountryIso
             }
+
             else -> {
                 null
             }

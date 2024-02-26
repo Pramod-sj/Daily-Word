@@ -51,4 +51,5 @@
     <color name="radio_track_color">#41FFFFFF</color>
 
     <color name="update_card_stroke_color">#30F5F3F3</color>
+    <color name="enable_notification_stroke_color">#30EF9A9A</color>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -16,6 +17,7 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.bookmarks.FavoriteWordsActivity
 import com.pramod.dailyword.framework.ui.home.HomeActivity
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationConsentActivity
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
 import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
@@ -34,9 +36,36 @@ fun Activity.openSplashScreen(vararg flag: Int) {
     startActivity(intent)
 }
 
-fun AppCompatActivity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
+fun ComponentActivity.openHomePage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
     val intent = Intent(this, HomeActivity::class.java).apply {
         this@openHomePage.intent.extras?.let {
+            Timber.i("openHomePage: $it")
+            putExtras(it)
+        }
+    }
+    if (withFadeAnimation) {
+        /*overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )*/
+        val option = ActivityOptions.makeCustomAnimation(
+            this,
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+        startActivity(intent, option.toBundle())
+    } else {
+        startActivity(intent)
+    }
+    if (finish) {
+        finish()
+    }
+}
+
+
+fun AppCompatActivity.openNotificationConsentPage(withFadeAnimation: Boolean = false, finish: Boolean = false) {
+    val intent = Intent(this, NotificationConsentActivity::class.java).apply {
+        this@openNotificationConsentPage.intent.extras?.let {
             Timber.i("openHomePage: $it")
             putExtras(it)
         }

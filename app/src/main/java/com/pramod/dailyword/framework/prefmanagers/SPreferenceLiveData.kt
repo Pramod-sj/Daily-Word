@@ -17,7 +17,7 @@ abstract class SPreferenceLiveData<T>(
     abstract fun getValueFromPreference(key: String, defValue: T): T
 
     private val preferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences, s: String ->
+        SharedPreferences.OnSharedPreferenceChangeListener { _, s: String? ->
             if (s == key) {
                 value = getValueFromPreference(s, defValue)
             }

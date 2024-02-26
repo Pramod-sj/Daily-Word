@@ -435,6 +435,7 @@
                         android:layout_margin="@dimen/margin_large"
                         android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
                         android:text="@string/go_to_merriam_webster"
+                        android:textAllCaps="false"
                         app:buttonTextColorBasedOnWord="@{wordDetailedViewModel.word}"
                         app:icon="@drawable/ic_round_arrow_forward_24"
                         app:iconGravity="end" />

@@ -11,10 +11,11 @@ import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
 import com.pramod.dailyword.framework.util.CalenderUtil
+import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,12 +24,30 @@ class HomeViewModel @Inject constructor(
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
     private val badgeManager: HomeScreenBadgeManager,
     private val prefManager: PrefManager,
-    val audioPlayer: AudioPlayer
+    val audioPlayer: AudioPlayer,
+    private val notificationChecker: NotificationChecker,
+    private val batteryOptimizationChecker: BatteryOptimizationChecker
 ) : BaseViewModel() {
 
     companion object {
         val TAG = HomeViewModel::class.java.simpleName
     }
+
+    val canShowNotificationEnableMessage: LiveData<Boolean>
+        get() = notificationChecker.canShowNotificationEnableMessage
+
+    val canShowDisableBatteryOptimizationMessage: LiveData<Boolean>
+        get() = batteryOptimizationChecker.canShowDisableBatteryOptimizationMessage
+
+
+    private val _showNotificationPermissionDialog = MutableLiveData<Event<Unit>>()
+    val showNotificationPermissionDialog: LiveData<Event<Unit>>
+        get() = _showNotificationPermissionDialog
+
+    private val _navigateToBatteryOptimizationPage = MutableLiveData<Event<Unit>>()
+    val navigateToBatteryOptimizationPage: LiveData<Event<Unit>>
+        get() = _navigateToBatteryOptimizationPage
+
 
     private val title = MutableLiveData<SpannableString>()
 
@@ -145,6 +164,22 @@ class HomeViewModel @Inject constructor(
     fun setAppUpdateButtonText(buttonText: String) {
         val current = appUpdateModel.value
         appUpdateModel.value = current?.copy(buttonText = buttonText)
+    }
+
+    fun enableNotificationNeverClick() {
+        notificationChecker.markSmallNotificationRequestDismissed()
+    }
+
+    fun enableNotificationAllowClick() {
+        _showNotificationPermissionDialog.value = Event.init(Unit)
+    }
+
+    fun navigateToBatteryOptimizationPage() {
+        _navigateToBatteryOptimizationPage.value = Event.init(Unit)
+    }
+
+    fun removeBatteryOptimizationMessage() {
+        batteryOptimizationChecker.markNotInterestedForBatteryOptimization()
     }
 
 }

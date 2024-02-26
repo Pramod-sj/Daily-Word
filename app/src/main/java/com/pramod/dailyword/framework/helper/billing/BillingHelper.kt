@@ -3,8 +3,20 @@ package com.pramod.dailyword.framework.helper.billing
 import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.LifecycleObserver
-import com.android.billingclient.api.*
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.SkuType.INAPP
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.acknowledgePurchase
+import com.android.billingclient.api.queryPurchasesAsync
+import com.android.billingclient.api.querySkuDetails
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.Security
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +62,7 @@ class BillingHelper constructor(
     }
 
     fun close() {
-        Timber.i( "close: ")
+        Timber.i("close: ")
         fetchSkuDetailsJob?.cancel()
         purchaseUpdateJob?.cancel()
         removeListeners()
@@ -59,7 +71,7 @@ class BillingHelper constructor(
 
 
     private fun isInAppPurchaseSupported(): Boolean =
-        billingClient.isFeatureSupported(BillingClient.FeatureType.IN_APP_ITEMS_ON_VR)
+        billingClient.isFeatureSupported(BillingClient.FeatureType.IN_APP_MESSAGING)
             .responseCode != BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED
 
     /**
@@ -78,10 +90,11 @@ class BillingHelper constructor(
                     if (isPurchasePending(sku)) {
                         emitPurchaseError("Please wait your purchase is under process, check on this after some time.")
                     } else {
-                        Timber.i( "buy: already purchased")
+                        Timber.i("buy: already purchased")
                         emitPurchaseError("You have already donated this item, Thank you so much ❤")
                     }
                 }
+
                 else -> {
                     sku.toSkuDetails(INAPP)?.let {
                         billingClient.launchBillingFlow(
@@ -137,12 +150,12 @@ class BillingHelper constructor(
 
 
     override fun onBillingServiceDisconnected() {
-        Timber.i( "onBillingServiceDisconnected: ")
+        Timber.i("onBillingServiceDisconnected: ")
         emitBillingClientError("Billing service is disconnected!")
     }
 
     override fun onBillingSetupFinished(p0: BillingResult) {
-        Timber.i( "onBillingSetupFinished: ")
+        Timber.i("onBillingSetupFinished: ")
         if (p0.responseCode.isBillingResultOk()) {
             emitBillingInitialized()
             fetchSkuDetailsJob = GlobalScope.launch(Dispatchers.Main) {
@@ -163,7 +176,7 @@ class BillingHelper constructor(
     //fetch skus and cache in skuDetails map
     private suspend fun querySkus(): List<SkuDetails>? {
         if (!isInitializedAndReady()) {
-            Timber.i( "querySkus: Not initialized or read")
+            Timber.i("querySkus: Not initialized or read")
             return null
         }
         val skuDetailsList = skus.toSkuDetailsList(INAPP)
@@ -205,7 +218,7 @@ class BillingHelper constructor(
             // To be implemented in a later section.
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
-                    Timber.i( "onPurchasesUpdated: OK")
+                    Timber.i("onPurchasesUpdated: OK")
                     purchases?.let {
                         processPurchase(
                             purchases,
@@ -214,8 +227,9 @@ class BillingHelper constructor(
                         )
                     }
                 }
+
                 BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
-                    Timber.i( "onPurchasesUpdated: ITEM_ALREADY_OWNED")
+                    Timber.i("onPurchasesUpdated: ITEM_ALREADY_OWNED")
                     purchases?.let {
                         processPurchase(
                             purchases,
@@ -224,10 +238,12 @@ class BillingHelper constructor(
                         )
                     }
                 }
+
                 BillingClient.BillingResponseCode.USER_CANCELED -> {
-                    Timber.i( "onPurchasesUpdated: USER_CANCELED")
+                    Timber.i("onPurchasesUpdated: USER_CANCELED")
                     emitPurchaseError("Purchase wasn't made, you can try again now or later. Thank you :)")
                 }
+
                 else -> emitPurchaseError(billingResult.debugMessage)
             }
 
@@ -252,7 +268,7 @@ class BillingHelper constructor(
                     if (!isValidSignature(purchase.originalJson, purchase.signature)) {
                         // Invalid purchase
                         // show error to user
-                        Timber.i( "processPurchase: invalid purchase")
+                        Timber.i("processPurchase: invalid purchase")
                         continue
                     }
                     // else purchase is valid
@@ -272,11 +288,13 @@ class BillingHelper constructor(
                         purchased(purchase.skus.first(), isRestored)
                     }
                 }
+
                 Purchase.PurchaseState.PENDING -> {
                     purchasePending(purchase.skus.first())
                 }
+
                 else -> {
-                    Timber.e( "processPurchase: Purchase State: ${purchase.purchaseState}")
+                    Timber.e("processPurchase: Purchase State: ${purchase.purchaseState}")
                 }
             }
 
@@ -294,7 +312,7 @@ class BillingHelper constructor(
                 ConsumeParams.newBuilder()
                     .setPurchaseToken(it.purchaseToken)
                     .build()
-            ) { p0, p1 -> Timber.i( "onConsumeResponse: ") }
+            ) { p0, p1 -> Timber.i("onConsumeResponse: ") }
         }
     }
 

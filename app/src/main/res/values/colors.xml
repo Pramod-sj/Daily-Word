@@ -124,4 +124,5 @@
 
 
     <color name="update_card_stroke_color">#3066bb6a</color>
+    <color name="enable_notification_stroke_color">#80EF9A9A</color>
 </resources>
