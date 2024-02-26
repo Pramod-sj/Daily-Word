@@ -30,10 +30,10 @@ class WebViewDialogFragment :
 
         if (ThemeManager.isNightModeActive(requireContext())) {
             try {
-                if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                    WebSettingsCompat.setForceDark(
+                if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+                    WebSettingsCompat.setAlgorithmicDarkeningAllowed(
                         binding.webView.settings,
-                        WebSettingsCompat.FORCE_DARK_ON
+                        true
                     )
                 }
             } catch (e: Exception) {
