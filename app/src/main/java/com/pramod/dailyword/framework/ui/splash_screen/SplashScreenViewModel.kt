@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
+import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class SplashScreenViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val prefManager: PrefManager,
-    private val fbTopicSubscriber: FBTopicSubscriber
+    private val fbTopicSubscriber: FBTopicSubscriber,
+    private val notificationChecker: NotificationChecker
 ) : BaseViewModel() {
     private val animateSplashIcon = MutableLiveData<Boolean>().apply {
         value = true
@@ -26,6 +28,10 @@ class SplashScreenViewModel @Inject constructor(
     private val splashScreenSubText = MutableLiveData<String>()
 
     private val navigateToHomePage = MutableLiveData<Event<Boolean>>()
+
+    private val _navigateToNotificationConsent = MutableLiveData<Event<Boolean>>()
+    val navigateToNotificationConsent: LiveData<Event<Boolean>>
+        get() = _navigateToNotificationConsent
 
     init {
         //subscribe to receive notification
@@ -69,7 +75,15 @@ class SplashScreenViewModel @Inject constructor(
 
     fun goToHomePage() {
         prefManager.markUserAsOld()
-        navigateToHomePage.value = Event.init(true)
+        if (notificationChecker.isNotificationEnabled.value == true) {
+            navigateToHomePage.value = Event.init(true)
+        } else {
+            if (notificationChecker.canShowFullNotificationEnableMessage.value == true) {
+                _navigateToNotificationConsent.value = Event.init(true)
+            } else {
+                navigateToHomePage.value = Event.init(true)
+            }
+        }
     }
 
     fun showSplashText() {
