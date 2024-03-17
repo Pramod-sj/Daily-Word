@@ -210,7 +210,7 @@
                 app:cardBackgroundColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}"
                 app:cardElevation="0dp"
                 app:contentPadding="6dp"
-                app:isGone="@{!mainViewModel.canShowNotificationEnableMessage}"
+                app:isGone="@{!mainViewModel.canShowSettingIssueWarningMessage}"
                 app:strokeColor="@color/enable_notification_stroke_color"
                 app:strokeWidth="1dp">
 
@@ -225,8 +225,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Please allow us to send daily word notification"
-                        android:textColor="@color/red_200"
+                        android:text="@string/setting_issues_warning_message"
+                        android:textColor="@color/red_400"
                         android:textSize="@dimen/text_small"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -242,66 +242,15 @@
                         android:insetRight="0dp"
                         android:insetBottom="0dp"
                         android:onClick="@{(v)->mainViewModel.enableNotificationNeverClick()}"
-                        android:alpha="0.9"
                         android:padding="0dp"
-                        android:text="Not \ninterested"
+                        android:text="@string/btn_not_ninterested"
                         android:textAllCaps="false"
-                        android:textColor="@color/red_200"
+                        android:textColor="@color/red_400"
                         android:textSize="10sp"
                         app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}" />
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                        android:layout_width="40dp"
-                        android:layout_height="25dp"
-                        android:layout_margin="4dp"
-                        android:insetLeft="0dp"
-                        android:insetTop="0dp"
-                        android:insetRight="0dp"
-                        android:insetBottom="0dp"
-                        android:onClick="@{(v)->mainViewModel.enableNotificationAllowClick()}"
-                        android:padding="0dp"
-                        android:text="Allow"
-                        android:textAllCaps="false"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.MaterialComponents.CardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="5dp"
-                app:cardBackgroundColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}"
-                app:cardElevation="0dp"
-                app:contentPadding="6dp"
-                app:isGone="@{!mainViewModel.canShowDisableBatteryOptimizationMessage}"
-                app:strokeColor="@color/enable_notification_stroke_color"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="4dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Your devices is set to stop the app to save some battery, this setting prevent you learning new word!"
-                        android:textColor="@color/red_200"
-                        android:textSize="@dimen/text_small"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="60dp"
                         android:layout_height="25dp"
                         android:layout_margin="4dp"
@@ -309,27 +258,9 @@
                         android:insetTop="0dp"
                         android:insetRight="0dp"
                         android:insetBottom="0dp"
-                        android:alpha="0.9"
-                        android:onClick="@{(v)->mainViewModel.removeBatteryOptimizationMessage()}"
+                        android:onClick="@{(v)->mainViewModel.fixSettingIssuesClick()}"
                         android:padding="0dp"
-                        android:text="Not \ninterested"
-                        android:textAllCaps="false"
-                        android:textColor="@color/red_200"
-                        android:textSize="10sp"
-                        app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}" />
-
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                        android:layout_width="40dp"
-                        android:layout_height="25dp"
-                        android:layout_margin="4dp"
-                        android:insetLeft="0dp"
-                        android:insetTop="0dp"
-                        android:insetRight="0dp"
-                        android:insetBottom="0dp"
-                        android:onClick="@{(v)->mainViewModel.navigateToBatteryOptimizationPage()}"
-                        android:padding="0dp"
-                        android:text="Fix"
+                        android:text="@string/btn_fix_them"
                         android:textAllCaps="false"
                         android:textSize="10sp" />
 

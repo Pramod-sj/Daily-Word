@@ -6,7 +6,7 @@ import androidx.lifecycle.*
 import com.pramod.dailyword.framework.firebase.FBTopicSubscriber
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
-import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class SplashScreenViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle,
     private val prefManager: PrefManager,
     private val fbTopicSubscriber: FBTopicSubscriber,
-    private val notificationChecker: NotificationChecker
+    private val importantPermissionState: ImportantPermissionState
 ) : BaseViewModel() {
     private val animateSplashIcon = MutableLiveData<Boolean>().apply {
         value = true
@@ -75,10 +75,10 @@ class SplashScreenViewModel @Inject constructor(
 
     fun goToHomePage() {
         prefManager.markUserAsOld()
-        if (notificationChecker.isNotificationEnabled.value == true) {
+        if (importantPermissionState.isNotificationEnabled.value == true) {
             navigateToHomePage.value = Event.init(true)
         } else {
-            if (notificationChecker.canShowFullNotificationEnableMessage.value == true) {
+            if (importantPermissionState.canShowFullNotificationEnableMessage.value == true) {
                 _navigateToNotificationConsent.value = Event.init(true)
             } else {
                 navigateToHomePage.value = Event.init(true)

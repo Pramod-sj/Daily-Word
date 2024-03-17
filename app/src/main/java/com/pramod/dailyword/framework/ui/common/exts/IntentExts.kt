@@ -21,6 +21,7 @@ import com.pramod.dailyword.framework.ui.notification_consent.NotificationConsen
 import com.pramod.dailyword.framework.ui.recap.RecapWordsActivity
 import com.pramod.dailyword.framework.ui.settings.AppSettingActivity
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
+import com.pramod.dailyword.framework.ui.troubleshoot.TroubleshootActivity
 import com.pramod.dailyword.framework.ui.worddetails.WordDetailedActivity
 import com.pramod.dailyword.framework.ui.words.WordListActivity
 import timber.log.Timber
@@ -90,6 +91,8 @@ fun AppCompatActivity.openNotificationConsentPage(withFadeAnimation: Boolean = f
 }
 
 
+
+
 fun Activity.openWordDetailsPage(
     wordDate: String,
     option: ActivityOptions? = null,
@@ -138,6 +141,10 @@ fun Activity.openSettingPage() {
 fun Activity.openAboutPage() {
     val intent = Intent(this, AboutAppActivity::class.java)
     startActivity(intent)
+}
+
+fun Activity.openTroubleshoot() {
+    startActivity(Intent(this, TroubleshootActivity::class.java))
 }
 
 fun Activity.shareApp(

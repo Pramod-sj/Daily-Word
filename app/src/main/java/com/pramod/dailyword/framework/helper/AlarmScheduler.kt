@@ -123,7 +123,7 @@ fun Context.setCompactExactAndAllowWhileIdle(
 
             else -> {
                 // Ask users to go to exact alarm page in system settings. c
-                startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                // startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
             }
         }
     } else {

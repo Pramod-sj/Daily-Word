@@ -128,4 +128,10 @@
     <string name="search_hint">Search by word…</string>
     <string name="no_search_result_placeholder">No result found for \'%1$s\'</string>
     <string name="no_search_result_search_on_web">Tap anywhere to search on web</string>
+
+
+    <string name="setting_issues_warning_message">There\'re some issues with your setting which is not allowing us to send you daily words</string>
+    <string name="btn_fix_them">Fix them</string>
+    <string name="btn_not_interested">Not interested</string>
+    <string name="btn_not_ninterested">Not \ninterested</string>
 </resources>
