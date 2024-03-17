@@ -7,42 +7,55 @@ import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
-import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
-import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
 import com.pramod.dailyword.framework.util.CalenderUtil
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getWordsInteractor: GetWordsInteractor,
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
-    private val badgeManager: HomeScreenBadgeManager,
     private val prefManager: PrefManager,
     val audioPlayer: AudioPlayer,
-    private val notificationChecker: NotificationChecker,
-    private val batteryOptimizationChecker: BatteryOptimizationChecker
+    private val importantPermissionState: ImportantPermissionState,
 ) : BaseViewModel() {
 
     companion object {
         val TAG = HomeViewModel::class.java.simpleName
     }
 
-    val canShowNotificationEnableMessage: LiveData<Boolean>
-        get() = notificationChecker.canShowNotificationEnableMessage
+    private val _canShowSettingIssueWarningMessage = MutableLiveData<Boolean>()
+    val canShowSettingIssueWarningMessage: LiveData<Boolean>
+        get() = _canShowSettingIssueWarningMessage
 
-    val canShowDisableBatteryOptimizationMessage: LiveData<Boolean>
-        get() = batteryOptimizationChecker.canShowDisableBatteryOptimizationMessage
+    private fun settingIssueWarningMessage() {
+        combine(
+            importantPermissionState.isSetAlarmEnabled,
+            importantPermissionState.isNotificationEnabled,
+            importantPermissionState.isBatteryOptimizationDisabled
+        ) { s, n, b ->
+            Triple(s, n, b)
+        }.onEach {
+            val (s, n, b) = it
+            _canShowSettingIssueWarningMessage.value =
+                prefManager.isSettingIssueWarningMessageDismissed() == false && (!s || !n || !b)
+        }.launchIn(viewModelScope)
+
+    }
 
 
-    private val _showNotificationPermissionDialog = MutableLiveData<Event<Unit>>()
-    val showNotificationPermissionDialog: LiveData<Event<Unit>>
-        get() = _showNotificationPermissionDialog
+    private val _navigateToTroubleshootScreen = MutableLiveData<Event<Unit>>()
+    val navigateToTroubleshootScreen: LiveData<Event<Unit>>
+        get() = _navigateToTroubleshootScreen
 
     private val _navigateToBatteryOptimizationPage = MutableLiveData<Event<Unit>>()
     val navigateToBatteryOptimizationPage: LiveData<Event<Unit>>
@@ -125,6 +138,8 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+
+        settingIssueWarningMessage()
     }
 
     fun refresh() {
@@ -167,19 +182,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun enableNotificationNeverClick() {
-        notificationChecker.markSmallNotificationRequestDismissed()
+        importantPermissionState.markSettingIssueMessageDismissed()
     }
 
-    fun enableNotificationAllowClick() {
-        _showNotificationPermissionDialog.value = Event.init(Unit)
+    fun fixSettingIssuesClick() {
+        _navigateToTroubleshootScreen.value = Event.init(Unit)
     }
 
     fun navigateToBatteryOptimizationPage() {
         _navigateToBatteryOptimizationPage.value = Event.init(Unit)
-    }
-
-    fun removeBatteryOptimizationMessage() {
-        batteryOptimizationChecker.markNotInterestedForBatteryOptimization()
     }
 
 }

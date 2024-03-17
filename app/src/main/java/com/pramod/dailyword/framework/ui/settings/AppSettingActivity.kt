@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -34,14 +35,15 @@ import com.pramod.dailyword.framework.ui.common.exts.openSplashScreen
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.ui.common.exts.showCheckboxDialog
-import com.pramod.dailyword.framework.ui.notification_consent.NotificationChecker
-import com.pramod.dailyword.framework.ui.notification_consent.NotificationPermissionHandler
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionHandler
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,10 +72,10 @@ class AppSettingActivity :
     lateinit var fbRemoteConfig: FBRemoteConfig
 
     @Inject
-    lateinit var notificationChecker: NotificationChecker
+    lateinit var importantPermissionState: ImportantPermissionState
 
     @Inject
-    lateinit var notificationPermissionHandler: NotificationPermissionHandler
+    lateinit var importantPermissionHandler: ImportantPermissionHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -398,18 +400,21 @@ class AppSettingActivity :
     }
 
     private fun bindNotificationEnabledState() {
-        notificationChecker.isNotificationEnabled.observe(this) {
-            binding.notificationDailyToggle.setEnabled(it, 0.5f)
-            binding.notificationMeaningToggle.setEnabled(it, 0.5f)
-            binding.notificationReminderToggle.setEnabled(it, 0.5f)
-            if (!it) {
-                binding.ivNotificationAlert.isVisible = true
-                binding.cardNotification.setOnClickListener { notificationPermissionHandler.launch() }
-                binding.cardNotification.isEnabled = true
-            } else {
-                binding.ivNotificationAlert.isVisible = false
-                binding.cardNotification.isEnabled = false
+        lifecycleScope.launch {
+            importantPermissionState.isNotificationEnabled.collect {
+                binding.notificationDailyToggle.setEnabled(it, 0.5f)
+                binding.notificationMeaningToggle.setEnabled(it, 0.5f)
+                binding.notificationReminderToggle.setEnabled(it, 0.5f)
+                if (!it) {
+                    binding.ivNotificationAlert.isVisible = true
+                    binding.cardNotification.setOnClickListener { importantPermissionHandler.launchNotificationPermissionFlow() }
+                    binding.cardNotification.isEnabled = true
+                } else {
+                    binding.ivNotificationAlert.isVisible = false
+                    binding.cardNotification.isEnabled = false
+                }
             }
+
         }
     }
 
