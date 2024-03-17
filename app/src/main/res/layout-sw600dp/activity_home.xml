@@ -209,7 +209,7 @@
                 app:cardBackgroundColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}"
                 app:cardElevation="0dp"
                 app:contentPadding="6dp"
-                app:isGone="@{!mainViewModel.canShowNotificationEnableMessage}"
+                app:isGone="@{!mainViewModel.canShowSettingIssueWarningMessage}"
                 app:strokeColor="@color/enable_notification_stroke_color"
                 app:strokeWidth="1dp">
 
@@ -223,8 +223,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="Please allow us to send daily word notification"
+                        android:text="@string/setting_issues_warning_message"
                         android:textColor="@color/red_200"
                         android:textSize="@dimen/text_small"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -232,34 +233,30 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="65dp"
-                        android:layout_height="30dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
                         android:layout_margin="4dp"
-                        android:insetLeft="0dp"
                         android:insetTop="0dp"
-                        android:insetRight="0dp"
                         android:insetBottom="0dp"
                         android:onClick="@{(v)->mainViewModel.enableNotificationNeverClick()}"
-                        android:padding="0dp"
-                        android:text="Never"
+                        android:text="@string/btn_not_interested"
                         android:textAllCaps="false"
                         android:textColor="@color/red_200"
+                        android:textSize="12sp"
                         app:rippleColor="@{CommonUtils.changeAlpha(CommonUtils.getColor(context,R.color.red_200),Constants.COLOR_ALPHA)}" />
 
                     <com.google.android.material.button.MaterialButton
                         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                        android:layout_width="60dp"
-                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
                         android:layout_margin="4dp"
-                        android:insetLeft="0dp"
                         android:insetTop="0dp"
-                        android:insetRight="0dp"
                         android:insetBottom="0dp"
-                        android:onClick="@{(v)->mainViewModel.enableNotificationAllowClick()}"
-                        android:padding="0dp"
-                        android:text="Allow"
-                        android:textAllCaps="false" />
+                        android:onClick="@{(v)->mainViewModel.fixSettingIssuesClick()}"
+                        android:text="@string/btn_fix_them"
+                        android:textAllCaps="false"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -278,8 +275,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:onClick="@{(v)->mainViewModel.navigator.learnAll(v)}"
                     android:orientation="vertical">
@@ -322,9 +319,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginHorizontal="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:onClick="@{(v)->mainViewModel.navigator.gotoBookmark(v)}"
                     android:orientation="vertical">
@@ -367,9 +364,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginHorizontal="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:onClick="@{(v)->mainViewModel.navigator.gotoRandomWord(v)}"
@@ -412,9 +409,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginHorizontal="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:onClick="@{(v)->mainViewModel.navigator.gotoRecap(v)}"

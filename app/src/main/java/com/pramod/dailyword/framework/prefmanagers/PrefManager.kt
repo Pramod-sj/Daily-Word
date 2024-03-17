@@ -27,8 +27,7 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     DonatedContract,
     SupportUsDialogContract,
     WidgetSettingPreference,
-    NotificationPermissionPref,
-    DisableBatteryOptimizationPermissionPref {
+    NotificationPermissionPref {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -101,6 +100,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         //how many time support us dialog method was called
         private const val KEY_SUPPORT_US_CALLED_COUNT = "support_us_called_count"
         private const val KEY_SHOW_SUPPORT_US_NEVER = "show_support_us_never"
+
+        const val KEY_SETTING_ISSUE_MESSAGE_DISMISSED = "setting_issue_message_dismissed"
 
         /**
          * country code
@@ -186,9 +187,9 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         editor.putInt(KEY_WIDGET_BACKGROUND_ALPHA, alpha).apply()
     }
 
-    override fun isSmallNotificationMessageDismissed(): Boolean {
+    override fun isSettingIssueWarningMessageDismissed(): Boolean {
         return sPrefManager.getBoolean(
-            NotificationPermissionPref.KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED,
+            KEY_SETTING_ISSUE_MESSAGE_DISMISSED,
             false
         )
     }
@@ -207,11 +208,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         )
     }
 
-    override fun markSmallNotificationMessageDismissed() {
-        editor.putBoolean(
-            NotificationPermissionPref.KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED,
-            true
-        ).commit()
+    override fun markSettingIssueWarningDismissed() {
+        editor.putBoolean(KEY_SETTING_ISSUE_MESSAGE_DISMISSED, true).commit()
     }
 
     override fun markFullNotificationMessageDismissed() {
@@ -227,21 +225,6 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
             true
         ).commit()
     }
-
-    override fun isDisableBatteryOptimizationDismissed(): Boolean {
-        return sPrefManager.getBoolean(
-            DisableBatteryOptimizationPermissionPref.KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED,
-            false
-        )
-    }
-
-    override fun markDisableBatteryOptimizationDismissed() {
-        editor.putBoolean(
-            DisableBatteryOptimizationPermissionPref.KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED,
-            true
-        ).commit()
-    }
-
 
 }
 
@@ -344,36 +327,21 @@ interface NotificationPermissionPref {
     companion object {
         const val KEY_IS_FIRST_NOTIFICATION_PERMISSION_ASKED =
             "is_first_notification_permission_asked"
-        const val KEY_SMALL_NOTIFICATION_MESSAGE_DISMISSED =
-            "small_notification_message_dismissed"
         const val KEY_FULL_NOTIFICATION_MESSAGE_DISMISSED =
             "full_notification_message_dismissed"
     }
 
 
-    fun isSmallNotificationMessageDismissed(): Boolean
+    fun isSettingIssueWarningMessageDismissed(): Boolean
 
     fun isFullNotificationMessageDismissed(): Boolean
 
     fun isNotificationPermissionAsked(): Boolean
 
-    fun markSmallNotificationMessageDismissed()
+    fun markSettingIssueWarningDismissed()
 
     fun markFullNotificationMessageDismissed()
 
     fun markNotificationPermissionAsked()
-
-}
-
-
-interface DisableBatteryOptimizationPermissionPref {
-
-    companion object {
-        const val KEY_DISABLE_BATTERY_OPTIMIZATION_MESSAGE_DISMISSED =
-            "disable_battery_optimization_message_dismissed"
-    }
-
-    fun isDisableBatteryOptimizationDismissed(): Boolean
-    fun markDisableBatteryOptimizationDismissed()
 
 }

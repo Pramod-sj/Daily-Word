@@ -3,12 +3,9 @@ package com.pramod.dailyword.framework.ui.home
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PowerManager
-import android.provider.Settings
 import android.text.SpannableString
 import android.util.Pair
 import android.view.HapticFeedbackConstants
@@ -59,6 +56,7 @@ import com.pramod.dailyword.framework.ui.common.exts.openBookmarksPage
 import com.pramod.dailyword.framework.ui.common.exts.openRandomWordPage
 import com.pramod.dailyword.framework.ui.common.exts.openRecapPage
 import com.pramod.dailyword.framework.ui.common.exts.openSettingPage
+import com.pramod.dailyword.framework.ui.common.exts.openTroubleshoot
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.openWordListPage
 import com.pramod.dailyword.framework.ui.common.exts.shareApp
@@ -68,7 +66,7 @@ import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.ui.dialog.BottomMenuDialog
 import com.pramod.dailyword.framework.ui.donate.DONATE_ITEM_LIST
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
-import com.pramod.dailyword.framework.ui.notification_consent.NotificationPermissionHandler
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionHandler
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.CommonUtils.formatListAsBulletList
@@ -119,10 +117,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     lateinit var fbRemoteConfig: FBRemoteConfig
 
     @Inject
-    lateinit var notificationPermissionHandler: NotificationPermissionHandler
-
-    @Inject
-    lateinit var batteryOptimizationPermissionHandler: BatteryOptimizationPermissionHandler
+    lateinit var importantPermissionHandler: ImportantPermissionHandler
 
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
@@ -160,14 +155,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     private fun handleNavigationToDisableBatteryOptimization() {
         viewModel.navigateToBatteryOptimizationPage.observe(this) {
             it.getContentIfNotHandled()?.let {
-                batteryOptimizationPermissionHandler.launch()
+                openTroubleshoot()
+                //batteryOptimizationPermissionHandler.launch()
             }
         }
     }
 
     private fun handlePermissionChangedScenario() {
         lifecycleScope.launch {
-            notificationPermissionHandler.isNotificationPermissionGranted.collect {
+            importantPermissionHandler.isNotificationPermissionGranted.collect {
                 if (it) {
                     if (prefManager.getAppLaunchCount() == 1 && !viewModel.firstNotificationShown) {
                         viewModel.wordOfTheDay.value?.let { word ->
@@ -181,9 +177,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun handleNotificationPermissionLaunch() {
-        viewModel.showNotificationPermissionDialog.observe(this) {
+        viewModel.navigateToTroubleshootScreen.observe(this) {
             it.getContentIfNotHandled()?.let {
-                notificationPermissionHandler.launch()
+                openTroubleshoot()
             }
         }
     }
@@ -428,7 +424,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                         && !viewModel.firstNotificationShown
                     ) {
 
-                        val isLaunched = notificationPermissionHandler.launch()
+                        val isLaunched =
+                            importantPermissionHandler.launchNotificationPermissionFlow()
 
                         if (!isLaunched) {
                             viewModel.firstNotificationShown = true

@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.notification_consent
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.pramod.dailyword.framework.ui.common.ThemedActivity
@@ -15,7 +14,7 @@ import javax.inject.Inject
 class NotificationConsentActivity : ThemedActivity() {
 
     @Inject
-    lateinit var notificationChecker: NotificationChecker
+    lateinit var importantPermissionState: ImportantPermissionState
 
     private val notificationPermissionResult =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { permissionGranted ->
@@ -39,7 +38,7 @@ class NotificationConsentActivity : ThemedActivity() {
                     }
                 },
                 neverShowAgainCallback = {
-                    notificationChecker.markFullNotificationRequestDismissed()
+                    importantPermissionState.markFullNotificationRequestDismissed()
                     openHomePage(withFadeAnimation = true, finish = true)
                 }
             )
