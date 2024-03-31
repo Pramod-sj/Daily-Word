@@ -2,14 +2,18 @@ package com.pramod.dailyword.framework.ui.notification_consent
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.ALARM_SERVICE
 import android.content.Context.POWER_SERVICE
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -19,15 +23,21 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -82,14 +92,24 @@ class ActivityImportantPermissionHandler @Inject constructor(
             }
         }
 
+    private val alarmReScheduleBroadcastListener by lazy {
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED) {
+                    Timber.i("Scheduling alarm at 12PM on Sunday")
+                    context?.scheduleWeeklyAlarmAt12PM()
+                }
+            }
+        }
+    }
+
     override fun launchNotificationPermissionFlow(): Boolean {
 
         if (importantPermissionState.isNotificationEnabled.value) return false
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.POST_NOTIFICATIONS
+                    activity, Manifest.permission.POST_NOTIFICATIONS
                 )
             ) {
                 prefManager.markNotificationPermissionAsked()
@@ -138,6 +158,16 @@ class ActivityImportantPermissionHandler @Inject constructor(
         } else false
     }
 
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            activity.registerReceiver(
+                alarmReScheduleBroadcastListener,
+                IntentFilter(ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)
+            )
+        }
+    }
+
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         if (isNavigatedToAppDetailPage) {
@@ -149,6 +179,9 @@ class ActivityImportantPermissionHandler @Inject constructor(
 
     override fun onDestroy(owner: LifecycleOwner) {
         activity.lifecycle.removeObserver(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            activity.unregisterReceiver(alarmReScheduleBroadcastListener)
+        }
         super.onDestroy(owner)
     }
 
