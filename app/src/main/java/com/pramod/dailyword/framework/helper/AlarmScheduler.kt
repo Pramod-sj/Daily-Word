@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.app.AlarmManagerCompat
 import com.pramod.dailyword.framework.receiver.ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER
 import com.pramod.dailyword.framework.receiver.AlarmReceiver
@@ -16,6 +15,13 @@ import timber.log.Timber
 import java.util.*
 
 fun safeImmutableFlag(flag: Int): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.FLAG_IMMUTABLE or flag
+    } else flag
+}
+
+
+fun compactMutableFlag(flag: Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         PendingIntent.FLAG_IMMUTABLE or flag
     } else flag

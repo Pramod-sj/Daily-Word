@@ -24,17 +24,19 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER -> {
-                val notification = notificationHelper.createNotification(
-                    title = "Good Afternoon folks!",
-                    body = "Let's revise this week's words",
-                    pendingIntent = PendingIntent.getActivity(
-                        context,
-                        REQUEST_CODE_WEEKLY_12_PM_RECAP_WORDS_REMINDER,
-                        Intent(context, RecapWordsActivity::class.java),
-                        safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                if (this::notificationHelper.isInitialized) {
+                    val notification = notificationHelper.createNotification(
+                        title = "Good Afternoon folks!",
+                        body = "Let's revise this week's words",
+                        pendingIntent = PendingIntent.getActivity(
+                            context,
+                            REQUEST_CODE_WEEKLY_12_PM_RECAP_WORDS_REMINDER,
+                            Intent(context, RecapWordsActivity::class.java),
+                            safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                        )
                     )
-                )
-                notificationHelper.showNotification(notification)
+                    notificationHelper.showNotification(notification)
+                }
             }
         }
     }

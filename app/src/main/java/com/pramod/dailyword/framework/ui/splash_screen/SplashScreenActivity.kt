@@ -165,7 +165,7 @@ class SplashScreenActivity :
         binding.acceptConditionTextView.showLinks(termsAndConditionLink, privacyPolicyLink)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.i("onNewIntent: ")
     }

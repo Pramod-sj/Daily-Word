@@ -9,27 +9,30 @@ import com.pramod.dailyword.framework.datasource.cache.model.WordCE
 interface WordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAll(word: List<WordCE>): List<Long>
+    suspend fun addAll(word: List<WordCE>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(wordCE: WordCE): Long
+    suspend fun add(wordCE: WordCE): Long
 
     @Query("SELECT * FROM Word WHERE date=:wordDate")
-    fun get(wordDate: String): WordCE?
+    suspend fun get(wordDate: String): WordCE?
+
+    @Query("SELECT * FROM Word WHERE word=:wordName")
+    suspend fun getWordByName(wordName: String): WordCE?
 
     @Query("SELECT * FROM Word")
-    fun getAll(): List<WordCE>?
+    suspend fun getAll(): List<WordCE>?
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(wordCE: WordCE): Int
+    suspend fun update(wordCE: WordCE): Int
 
     @Query("DELETE FROM Word WHERE word=:word")
-    fun delete(word: String): Int
+    suspend fun delete(word: String): Int
 
     @Query("DELETE FROM Word")
-    fun deleteAll(): Int
+    suspend fun deleteAll(): Int
 
     @Query("DELETE FROM Word WHERE word NOT IN (SELECT word FROM Word ORDER BY dateTimeInMillis DESC LIMIT :n)")
-    fun deleteAllExceptTop(n: Int): Int
+    suspend fun deleteAllExceptTop(n: Int): Int
 
 }
