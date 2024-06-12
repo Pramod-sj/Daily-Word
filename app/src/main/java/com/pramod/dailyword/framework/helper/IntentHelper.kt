@@ -17,9 +17,11 @@ fun Context.restartApp() {
         is Activity -> {
             finish()
         }
+
         is Fragment -> {
             requireActivity().finish()
         }
+
         else -> {
             Toast.makeText(
                 this,
@@ -64,7 +66,11 @@ fun Context.openWebsite(url: String) {
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else {
-            Toast.makeText(this, "No browser application found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                resources.getString(R.string.no_browser_app_message),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -83,7 +89,11 @@ fun Context.openGmail(emails: Array<String>, subject: String, body: String) {
     if (intent.resolveActivity(packageManager) != null) {
         startActivity(intent)
     } else {
-        Toast.makeText(this, "Please install Gmail app", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            resources.getString(R.string.no_gmail_app_message),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
@@ -95,7 +105,11 @@ fun Context.openGoogleReviewPage() {
     if (intent.resolveActivity(packageManager) != null) {
         startActivity(intent)
     } else {
-        Toast.makeText(this, "Please install or update Google play app", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            resources.getString(R.string.no_play_app_message),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 

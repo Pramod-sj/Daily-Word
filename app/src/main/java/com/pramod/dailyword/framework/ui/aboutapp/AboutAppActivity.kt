@@ -117,8 +117,8 @@ class AboutAppActivity :
             override fun navigateToGmail() {
                 openGmail(
                     arrayOf(resources.getString(R.string.dev_email)),
-                    "Daily Word Query",
-                    "Hello Pramod,"
+                    resources.getString(R.string.mail_subject),
+                    resources.getString(R.string.mail_body_start)
                 )
             }
 
@@ -142,13 +142,13 @@ class AboutAppActivity :
 
             override fun navigateToMerriamWebster() {
                 showBottomSheet(
-                    "App Content Credit",
+                    resources.getString(R.string.dialog_app_content_credit_title),//"App Content Credit",
                     resources.getString(R.string.merriam_webster_credit_text),
-                    positiveText = "Merriam-Webster",
+                    positiveText = resources.getString(R.string.dialog_app_content_credit_positive),
                     positiveClickCallback = {
                         openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
                     },
-                    negativeText = "Close"
+                    negativeText = resources.getString(R.string.dialog_app_content_credit_negative)
                 )
 
             }

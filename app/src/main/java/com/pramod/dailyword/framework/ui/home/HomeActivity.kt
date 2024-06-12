@@ -221,7 +221,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 ) { e ->
                                     viewModel.setMessage(
                                         Message.ToastMessage(
-                                            "Something went wrong during update process: reason:${e.message}"
+                                            String.format(
+                                                resources.getString(R.string.something_went_wrong_during_update),
+                                                e.message
+                                            )
                                         )
                                     )
                                     finishAffinity()
@@ -368,13 +371,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (prefManager.shouldShowMWCreditDialog()) {
             prefManager.changeMWCreditDialogShown(false)
             showBottomSheet(
-                "App Content Credit",
-                resources.getString(R.string.merriam_webster_credit_text),
-                positiveText = "Merriam-Webster",
+                title = resources.getString(R.string.dialog_app_content_credit_title), //"App Content Credit",
+                desc = resources.getString(R.string.merriam_webster_credit_text),
+                positiveText = resources.getString(R.string.dialog_app_content_credit_positive),
                 positiveClickCallback = {
                     openWebsite(resources.getString(R.string.app_merriam_webster_icon_url))
                 },
-                negativeText = "Close"
+                negativeText = resources.getString(R.string.dialog_app_content_credit_negative)
             ) {
                 //prompt for auto start settings when credit dialog is dimissed
                 promptAutoStart()
@@ -387,8 +390,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun showNotification(word: Word) {
         val notification = notificationHelper.createNotification(
-            title = "Welcome to Daily Word!",
-            body = "Your first word of the day is '${word.word}'",
+            title = resources.getString(R.string.first_notification_title),// "Welcome to Daily Word!",
+            body = String.format(
+                resources.getString(R.string.first_notification_subtitle),
+                word.word
+            ),//"Your first word of the day is '${}'",
             cancelable = true,
             pendingIntent = PendingIntent.getActivity(
                 applicationContext,
@@ -505,24 +511,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         if (autoStartPermissionHelper.isAutoStartPermissionAvailable(this)) {
             if (!autoStartPrefManager.isAutoStartAlreadyEnabled()) {
                 showBasicDialog(
-                    title = "Auto Start",
+                    title = resources.getString(R.string.dialog_auto_start_title),//"Auto Start",
                     message =
                     if (!autoStartPrefManager.isClickedOnSetting())
-                        "Please enable auto start else notification feature won't work properly!"
+                        resources.getString(R.string.dialog_auto_start_desc_1)
+                    //"Please enable auto start else notification feature won't work properly!"
                     else
-                        "It's look like you have already went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
-                    positiveText = "Setting",
+                        resources.getString(R.string.dialog_auto_start_desc_2),
+                    //"It's look like you have already went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
+                    positiveText = resources.getString(R.string.dialog_auto_start_positive),
                     positiveClickCallback = {
                         if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage("Sorry we unable to locate auto start setting, Please enable it manually."))
+                            viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.auto_start_unable_to_open_setting)))
                         }
                         autoStartPrefManager.clickedOnSetting()
                     },
-                    negativeText = "Cancel",
+                    negativeText = resources.getString(R.string.dialog_auto_start_negative),
                     negativeClickCallback = {
 
                     },
-                    neutralText = "Already Enabled",
+                    neutralText = resources.getString(R.string.dialog_auto_start_neutral),
                     neutralClickCallback = {
                         autoStartPrefManager.clickedOnAlreadyEnabled()
                     }
@@ -543,7 +551,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
                     Toast.makeText(
                         applicationContext,
-                        "App download starts...",
+                        resources.getString(R.string.app_download_starts),
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -553,7 +561,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     //if you want to request the update again just call checkUpdate()
                     Toast.makeText(
                         applicationContext,
-                        "Sorry you can't use Daily Word app unless you update!",
+                        resources.getString(R.string.sorry_you_cant_use_app_unless_you_update),
                         Toast.LENGTH_LONG
                     ).show()
                     finishAffinity()
@@ -562,7 +570,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
                     Toast.makeText(
                         applicationContext,
-                        "App download failed, we're trying again for you",
+                        resources.getString(R.string.app_download_failed),
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -643,7 +651,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 viewModel.setAppUpdateMessage(
                                     buildUpdateAvailableToInstallSpannableString(releaseNote)
                                 )
-                                viewModel.setAppUpdateButtonText("Install")
+                                viewModel.setAppUpdateButtonText(resources.getString(R.string.new_update_card_install_btn))
                                 viewModel.setAppUpdateDownloadProgress(100)
                             }
                         }
@@ -654,13 +662,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 buildUpdateAvailableToDownloadSpannableString(releaseNote)
                             )
                             viewModel.setAppUpdateDownloadProgress(0)
-                            viewModel.setAppUpdateButtonText("Update")
+                            viewModel.setAppUpdateButtonText(resources.getString(R.string.new_update_card_update_btn))
                             if (releaseNote.isForceUpdate) {
                                 showBottomSheet(
-                                    title = "A new update version ${releaseNote.versionName} is available!",
+                                    title = String.format(
+                                        resources.getString(R.string.dialog_force_update_title),
+                                        releaseNote.versionName
+                                    ),
                                     desc = formatListAsBulletList(releaseNote.changes),
                                     cancellable = false,
-                                    positiveText = "Update",
+                                    positiveText = resources.getString(R.string.dialog_force_update_positive),
                                     positiveClickCallback = {
                                         appUpdateManager.safeStartUpdateFlowForResult(
                                             task.result,
@@ -670,18 +681,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                         ) { e ->
                                             viewModel.setMessage(
                                                 Message.ToastMessage(
-                                                    "Something went wrong during update process: reason:${e.message}"
+                                                    String.format(
+                                                        resources.getString(R.string.something_went_wrong_during_update),
+                                                        e.message
+                                                    )
                                                 )
                                             )
                                             finishAffinity()
                                         }
 
                                     },
-                                    negativeText = "Close App",
+                                    negativeText = resources.getString(R.string.dialog_force_update_negative),
                                     negativeClickCallback = {
                                         Toast.makeText(
                                             applicationContext,
-                                            "Sorry but you need to update app",
+                                            resources.getString(R.string.force_update_needed_message),
                                             Toast.LENGTH_LONG
                                         ).show()
                                         finishAffinity()
@@ -689,10 +703,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                 )
                             } else {
                                 showBottomSheet(
-                                    title = "A new update version ${releaseNote.versionName} is available!",
+                                    title = String.format(
+                                        resources.getString(R.string.dialog_optional_update_title),
+                                        releaseNote.versionName
+                                    ),
                                     desc = formatListAsBulletList(releaseNote.changes),
                                     cancellable = true,
-                                    positiveText = "Update",
+                                    positiveText = resources.getString(R.string.dialog_optional_update_positive),
                                     positiveClickCallback = {
                                         appUpdateManager.safeStartUpdateFlowForResult(
                                             task.result,
@@ -702,14 +719,17 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                                         ) { e ->
                                             viewModel.setMessage(
                                                 Message.ToastMessage(
-                                                    "Something went wrong during update process: reason:${e.message}"
+                                                    String.format(
+                                                        resources.getString(R.string.something_went_wrong_during_update),
+                                                        e.message
+                                                    )
                                                 )
                                             )
 
                                         }
 
                                     },
-                                    negativeText = "May be later",
+                                    negativeText = resources.getString(R.string.dialog_optional_update_negative),
                                 )
 
                             }
@@ -723,7 +743,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                     viewModel.setAppUpdateModel(null)
                 }
             } else {
-                viewModel.setMessage(Message.ToastMessage("Failed to check update:" + task.exception?.message))
+                viewModel.setMessage(
+                    Message.ToastMessage(
+                        String.format(
+                            resources.getString(R.string.error_failed_to_check_update),
+                            task.exception?.message
+                        )
+                    )
+                )
             }
 
         }
@@ -740,15 +767,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                         )
                     )
                     viewModel.setAppUpdateDownloadProgress(100)
-                    viewModel.setAppUpdateButtonText("Install")
+                    viewModel.setAppUpdateButtonText(resources.getString(R.string.new_update_card_install_btn))
                 }
             }
 
             InstallStatus.CANCELED -> {
                 Timber.i(": CANCELED")
                 viewModel.setAppUpdateDownloadProgress(0)
-                viewModel.setAppUpdateButtonText("Update")
-                viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
+                viewModel.setAppUpdateButtonText(resources.getString(R.string.new_update_card_update_btn))
+                viewModel.setMessage(Message.ToastMessage(resources.getString(R.string.error_user_cancelled_update)))
             }
 
             InstallStatus.DOWNLOADING -> {
@@ -761,17 +788,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             InstallStatus.FAILED -> {
                 Timber.i(": FAILED")
                 viewModel.setAppUpdateDownloadProgress(0)
-                viewModel.setAppUpdateButtonText("Update")
-                viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
+                viewModel.setAppUpdateButtonText(resources.getString(R.string.new_update_card_update_btn))
+                viewModel.setMessage(
+                    Message.ToastMessage(
+                        String.format(
+                            resources.getString(R.string.error_update_process_failed),
+                            installState.installErrorCode().toString()
+                        )
+                    )
+                )
             }
 
             InstallStatus.INSTALLED -> {
                 Timber.i(": INSTALLED")
                 viewModel.setAppUpdateDownloadProgress(0)
-                viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
+                viewModel.setMessage(
+                    Message.ToastMessage(resources.getString(R.string.success_update))
+                )
                 Toast.makeText(
                     applicationContext,
-                    "Successfully install new update!",
+                    resources.getString(R.string.success_install_new_update_message),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -781,7 +817,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 Timber.i(": INSTALLING")
                 Toast.makeText(
                     applicationContext,
-                    "Installation started!",
+                    resources.getString(R.string.installation_started),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -793,7 +829,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 //no need to implement
                 Toast.makeText(
                     applicationContext,
-                    "UI Intent issue!",
+                    resources.getString(R.string.update_ui_intent_issue),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -803,7 +839,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 Timber.i(": UNKNOWN")
                 Toast.makeText(
                     applicationContext,
-                    "Unknown issue!",
+                    resources.getString(R.string.update_unknown_issue),
                     Toast.LENGTH_SHORT
                 ).show()
             }
