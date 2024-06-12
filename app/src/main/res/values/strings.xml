@@ -15,13 +15,6 @@
     <string name="about_app_others">Others</string>
 
 
-    <string-array name="theme_options">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Default</item>
-    </string-array>
-
-
     <string name="dev_facebook_url">http://www.facebook.com</string>
     <string name="dev_instagram_url">http://www.instagram.com</string>
     <string name="dev_github_url">http://www.github.com/pramod-sj</string>
@@ -98,25 +91,25 @@
 
     <string name="previous_words">Words</string>
     <string name="random_word">Random word</string>
-    <string name="weekly_recap_note">Review the new words you learned this week! Here\'s the list from Monday – today, Sunday.</string>
-    <string name="weekly_recap_note_with_date_placeholder">Review the new words you learned this week! Here\'s the list from %s – today, %s.</string>
-    <string name="support_development">Hello My Dear User, \nThis project is solely handled by me along with my other works thus adding new features takes weeks or months. \nThis app is completely free, donating a small amount will encourage me to keep this project alive.</string>
+    <string name="weekly_recap_note">Review the new words you learned this week! Here\'s the list from Monday to today, Sunday.</string>
+    <string name="weekly_recap_note_with_date_placeholder">Review the new words you learned this week! Here\'s the list from %s to today, %s.</string>
+    <string name="support_development">Hello My Dear User,\n\nThis project is solely handled by me, along with my other work, so adding new features takes weeks or even months.\nThis app is completely free, but donating a small amount will encourage me to keep this project alive.</string>
     <string name="regards">Regards,</string>
 
     <string name="no_favorite_title_placeholder">No bookmarks!</string>
-    <string name="no_favorite_text_placeholder">Hey it looks like you don\'t have any bookmarks</string>
+    <string name="no_favorite_text_placeholder">Hey, it looks like you don\'t have any bookmarks.</string>
 
 
-    <string name="no_recap_title_placeholder">No words for quick recap!</string>
-    <string name="no_recap_text_placeholder">There are no words to show for this week!</string>
+    <string name="no_recap_title_placeholder">No words for a quick recap!</string>
+    <string name="no_recap_text_placeholder">There are no words to show for this week.</string>
 
     <string name="google_search_url">https://www.merriam-webster.com/dictionary/</string>
 
-    <string name="syn_info">Synonyms are gathered from Merriam-Webster. Not all words shown through this app will have synonyms, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
+    <string name="syn_info">Synonyms are gathered from Merriam-Webster. Not all words shown through this app will have synonyms, but if Merriam-Webster provides a thesaurus for a word, it will be displayed.</string>
 
-    <string name="ant_info">Antonyms are gathered from Merriam-Webster. Not all words shown through this app will have antonyms, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
+    <string name="ant_info">Antonyms are gathered from Merriam-Webster. Not all words shown through this app will have antonyms, but if Merriam-Webster provides a thesaurus for a word, it will be displayed.</string>
 
-    <string name="other_words_info">Other words are gathered from Merriam-Webster. Not all words shown through this app will have other words, if Merriam-Webster provides thesaurus for a word then it will be shown.</string>
+    <string name="other_words_info">Other words are gathered from Merriam-Webster. Not all words shown through this app will have other words, if Merriam-Webster provides thesaurus for a word, it will be displayed.</string>
 
     <string name="support_development_text">Support</string>
     <string name="designed_amp_developed_by">Designed &amp; Developed by</string>
@@ -134,4 +127,156 @@
     <string name="btn_fix_them">Fix them</string>
     <string name="btn_not_interested">Not interested</string>
     <string name="btn_not_ninterested">Not \ninterested</string>
+
+
+    <string name="notification_consent_title">Get Notified</string>
+    <string name="notification_consent_desc">Never miss learning a new word every day!</string>
+    <string name="notification_consent_negative_btn">Don\'t show again</string>
+    <string name="notification_consent_positive_btn">I\'m in</string>
+    <string name="notification_consent_skip_btn">Skip</string>
+
+
+    <string name="setting_section_personalize">Personalize</string>
+    <string name="setting_item_theme_title">Theme</string>
+    <string name="setting_item_window_animation_title">Window animation</string>
+    <string name="setting_item_window_animation_desc">Animate when switching from one page to another</string>
+    <string name="setting_item_fullscreen_title">Edge to Edge view (Full screen app)</string>
+    <string name="setting_item_fullscreen_desc">Immersive mode for clean and better UI</string>
+
+
+    <string name="setting_section_suggestions">Suggestions</string>
+    <string name="setting_item_hide_badge_title">Badges (Dot)</string>
+    <string name="setting_item_hide_badge_desc">Badges are displayed on newly added words and bookmarks to signify that the words are yet to be read.</string>
+
+
+    <string name="setting_section_notifications">Notifications</string>
+    <string name="setting_item_daily_notification_title">Daily word notifications</string>
+    <string name="setting_item_daily_notification_desc">Receive daily notification when a new word arrives.</string>
+    <string name="setting_item_reminder_notification_title">Reminder notifications</string>
+    <string name="setting_item_reminder_notification_desc">Receive a reminding notification</string>
+    <string name="setting_item_word_meaning_notification_title">Word meaning in notifications</string>
+    <string name="setting_item_word_meaning_notification_desc">Show word meaning in notification itself</string>
+
+
+    <string name="setting_section_widget">Widget</string>
+    <string name="setting_item_widget_background_opacity_title">Background transparency</string>
+    <string name="setting_item_widget_background_opacity_desc">Change background transparency of widget shown in home screen.</string>
+    <string name="setting_item_widget_quick_action_title">Quick actions</string>
+    <string name="setting_item_widget_quick_action_desc">Show quick actions like random word or bookmark word on widget in home screen.</string>
+
+
+    <string name="setting_section_others">Other</string>
+    <string name="setting_item_clear_app_title">Clear app data</string>
+    <string name="setting_item_clear_app_desc">You\'ll loose your bookmarks and viewed data information.</string>
+    <string name="setting_item_check_update_title">Check for update</string>
+    <string name="setting_item_check_update_desc">You are currently on %s, Tap to check for update</string>
+    <string name="setting_item_about_title">About</string>
+    <string name="setting_item_about_desc">Links, developer, license, others</string>
+
+    <string name="app_update_check_for_update_message">You are currently on %s, Tap to check for update</string>
+    <string name="app_update_update_available_download_message">A new version is available to download, Tap to download the update!</string>
+    <string name="app_update_update_downloading_message">A new version is downloading, please wait…</string>
+    <string name="app_update_update_available_install_message">A new version is available to install, Tap to proceed with installation process</string>
+
+    <string name="checking_for_update">Checking for the update…</string>
+    <string name="update_in_progress">Update in process…</string>
+    <string name="something_went_wrong_during_update">Something went wrong during update process: reason:%s</string>
+    <string name="new_update_available">A new update version %s available!</string>
+    <string name="update_dialog_positive_btn">Update</string>
+    <string name="update_dialog_negative_btn">May be later</string>
+
+    <string name="installation_started">Installation started!</string>
+    <string name="error_failed_to_check_update">Failed to check update:%s</string>
+    <string name="error_user_cancelled_update">User cancelled update app process</string>
+    <string name="error_update_process_failed">Update process failed! reason:%s</string>
+    <string name="success_update">Successfully updated!</string>
+    <string name="update_ui_intent_issue">UI Intent issue!</string>
+    <string name="update_unknown_issue">Unknown issue!</string>
+
+    <string name="app_download_starts">App download starts…</string>
+    <string name="sorry_you_cant_use_app_unless_you_update">Sorry you can\'t use Daily Word app unless you update!</string>
+    <string name="app_download_failed">App download failed, we\'re trying again</string>
+
+    <string name="token_captured_success_message">Your token has been captured!</string>
+    <string name="token_captured_failed_message">Sorry we\'re currently not able to fetch your token</string>
+
+    <string name="change_theme_dialog_title">Choose app theme</string>
+    <string name="change_theme_dialog_option_light">Light</string>
+    <string name="change_theme_dialog_option_dark">Dark</string>
+    <string name="change_theme_dialog_option_default">Default</string>
+    <string name="change_theme_cancel_btn">Cancel</string>
+    <string name="change_theme_apply_btn">Apply</string>
+    <string-array name="theme_options">
+        <item>@string/change_theme_dialog_option_light</item>
+        <item>@string/change_theme_dialog_option_dark</item>
+        <item>@string/change_theme_dialog_option_default</item>
+    </string-array>
+
+    <string name="clear_data_dialog_title">Clear app data</string>
+    <string name="clear_data_dialog_desc">Note: You\'ll loose all your bookmarks and word view data if you proceed</string>
+    <string name="clear_data_dialog_positive_btn">Proceed</string>
+    <string name="clear_data_dialog_negative_btn">Cancel</string>
+
+    <string name="quick_action_dialog_title">Quick actions</string>
+    <string name="quick_action_dialog_positive">Apply</string>
+    <string name="quick_action_dialog_negative">Cancel</string>
+
+    <string name="background_transparency_dialog_title">Widget background transparency</string>
+    <string name="background_transparency_dialog_positive">Apply</string>
+    <string name="background_transparency_dialog_negative">Cancel</string>
+
+
+    <string name="dialog_app_content_credit_title">App content credit</string>
+    <string name="dialog_app_content_credit_positive">Merriam-Webster</string>
+    <string name="dialog_app_content_credit_negative">Close</string>
+
+    <string name="mail_subject">DailyWord query</string>
+    <string name="mail_body_start">Hello Pramod,</string>
+
+
+    <string name="no_browser_app_message">No browser application found</string>
+    <string name="no_gmail_app_message">Please install Gmail app</string>
+    <string name="no_play_app_message">Please install or update Google play app</string>
+
+
+    <string name="donate_purchase_under_process">Thank you so much ❤, your purchase is under process.</string>
+    <string name="donate_purchase_success">Thank you so much ❤</string>
+
+
+    <string name="snackbar_removed_from_bookmarks">Removed %s from bookmarks</string>
+    <string name="snackbar_undo_action">Undo</string>
+
+
+    <string name="dialog_auto_start_title">Auto Start</string>
+    <string name="dialog_auto_start_desc_1">Please enable auto start else notification feature won\'t work properly!</string>
+    <string name="dialog_auto_start_desc_2">It\'s look like you have already went to setting, if you have enabled AutoStart clicked on \'Already Enabled\'</string>
+    <string name="dialog_auto_start_positive">Setting</string>
+    <string name="dialog_auto_start_negative">Cancel</string>
+    <string name="dialog_auto_start_neutral">Already enabled</string>
+    <string name="auto_start_unable_to_open_setting">Sorry we unable to locate auto start setting, Please enable it manually.</string>
+
+    <string name="dialog_force_update_title">A new update version %s available!</string>
+    <string name="dialog_force_update_positive">Update</string>
+    <string name="dialog_force_update_negative">Close app</string>
+    <string name="force_update_needed_message">You need to update to latest version to use this app</string>
+
+    <string name="dialog_optional_update_title">A new update version %s available!</string>
+    <string name="dialog_optional_update_positive">Update</string>
+    <string name="dialog_optional_update_negative">May be later</string>
+
+    <string name="success_install_new_update_message">Successfully install new update!</string>
+
+    <string name="new_update_card_available_to_download">A new update v%s is available to download, click to view changelog.</string>
+    <string name="new_update_card_ready_to_install">A new update v%s is ready to install, click to view changelog.</string>
+    <string name="new_update_card_update_btn">Update</string>
+    <string name="new_update_card_install_btn">Install</string>
+
+
+    <string name="dialog_changelog_title">Changelog</string>
+    <string name="dialog_changelog_positive_btn">Close</string>
+
+
+
+    <string name="first_notification_title">Welcome to Daily Word!</string>
+    <string name="first_notification_subtitle">Your first word of the day is \'%s\'</string>
 </resources>

@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.LottieComposition
@@ -85,7 +86,7 @@ fun NotificationConsentScreen(
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     TextButton(onClick = { skipCallback() }) {
-                        Text(text = "Skip")
+                        Text(text = stringResource(id = R.string.notification_consent_skip_btn))
                     }
                 }
 
@@ -100,11 +101,11 @@ fun NotificationConsentScreen(
                     contentDescription = "Bell"
                 )
                 Text(
-                    text = "Get Notified",
+                    text = stringResource(id = R.string.notification_consent_title),
                     style = MaterialTheme.typography.h6.copy(color = colorResource(id = R.color.textColor_highEmphasis))
                 )
                 Text(
-                    text = "Never miss learning a new word every day!",
+                    text = stringResource(id = R.string.notification_consent_desc),
                     style = MaterialTheme.typography.body2.copy(
                         color = colorResource(id = R.color.textColor_highEmphasis)
                     )
@@ -127,13 +128,13 @@ fun NotificationConsentScreen(
                 ) {
 
                     TextButton(onClick = { neverShowAgainCallback() }) {
-                        Text(text = "Don't show again")
+                        Text(text = stringResource(id = R.string.notification_consent_negative_btn))
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
 
                     Button(onClick = { imInCallback() }) {
-                        Text(text = "I'm in")
+                        Text(text = stringResource(id = R.string.notification_consent_positive_btn))
                     }
                 }
             }

@@ -141,7 +141,7 @@ class DonateBottomDialogFragment :
 
     override fun onPurchased(sku: String) {
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
-        viewModel.setMessage(Message.SnackBarMessage("Thank you so much ❤"))
+        viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.donate_purchase_success)))
         //setting has donated to true
         prefManager.setHasDonated(true)
     }
@@ -154,7 +154,7 @@ class DonateBottomDialogFragment :
 
     override fun onPurchasePending(sku: String) {
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASE_IN_PROCESS)
-        viewModel.setMessage(Message.SnackBarMessage("Thank you so much ❤, your purchase is under process."))
+        viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.donate_purchase_under_process)))
     }
 
     override fun onPurchaseError(message: String) {
@@ -162,7 +162,7 @@ class DonateBottomDialogFragment :
     }
 
     override fun onBillingInitialized() {
-        Timber.i( "onBillingInitialized: ")
+        Timber.i("onBillingInitialized: ")
     }
 
     override fun onBillingError(message: String) {

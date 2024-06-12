@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.ui.settings
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.WOTDApp
@@ -46,6 +48,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+
+val Activity.CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION: String
+    get() = String.format(
+        resources.getString(R.string.app_update_check_for_update_message),
+        BuildConfig.VERSION_NAME
+    )
 
 @AndroidEntryPoint
 class AppSettingActivity :
@@ -97,28 +105,28 @@ class AppSettingActivity :
                     UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
                         if (appUpdateInfoTask.result.installStatus() == InstallStatus.DOWNLOADED) {
                             viewModel.subTitleCheckForUpdate.value =
-                                AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
+                                resources.getString(R.string.app_update_update_available_install_message)
                         }
                     }
 
                     UpdateAvailability.UPDATE_AVAILABLE -> {
                         viewModel.subTitleCheckForUpdate.value =
-                            AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                            resources.getString(R.string.app_update_update_available_download_message)
                     }
 
                     UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
                         viewModel.subTitleCheckForUpdate.value =
-                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                            CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
                     }
 
                     UpdateAvailability.UNKNOWN -> {
                         viewModel.subTitleCheckForUpdate.value =
-                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                            CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
                     }
                 }
             } else {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                    CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
             }
         }
     }
@@ -153,11 +161,11 @@ class AppSettingActivity :
             override fun openChooseThemeDialog() {
                 DailogHelper.showRadioDialog(
                     this@AppSettingActivity,
-                    "Choose App Theme",
+                    resources.getString(R.string.change_theme_dialog_title),
                     R.array.theme_options,
                     themeManager.getThemeMode(),
-                    "Apply",
-                    "Cancel"
+                    resources.getString(R.string.change_theme_apply_btn),
+                    resources.getString(R.string.change_theme_cancel_btn)
                 ) { selectedThemeText ->
                     themeManager.applyTheme(selectedThemeText)
                 }
@@ -179,18 +187,22 @@ class AppSettingActivity :
 
             override fun checkForUpdate() {
 
-                if (viewModel.subTitleCheckForUpdate.value == AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING) {
+                if (viewModel.subTitleCheckForUpdate.value
+                    == resources.getString(R.string.app_update_update_downloading_message)
+                ) {
                     return
                 }
 
-                viewModel.subTitleCheckForUpdate.value = "Checking for the update..."
+                viewModel.subTitleCheckForUpdate.value =
+                    resources.getString(R.string.checking_for_update)
 
                 appUpdateManager.appUpdateInfo.addOnCompleteListener { appUpdateInfoTask ->
 
                     if (appUpdateInfoTask.isSuccessful) {
                         when (appUpdateInfoTask.result.updateAvailability()) {
                             UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
-                                viewModel.subTitleCheckForUpdate.value = "Update in process..."
+                                viewModel.subTitleCheckForUpdate.value =
+                                    resources.getString(R.string.update_in_progress)
 
                                 if (appUpdateInfoTask.result.installStatus() == InstallStatus.DOWNLOADED) {
                                     appUpdateManager.completeUpdate()
@@ -203,7 +215,10 @@ class AppSettingActivity :
                                     ) { e ->
                                         viewModel.setMessage(
                                             Message.ToastMessage(
-                                                "Something went wrong during update process: reason:${e.message}"
+                                                String.format(
+                                                    resources.getString(R.string.something_went_wrong_during_update),
+                                                    e.message
+                                                )
                                             )
                                         )
 
@@ -213,14 +228,17 @@ class AppSettingActivity :
 
                             UpdateAvailability.UPDATE_AVAILABLE -> {
                                 viewModel.subTitleCheckForUpdate.value =
-                                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                                    resources.getString(R.string.app_update_update_available_download_message)
                                 val releaseNote = fbRemoteConfig.getLatestRelease()
                                 releaseNote?.let {
                                     showBottomSheet(
-                                        title = "A new update version ${releaseNote.versionName} available!",
+                                        title = String.format(
+                                            resources.getString(R.string.new_update_available),
+                                            releaseNote.versionName
+                                        ),
                                         desc = CommonUtils.formatListAsBulletList(releaseNote.changes),
                                         cancellable = true,
-                                        positiveText = "Update",
+                                        positiveText = resources.getString(R.string.update_dialog_positive_btn),
                                         positiveClickCallback = {
                                             appUpdateManager.safeStartUpdateFlowForResult(
                                                 appUpdateInfoTask.result,
@@ -230,32 +248,42 @@ class AppSettingActivity :
                                             ) { e ->
                                                 viewModel.setMessage(
                                                     Message.ToastMessage(
-                                                        "Something went wrong during update process: reason:${e.message}"
+                                                        String.format(
+                                                            resources.getString(R.string.something_went_wrong_during_update),
+                                                            e.message
+                                                        )
                                                     )
                                                 )
 
                                             }
 
                                         },
-                                        negativeText = "May be later",
+                                        negativeText = resources.getString(R.string.update_dialog_negative_btn),
                                     )
                                 }
                             }
 
                             UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
                                 viewModel.subTitleCheckForUpdate.value =
-                                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                                    CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
                             }
 
                             UpdateAvailability.UNKNOWN -> {
                                 viewModel.subTitleCheckForUpdate.value =
-                                    AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
+                                    CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
                             }
                         }
                     } else {
                         viewModel.subTitleCheckForUpdate.value =
-                            AppSettingViewModel.DEFAULT_MESSAGE_CHECK_FOR_UPDATE
-                        viewModel.setMessage(Message.ToastMessage("Failed to check update:" + appUpdateInfoTask.exception?.message))
+                            CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION
+                        viewModel.setMessage(
+                            Message.ToastMessage(
+                                String.format(
+                                    resources.getString(R.string.error_failed_to_check_update),
+                                    appUpdateInfoTask.exception?.message.toString()
+                                )
+                            )
+                        )
                     }
                 }
             }
@@ -268,18 +296,18 @@ class AppSettingActivity :
                 FirebaseMessaging.getInstance().token.addOnCompleteListener {
                     if (it.isSuccessful) {
                         CommonUtils.copyToClipboard(applicationContext, it.result)
-                        viewModel.setMessage(Message.SnackBarMessage("Your token has been captured!"))
+                        viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.token_captured_success_message)))
                     } else {
-                        viewModel.setMessage(Message.SnackBarMessage("Sorry we're currently not able to fetch your token"))
+                        viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.token_captured_failed_message)))
                     }
                 }
             }
 
             override fun clearAppData() {
                 showBottomSheet(
-                    "Clear App Data",
-                    "Note: You'll loose all your bookmarks and word view data if you proceed",
-                    positiveText = "Proceed",
+                    resources.getString(R.string.clear_data_dialog_title),//"Clear App Data",
+                    resources.getString(R.string.clear_data_dialog_desc),//"Note: You'll loose all your bookmarks and word view data if you proceed",
+                    positiveText = resources.getString(R.string.clear_data_dialog_positive_btn),//"Proceed",
                     positiveClickCallback = {
                         val cleared = WOTDApp.clearAppData(this@AppSettingActivity)
                         if (cleared) {
@@ -288,7 +316,7 @@ class AppSettingActivity :
                             )
                         }
                     },
-                    negativeText = "Cancel",
+                    negativeText = resources.getString(R.string.clear_data_dialog_negative_btn), //"Cancel",
                     negativeClickCallback = {
 
                     }
@@ -301,14 +329,15 @@ class AppSettingActivity :
 
             override fun showWidgetControlsDialog() {
                 showCheckboxDialog(
-                    title = "Widget Controls",
-                    items = Controls.values().map { it.label },
+                    title = resources.getString(R.string.quick_action_dialog_title),//"Widget Controls",
+                    items = Controls.entries.map { it.label },
                     selectedItems = prefManager.getVisibleWidgetControls().toList(),
-                    positiveText = "Apply",
+                    positiveText = resources.getString(R.string.quick_action_dialog_positive),//"Apply",
                     onPositiveClickCallback = {
                         prefManager.setVisibleWidgetControls(it.toSet())
                         refreshWidget()
                     },
+                    negativeText = resources.getString(R.string.quick_action_dialog_negative)
                 )
             }
 
@@ -319,34 +348,40 @@ class AppSettingActivity :
         when (installState.installStatus()) {
             InstallStatus.DOWNLOADED -> {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_INSTALL
+                    resources.getString(R.string.app_update_update_available_install_message)
             }
 
             InstallStatus.CANCELED -> {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
-                viewModel.setMessage(Message.ToastMessage("User cancelled update app process"))
+                    resources.getString(R.string.app_update_update_available_download_message)
+                viewModel.setMessage(Message.ToastMessage(resources.getString(R.string.error_user_cancelled_update)))
             }
 
             InstallStatus.DOWNLOADING -> {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_DOWNLOADING +
-                            " " +
+                    resources.getString(R.string.app_update_update_downloading_message) + " " +
                             ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()) + "%"
             }
 
             InstallStatus.FAILED -> {
-                viewModel.setMessage(Message.ToastMessage("Update process failed! reason:${installState.installErrorCode()}"))
+                viewModel.setMessage(
+                    Message.ToastMessage(
+                        String.format(
+                            resources.getString(R.string.error_update_process_failed),
+                            installState.installErrorCode().toString()
+                        )
+                    )
+                )
             }
 
             InstallStatus.INSTALLED -> {
-                viewModel.setMessage(Message.ToastMessage("Successfully updated!"))
+                viewModel.setMessage(Message.ToastMessage(resources.getString(R.string.success_update)))
             }
 
             InstallStatus.INSTALLING -> {
                 Toast.makeText(
                     applicationContext,
-                    "Installation started!",
+                    resources.getString(R.string.installation_started),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -354,21 +389,21 @@ class AppSettingActivity :
             InstallStatus.PENDING -> {}
             InstallStatus.REQUIRES_UI_INTENT -> {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                    resources.getString(R.string.app_update_update_available_download_message)
                 //no need to implement
                 Toast.makeText(
                     applicationContext,
-                    "UI Intent issue!",
+                    resources.getString(R.string.update_ui_intent_issue),
                     Toast.LENGTH_SHORT
                 ).show()
             }
 
             InstallStatus.UNKNOWN -> {
                 viewModel.subTitleCheckForUpdate.value =
-                    AppSettingViewModel.DEFAULT_MESSAGE_NEW_UPDATE_AVAILABLE_TO_DOWNLOAD
+                    resources.getString(R.string.app_update_update_available_download_message)
                 Toast.makeText(
                     applicationContext,
-                    "Unknown issue!",
+                    resources.getString(R.string.update_unknown_issue),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -386,13 +421,13 @@ class AppSettingActivity :
         binding.sliderWidgetBodyBgControl.value = prefManager.getWidgetBodyAlpha().toFloat()
         binding.sliderWidgetBgControl.value = prefManager.getWidgetBackgroundAlpha().toFloat()
         val dialog = MaterialAlertDialogBuilder(this)
-            .setTitle("Control Background Opacity")
+            .setTitle(resources.getString(R.string.background_transparency_dialog_title))
             .setView(binding.root)
-            .setPositiveButton("Apply") { dialog, which ->
+            .setPositiveButton(resources.getString(R.string.background_transparency_dialog_positive)) { _, _ ->
                 prefManager.setWidgetBodyAlpha(binding.sliderWidgetBodyBgControl.value.toInt())
                 prefManager.setWidgetBackgroundAlpha(binding.sliderWidgetBgControl.value.toInt())
                 refreshWidget()
-            }.setNegativeButton("Cancel") { dialog, which ->
+            }.setNegativeButton(resources.getString(R.string.background_transparency_dialog_negative)) { _, _ ->
 
             }.create()
         dialog.applyStyleOnAlertDialog()

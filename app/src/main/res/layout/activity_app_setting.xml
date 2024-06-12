@@ -58,7 +58,7 @@
                             android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginTop="@dimen/margin_medium"
                             android:padding="@dimen/padding_medium"
-                            android:text="@string/personalize"
+                            android:text="@string/setting_section_personalize"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimary" />
 
@@ -68,7 +68,7 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.openChooseThemeDialog()}"
                             app:showIconBackground="false"
                             app:subTitle="@{appSettingViewModel.themeValue}"
-                            app:title="Theme"
+                            app:title="@string/setting_item_theme_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -86,8 +86,8 @@
                             app:checked="@{appSettingViewModel.windowAnimValue}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
-                            app:subTitle="Animate when switching from one window to another"
-                            app:title="Window animation (Beta)"
+                            app:subTitle="@string/setting_item_window_animation_desc"
+                            app:title="@string/setting_item_window_animation_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -105,8 +105,8 @@
                             app:checked="@{appSettingViewModel.edgeToEdgeValue}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
-                            app:subTitle="Immersive mode"
-                            app:title="Full screen (Edge to Edge)"
+                            app:subTitle="@string/setting_item_fullscreen_desc"
+                            app:title="@string/setting_item_fullscreen_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -136,7 +136,7 @@
                             android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginTop="@dimen/margin_medium"
                             android:padding="@dimen/padding_medium"
-                            android:text="Suggestions"
+                            android:text="@string/setting_section_suggestions"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimary" />
 
@@ -147,8 +147,8 @@
                             app:checked="@{appSettingViewModel.hideBadgesValue}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
-                            app:subTitle="Badges are shown on newly added words &amp; bookmarks"
-                            app:title="Hide badge"
+                            app:title="@string/setting_item_hide_badge_title"
+                            app:subTitle="@string/setting_item_hide_badge_desc"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -183,7 +183,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_medium"
                                 android:padding="@dimen/padding_medium"
-                                android:text="@string/notification"
+                                android:text="@string/setting_section_notifications"
                                 android:textAllCaps="true"
                                 android:textColor="@color/colorPrimary" />
 
@@ -206,8 +206,8 @@
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleDailyWordNotification()}"
                             app:checked="@{appSettingViewModel.notificationPrefManager.dailyWordNotificationEnabledLiveData}"
                             app:showRadioButton="true"
-                            app:subTitle="Receive notification when word of the day is available"
-                            app:title="Daily word notification"
+                            app:subTitle="@string/setting_item_daily_notification_desc"
+                            app:title="@string/setting_item_daily_notification_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -225,8 +225,8 @@
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
                             app:checked="@{appSettingViewModel.notificationPrefManager.reminderNotificationEnabledLiveData}"
                             app:showRadioButton="true"
-                            app:subTitle="Receive a reminding notification"
-                            app:title="Reminder Notification"
+                            app:subTitle="@string/setting_item_reminder_notification_desc"
+                            app:title="@string/setting_item_reminder_notification_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -244,8 +244,8 @@
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleShowWordMeaningInNotification()}"
                             app:checked="@{appSettingViewModel.notificationPrefManager.showWordMeaningInNotificationLiveData}"
                             app:showRadioButton="true"
-                            app:subTitle="Show word meaning in notification itself"
-                            app:title="Word meaning in notification"
+                            app:subTitle="@string/setting_item_word_meaning_notification_desc"
+                            app:title="@string/setting_item_word_meaning_notification_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -274,7 +274,7 @@
                             android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginTop="@dimen/margin_medium"
                             android:padding="@dimen/padding_medium"
-                            android:text="Widget"
+                            android:text="@string/setting_section_widget"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimary" />
 
@@ -284,8 +284,8 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.showWidgetBackgroundDialog()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
-                            app:subTitle="Change widget background transparent value"
-                            app:title="Background Opacity Control"
+                            app:subTitle="@string/setting_item_widget_background_opacity_desc"
+                            app:title="@string/setting_item_widget_background_opacity_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -296,8 +296,8 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.showWidgetControlsDialog()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
-                            app:subTitle="Add or remove controls (i.e. Bookmark and Random word buttons) from widget"
-                            app:title="Widget Controls"
+                            app:subTitle="@string/setting_item_widget_quick_action_desc"
+                            app:title="@string/setting_item_widget_quick_action_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -327,7 +327,7 @@
                             android:layout_marginStart="@dimen/margin_medium"
                             android:layout_marginTop="@dimen/margin_medium"
                             android:padding="@dimen/padding_medium"
-                            android:text="@string/other"
+                            android:text="@string/setting_section_others"
                             android:textAllCaps="true"
                             android:textColor="@color/colorPrimary" />
 
@@ -337,8 +337,8 @@
                             android:onClick="@{()->appSettingViewModel.settingUseCase.clearAppData()}"
                             app:showIconBackground="false"
                             app:showRadioButton="false"
-                            app:subTitle="You'll loose your bookmarks and viewed data information"
-                            app:title="Clear app data"
+                            app:subTitle="@string/setting_item_clear_app_desc"
+                            app:title="@string/setting_item_clear_app_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -357,7 +357,7 @@
                             app:showIconBackground="false"
                             app:showRadioButton="false"
                             app:subTitle="@{appSettingViewModel.subTitleCheckForUpdate}"
-                            app:title="Check for update"
+                            app:title="@string/setting_item_check_update_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
