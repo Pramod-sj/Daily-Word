@@ -9,6 +9,8 @@ interface WordCacheDataSource {
 
     suspend fun get(wordDate: String): Word?
 
+    suspend fun getWordByName(wordName: String): Word?
+
     suspend fun getAll(): List<Word>?
 
     suspend fun update(word: Word): Int

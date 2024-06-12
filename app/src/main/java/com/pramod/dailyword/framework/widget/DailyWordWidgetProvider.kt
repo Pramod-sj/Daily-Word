@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.widget
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
@@ -7,10 +8,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.widget.RemoteViews
+import androidx.core.os.bundleOf
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.Constants
+import com.pramod.dailyword.R
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import com.pramod.dailyword.framework.helper.compactMutableFlag
+import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.common.exts.goAsync
 import com.pramod.dailyword.framework.ui.common.exts.safeLet
 import com.pramod.dailyword.framework.util.safeNetworkCall
@@ -21,8 +28,10 @@ import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 open class DailyWordWidgetProvider : AppWidgetProvider() {
+
     private val TAG = DailyWordWidgetProvider::class.simpleName
 
     @Inject
@@ -141,6 +150,7 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                 ACTION_RANDOM_WORD -> c.safeNetworkCall {
                     widgetDataFetchHelper.runRandomWordJob()
                 }
+
                 else -> Unit
             }
         }
@@ -165,6 +175,16 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
+        /*goAsync(Dispatchers.Main) {
+            val wordName = widgetPreference.getCurrentWordShown()
+            if (wordName != null) {
+                updateWidgetViewHelper.localFetchWordByNameAndUpdateWidgetUi(
+                    wordName
+                )
+            } else {
+                widgetDataFetchHelper.runTodayWordFetchJob()
+            }
+        }*/
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         safeLet(
             context,

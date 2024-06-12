@@ -21,6 +21,10 @@ class WordCacheDataSourceImpl @Inject constructor(private val wordCacheService: 
         return wordCacheService.get(wordDate)
     }
 
+    override suspend fun getWordByName(wordName: String): Word? {
+        return wordCacheService.getWordByName(wordName)
+    }
+
     override suspend fun getAll(): List<Word>? {
         return wordCacheService.getAll()
     }

@@ -3,6 +3,8 @@ package com.pramod.dailyword.framework.widget
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
@@ -12,7 +14,10 @@ import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.framework.util.NetworkUtils
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -103,6 +108,14 @@ class UpdateWidgetViewHelper @Inject constructor(
                         widgetSize.height
                     )
                 )
+
+                Handler(Looper.myLooper()!!).postDelayed({
+                    appWidgetManager.notifyAppWidgetViewDataChanged(
+                        appWidgetManager.getAppWidgetIds(widgetComponent),
+                        R.id.list_scrollable_content
+                    )
+                }, 50)
+
             } else {
                 appWidgetManager.updateAppWidget(
                     widgetComponent,

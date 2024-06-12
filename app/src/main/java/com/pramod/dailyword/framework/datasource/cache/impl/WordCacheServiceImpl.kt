@@ -11,8 +11,8 @@ import javax.inject.Singleton
 class WordCacheServiceImpl @Inject constructor(
     private val wordDao: WordDao,
     private val wordCEMapper: WordCEMapper
-) :
-    WordCacheService {
+) : WordCacheService {
+
     override suspend fun addAll(word: List<Word>): List<Long> {
         return wordDao.addAll(word.map { wordCEMapper.toEntity(it) })
     }
@@ -23,6 +23,10 @@ class WordCacheServiceImpl @Inject constructor(
 
     override suspend fun get(wordDate: String): Word? {
         return wordDao.get(wordDate)?.let { wordCEMapper.fromEntity(it) }
+    }
+
+    override suspend fun getWordByName(wordName: String): Word? {
+        return wordDao.getWordByName(wordName)?.let { wordCEMapper.fromEntity(it) }
     }
 
     override suspend fun getAll(): List<Word>? {

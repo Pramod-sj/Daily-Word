@@ -328,7 +328,7 @@ class WordDetailedActivity :
         setResult(RESULT_OK, data)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.i("onNewIntent:" + intent?.getStringExtra("WORD_DATE"))
         intent?.getStringExtra("WORD_DATE")?.let {

@@ -7,17 +7,17 @@ import com.pramod.dailyword.framework.datasource.cache.model.SeenCE
 interface SeenDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun add(seenCE: SeenCE): Long
+    suspend fun add(seenCE: SeenCE): Long
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    fun update(seenCE: SeenCE): Int
+    suspend fun update(seenCE: SeenCE): Int
 
     @Query("SELECT * FROM Seen WHERE seenWord=:word")
-    fun get(word: String): SeenCE?
+    suspend fun get(word: String): SeenCE?
 
     @Query("SELECT * FROM Seen")
-    fun getAll(): List<SeenCE>
+    suspend fun getAll(): List<SeenCE>
 
     @Query("DELETE FROM Seen WHERE seenWord=:word")
-    fun delete(word: String): Int
+    suspend fun delete(word: String): Int
 }

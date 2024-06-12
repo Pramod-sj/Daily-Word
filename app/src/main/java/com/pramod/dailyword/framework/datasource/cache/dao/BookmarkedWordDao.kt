@@ -22,7 +22,7 @@ interface BookmarkedWordDao {
     fun getWordByDate(date: String): LiveData<BookmarkedWordCE?>
 
     @Query("$query_get_all_word WHERE date=:date")
-    fun getWordByDateNonLive(date: String): BookmarkedWordCE?
+    suspend fun getWordByDateNonLive(date: String): BookmarkedWordCE?
 
     @Query("$query_get_all_word WHERE date=:date")
     fun getWordByDateAsFlow(date: String): Flow<BookmarkedWordCE?>
@@ -69,13 +69,13 @@ interface BookmarkedWordDao {
 
     //nonLiveFunction
     @Query("$query_get_all_word WHERE date=:date")
-    fun getWordNonLive(date: String): BookmarkedWordCE?
+    suspend fun getWordNonLive(date: String): BookmarkedWordCE?
 
     @Query("$query_get_all_word WHERE word=:word")
-    fun getWordByNameNonLive(word: String): BookmarkedWordCE?
+    suspend fun getWordByNameNonLive(word: String): BookmarkedWordCE?
 
     @Query("$query_get_all_word ORDER BY dateTimeInMillis ASC LIMIT 1 OFFSET 0")
-    fun getJustTopOneWordNonLive(): BookmarkedWordCE?
+    suspend fun getJustTopOneWordNonLive(): BookmarkedWordCE?
 
 
     @Query("$query_get_only_bookmarked ORDER BY Bookmark.bookmarkedAt DESC")
