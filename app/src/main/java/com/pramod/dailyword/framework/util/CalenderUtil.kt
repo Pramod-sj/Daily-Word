@@ -1,7 +1,9 @@
 package com.pramod.dailyword.framework.util
 
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.List
 import kotlin.math.abs
 
 class CalenderUtil {
@@ -12,15 +14,8 @@ class CalenderUtil {
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
         const val TIME_FORMAT = "hh:mm a"
 
-        val DAYS = listOf(
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        )
+        val DAYS: List<String>
+            get() = DateFormatSymbols(Locale.ENGLISH).weekdays.toList()
 
         fun isTodaySunday(calender: Calendar): Boolean {
             return Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == 0
@@ -132,9 +127,11 @@ class CalenderUtil {
                 isToday(dateString, dateFormat) -> {
                     "Today"
                 }
+
                 isYesterday(dateString, dateFormat) -> {
                     "Yesterday"
                 }
+
                 else -> {
                     convertDateStringToSpecifiedDateString(
                         dateString,

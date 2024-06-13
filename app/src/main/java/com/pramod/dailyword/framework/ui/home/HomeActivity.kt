@@ -258,7 +258,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
     private fun initToolbar() {
         //setUpToolbar(binding.toolbar, null, false)
-        viewModel.setTitle(SpannableString(CommonUtils.getGreetMessage()))
+        viewModel.setTitle(SpannableString(CommonUtils.getGreetMessage(this)))
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.setTitle(CommonUtils.getFancyAppName(this))
         }, 2000)
