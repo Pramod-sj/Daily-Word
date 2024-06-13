@@ -115,16 +115,38 @@ object CommonUtils {
     }
 
     @JvmStatic
-    fun getGreetMessage(): SpannableString {
+    fun getGreetMessage(context: Context): SpannableString {
         val cal: Calendar = Calendar.getInstance()
 
-        val random = arrayOf("Hi, ", "Hello, ", "Hey, ", "")
+        val random = arrayOf(
+            context.getString(R.string.greeting_hi),
+            context.getString(R.string.greeting_hey),
+            context.getString(R.string.greeting_hello),
+            ""
+        )
 
         return SpannableString(
             when (cal.get(Calendar.HOUR_OF_DAY)) {
-                in 0..11 -> "${random.random()}Good Morning"
-                in 12..16 -> "${random.random()}Good Afternoon"
-                else -> "${random.random()}Good Evening"
+                in 0..11 -> {
+                    String.format(
+                        context.getString(R.string.greeting_good_morning),
+                        random.random()
+                    ).trim()
+                }
+
+                in 12..16 -> {
+                    String.format(
+                        context.getString(R.string.greeting_good_afternoon),
+                        random.random()
+                    ).trim()
+                }
+
+                else -> {
+                    String.format(
+                        context.getString(R.string.greeting_good_evening),
+                        random.random()
+                    ).trim()
+                }
             }
         ).also {
             it.setSpan(RelativeSizeSpan(0.9f), 0, it.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

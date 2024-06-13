@@ -289,4 +289,18 @@
     <string name="troubleshoot_card_exact_alarms_btn">Grant permission</string>
     <string name="troubleshoot_all_good_message">All good!</string>
 
+    <string name="no_internet_connection">Please check your internet connection!</string>
+
+    <string name="widget_unable_to_fetch">Unable to fetch the word, try opening the app.</string>
+    <string name="widget_please_check_internet">Please check your internet</string>
+    <string name="widget_something_went_wrong">Something went wrong! try again.</string>
+
+
+    <string name="greeting_hi">Hi, </string>
+    <string name="greeting_hello">Hello, </string>
+    <string name="greeting_hey">Hey, </string>
+    <string name="greeting_good_morning">%sGood Morning</string>
+    <string name="greeting_good_afternoon">%sGood Afternoon</string>
+    <string name="greeting_good_evening">%sGood Evening</string>
+
 </resources>
