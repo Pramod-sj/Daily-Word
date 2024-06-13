@@ -115,6 +115,10 @@
                             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                             app:spanCount="2" />
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp" />
+
                     </LinearLayout>
 
                 </com.pramod.dailyword.framework.ui.common.view.CustomNestedScrollView>
