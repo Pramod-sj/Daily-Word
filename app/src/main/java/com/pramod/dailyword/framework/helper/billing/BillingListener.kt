@@ -1,7 +1,7 @@
 package com.pramod.dailyword.framework.helper.billing
 
 import android.app.Activity
-import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.ProductDetails
 
 abstract class BillingListenerHandler {
 
@@ -72,7 +72,7 @@ abstract class BillingListenerHandler {
         }
     }
 
-    fun emitSkuDetails(skuDetailsList: List<SkuDetails>) {
+    fun emitSkuDetails(skuDetailsList: List<ProductDetails>) {
         billingListeners.forEach {
             it.onBillingSkuDetailsAvailable(skuDetailsList)
         }
@@ -102,7 +102,7 @@ interface BillingListener {
     fun onBillingError(message: String)
 
     //called when list of sku details is available
-    fun onBillingSkuDetailsAvailable(skuDetailsList: List<SkuDetails>)
+    fun onBillingSkuDetailsAvailable(skuDetailsList: List<ProductDetails>)
 
     //called when initial processing for any previous purchase is done
     fun onBillingPurchasesProcessed()
@@ -131,7 +131,7 @@ open class BillingListenerImpl : BillingListener {
 
     }
 
-    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<ProductDetails>) {
 
     }
 
@@ -166,7 +166,7 @@ open class PurchaseListenerImpl : PurchaseListener {
 
     }
 
-    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<ProductDetails>) {
 
     }
 

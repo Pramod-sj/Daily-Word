@@ -5,22 +5,25 @@ import android.content.Context
 import androidx.lifecycle.LifecycleObserver
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.SkuType.INAPP
+import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.acknowledgePurchase
+import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
-import com.android.billingclient.api.querySkuDetails
+import com.google.common.collect.ImmutableList
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.Security
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -37,15 +40,18 @@ class BillingHelper constructor(
     PurchasesUpdatedListener {
 
     //cache skus with details
-    private val skuDetails = mutableMapOf<String, SkuDetails>()
+    private val productDetails = mutableMapOf<String, ProductDetails>()
 
     //cache purchases
     private val purchases = mutableMapOf<String, Purchase>()
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context)
         .setListener(this)
-        .enablePendingPurchases()
-        .build()
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .build()
+        ).build()
 
     //GlobalScope coroutine job fetching sku details and processing puchase
     private var fetchSkuDetailsJob: Job? = null
@@ -96,10 +102,16 @@ class BillingHelper constructor(
                 }
 
                 else -> {
-                    sku.toSkuDetails(INAPP)?.let {
+                    sku.toProductDetails(INAPP)?.let {
                         billingClient.launchBillingFlow(
                             activity, BillingFlowParams.newBuilder()
-                                .setSkuDetails(it)
+                                .setProductDetailsParamsList(
+                                    ImmutableList.of(
+                                        BillingFlowParams.ProductDetailsParams.newBuilder()
+                                            .setProductDetails(it)
+                                            .build()
+                                    )
+                                )
                                 .build()
                         )
                     }
@@ -114,7 +126,11 @@ class BillingHelper constructor(
      */
     suspend fun queryPurchases(): List<Purchase> {
         if (purchases.isEmpty()) {
-            billingClient.queryPurchasesAsync(INAPP).purchasesList.forEach {
+            billingClient.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder()
+                    .setProductType(BillingClient.ProductType.INAPP)
+                    .build()
+            ).purchasesList.forEach {
                 purchases[it.purchaseToken] = it
             }
         }
@@ -123,19 +139,19 @@ class BillingHelper constructor(
 
     private suspend fun isPurchasePending(sku: String): Boolean {
         return queryPurchases().find {
-            sku == it.skus.firstOrNull()
+            sku == it.products.firstOrNull()
         }?.purchaseState == Purchase.PurchaseState.PENDING
     }
 
     private suspend fun isPurchasedSucceed(sku: String): Boolean {
         return queryPurchases().find {
-            sku == it.skus.firstOrNull()
+            sku == it.products.firstOrNull()
         }?.purchaseState == Purchase.PurchaseState.PURCHASED
     }
 
     suspend fun isPurchased(sku: String): Boolean {
         return queryPurchases().find {
-            sku == it.skus.firstOrNull()
+            sku == it.products.firstOrNull()
         } != null
     }
 
@@ -158,8 +174,8 @@ class BillingHelper constructor(
         Timber.i("onBillingSetupFinished: ")
         if (p0.responseCode.isBillingResultOk()) {
             emitBillingInitialized()
-            fetchSkuDetailsJob = GlobalScope.launch(Dispatchers.Main) {
-                val skuDetailsList = querySkus()
+            fetchSkuDetailsJob = CoroutineScope(Dispatchers.Main).launch {
+                val skuDetailsList = queryProductDetails()
                 skuDetailsList?.let {
                     emitSkuDetails(it)
                 }
@@ -174,34 +190,44 @@ class BillingHelper constructor(
     }
 
     //fetch skus and cache in skuDetails map
-    private suspend fun querySkus(): List<SkuDetails>? {
+    private suspend fun queryProductDetails(): List<ProductDetails>? {
         if (!isInitializedAndReady()) {
             Timber.i("querySkus: Not initialized or read")
             return null
         }
         val skuDetailsList = skus.toSkuDetailsList(INAPP)
         skuDetailsList?.forEach {
-            skuDetails[it.sku] = it
+            productDetails[it.productId] = it
         }
         return skuDetailsList
     }
 
     //convert sku to sku details
-    private suspend fun String.toSkuDetails(skuType: String): SkuDetails? {
-        return skuDetails[this] ?: billingClient.querySkuDetails(
-            SkuDetailsParams.newBuilder()
-                .setType(skuType)
-                .setSkusList(listOf(this)).build()
-        ).skuDetailsList?.firstOrNull()
+    private suspend fun String.toProductDetails(skuType: String): ProductDetails? {
+        return productDetails[this] ?: billingClient.queryProductDetails(
+            QueryProductDetailsParams.newBuilder()
+                .setProductList(
+                    ImmutableList.of(
+                        QueryProductDetailsParams.Product.newBuilder()
+                            .setProductId(this)
+                            .setProductType(skuType)
+                            .build()
+                    )
+                ).build()
+        ).productDetailsList?.firstOrNull()
     }
 
     //convert list of sku to list of sku details
-    private suspend fun List<String>.toSkuDetailsList(skuType: String): List<SkuDetails>? {
-        return billingClient.querySkuDetails(
-            SkuDetailsParams.newBuilder()
-                .setType(skuType)
-                .setSkusList(this).build()
-        ).skuDetailsList
+    private suspend fun List<String>.toSkuDetailsList(skuType: String): List<ProductDetails>? {
+        return billingClient.queryProductDetails(
+            QueryProductDetailsParams.newBuilder()
+                .setProductList(map {
+                    QueryProductDetailsParams.Product.newBuilder()
+                        .setProductId(it)
+                        .setProductType(skuType)
+                        .build()
+                }).build()
+        ).productDetailsList
     }
 
 
@@ -214,7 +240,7 @@ class BillingHelper constructor(
         billingResult: BillingResult,
         purchases: MutableList<Purchase>?
     ) {
-        purchaseUpdateJob = GlobalScope.launch(Dispatchers.Main) {
+        purchaseUpdateJob = CoroutineScope(Dispatchers.Main).launch {
             // To be implemented in a later section.
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
@@ -281,16 +307,16 @@ class BillingHelper constructor(
                             billingClient.acknowledgePurchase(acknowledgePurchaseParams)
                         if (result.responseCode.isBillingResultOk()) {
                             //if purchase is acknowledged Grant entitlement to the user
-                            purchased(purchase.skus.first(), isRestored)
+                            purchased(purchase.products.first(), isRestored)
                         }
                     } else {
                         // Grant entitlement to the user on item purchase
-                        purchased(purchase.skus.first(), isRestored)
+                        purchased(purchase.products.first(), isRestored)
                     }
                 }
 
                 Purchase.PurchaseState.PENDING -> {
-                    purchasePending(purchase.skus.first())
+                    purchasePending(purchase.products.first())
                 }
 
                 else -> {

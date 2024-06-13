@@ -3,7 +3,7 @@ package com.pramod.dailyword.framework.ui.donate
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.ProductDetails
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -100,20 +100,20 @@ class DonateViewModel @Inject constructor(
         _donateItemList.value = current
     }
 
-    fun updateDonateItemPrice(skuDetailsList: List<SkuDetails>) {
+    fun updateDonateItemPrice(skuDetailsList: List<ProductDetails>) {
 
         val current = _donateItemList.value?.let { ArrayList(it) } ?: mutableListOf<DonateItem>()
 
         val immutableCurrent = _donateItemList.value?.let { ArrayList(it) } ?: listOf<DonateItem>()
 
         for (skuDetails in skuDetailsList) {
-            immutableCurrent.find { skuDetails.sku == it.itemProductId }?.let {
+            immutableCurrent.find { skuDetails.productId == it.itemProductId }?.let {
                 current[immutableCurrent.indexOf(it)] =
                     DonateItem(
                         it.itemProductId,
                         it.drawableId,
                         it.title,
-                        skuDetails.price,
+                        skuDetails.oneTimePurchaseOfferDetails?.formattedPrice.orEmpty(),
                         it.color,
                         it.donateItemState
                     )

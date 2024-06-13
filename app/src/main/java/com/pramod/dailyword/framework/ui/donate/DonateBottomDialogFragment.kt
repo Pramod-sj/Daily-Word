@@ -7,7 +7,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.ProductDetails
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.pramod.dailyword.R
@@ -169,7 +169,7 @@ class DonateBottomDialogFragment :
         viewModel.setMessage(Message.SnackBarMessage(message))
     }
 
-    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<SkuDetails>) {
+    override fun onBillingSkuDetailsAvailable(skuDetailsList: List<ProductDetails>) {
         viewModel.updateDonateItemPrice(skuDetailsList)
     }
 
