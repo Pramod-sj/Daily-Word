@@ -122,6 +122,7 @@
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SILENT_REFRESH_WIDGET" />
                 <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_RANDOM_WORD" />
+                <action android:name="com.pramod.dailyword.ui.widget.BaseWidgetProvider.ACTION_SCROLLABLE_WIDGET" />
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
             </intent-filter>
 

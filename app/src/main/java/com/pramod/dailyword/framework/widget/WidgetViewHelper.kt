@@ -22,7 +22,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.ceil
-import kotlin.random.Random
 
 fun RemoteViews.applyControlVisibility(widgetSettingPreference: WidgetSettingPreference): RemoteViews {
 
@@ -207,7 +206,7 @@ class WidgetViewHelper @Inject constructor(
                 R.id.list_scrollable_content,
                 Intent(context, ScrollableWidgetItemService::class.java).apply {
                     putExtra(EXTRA_WORD_DATA, word)
-                    putExtra("TEST", Random.nextInt())
+                    setData(Uri.parse(toUri(Intent.URI_INTENT_SCHEME)))
                 }
             )
 
@@ -267,10 +266,10 @@ class WidgetViewHelper @Inject constructor(
             //endregion */
 
             //region audio pending intent
-            val playAudioIntent = Intent(context, DailyWordWidgetProvider::class.java)
-            playAudioIntent.action =
-                DailyWordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
-            playAudioIntent.putExtras(
+            val fillInIntent = Intent(context, DailyWordWidgetProvider::class.java)
+            fillInIntent.action =
+                DailyWordWidgetProvider.ACTION_SCROLLABLE_WIDGET
+            fillInIntent.putExtras(
                 bundleOf(
                     Pair(
                         DailyWordWidgetProvider.EXTRA_AUDIO_URL,
@@ -278,10 +277,11 @@ class WidgetViewHelper @Inject constructor(
                     )
                 )
             )
+            fillInIntent.setData(Uri.parse(fillInIntent.toUri(Intent.URI_INTENT_SCHEME)));
             val pendingIntentPlayAudio = PendingIntent.getBroadcast(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
-                playAudioIntent,
+                fillInIntent,
                 compactMutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setPendingIntentTemplate(R.id.list_scrollable_content, pendingIntentPlayAudio)
