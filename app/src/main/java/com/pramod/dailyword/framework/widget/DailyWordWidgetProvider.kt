@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.widget
 
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
@@ -8,19 +7,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.widget.RemoteViews
 import androidx.core.os.bundleOf
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
-import com.pramod.dailyword.Constants
-import com.pramod.dailyword.R
 import com.pramod.dailyword.business.data.network.Status
+import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
-import com.pramod.dailyword.framework.helper.compactMutableFlag
-import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.ui.common.exts.goAsync
 import com.pramod.dailyword.framework.ui.common.exts.safeLet
+import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.safeNetworkCall
+import com.pramod.dailyword.framework.widget.ClickType.*
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +60,9 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
         const val ACTION_BOOKMARK_FROM_WIDGET =
             "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET"
         const val ACTION_PLAY_AUDIO_FROM_WIDGET =
-            "com.pramod.dailyword.ui.widget.WordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET"
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET"
+        const val ACTION_SCROLLABLE_WIDGET =
+            "com.pramod.dailyword.ui.widget.DailyWordWidgetProvider.ACTION_SCROLLABLE_WIDGET"
 
 
         /**
@@ -89,6 +88,44 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
             Timber.i("onReceive: " + i.action)
             //Toast.makeText(context, it.action, Toast.LENGTH_SHORT).show()
             when (i.action) {
+                ACTION_SCROLLABLE_WIDGET -> {
+                    Timber.i("onReceive: " +i.extras?.keySet()
+                        ?.joinToString(", ", "{", "}") { key ->
+                            "$key=${i.extras?.get(key)}"
+                        })
+                    val clickType = i.extras?.get(EXTRA_CLICK_TYPE) as? ClickType
+                    when (clickType) {
+                        PLAY_AUDIO -> {
+                            c.safeNetworkCall {
+                                i.getStringExtra(EXTRA_AUDIO_URL)?.let { audioUrl ->
+                                    audioPlayer.play(audioUrl)
+                                }
+                            }
+                        }
+
+                        VIEW_FULL_WORD_DETAIL -> {
+                            i.extras?.getSerializable(EXTRA_WORD_DATA, Word::class.java)
+                                ?.let { word ->
+                                    context?.let {
+                                        it.startActivity(
+                                            Intent(
+                                                context,
+                                                SplashScreenActivity::class.java
+                                            ).apply {
+                                                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                putExtras(
+                                                    bundleOf(EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
+                                                )
+                                            })
+                                    }
+
+                                }
+                        }
+
+                        else -> Unit
+                    }
+                }
 
                 ACTION_APPWIDGET_OPTIONS_CHANGED -> {
                     goAsync(Dispatchers.Main) {

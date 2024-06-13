@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import androidx.core.os.bundleOf
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.domain.model.Word
@@ -38,6 +39,14 @@ class ScrollableWidgetItemService : RemoteViewsService() {
 }
 
 const val EXTRA_WORD_DATA = "word"
+
+const val EXTRA_CLICK_TYPE = "click_type"
+const val EXTRA_ITEM_POSITION = "item_pos"
+
+enum class ClickType {
+    PLAY_AUDIO,
+    VIEW_FULL_WORD_DETAIL
+}
 
 class ScrollableWidgetItemFactory(
     private val context: Context,
@@ -98,9 +107,20 @@ class ScrollableWidgetItemFactory(
 
                 //pronounce audio pending intent
                 val playAudioIntent = Intent()
-                playAudioIntent.putExtra("item_position", position)
+                playAudioIntent.putExtras(
+                    bundleOf(EXTRA_CLICK_TYPE to ClickType.PLAY_AUDIO)
+                )
                 views.setOnClickFillInIntent(R.id.widget_img_pronounce, playAudioIntent)
                 //end
+
+                val fullRowClickIntent = Intent()
+                fullRowClickIntent.putExtras(
+                    bundleOf(
+                        EXTRA_CLICK_TYPE to ClickType.VIEW_FULL_WORD_DETAIL,
+                        EXTRA_WORD_DATA to word
+                    )
+                )
+                views.setOnClickFillInIntent(R.id.root_word_info_item, fullRowClickIntent)
 
                 views
             }
@@ -117,6 +137,15 @@ class ScrollableWidgetItemFactory(
                     R.id.widget_txtView_examples,
                     word?.examples?.joinToString(separator = "\n") { it })
 
+                val fullRowClickIntent = Intent()
+                fullRowClickIntent.putExtras(
+                    bundleOf(
+                        EXTRA_CLICK_TYPE to ClickType.VIEW_FULL_WORD_DETAIL,
+                        EXTRA_WORD_DATA to word
+                    )
+                )
+                views.setOnClickFillInIntent(R.id.root_word_usage_item, fullRowClickIntent)
+
                 views
             }
 
@@ -129,6 +158,16 @@ class ScrollableWidgetItemFactory(
                 views.setTextViewText(
                     R.id.widget_txtView_did_you_know, word?.didYouKnow
                 )
+
+                val fullRowClickIntent = Intent()
+                fullRowClickIntent.putExtras(
+                    bundleOf(
+                        EXTRA_CLICK_TYPE to ClickType.VIEW_FULL_WORD_DETAIL,
+                        EXTRA_WORD_DATA to word
+                    )
+                )
+                views.setOnClickFillInIntent(R.id.root_did_you_know_item, fullRowClickIntent)
+
                 views
             }
         }

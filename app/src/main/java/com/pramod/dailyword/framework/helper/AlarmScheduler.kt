@@ -23,7 +23,7 @@ fun safeImmutableFlag(flag: Int): Int {
 
 fun compactMutableFlag(flag: Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        PendingIntent.FLAG_IMMUTABLE or flag
+        PendingIntent.FLAG_MUTABLE or flag
     } else flag
 }
 
