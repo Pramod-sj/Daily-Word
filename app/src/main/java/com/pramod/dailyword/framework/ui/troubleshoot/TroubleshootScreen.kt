@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,7 +68,7 @@ fun TroubleshootScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "Troubleshoot")
+                        Text(text = stringResource(id = R.string.troubleshoot_title))
                     },
                     windowInsets = windowInsets,
                     navigationIcon = {
@@ -112,9 +113,9 @@ fun TroubleshootScreen(
                         if (!isNotificationEnabled) {
                             TroubleshootCard(
                                 modifier = modifier,
-                                title = "App Notification",
-                                subtitle = "Please allow us to send daily word notification",
-                                buttonLabel = "Enable notification",
+                                title = stringResource(id = R.string.troubleshoot_card_notification_title),
+                                subtitle = stringResource(id = R.string.troubleshoot_card_notification_desc),//"Please allow us to send daily word notification",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_notification_btn)//"Enable notification",
                             ) {
                                 enableNotificationClick()
                             }
@@ -123,9 +124,9 @@ fun TroubleshootScreen(
                         if (!isBatteryOptimizationDisabled) {
                             TroubleshootCard(
                                 modifier = modifier,
-                                title = "Disable Battery Optimization",
-                                subtitle = "Your devices is set to stop the app to save some battery, this setting prevent you learning new word!",
-                                buttonLabel = "Disable battery optimization",
+                                title = stringResource(id = R.string.troubleshoot_card_battery_optimization_title),// "Disable Battery Optimization",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_battery_optimization_desc),//"Your devices is set to stop the app to save some battery, this setting prevent you learning new word!",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_battery_optimization_btn),//"Disable battery optimization",
                             ) {
                                 disableBatteryOptimizationClick()
                             }
@@ -134,9 +135,9 @@ fun TroubleshootScreen(
                         if (!isSetAlarmEnabled) {
                             TroubleshootCard(
                                 modifier = modifier,
-                                title = "Allow setting alarms",
-                                subtitle = "Please allow us set alarms for correct functioning of the app",
-                                buttonLabel = "Grant permission",
+                                title = stringResource(id = R.string.troubleshoot_card_exact_alarms_title),//"Allow setting alarms",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_exact_alarms_desc),//"Please allow us set alarms for correct functioning of the app",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_exact_alarms_btn),//"Grant permission",
                             ) {
                                 allowSettingAlarmsClick()
                             }
@@ -161,7 +162,7 @@ fun TroubleshootScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = "All good!",
+                            text = stringResource(id = R.string.troubleshoot_all_good_message),//"All good!",
                             style = MaterialTheme.typography.h5
                         )
                     }

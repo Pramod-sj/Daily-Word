@@ -271,12 +271,22 @@
     <string name="new_update_card_update_btn">Update</string>
     <string name="new_update_card_install_btn">Install</string>
 
-
     <string name="dialog_changelog_title">Changelog</string>
     <string name="dialog_changelog_positive_btn">Close</string>
 
-
-
     <string name="first_notification_title">Welcome to Daily Word!</string>
     <string name="first_notification_subtitle">Your first word of the day is \'%s\'</string>
+
+    <string name="troubleshoot_title">Troubleshoot</string>
+    <string name="troubleshoot_card_notification_title">App notifications</string>
+    <string name="troubleshoot_card_notification_desc">Please allow us to send daily word notifications.</string>
+    <string name="troubleshoot_card_notification_btn">Enable notifications</string>
+    <string name="troubleshoot_card_battery_optimization_title">Disable Battery Optimization</string>
+    <string name="troubleshoot_card_battery_optimization_desc">Your device is set to stop the app to save some battery, but this setting prevents you from learning new words!</string>
+    <string name="troubleshoot_card_battery_optimization_btn">Disable battery optimization</string>
+    <string name="troubleshoot_card_exact_alarms_title">Allow setting alarms</string>
+    <string name="troubleshoot_card_exact_alarms_desc">Please allow us to set alarms for the correct functioning of the app.</string>
+    <string name="troubleshoot_card_exact_alarms_btn">Grant permission</string>
+    <string name="troubleshoot_all_good_message">All good!</string>
+
 </resources>
