@@ -303,4 +303,21 @@
     <string name="greeting_good_afternoon">%sGood Afternoon</string>
     <string name="greeting_good_evening">%sGood Evening</string>
 
+
+    <string name="dialog_common_okay_btn">Okay</string>
+
+    <string name="snack_bar_action_message">Something went wrong! Cause: %s</string>
+    <string name="snack_bar_action_report_btn">Report</string>
+    <string name="mail_report_issue_subject">Daily Word issue</string>
+    <string name="mail_report_issue_body">Something went wrong! Cause: %s</string>
+
+
+    <string name="buy_me_cookie">Buy me cookies</string>
+    <string name="buy_me_coffee">Buy me a cup of coffee</string>
+    <string name="buy_me_snacks">Buy me snacks</string>
+    <string name="buy_me_movie_ticket">Buy movie ticket for me</string>
+    <string name="buy_me_meal">Buy meal for me</string>
+    <string name="buy_me_server">Buy server and keep this app alive</string>
+    <string name="buy_me_gift">Buy me a gift</string>
+
 </resources>
