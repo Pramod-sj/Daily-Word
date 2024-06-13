@@ -170,7 +170,11 @@ class WordDetailedActivity :
             }
 
             override fun navigateToShowThesaurusInfo(title: String, desc: String) {
-                showBottomSheet(title, desc, positiveText = "Okay")
+                showBottomSheet(
+                    title = title,
+                    desc = desc,
+                    positiveText = resources.getString(R.string.dialog_common_okay_btn)
+                )
             }
 
             override fun navigateToMerriamWebsterPage(value: String) {
@@ -184,12 +188,18 @@ class WordDetailedActivity :
                 } catch (e: Exception) {
                     viewModel.setMessage(
                         Message.SnackBarMessage(
-                            message = "Something went wrong! Cause: ${e.message}",
-                            action = Action("Report") {
+                            message = String.format(
+                                resources.getString(R.string.snack_bar_action_message),
+                                e.message
+                            ),
+                            action = Action(resources.getString(R.string.snack_bar_action_report_btn)) {
                                 openGmail(
                                     arrayOf(resources.getString(R.string.dev_email)),
-                                    "Daily Word issue",
-                                    "Something went wrong! Cause: ${e.message}"
+                                    resources.getString(R.string.mail_report_issue_subject),//"Daily Word issue",
+                                    String.format(
+                                        resources.getString(R.string.mail_report_issue_body),
+                                        e.message
+                                    ),//"Something went wrong! Cause: ${e.message}"
                                 )
                             }
                         )
@@ -304,6 +314,7 @@ class WordDetailedActivity :
                     shareApp(bitmap = it)
                 } ?: shareApp()
             }
+
             R.id.menu_bookmark -> viewModel.bookmark()
         }
         return super.onOptionsItemSelected(item)

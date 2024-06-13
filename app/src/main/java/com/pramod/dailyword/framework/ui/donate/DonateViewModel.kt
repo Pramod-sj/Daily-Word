@@ -1,69 +1,79 @@
 package com.pramod.dailyword.framework.ui.donate
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.billingclient.api.SkuDetails
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-val DONATE_ITEM_LIST = arrayListOf(
-    DonateItem(
-        "cookie_new_",
-        R.drawable.ic_cookie,
-        "Buy me cookies",
-        "₹30.00",
-        R.color.color_cookie
-    ),
-    DonateItem(
-        "coffee_new_",
-        R.drawable.ic_coffee_outline,
-        "Buy me a cup of coffee",
-        "₹60.00",
-        R.color.color_coffee
-    ),
-    DonateItem(
-        "snacks_",
-        R.drawable.ic_snacks,
-        "Buy me snacks",
-        "₹150.00",
-        R.color.color_snacks
-    ),
-    DonateItem(
-        "movie_",
-        R.drawable.ic_round_local_movies_24,
-        "Buy movie ticket for me",
-        "₹200.00",
-        R.color.color_movie
-    ),
-    DonateItem(
-        "meal_",
-        R.drawable.ic_round_meal_24,
-        "Buy meal for me",
-        "₹350.00",
-        R.color.color_meal
-    ),
-    DonateItem(
-        "server_new_",
-        R.drawable.ic_server,
-        "Buy server and keep this app alive",
-        "₹500.00",
-        R.color.color_server
-    ),
-    DonateItem(
-        "gift_new_",
-        R.drawable.ic_baseline_card_giftcard_24,
-        "Buy me a gift",
-        "₹750.00",
-        R.color.color_gift
-    )
-)
+val Context.DONATE_ITEM_LIST: List<DonateItem>
+    get() {
+        return arrayListOf(
+            DonateItem(
+                "cookie_new_",
+                R.drawable.ic_cookie,
+                resources.getString(R.string.buy_me_cookie),//"Buy me cookies",
+                "₹30",
+                R.color.color_cookie
+            ),
+            DonateItem(
+                "coffee_new_",
+                R.drawable.ic_coffee_outline,
+                resources.getString(R.string.buy_me_coffee),//"Buy me a cup of coffee",
+                "₹60",
+                R.color.color_coffee
+            ),
+            DonateItem(
+                "snacks_",
+                R.drawable.ic_snacks,
+                resources.getString(R.string.buy_me_snacks),//"Buy me snacks",
+                "₹150",
+                R.color.color_snacks
+            ),
+            DonateItem(
+                "movie_",
+                R.drawable.ic_round_local_movies_24,
+                resources.getString(R.string.buy_me_movie_ticket),//"Buy movie ticket for me",
+                "₹200",
+                R.color.color_movie
+            ),
+            DonateItem(
+                "meal_",
+                R.drawable.ic_round_meal_24,
+                resources.getString(R.string.buy_me_meal),//"Buy meal for me",
+                "₹350",
+                R.color.color_meal
+            ),
+            DonateItem(
+                "server_new_",
+                R.drawable.ic_server,
+                resources.getString(R.string.buy_me_server),//"Buy server and keep this app alive",
+                "₹500",
+                R.color.color_server
+            ),
+            DonateItem(
+                "gift_new_",
+                R.drawable.ic_baseline_card_giftcard_24,
+                resources.getString(R.string.buy_me_gift),//"Buy me a gift",
+                "₹750",
+                R.color.color_gift
+            )
+        )
+    }
 
 
-class DonateViewModel : BaseViewModel() {
+@HiltViewModel
+class DonateViewModel @Inject constructor(
+    @ApplicationContext private val context: Context
+) : BaseViewModel() {
 
     private val _donateItemList =
         MutableLiveData<List<DonateItem>>().apply {
-            value = DONATE_ITEM_LIST
+            value = context.applicationContext.DONATE_ITEM_LIST
         }
 
     val donateItemList: LiveData<List<DonateItem>> = _donateItemList
