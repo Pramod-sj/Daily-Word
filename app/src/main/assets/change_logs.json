@@ -1,5 +1,18 @@
 [
   {
+    "version_name": "2.4.1",
+    "version_code": 202406130,
+    "release_name": "\uD83C\uDF8A Maintenance update \uD83C\uDF8A",
+    "date": "13 Jun 2024",
+    "changes": [
+      "Scrollable word content in widget itself",
+      "Better way to troubleshoot any notifications issues",
+      "Underlying libraries updates",
+      "Bug fixes"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "2.3.1",
     "version_code": 202202260,
     "release_name": "\uD83C\uDF8A Widget improvement \uD83C\uDF8A",
