@@ -54,7 +54,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                 widgetComponent,
                 widgetViewHelper.getResponsiveErrorRemoteView(
                     R.drawable.ic_info_outline_black_24dp,
-                    "Unable to fetch the word, try opening the app.",
+                    context.resources.getString(R.string.widget_unable_to_fetch),//"Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
                 )
@@ -75,7 +75,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     widgetComponent,
                     widgetViewHelper.getResponsiveErrorRemoteView(
                         R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
-                        "Please check your internet",
+                        context.resources.getString(R.string.widget_please_check_internet),//"Please check your internet",
                         width = widgetSize.width,
                         height = widgetSize.height
                     )
@@ -122,7 +122,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                     widgetViewHelper.getResponsiveErrorRemoteView(
                         R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
                         latestWordResource?.error?.message
-                            ?: "Something went wrong! try again.",
+                            ?: context.resources.getString(R.string.widget_something_went_wrong),//"Something went wrong! try again.",
                         width = widgetSize.width,
                         height = widgetSize.height
                     )
@@ -134,7 +134,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                 widgetComponent,
                 widgetViewHelper.getResponsiveErrorRemoteView(
                     R.drawable.ic_info_outline_black_24dp,
-                    "Unable to fetch the word, try opening the app.",
+                    context.resources.getString(R.string.widget_unable_to_fetch),//"Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
                 )
@@ -161,7 +161,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                         widgetComponent,
                         widgetViewHelper.getResponsiveErrorRemoteView(
                             R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
-                            "Please check your internet",
+                            context.resources.getString(R.string.widget_please_check_internet), //"Please check your internet",
                             width = widgetSize.width,
                             height = widgetSize.height
                         )
@@ -185,7 +185,9 @@ class UpdateWidgetViewHelper @Inject constructor(
 
                 Timber.i("onStartJob: " + Gson().toJson(latestWordResource))
 
-                if (latestWordResource?.status == Status.SUCCESS && latestWordResource.data?.isNullOrEmpty() == false) {
+                if (latestWordResource?.status == Status.SUCCESS
+                    && latestWordResource.data?.isEmpty() == false
+                ) {
                     val word = latestWordResource.data.first()
 
                     widgetPreference.setCurrentWordShown(word.word) //updating current showing word
@@ -204,7 +206,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                         widgetViewHelper.getResponsiveErrorRemoteView(
                             R.drawable.ic_round_signal_cellular_connected_no_internet_4_bar_24,
                             latestWordResource?.error?.message
-                                ?: "Something went wrong! try again.",
+                                ?: context.resources.getString(R.string.widget_something_went_wrong),//"Something went wrong! try again.",
                             width = widgetSize.width,
                             height = widgetSize.height
                         )
@@ -226,7 +228,7 @@ class UpdateWidgetViewHelper @Inject constructor(
                 widgetComponent,
                 widgetViewHelper.getResponsiveErrorRemoteView(
                     R.drawable.ic_info_outline_black_24dp,
-                    "Unable to fetch the word, try opening the app.",
+                    context.resources.getString(R.string.widget_unable_to_fetch),//"Unable to fetch the word, try opening the app.",
                     widgetSize.width,
                     widgetSize.height
                 )

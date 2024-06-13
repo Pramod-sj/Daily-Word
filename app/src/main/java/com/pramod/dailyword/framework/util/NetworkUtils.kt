@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.Toast
+import com.pramod.dailyword.R
 
 class NetworkUtils {
     companion object {
@@ -22,9 +23,11 @@ class NetworkUtils {
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
                             return true
                         }
+
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                             return true
                         }
+
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
                             return true
                         }
@@ -70,7 +73,9 @@ class NetworkUtils {
 fun Context.safeNetworkCall(callback: () -> Unit) {
     if (!NetworkUtils.isNetworkActive(this)) {
         Toast.makeText(
-            this, "Please check your internet connection!", Toast.LENGTH_SHORT
+            this,
+            resources.getString(R.string.no_internet_connection),
+            Toast.LENGTH_SHORT
         ).show()
         return
     }
