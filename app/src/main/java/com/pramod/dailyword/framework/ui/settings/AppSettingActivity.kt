@@ -360,7 +360,12 @@ class AppSettingActivity :
             InstallStatus.DOWNLOADING -> {
                 viewModel.subTitleCheckForUpdate.value =
                     resources.getString(R.string.app_update_update_downloading_message) + " " +
-                            ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()) + "%"
+                            try {
+                                ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload())
+                            } catch (_: Exception) {
+                                "0"
+                            } + "%"
+
             }
 
             InstallStatus.FAILED -> {
@@ -427,7 +432,8 @@ class AppSettingActivity :
                 prefManager.setWidgetBodyAlpha(binding.sliderWidgetBodyBgControl.value.toInt())
                 prefManager.setWidgetBackgroundAlpha(binding.sliderWidgetBgControl.value.toInt())
                 refreshWidget()
-            }.setNegativeButton(resources.getString(R.string.background_transparency_dialog_negative)) { _, _ ->
+            }
+            .setNegativeButton(resources.getString(R.string.background_transparency_dialog_negative)) { _, _ ->
 
             }.create()
         dialog.applyStyleOnAlertDialog()

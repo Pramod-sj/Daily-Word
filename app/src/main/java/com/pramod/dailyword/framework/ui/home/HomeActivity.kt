@@ -780,7 +780,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
 
             InstallStatus.DOWNLOADING -> {
                 val downloadPercentage =
-                    ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt()
+                    try {
+                        ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload()).toInt()
+                    } catch (_: Exception) {
+                        0
+                    }
                 viewModel.setAppUpdateButtonText("$downloadPercentage%")
                 viewModel.setAppUpdateDownloadProgress(downloadPercentage)
             }
