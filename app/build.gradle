@@ -24,8 +24,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdk 21
         targetSdk 34
-        versionCode 202406130
-        versionName "2.4.1"
+        versionCode 202406220
+        versionName "2.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,6 +62,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
         }
     }
 
