@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.core.app.AlarmManagerCompat
 import com.pramod.dailyword.framework.receiver.ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER
 import com.pramod.dailyword.framework.receiver.AlarmReceiver
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.common.exts.isSunday
 import com.pramod.dailyword.framework.ui.common.exts.make12AMInstance
 import com.pramod.dailyword.framework.util.CalenderUtil
@@ -32,13 +33,11 @@ fun compactMutableFlag(flag: Int): Int {
  * Showing weekly notification fo revising words on every sunday
  */
 fun Context.scheduleWeeklyAlarmAt12PM() {
-    val comingSunday12PMCal = Calendar.getInstance(Locale.getDefault()).apply {
+    val comingSunday12PMCal = getLocalCalendar().apply {
         if (isSunday()) {
             //if 12 PM for sunday passed then calculate
             // next upcoming sunday by adding 7 days
-            val cal12PM = Calendar.getInstance().apply {
-                make12AMInstance()
-            }
+            val cal12PM = getLocalCalendar().apply { make12AMInstance() }
             if (timeInMillis > cal12PM.timeInMillis) {
                 val offset = 7
                 add(Calendar.DATE, offset)

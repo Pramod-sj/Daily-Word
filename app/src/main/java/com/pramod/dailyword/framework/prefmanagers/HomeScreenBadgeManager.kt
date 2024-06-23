@@ -1,17 +1,21 @@
 package com.pramod.dailyword.framework.prefmanagers
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.google.gson.Gson
 import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheDataSource
 import com.pramod.dailyword.business.interactor.bookmark.GetAllBookmarks
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.common.exts.isSunday
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +31,7 @@ class HomeScreenBadgeManager @Inject constructor(
         sPrefManager.edit().putString(
             KEY_LAST_RANDOM_WORD_READ_ON,
             CalenderUtil.convertCalenderToString(
-                Calendar.getInstance(), CalenderUtil.DATE_FORMAT
+                getLocalCalendar(), CalenderUtil.DATE_FORMAT
             )
         ).apply()
     }
@@ -41,7 +45,7 @@ class HomeScreenBadgeManager @Inject constructor(
             if (!hideBadge) {
                 return@switchMap liveData.map {
                     return@map CalenderUtil.convertCalenderToString(
-                        Calendar.getInstance(),
+                        getLocalCalendar(),
                         CalenderUtil.DATE_FORMAT
                     ) != it
                 }
@@ -56,7 +60,7 @@ class HomeScreenBadgeManager @Inject constructor(
         sPrefManager.edit().putString(
             KEY_LAST_DATE_SHOWN_RECAP_BADGE_ONLY_SUNDAYS,
             CalenderUtil.convertCalenderToString(
-                Calendar.getInstance(), CalenderUtil.DATE_FORMAT
+                getLocalCalendar(), CalenderUtil.DATE_FORMAT
             )
         ).apply()
     }
@@ -81,8 +85,8 @@ class HomeScreenBadgeManager @Inject constructor(
                         )?.timeInMillis ?: 0
                     val todayTimeInMillis = CalenderUtil.getCalendarInstance(true).timeInMillis
 
-                    if (Calendar.getInstance()
-                            .isSunday() && lastDateTimeInMillis < todayTimeInMillis
+                    if (getLocalCalendar().isSunday()
+                        && lastDateTimeInMillis < todayTimeInMillis
                     ) {
                         return@map true
                     }
@@ -104,7 +108,7 @@ class HomeScreenBadgeManager @Inject constructor(
             if (!hideBadge) {
                 return@switchMap getAllBookmarks.getBookmarks()
                     .map {
-                        Timber.i( "showBadgeOnBookmark: " + Gson().toJson(it))
+                        Timber.i("showBadgeOnBookmark: " + Gson().toJson(it))
                         return@map it.data.let { bookmarkList ->
                             if (bookmarkList != null) {
                                 for (b in bookmarkList) {

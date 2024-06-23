@@ -59,9 +59,9 @@ class RecapWordsActivity :
 
                 val word2String = wordList.firstOrNull()?.let { word ->
                     CalenderUtil.getDayName(
-                        word.dateTimeInMillis ?: 0L
+                        timeInMillis = word.dateTimeInMillis ?: 0L
                     ) + " (" + CalenderUtil.convertCalenderToString(
-                        word.dateTimeInMillis ?: 0L,
+                        dateInMillis = word.dateTimeInMillis ?: 0L,
                         CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
                     ) + ")"
                 }
@@ -83,7 +83,7 @@ class RecapWordsActivity :
             window.sharedElementExitTransition.addListener(object : TransitionCallback() {
                 override fun onTransitionEnd(transition: Transition) {
                     super.onTransitionEnd(transition)
-                    Timber.i( "onTransitionEnd: ")
+                    Timber.i("onTransitionEnd: ")
                     removeCallbacks(this)
                 }
             })

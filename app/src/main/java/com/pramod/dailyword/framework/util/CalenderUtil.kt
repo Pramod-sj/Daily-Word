@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.util
 
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,11 +19,11 @@ class CalenderUtil {
             get() = DateFormatSymbols(Locale.ENGLISH).weekdays.toList()
 
         fun isTodaySunday(calender: Calendar): Boolean {
-            return Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == 0
+            return getLocalCalendar().get(Calendar.DAY_OF_WEEK) == 0
         }
 
         fun getCalendarInstance(as12AM: Boolean = false): Calendar {
-            val calendar = Calendar.getInstance(Locale.US)
+            val calendar = getLocalCalendar()
             if (as12AM) {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.MINUTE, 0)
@@ -35,7 +36,7 @@ class CalenderUtil {
         @JvmStatic
         fun getDayNameBasedOnDayOfWeek(dayOfWeek: Int): String? {
             return try {
-                DAYS[dayOfWeek - 1]
+                DAYS[dayOfWeek]
             } catch (e: Error) {
                 null
             }
@@ -44,27 +45,27 @@ class CalenderUtil {
         @JvmStatic
         fun getDayName(timeInMillis: Long): String? {
             return getDayNameBasedOnDayOfWeek(
-                Calendar.getInstance(Locale.US).apply {
+                getLocalCalendar().apply {
                     this.timeInMillis = timeInMillis
                 }.get(Calendar.DAY_OF_WEEK)
             )
         }
 
         fun getCalendar(timeInMillis: Long): Calendar {
-            return Calendar.getInstance(Locale.US).apply {
+            return getLocalCalendar().apply {
                 this.timeInMillis = timeInMillis
             }
         }
 
         @JvmStatic
         fun convertCalenderToString(calender: Calendar, dateFormat: String = DATE_FORMAT): String {
-            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
+            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             return simpleDateFormat.format(calender.time)
         }
 
         @JvmStatic
         fun convertCalenderToString(dateInMillis: Long, dateFormat: String = DATE_FORMAT): String {
-            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
+            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             return simpleDateFormat.format(dateInMillis)
         }
 
@@ -73,10 +74,10 @@ class CalenderUtil {
             if (dateString == null) {
                 return null
             }
-            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
+            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
-                val calender = Calendar.getInstance(Locale.US)
+                val calender = getLocalCalendar()
                 calender.time = date
                 return calender
             }
@@ -92,10 +93,10 @@ class CalenderUtil {
             if (dateString == null) {
                 return null
             }
-            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US)
+            val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
-                val reqSimpleDateFormat = SimpleDateFormat(requiredDateFormat, Locale.US)
+                val reqSimpleDateFormat = SimpleDateFormat(requiredDateFormat, Locale.getDefault())
                 return reqSimpleDateFormat.format(date)
             }
             return null
@@ -106,7 +107,7 @@ class CalenderUtil {
             if (dateString == null) {
                 return false
             }
-            val cal: Calendar = Calendar.getInstance(Locale.US)
+            val cal: Calendar = getLocalCalendar()
             cal.roll(Calendar.DATE, false)
             return convertCalenderToString(cal, dateFormat) == dateString
         }
@@ -116,7 +117,7 @@ class CalenderUtil {
             if (dateString == null) {
                 return false
             }
-            val cal: Calendar = Calendar.getInstance(Locale.US)
+            val cal: Calendar = getLocalCalendar()
             return convertCalenderToString(cal, dateFormat) == dateString
         }
 
@@ -144,7 +145,7 @@ class CalenderUtil {
 
         @JvmStatic
         fun createCalendarForHourOfDayAndMin(hourOfDay: Int, minute: Int = 0): Calendar {
-            val calender = Calendar.getInstance(Locale.US)
+            val calender = getLocalCalendar()
             calender.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calender.set(Calendar.MINUTE, minute)
             calender.set(Calendar.SECOND, 0)
@@ -161,7 +162,7 @@ class CalenderUtil {
             }
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
-                return SimpleDateFormat("dd", Locale.US).format(calendar.time)
+                return SimpleDateFormat("dd", Locale.getDefault()).format(calendar.time)
             }
             return date.substring(0, 2)
         }
@@ -171,7 +172,7 @@ class CalenderUtil {
         fun getMonthFromDateString(date: String, format: String): String {
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
-                return SimpleDateFormat("MMM", Locale.US).format(calendar.time)
+                return SimpleDateFormat("MMM", Locale.getDefault()).format(calendar.time)
             }
             return date.substring(2, 5)
         }
@@ -188,7 +189,7 @@ class CalenderUtil {
                     DATE_FORMAT
                 )!!
             } else {
-                Calendar.getInstance(Locale.US)
+                getLocalCalendar()
             }
             calendar.add(Calendar.DATE, -abs(howManyDays))
             return convertCalenderToString(

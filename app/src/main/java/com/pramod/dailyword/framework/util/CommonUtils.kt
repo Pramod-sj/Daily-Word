@@ -34,6 +34,7 @@ import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.pramod.dailyword.R
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.common.exts.resolveAttrToColor
 import timber.log.Timber
 import java.util.Calendar
@@ -116,7 +117,7 @@ object CommonUtils {
 
     @JvmStatic
     fun getGreetMessage(context: Context): SpannableString {
-        val cal: Calendar = Calendar.getInstance()
+        val cal: Calendar = getLocalCalendar()
 
         val random = arrayOf(
             context.getString(R.string.greeting_hi),
@@ -200,7 +201,7 @@ object CommonUtils {
 
     @JvmStatic
     fun getAutoTimeTheme(): Int {
-        val calendar = Calendar.getInstance()
+        val calendar = getLocalCalendar()
         return when (calendar.get(Calendar.HOUR_OF_DAY)) {
             in 0..5 -> AppCompatDelegate.MODE_NIGHT_YES
             in 6..18 -> AppCompatDelegate.MODE_NIGHT_NO
@@ -349,7 +350,7 @@ object CommonUtils {
     fun getColorBasedOnDay(cal: Calendar?): List<Int> {
 
         return when (cal?.get(Calendar.DAY_OF_WEEK)
-            ?: Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+            ?: getLocalCalendar().get(Calendar.DAY_OF_WEEK)) {
             Calendar.MONDAY -> arrayListOf(R.color.color_mon, R.color.desaturated_color_mon)
             Calendar.TUESDAY -> arrayListOf(R.color.color_tue, R.color.desaturated_color_tue)
             Calendar.WEDNESDAY -> arrayListOf(R.color.color_wed, R.color.desaturated_color_wed)

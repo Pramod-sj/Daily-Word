@@ -5,10 +5,10 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkedWordCacheD
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,7 +30,7 @@ class ToggleBookmarkInteractor @Inject constructor(
                         Bookmark(
                             bookmarkId = null,
                             bookmarkedWord = wordResult.data?.word,
-                            bookmarkedAt = Calendar.getInstance().timeInMillis,
+                            bookmarkedAt = getLocalCalendar().timeInMillis,
                             bookmarkSeenAt = null
                         )
                     )
