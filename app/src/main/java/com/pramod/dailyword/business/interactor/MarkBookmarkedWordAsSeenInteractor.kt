@@ -4,11 +4,10 @@ import com.pramod.dailyword.business.data.cache.abstraction.BookmarkCacheDataSou
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Bookmark
-import dagger.hilt.android.scopes.ViewModelScoped
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,7 +25,7 @@ class MarkBookmarkedWordAsSeenInteractor @Inject constructor(
                         bookmarkId = it.bookmarkId,
                         bookmarkedWord = it.bookmarkedWord,
                         bookmarkedAt = it.bookmarkedAt,
-                        bookmarkSeenAt = Calendar.getInstance().timeInMillis
+                        bookmarkSeenAt = getLocalCalendar().timeInMillis
                     )
                     bookmarkCacheDataSource.update(seen)
                 }

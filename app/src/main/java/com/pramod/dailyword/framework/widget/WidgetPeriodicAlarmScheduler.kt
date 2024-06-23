@@ -6,8 +6,12 @@ import android.content.Context
 import android.content.Intent
 import com.pramod.dailyword.Constants
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
+import com.pramod.dailyword.framework.util.CalenderUtil
+import com.pramod.dailyword.framework.util.CalenderUtil.Companion.DATE_TIME_FORMAT
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.*
+import timber.log.Timber
+import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,9 +21,9 @@ class WidgetPeriodicAlarmScheduler @Inject constructor(
     private val alarmManager: AlarmManager
 ) {
 
-    //An alarm is set at 4:30 PM for fetching new word
-    private val alarmTimeHourOfDay = 16
-    private val alarmTimeMinute = 30
+    //An alarm is set at 5:00 PM for fetching new word
+    private val alarmTimeHourOfDay = 17
+    private val alarmTimeMinute = 0
 
     fun setRepeatingDailyAlarmToFetch() {
         val intent = Intent(context, DailyWordWidgetProvider::class.java)
@@ -32,13 +36,13 @@ class WidgetPeriodicAlarmScheduler @Inject constructor(
             safeImmutableFlag(0)
         )
 
-        val cal = Calendar.getInstance(Locale.US)
-        cal.set(Calendar.HOUR_OF_DAY, alarmTimeHourOfDay)
-        cal.set(Calendar.MINUTE, alarmTimeMinute)
+        val cal = getLocalCalendar(alarmTimeHourOfDay, alarmTimeMinute)
 
-        if (cal.timeInMillis < Calendar.getInstance(Locale.US).timeInMillis) {
+        if (cal.timeInMillis < getLocalCalendar().timeInMillis) {
             cal.add(Calendar.DAY_OF_YEAR, 1)
         }
+
+        Timber.i("DAILYWORDDATE:"+ CalenderUtil.convertCalenderToString(cal, DATE_TIME_FORMAT))
 
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,

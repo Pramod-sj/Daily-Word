@@ -12,12 +12,14 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -157,7 +159,7 @@ class FBMessageService : FirebaseMessagingService() {
         var title: String = "Title",
         var body: String = "Body",
         var noitificationType: String = NOTIFICATION_NEW_WORD,
-        var date: String = CalenderUtil.convertCalenderToString(Calendar.getInstance(Locale.US)),
+        var date: String = CalenderUtil.convertCalenderToString(getLocalCalendar()),
         var deepLink: String = DEEP_LINK_TO_HOME_ACTIVITY,
         var wordMeaning: String? = null
     )

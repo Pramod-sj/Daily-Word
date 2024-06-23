@@ -1,15 +1,13 @@
 package com.pramod.dailyword.business.interactor
 
 import com.pramod.dailyword.business.data.cache.abstraction.SeenCacheDataSource
-import com.pramod.dailyword.business.data.cache.abstraction.WordCacheDataSource
 import com.pramod.dailyword.business.data.cache.utils.safeCacheCall
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.domain.model.Seen
-import dagger.hilt.android.scopes.ViewModelScoped
+import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +21,7 @@ class MarkWordAsSeenInteractor @Inject constructor(
             val cacheResult = safeCacheCall(Dispatchers.IO) {
                 val seen = Seen(
                     word = word,
-                    seenAt = Calendar.getInstance().timeInMillis
+                    seenAt = getLocalCalendar().timeInMillis
                 )
                 seenCacheDataSource.add(seen)
             }

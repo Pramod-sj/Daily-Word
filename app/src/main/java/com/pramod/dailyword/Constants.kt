@@ -1,5 +1,7 @@
 package com.pramod.dailyword
 
+import java.util.TimeZone
+
 class Constants {
     companion object {
         const val REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK = 200
@@ -18,6 +20,8 @@ class Constants {
         //in-app update request codes
         const val APP_UPDATE_FLEX_REQUEST_CODE = 1
         const val APP_UPDATE_IMMEDIATE_REQUEST_CODE = 2
+
+        val DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Asia/Kolkata")
 
     }
 }
