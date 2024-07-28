@@ -1,10 +1,16 @@
 package com.pramod.dailyword.framework.ui.common.exts
 
+import android.R.id.input
+import androidx.compose.ui.util.fastRoundToInt
 import com.pramod.dailyword.Constants.Companion.DEFAULT_TIME_ZONE
+import com.pramod.dailyword.framework.util.CalenderUtil
 import timber.log.Timber
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
+
 
 fun Calendar.isSunday(): Boolean {
     Timber.i("isSunday: " + get(Calendar.DAY_OF_WEEK))
@@ -29,7 +35,7 @@ fun getLocalCalendar(istHour: Int, istMinute: Int): Calendar {
     val istCalendar = Calendar.getInstance(DEFAULT_TIME_ZONE)
     istCalendar[Calendar.HOUR_OF_DAY] = istHour
     istCalendar[Calendar.MINUTE] = istMinute
-    istCalendar[Calendar.SECOND] = 0
+    istCalendar[Calendar.SECOND] = 60
     istCalendar[Calendar.MILLISECOND] = 0
 
     /*
@@ -39,7 +45,8 @@ fun getLocalCalendar(istHour: Int, istMinute: Int): Calendar {
         val utcTimeInMillis = istTimeInMillis - offset
     */
     val tzOffsetMin: Int =
-        (istCalendar.get(Calendar.ZONE_OFFSET) + istCalendar.get(Calendar.DST_OFFSET)) / (1000 * 60)
+        ((istCalendar.get(Calendar.ZONE_OFFSET).toDouble() + istCalendar.get(Calendar.DST_OFFSET)
+            .toDouble()) / (1000.0 * 60.0)).fastRoundToInt()
 
     // Step 3: Convert UTC time to user's local time zone
     val localCalendar = getLocalCalendar()
@@ -47,4 +54,10 @@ fun getLocalCalendar(istHour: Int, istMinute: Int): Calendar {
     localCalendar.timeInMillis = istCalendar.timeInMillis - tzOffsetMin
 
     return localCalendar
+}
+
+
+fun Calendar.isToday(): Boolean {
+    return CalenderUtil.convertCalenderToString(this, CalenderUtil.DATE_FORMAT) ==
+            CalenderUtil.convertCalenderToString(getLocalCalendar(), CalenderUtil.DATE_FORMAT)
 }

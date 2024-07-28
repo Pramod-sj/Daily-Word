@@ -126,4 +126,10 @@
 
     <color name="update_card_stroke_color">#3066bb6a</color>
     <color name="enable_notification_stroke_color">#80EF9A9A</color>
+
+
+    <color name="notification_timer_background">#F6F7F8</color>
+
+    <color name="button_textColor_highEmphasis">#B3000000</color>
+
 </resources>

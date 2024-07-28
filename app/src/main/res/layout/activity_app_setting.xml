@@ -147,8 +147,8 @@
                             app:checked="@{appSettingViewModel.hideBadgesValue}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
-                            app:title="@string/setting_item_hide_badge_title"
                             app:subTitle="@string/setting_item_hide_badge_desc"
+                            app:title="@string/setting_item_hide_badge_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -219,10 +219,27 @@
                             android:background="@color/setting_stroke" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:id="@+id/notification_change_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:subTitle="@string/setting_notification_change_time_desc"
+                            app:title="@string/setting_notification_change_time_title"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_extra_large"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:id="@+id/notification_reminder_toggle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.notificationPrefManager.toggleReminderNotification()}"
+                            android:visibility="gone"
                             app:checked="@{appSettingViewModel.notificationPrefManager.reminderNotificationEnabledLiveData}"
                             app:showRadioButton="true"
                             app:subTitle="@string/setting_item_reminder_notification_desc"
@@ -235,7 +252,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginStart="@dimen/margin_extra_large"
-                            android:background="@color/setting_stroke" />
+                            android:background="@color/setting_stroke"
+                            android:visibility="gone" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:id="@+id/notification_meaning_toggle"

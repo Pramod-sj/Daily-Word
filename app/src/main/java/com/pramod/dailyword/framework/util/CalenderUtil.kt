@@ -13,6 +13,7 @@ class CalenderUtil {
         const val DATE_WITH_YEAR_FORMAT_DISPLAY = "dd MMM yy"
         const val DATE_FORMAT = "yyyy-MM-dd"
         const val DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss a"
+        const val DATE_TIME_FORMAT_BEAUTIFY = "dd MMM hh:mm a"
         const val TIME_FORMAT = "hh:mm a"
 
         val DAYS: List<String>

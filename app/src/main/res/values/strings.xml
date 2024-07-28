@@ -320,4 +320,16 @@
     <string name="buy_me_server">Buy server and keep this app alive</string>
     <string name="buy_me_gift">Buy me a gift</string>
 
+    <string name="dialog_notification_time_title">Set notification time</string>
+    <string name="dialog_notification_time_note">Note: There are some restrictions on using this feature, as the word is available only after 5 PM IST (Indian standard time). Hence, this feature will vary for different time zones.</string>
+    <string name="dialog_notification_time_positive_btn">Set notification</string>
+    <string name="dialog_notification_time_negative_btn">Reset to default</string>
+
+
+    <string name="setting_notification_change_time_title">Change notification time</string>
+    <string name="setting_notification_change_time_desc">Notification is set to trigger at %s every %s</string>
+
+
+    <string name="dialog_notification_triggering_text_able">The notification will be triggered at %s every %s</string>
+    <string name="dialog_notification_triggering_text_not_able">We cannot send you a notification at %s due to word unavailability</string>
 </resources>
