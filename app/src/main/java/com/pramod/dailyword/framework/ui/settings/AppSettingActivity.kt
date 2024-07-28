@@ -8,7 +8,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -26,6 +28,7 @@ import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.databinding.DialogWidgetBackgroundOpacityBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.restartActivity
+import com.pramod.dailyword.framework.helper.scheduleAlarm
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -39,6 +42,8 @@ import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.ui.common.exts.showCheckboxDialog
 import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
 import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionHandler
+import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationAlarmScheduler
+import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationTimePickerDialog
 import com.pramod.dailyword.framework.util.CommonUtils
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.pref.Controls
@@ -85,6 +90,9 @@ class AppSettingActivity :
     @Inject
     lateinit var importantPermissionHandler: ImportantPermissionHandler
 
+    @Inject
+    lateinit var notificationAlarmScheduler: NotificationAlarmScheduler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpToolbar(binding.toolbar, null, true)
@@ -95,6 +103,25 @@ class AppSettingActivity :
         initHideBadgeValue()
         bindNotificationEnabledState()
         appUpdateManager.registerListener(installStateUpdatedListener)
+        setupChangeNotificationTimeDialog()
+    }
+
+    private fun setupChangeNotificationTimeDialog() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.changeNotificationSubtitle.collect {
+                    binding.notificationChangeTime.setSubTitle(it)
+                }
+            }
+        }
+        binding.notificationChangeTime.setOnClickListener {
+            NotificationTimePickerDialog.show(
+                notificationTriggerTime = viewModel.notificationTriggerTime.value,
+                fragmentManager = supportFragmentManager,
+                changeNotificationCallback = {
+                    viewModel.setNotificationTriggerTime(it)
+                })
+        }
     }
 
     override fun onResume() {

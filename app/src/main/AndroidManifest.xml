@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
 
     <application
         android:name=".WOTDApp"
@@ -150,10 +153,12 @@
         </receiver>
 
         <receiver
-            android:name=".framework.receiver.BootReceiver"
-            android:exported="false">
+            android:name=".framework.receiver.DailyWordBootReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -165,6 +170,20 @@
                 <action android:name="android.widget.RemoteViewsService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".framework.receiver.FetchWordAndSendNotificationService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <receiver
+            android:name=".framework.receiver.CustomDailyNotificationAlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pramod.dailyword.framework.receiver.ACTION_CUSTOM_NOTIFICATION_TIME_ALARM" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
