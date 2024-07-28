@@ -52,4 +52,7 @@
 
     <color name="update_card_stroke_color">#30F5F3F3</color>
     <color name="enable_notification_stroke_color">#30EF9A9A</color>
+
+    <color name="notification_timer_background">#191919</color>
+
 </resources>

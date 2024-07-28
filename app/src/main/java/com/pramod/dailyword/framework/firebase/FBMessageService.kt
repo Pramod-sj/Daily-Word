@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.firebase
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import com.google.firebase.logger.Logger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -85,8 +86,8 @@ class FBMessageService : FirebaseMessagingService() {
                 //and if word meaning is null then return default body
                 //or if word meaning show in notification is disable return default body
                 val bodyText =
-                    if (notificationPrefManager.isShowingWordMeaningInNotification())
-                        wordMeaning ?: payload.body
+                    if (notificationPrefManager.isShowingWordMeaningInNotification()) wordMeaning
+                        ?: payload.body
                     else payload.body
 
                 when (payload.noitificationType) {
@@ -113,37 +114,58 @@ class FBMessageService : FirebaseMessagingService() {
                             //Log.i( "onMessageReceived: inside let")
                             if (!it.isSeen) {
                                 //Log.i( "onMessageReceived: not seen")
-                                notification = notificationHelper
-                                    .createNotification(
-                                        title = payload.title,
-                                        body = bodyText,
-                                        pendingIntent = pendingIntent
-                                    )
+                                notification = notificationHelper.createNotification(
+                                    title = payload.title,
+                                    body = bodyText,
+                                    pendingIntent = pendingIntent
+                                )
                             }
                         }
 
                     }
+
                     NOTIFICATION_NEW_WORD -> {
 
-                        if (!notificationPrefManager.isDailyWordNotificationEnabled()) {
-                            return@launch
+                        if (notificationPrefManager.isDailyWordNotificationEnabled()) {
+
+                            notificationPrefManager.setNotificationMessagePayload(payload)
+
+                            notificationPrefManager.getNotificationTriggerTimeNonLive()
+                                ?.let { notificationTriggerTime ->
+
+                                    if (notificationTriggerTime.timeInMillis < System.currentTimeMillis()) {
+
+                                        //if notification time is already elapsed then directly show the notification
+                                        notification = notificationHelper.createNotification(
+                                            title = payload.title,
+                                            body = bodyText,
+                                            pendingIntent = pendingIntent
+                                        )
+
+                                        //remove payload from preference for next notification
+                                        notificationPrefManager.setNotificationMessagePayload(null)
+
+                                        //create a notification object which needs to be shown
+                                        notification = notificationHelper.createNotification(
+                                            title = payload.title,
+                                            body = bodyText,
+                                            pendingIntent = pendingIntent
+                                        )
+
+                                    }
+                                }
+
                         }
 
-                        notification = notificationHelper
-                            .createNotification(
-                                title = payload.title,
-                                body = bodyText,
-                                pendingIntent = pendingIntent
-                            )
                     }
+
                     else -> {
                         //if no word in db or something diff notification type
-                        notification = notificationHelper
-                            .createNotification(
-                                title = payload.title,
-                                body = bodyText,
-                                pendingIntent = pendingIntent
-                            )
+                        notification = notificationHelper.createNotification(
+                            title = payload.title,
+                            body = bodyText,
+                            pendingIntent = pendingIntent
+                        )
                     }
                 }
                 notification?.let {
