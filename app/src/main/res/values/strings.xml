@@ -289,7 +289,7 @@
     <string name="troubleshoot_card_exact_alarms_btn">Grant permission</string>
 
     <string name="troubleshoot_card_unused_app_title">Disable pausing of unused app</string>
-    <string name="troubleshoot_card_unused_app_desc">Please disable the pausing of the app\'s services when unused, as it is likely preventing us from sending notifications and affecting the app\'s correct functionality.</string>
+    <string name="troubleshoot_card_unused_app_desc">Please disable \'Pause app activity if unused\', as it is likely preventing us from sending notifications and affecting the app\'s correct functionality.</string>
     <string name="troubleshoot_card_unused_app_btn">Disable it</string>
 
     <string name="troubleshoot_all_good_message">All good!</string>
