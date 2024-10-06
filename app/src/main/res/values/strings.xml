@@ -75,7 +75,7 @@
     <string name="splash_screen_get_started">Get Started</string>
 
 
-    <string name="merriam_webster_credit_text">All the content of the app belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam Webster</a> and the app developer doesn\'t hold any right over the app content.</string>
+    <string name="merriam_webster_credit_text">All app content belongs to <a href="http://www.merriam-webster.com/word-of-the-day">Merriam-Webster</a>. The app developer holds no rights over the content.</string>
     <string name="bookmark">bookmark</string>
     <string name="bookmarked_words">Bookmarks</string>
     <string name="what_s_new">What\'s new?</string>
@@ -287,6 +287,11 @@
     <string name="troubleshoot_card_exact_alarms_title">Allow setting alarms</string>
     <string name="troubleshoot_card_exact_alarms_desc">Please allow us to set alarms for the correct functioning of the app.</string>
     <string name="troubleshoot_card_exact_alarms_btn">Grant permission</string>
+
+    <string name="troubleshoot_card_unused_app_title">Disable pausing of unused app</string>
+    <string name="troubleshoot_card_unused_app_desc">Please disable the pausing of the app\'s services when unused, as it is likely preventing us from sending notifications and affecting the app\'s correct functionality.</string>
+    <string name="troubleshoot_card_unused_app_btn">Disable it</string>
+
     <string name="troubleshoot_all_good_message">All good!</string>
 
     <string name="no_internet_connection">Please check your internet connection!</string>
