@@ -52,9 +52,11 @@ fun TroubleshootScreen(
     isNotificationEnabled: Boolean = false,
     isBatteryOptimizationDisabled: Boolean = false,
     isSetAlarmEnabled: Boolean = false,
+    isUnusedAppPausingDisabled: Boolean = false,
     disableBatteryOptimizationClick: () -> Unit = {},
     enableNotificationClick: () -> Unit = {},
     allowSettingAlarmsClick: () -> Unit = {},
+    unusedAppPausingDisableClick: () -> Unit = { },
 ) {
 
     val windowInsets = WindowInsets(
@@ -89,6 +91,7 @@ fun TroubleshootScreen(
             if (!isNotificationEnabled
                 || !isBatteryOptimizationDisabled
                 || !isSetAlarmEnabled
+                || !isUnusedAppPausingDisabled
             ) {
                 BoxWithConstraints {
 
@@ -140,6 +143,17 @@ fun TroubleshootScreen(
                                 buttonLabel = stringResource(id = R.string.troubleshoot_card_exact_alarms_btn),//"Grant permission",
                             ) {
                                 allowSettingAlarmsClick()
+                            }
+                        }
+
+                        if (!isUnusedAppPausingDisabled) {
+                            TroubleshootCard(
+                                modifier = modifier,
+                                title = stringResource(id = R.string.troubleshoot_card_unused_app_title),
+                                subtitle = stringResource(id = R.string.troubleshoot_card_unused_app_desc),//"Please allow us to send daily word notification",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_unused_app_btn)//"Enable notification",
+                            ) {
+                                unusedAppPausingDisableClick()
                             }
                         }
 

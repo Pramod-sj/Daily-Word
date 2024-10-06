@@ -41,13 +41,12 @@ class HomeViewModel @Inject constructor(
         combine(
             importantPermissionState.isSetAlarmEnabled,
             importantPermissionState.isNotificationEnabled,
-            importantPermissionState.isBatteryOptimizationDisabled
-        ) { s, n, b ->
-            Triple(s, n, b)
-        }.onEach {
-            val (s, n, b) = it
+            importantPermissionState.isBatteryOptimizationDisabled,
+            importantPermissionState.isUnusedAppPausingDisabled
+        ) { s, n, b, unused ->
             _canShowSettingIssueWarningMessage.value =
-                prefManager.isSettingIssueWarningMessageDismissed() == false && (!s || !n || !b)
+                prefManager.isSettingIssueWarningMessageDismissed() == false
+                        && (!s || !n || !b || !unused)
         }.launchIn(viewModelScope)
 
     }

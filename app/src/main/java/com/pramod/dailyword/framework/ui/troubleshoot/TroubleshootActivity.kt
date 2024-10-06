@@ -35,6 +35,9 @@ class TroubleshootActivity : ThemedActivity() {
                 initial = false
             )
 
+            val isUnusedAppPausingDisabled by importantPermissionState.isUnusedAppPausingDisabled
+                .collectAsState(initial = false)
+
             TroubleshootScreen(
                 backButtonClick = {
                     onBackPressed()
@@ -42,6 +45,7 @@ class TroubleshootActivity : ThemedActivity() {
                 isNotificationEnabled = isNotificationEnabled,
                 isBatteryOptimizationDisabled = isBatteryOptimizationDisabled,
                 isSetAlarmEnabled = isSetAlarmEnabled,
+                isUnusedAppPausingDisabled = isUnusedAppPausingDisabled,
                 disableBatteryOptimizationClick = {
                     importantPermissionHandler.launchDisableBatteryOptimizationPermissionFlow()
                 },
@@ -50,6 +54,9 @@ class TroubleshootActivity : ThemedActivity() {
                 },
                 enableNotificationClick = {
                     importantPermissionHandler.launchNotificationPermissionFlow()
+                },
+                unusedAppPausingDisableClick = {
+                    importantPermissionHandler.launchDisableUnusedAppPaused()
                 }
             )
         }
