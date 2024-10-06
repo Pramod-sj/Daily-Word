@@ -28,7 +28,6 @@ import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.databinding.DialogWidgetBackgroundOpacityBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.restartActivity
-import com.pramod.dailyword.framework.helper.scheduleAlarm
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -104,6 +103,24 @@ class AppSettingActivity :
         bindNotificationEnabledState()
         appUpdateManager.registerListener(installStateUpdatedListener)
         setupChangeNotificationTimeDialog()
+
+        binding.notificationDailyToggle.setOnClickListener {
+            canChangeNotificationSettings {
+                viewModel.notificationPrefManager.toggleDailyWordNotification()
+            }
+        }
+
+        binding.notificationReminderToggle.setOnClickListener {
+            canChangeNotificationSettings {
+                viewModel.notificationPrefManager.toggleReminderNotification()
+            }
+        }
+
+        binding.notificationMeaningToggle.setOnClickListener {
+            canChangeNotificationSettings {
+                viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
+            }
+        }
     }
 
     private fun setupChangeNotificationTimeDialog() {
@@ -115,13 +132,31 @@ class AppSettingActivity :
             }
         }
         binding.notificationChangeTime.setOnClickListener {
-            NotificationTimePickerDialog.show(
-                notificationTriggerTime = viewModel.notificationTriggerTime.value,
-                fragmentManager = supportFragmentManager,
-                changeNotificationCallback = {
-                    viewModel.setNotificationTriggerTime(it)
-                })
+            canChangeNotificationSettings {
+                NotificationTimePickerDialog.show(
+                    notificationTriggerTime = viewModel.notificationTriggerTime.value,
+                    fragmentManager = supportFragmentManager,
+                    changeNotificationCallback = {
+                        viewModel.setNotificationTriggerTime(it)
+                    })
+            }
         }
+    }
+
+    private fun canChangeNotificationSettings(invokeOnYes: () -> Unit) {
+        if (!importantPermissionState.isNotificationEnabled.value) {
+            importantPermissionHandler.launchNotificationPermissionFlow()
+            return
+        }
+        if (!importantPermissionState.isBatteryOptimizationDisabled.value) {
+            importantPermissionHandler.launchDisableBatteryOptimizationPermissionFlow()
+            return
+        }
+        if (!importantPermissionState.isSetAlarmEnabled.value) {
+            importantPermissionHandler.launchAllowSettingAlarmPermissionFlow()
+            return
+        }
+        invokeOnYes()
     }
 
     override fun onResume() {
@@ -470,9 +505,10 @@ class AppSettingActivity :
     private fun bindNotificationEnabledState() {
         lifecycleScope.launch {
             importantPermissionState.isNotificationEnabled.collect {
-                binding.notificationDailyToggle.setEnabled(it, 0.5f)
-                binding.notificationMeaningToggle.setEnabled(it, 0.5f)
-                binding.notificationReminderToggle.setEnabled(it, 0.5f)
+                //binding.notificationDailyToggle.setEnabled(it, 0.5f)
+                //binding.notificationMeaningToggle.setEnabled(it, 0.5f)
+                //binding.notificationReminderToggle.setEnabled(it, 0.5f)
+                //binding.notificationChangeTime.setEnabled(it, 0.5f)
                 if (!it) {
                     binding.ivNotificationAlert.isVisible = true
                     binding.cardNotification.setOnClickListener { importantPermissionHandler.launchNotificationPermissionFlow() }
