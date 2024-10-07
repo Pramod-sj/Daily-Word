@@ -34,7 +34,7 @@
     <string name="title_donate">Support Development</string>
     <string name="learn_all">Learn all</string>
 
-    <string name="share_text">Start learning new word every day \nClick below link to download</string>
+    <string name="share_text">Start learning a new word every day.\nClick the link below to download.</string>
     <string name="google_app_url">https://play.google.com/store/apps/details?id=com.pramod.dailyword</string>
     <string name="go_to_merriam_webster">Go to Merriam-Webster</string>
 
@@ -97,7 +97,7 @@
     <string name="regards">Regards,</string>
 
     <string name="no_favorite_title_placeholder">No bookmarks!</string>
-    <string name="no_favorite_text_placeholder">Hey, it looks like you don\'t have any bookmarks.</string>
+    <string name="no_favorite_text_placeholder">It\'s looks like you don\'t have any bookmarks.</string>
 
 
     <string name="no_recap_title_placeholder">No words for a quick recap!</string>
