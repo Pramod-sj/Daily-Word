@@ -50,28 +50,33 @@ class RecapWordsActivity :
         viewModel.words.observe(this) { wordList ->
             binding.tvWeeklyRecapInfo.text = if (!wordList.isNullOrEmpty()) {
 
-                val word1String = wordList.lastOrNull()?.let { word ->
-                    CalenderUtil.getDayName(
-                        word.dateTimeInMillis ?: 0L
-                    ) + " (" + CalenderUtil.convertCalenderToString(
-                        word.dateTimeInMillis ?: 0L,
-                        CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
-                    ) + ")"
-                }
+                if (wordList.size == 1) {
+                    String.format(resources.getString(R.string.weekly_recap_note_only_1))
+                } else {
 
-                val word2String = wordList.firstOrNull()?.let { word ->
-                    CalenderUtil.getDayName(
-                        timeInMillis = word.dateTimeInMillis ?: 0L
-                    ) + " (" + CalenderUtil.convertCalenderToString(
-                        dateInMillis = word.dateTimeInMillis ?: 0L,
-                        CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
-                    ) + ")"
-                }
+                    val word1String = wordList.lastOrNull()?.let { word ->
+                        CalenderUtil.getDayName(
+                            word.dateTimeInMillis ?: 0L
+                        ) + " (" + CalenderUtil.convertCalenderToString(
+                            word.dateTimeInMillis ?: 0L,
+                            CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
+                        ) + ")"
+                    }
 
-                String.format(
-                    resources.getString(R.string.weekly_recap_note_with_date_placeholder),
-                    word1String, word2String
-                )
+                    val word2String = wordList.firstOrNull()?.let { word ->
+                        CalenderUtil.getDayName(
+                            timeInMillis = word.dateTimeInMillis ?: 0L
+                        ) + " (" + CalenderUtil.convertCalenderToString(
+                            dateInMillis = word.dateTimeInMillis ?: 0L,
+                            CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY
+                        ) + ")"
+                    }
+
+                    String.format(
+                        resources.getString(R.string.weekly_recap_note_with_date_placeholder),
+                        word1String, word2String
+                    )
+                }
             } else
                 String.format(resources.getString(R.string.weekly_recap_note))
         }
