@@ -97,87 +97,110 @@ kapt {
 
 
 dependencies {
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlin.stdlib.jdk8)
+    // Kotlin standard libraries
+    implementation(libs.kotlin.stdlib) // Kotlin standard library
+    implementation(libs.kotlin.stdlib.jdk8) // Kotlin standard library with JDK 8 extensions
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidxTestJunit)
-    androidTestImplementation(libs.espressoCore)
+    // Testing libraries
+    testImplementation(libs.junit) // Unit testing framework
+    androidTestImplementation(libs.androidxTestJunit) // Android JUnit test support
+    androidTestImplementation(libs.espressoCore) // Espresso UI testing framework
 
-    implementation(libs.material)
-    implementation(libs.swiperefreshlayout)
-    implementation(libs.appcompat)
-    implementation(libs.coreKtx)
-    implementation(libs.constraintlayout)
-    implementation(libs.recyclerview)
+    // UI libraries
+    implementation(libs.material) // Material Design components
+    implementation(libs.swiperefreshlayout) // Swipe-to-refresh layout
+    implementation(libs.appcompat) // AppCompat support library
+    implementation(libs.coreKtx) // Kotlin extensions for Android core
+    implementation(libs.constraintlayout) // Constraint layout for complex UIs
+    implementation(libs.recyclerview) // RecyclerView for displaying lists
 
-    implementation(libs.appUpdateKtx)
-    implementation(libs.reviewKtx)
+    // Google Play libraries
+    implementation(libs.appUpdateKtx) // KTX extensions for app updates
+    implementation(libs.reviewKtx) // KTX extensions for in-app reviews
 
-    implementation(libs.preferenceKtx)
+    // Preferences library
+    implementation(libs.preferenceKtx) // Kotlin extensions for shared preferences
 
-    ksp(libs.databindingCompiler)
+    // Data Binding compiler
+    ksp(libs.databindingCompiler) // Kotlin Symbol Processing for data binding
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofitGson)
-    implementation(libs.retrofitScalars)
+    // Retrofit libraries for network calls
+    implementation(libs.retrofit) // Core Retrofit library
+    implementation(libs.retrofitGson) // Gson converter for Retrofit
+    implementation(libs.retrofitScalars) // Scalars converter for Retrofit
 
-    implementation(libs.roomRuntime)
-    implementation(libs.roomKtx)
-    implementation(libs.roomPaging)
-    ksp(libs.roomCompiler)
+    // Room libraries for local database
+    implementation(libs.roomRuntime) // Room runtime library
+    implementation(libs.roomKtx) // Kotlin extensions for Room
+    implementation(libs.roomPaging) // Paging support for Room
+    ksp(libs.roomCompiler) // Kotlin Symbol Processing for Room
 
-    implementation(libs.viewmodelKtx)
-    implementation(libs.livedataKtx)
-    implementation(libs.lifecycleExtensions)
+    // Android lifecycle libraries
+    implementation(libs.viewmodelKtx) // ViewModel support with KTX
+    implementation(libs.livedataKtx) // LiveData support with KTX
+    implementation(libs.lifecycleExtensions) // Extensions for Android lifecycle
 
-    implementation(libs.firebaseMessaging)
-    implementation(libs.firebaseConfigKtx)
-    implementation(libs.firebaseAnalyticsKtx)
-    implementation(libs.firebaseCrashlyticsKtx)
+    // Firebase libraries
+    implementation(libs.firebaseMessaging) // Firebase Cloud Messaging
+    implementation(libs.firebaseConfigKtx) // Firebase Remote Config with KTX
+    implementation(libs.firebaseAnalyticsKtx) // Firebase Analytics with KTX
+    implementation(libs.firebaseCrashlyticsKtx) // Firebase Crashlytics with KTX
 
-    implementation(libs.pagingRuntimeKtx)
+    // Paging library for efficient data loading
+    implementation(libs.pagingRuntimeKtx) // Paging library with KTX
 
-    implementation(libs.facebookAudienceNetworkSdk)
-    implementation(libs.autostarter)
+    // Facebook Audience Network SDK for monetization
+    implementation(libs.facebookAudienceNetworkSdk) // Audience Network SDK
 
-    implementation(libs.lottie)
-    implementation(libs.lottieCompose)
+    // AutoStarter library for managing app permissions
+    implementation(libs.autostarter) // Library for auto-start permissions
 
-    implementation(libs.browser)
-    implementation(libs.webkit)
+    // Lottie for animations
+    implementation(libs.lottie) // Lottie for animations
+    implementation(libs.lottieCompose) // Lottie for Jetpack Compose
 
-    implementation(libs.hiltAndroid)
-    kapt(libs.hiltCompiler)
-    implementation(libs.hiltNavigationFragment)
-    implementation(libs.hiltWork)
+    // In-app browser and webview
+    implementation(libs.browser) // In-app browser
+    implementation(libs.webkit) // WebView for displaying web content
 
-    implementation(libs.glide)
-    ksp(libs.glideCompiler)
+    // Dagger Hilt for dependency injection
+    implementation(libs.hiltAndroid) // Hilt for Android dependency injection
+    kapt(libs.hiltCompiler) // Annotation processor for Hilt
+    implementation(libs.hiltNavigationFragment) // Hilt navigation fragment support
+    implementation(libs.hiltWork) // Hilt support for WorkManager
 
-    implementation(libs.billingKtx)
+    // Image loading with Glide
+    implementation(libs.glide) // Glide for image loading
+    ksp(libs.glideCompiler) // Kotlin Symbol Processing for Glide
 
-    implementation(libs.okhttpLoggingInterceptor)
+    // Billing client for in-app purchases
+    implementation(libs.billingKtx) // KTX for Billing Library
 
-    implementation(libs.timber)
+    // Logging with OkHttp
+    implementation(libs.okhttpLoggingInterceptor) // Logging interceptor for OkHttp
 
-    implementation(platform(libs.composeBom))
-    androidTestImplementation(platform(libs.composeBom))
-    implementation(libs.composeUi)
-    implementation(libs.composeMaterial)
-    implementation(libs.composeMaterial3)
-    implementation(libs.composeUiToolingPreview)
-    implementation(libs.activityCompose)
-    debugImplementation(libs.composeUiTooling)
+    // Logging with Timber
+    implementation(libs.timber) // Timber for logging
 
-    implementation(libs.accompanistThemeAdapter)
+    // Jetpack Compose libraries
+    implementation(platform(libs.composeBom)) // Jetpack Compose BOM for versioning
+    androidTestImplementation(platform(libs.composeBom)) // Compose BOM for UI tests
+    implementation(libs.composeUi) // Jetpack Compose UI library
+    implementation(libs.composeMaterial) // Jetpack Compose Material library
+    implementation(libs.composeMaterial3) // Jetpack Compose Material3 library
+    implementation(libs.composeUiToolingPreview) // UI tooling preview for Compose
+    implementation(libs.activityCompose) // Activity support for Jetpack Compose
+    debugImplementation(libs.composeUiTooling) // UI tooling for debugging Compose
 
-    implementation(libs.workRuntimeKtx)
+    // Accompanist library for additional Compose utilities
+    implementation(libs.accompanistThemeAdapter) // Theme adapter for Compose
 
-    // Debugging (LeakCanary)
-    debugImplementation(libs.leakCanary)
+    // WorkManager for background tasks
+    implementation(libs.workRuntimeKtx) // WorkManager with KTX
 
-    //custom lib to play and store audio files
-    implementation project(path: ':audioplayer')
+    // Debugging library (LeakCanary)
+    debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
 
+    // Custom library for playing and storing audio files
+    implementation(project(path = ":audioplayer")) // Custom audio player library
 }
