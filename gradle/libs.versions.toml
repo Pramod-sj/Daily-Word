@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.22"
+kotlin = "2.0.0"
 junit = "4.13.2"
 androidxTestJunit = "1.2.1"
 espresso = "3.6.1"
@@ -28,8 +28,8 @@ lottie = "6.2.0"
 browser = "1.8.0"
 webkit = "1.12.1"
 hilt = "2.51.1"
-hiltNavigation = "1.0.0"
-hiltWork = "1.0.0"  # Add Hilt Work version
+hiltNavigation = "1.2.0"
+hiltWork = "1.2.0"  # Add Hilt Work version
 glide = "4.16.0"
 glideCompiler = "4.12.0"
 billingKtx = "7.1.1"
@@ -43,9 +43,9 @@ workRuntimeKtx = "2.9.1"
 gradlePlugin = "8.6.1"
 googleServices = "4.4.2"
 firebaseCrashlytics = "3.0.2"
-ksp = "1.9.22-1.0.17"
+ksp = "2.0.0-1.0.21"
 
-okhttp = "4.9.1"
+okhttp = "4.12.0"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -137,3 +137,4 @@ firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "f
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

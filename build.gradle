@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.ksp) apply false // Apply in individual modules
     alias(libs.plugins.org.jetbrains.kotlin.kapt) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 // Clean task to delete build directories
