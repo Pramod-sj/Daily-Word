@@ -1,3 +1,23 @@
-include ':audioplayer'
+// settings.gradle.kts
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal() // Access plugins from the Gradle Plugin Portal
+        google()             // Required for Android Gradle plugin
+        mavenCentral()       // Required for other plugins and libraries
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") } // JitPack repository
+    }
+}
+
 rootProject.name='Today\'s Word'
-include ':app'
+// Include sub-projects or modules
+include(":app") // Include your application module
+include(":audioplayer")
