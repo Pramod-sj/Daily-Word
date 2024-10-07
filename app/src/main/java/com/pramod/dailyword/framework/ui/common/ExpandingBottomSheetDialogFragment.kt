@@ -195,7 +195,8 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
                     -1 to 1,
                     100 to 255
                 )
-            )
+            ).coerceAtLeast(0)
+                .coerceAtMost(255)
         )
     }
 
