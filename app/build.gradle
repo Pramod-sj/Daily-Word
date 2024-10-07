@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt)                // Applies Dagger Hilt
     alias(libs.plugins.ksp)                 // Applies KSP
     alias(libs.plugins.org.jetbrains.kotlin.kapt)         // Applies Kotlin KAPT
+    alias(libs.plugins.compose.compiler)
 }
 
 def keyPropertiesFile = rootProject.file("key.properties")
