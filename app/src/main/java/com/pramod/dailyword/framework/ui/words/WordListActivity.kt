@@ -6,6 +6,7 @@ import android.app.ActivityOptions
 import android.app.SearchManager
 import android.os.Bundle
 import android.view.Menu
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -59,7 +60,7 @@ class WordListActivity :
 
                 setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
 
-                Timber.i( "initAdapter: ")
+                Timber.i("initAdapter: ")
                 val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
                 val option = view?.let {
                     ActivityOptions.makeSceneTransitionAnimation(
@@ -86,6 +87,7 @@ class WordListActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleBackPress()
         contentInsetStartWithNavigation = binding.toolbar.contentInsetStartWithNavigation
         setUpToolbar(binding.toolbar, null, true)
         initAdapter()
@@ -154,8 +156,10 @@ class WordListActivity :
         }
     }
 
-    override fun onBackPressed() {
-        if (searchView?.isIconified == false) searchView?.isIconified = true else finish()
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback {
+            if (searchView?.isIconified == false) searchView?.isIconified = true else finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.recap
 import android.app.ActivityOptions
 import android.os.Bundle
 import android.transition.Transition
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -37,6 +38,7 @@ class RecapWordsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
+        handleBackPress()
         binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
         binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
@@ -112,8 +114,10 @@ class RecapWordsActivity :
         }
     }
 
-    override fun onBackPressed() {
-        finish()
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback {
+            finish()
+        }
     }
 
 

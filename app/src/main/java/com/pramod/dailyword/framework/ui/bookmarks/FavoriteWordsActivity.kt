@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.bookmarks
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -65,6 +66,7 @@ class FavoriteWordsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleBackPress()
         binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
         binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
@@ -108,7 +110,9 @@ class FavoriteWordsActivity :
 
     }
 
-    override fun onBackPressed() {
-        finish()
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback {
+            finish()
+        }
     }
 }
