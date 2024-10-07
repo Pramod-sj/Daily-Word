@@ -91,6 +91,7 @@
 
     <string name="previous_words">Words</string>
     <string name="random_word">Random word</string>
+    <string name="weekly_recap_note_only_1">Review the new words you learned this week!</string>
     <string name="weekly_recap_note">Review the new words you learned this week! Here\'s the list from Monday to today, Sunday.</string>
     <string name="weekly_recap_note_with_date_placeholder">Review the new words you learned this week! Here\'s the list from %s to today, %s.</string>
     <string name="support_development">Hello My Dear User,\n\nThis project is solely handled by me, along with my other work, so adding new features takes weeks or even months.\nThis app is completely free, but donating a small amount will encourage me to keep this project alive.</string>

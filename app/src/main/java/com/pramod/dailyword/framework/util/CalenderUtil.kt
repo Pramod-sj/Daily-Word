@@ -17,7 +17,10 @@ class CalenderUtil {
         const val TIME_FORMAT = "hh:mm a"
 
         val DAYS: List<String>
-            get() = DateFormatSymbols(Locale.ENGLISH).weekdays.toList()
+            get() = DateFormatSymbols(Locale.ENGLISH).weekdays.toMutableList()
+                .apply {
+                    remove("")//remove empty string
+                }.toList()
 
         fun isTodaySunday(calender: Calendar): Boolean {
             return getLocalCalendar().get(Calendar.DAY_OF_WEEK) == 0
@@ -37,7 +40,7 @@ class CalenderUtil {
         @JvmStatic
         fun getDayNameBasedOnDayOfWeek(dayOfWeek: Int): String? {
             return try {
-                DAYS[dayOfWeek]
+                DAYS[dayOfWeek - 1]
             } catch (e: Error) {
                 null
             }
@@ -59,19 +62,28 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun convertCalenderToString(calender: Calendar, dateFormat: String = DATE_FORMAT): String {
+        fun convertCalenderToString(
+            calender: Calendar,
+            dateFormat: String = DATE_FORMAT
+        ): String {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             return simpleDateFormat.format(calender.time)
         }
 
         @JvmStatic
-        fun convertCalenderToString(dateInMillis: Long, dateFormat: String = DATE_FORMAT): String {
+        fun convertCalenderToString(
+            dateInMillis: Long,
+            dateFormat: String = DATE_FORMAT
+        ): String {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             return simpleDateFormat.format(dateInMillis)
         }
 
         @JvmStatic
-        fun convertStringToCalender(dateString: String?, dateFormat: String): Calendar? {
+        fun convertStringToCalender(
+            dateString: String?,
+            dateFormat: String
+        ): Calendar? {
             if (dateString == null) {
                 return null
             }
@@ -97,14 +109,18 @@ class CalenderUtil {
             val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
             val date = simpleDateFormat.parse(dateString)
             if (date != null) {
-                val reqSimpleDateFormat = SimpleDateFormat(requiredDateFormat, Locale.getDefault())
+                val reqSimpleDateFormat =
+                    SimpleDateFormat(requiredDateFormat, Locale.getDefault())
                 return reqSimpleDateFormat.format(date)
             }
             return null
         }
 
         @JvmStatic
-        fun isYesterday(dateString: String?, dateFormat: String = DATE_FORMAT): Boolean {
+        fun isYesterday(
+            dateString: String?,
+            dateFormat: String = DATE_FORMAT
+        ): Boolean {
             if (dateString == null) {
                 return false
             }
@@ -145,7 +161,10 @@ class CalenderUtil {
         }
 
         @JvmStatic
-        fun createCalendarForHourOfDayAndMin(hourOfDay: Int, minute: Int = 0): Calendar {
+        fun createCalendarForHourOfDayAndMin(
+            hourOfDay: Int,
+            minute: Int = 0
+        ): Calendar {
             val calender = getLocalCalendar()
             calender.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calender.set(Calendar.MINUTE, minute)
@@ -173,7 +192,10 @@ class CalenderUtil {
         fun getMonthFromDateString(date: String, format: String): String {
             val calendar = convertStringToCalender(date, format)
             if (calendar != null) {
-                return SimpleDateFormat("MMM", Locale.getDefault()).format(calendar.time)
+                return SimpleDateFormat(
+                    "MMM",
+                    Locale.getDefault()
+                ).format(calendar.time)
             }
             return date.substring(2, 5)
         }
