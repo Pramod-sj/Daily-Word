@@ -202,5 +202,5 @@ dependencies {
     debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
 
     // Custom library for playing and storing audio files
-    implementation(project(path = ":audioplayer")) // Custom audio player library
+    implementation(project(path: ":audioplayer")) // Custom audio player library
 }
