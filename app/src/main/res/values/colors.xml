@@ -42,8 +42,8 @@
     <color name="green_500">#4CAF50</color>
     <color name="green_400">#66bb6a</color>
     <color name="green_200">#a5d6a7</color>
-    <color name="progress_bg">#33A5D6A7</color>
-    <color name="progress_fg">#1AA5D6A7</color>
+    <color name="progress_bg">#F1F8E9</color>
+    <color name="progress_fg">#66bb6a</color>
 
 
     <color name="blue_600">#1e88e5</color>
