@@ -57,15 +57,20 @@ android {
 
     buildTypes {
         debug {
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
+
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
-            ndk {
-                debugSymbolLevel 'SYMBOL_TABLE'
-            }
+            ndk { debugSymbolLevel 'SYMBOL_TABLE' }
         }
     }
 
@@ -77,6 +82,7 @@ android {
     buildFeatures {
         dataBinding = true
         compose true
+        buildConfig true
     }
 
     composeOptions {
