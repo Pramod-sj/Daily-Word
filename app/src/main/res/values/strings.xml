@@ -338,4 +338,24 @@
 
     <string name="dialog_notification_triggering_text_able">The notification will be triggered at %s every %s</string>
     <string name="dialog_notification_triggering_text_not_able">We cannot send you a notification at %s due to word unavailability</string>
+
+
+    <string name="dialog_consent_notification_title">Enable notifications</string>
+    <string name="dialog_consent_notification_desc">Please click on the \'Allow\' button in the next popup to enable daily word notifications.</string>
+    <string name="dialog_consent_notification_btn">Okay</string>
+
+    <string name="dialog_consent_disable_optimization_title">Disable battery optimization</string>
+    <string name="dialog_consent_disable_optimization_desc">Please exclude this app from the optimization list, as your phone\'s system may pause the app\'s activity, resulting in missed notifications. This may slightly reduce battery life.</string>
+    <string name="dialog_consent_disable_optimization_btn">Okay</string>
+
+    <string name="dialog_consent_exact_alarms_title">Allow setting alarms</string>
+    <string name="dialog_consent_exact_alarms_desc">Please allow us to set alarms for the app to function correctly, as the custom notification feature relies entirely on alarms to send new notifications.</string>
+    <string name="dialog_consent_exact_alarms_btn">Okay</string>
+
+    <string name="dialog_consent_unused_app_title">Disable pausing of unused app</string>
+    <string name="dialog_consent_unused_app_desc">Please disable \'Pause app activity if unused,\' as it stops the app from functioning if it hasn\'t been opened for a few days, likely preventing us from sending notifications.</string>
+    <string name="dialog_consent_unused_app_btn">Okay</string>
+
+
+
 </resources>
