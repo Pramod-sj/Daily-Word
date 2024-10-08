@@ -41,6 +41,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import timber.log.Timber
 import javax.inject.Inject
@@ -262,7 +263,6 @@ class ImportantPermissionState @Inject constructor(
 
     private val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
 
-
     private val _isNotificationEnabled = MutableStateFlow(false)
     val isNotificationEnabled: StateFlow<Boolean>
         get() = _isNotificationEnabled
@@ -282,6 +282,12 @@ class ImportantPermissionState @Inject constructor(
     val isUnusedAppPausingDisabled: StateFlow<Boolean>
         get() = _isUnusedAppPausingDisabled
 
+    val isAllImportantPermissionGranted = combine(
+        isNotificationEnabled,
+        isBatteryOptimizationDisabled,
+        isSetAlarmEnabled,
+        isUnusedAppPausingDisabled
+    ) { a, b, c, d -> a && b && c && d }
 
     private val _canShowFullNotificationEnableMessage = MutableLiveData(false)
     val canShowFullNotificationEnableMessage: LiveData<Boolean>

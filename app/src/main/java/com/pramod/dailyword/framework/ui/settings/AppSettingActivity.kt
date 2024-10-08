@@ -39,8 +39,8 @@ import com.pramod.dailyword.framework.ui.common.exts.openSplashScreen
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.ui.common.exts.showCheckboxDialog
-import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
 import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionHandler
+import com.pramod.dailyword.framework.ui.notification_consent.ImportantPermissionState
 import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationAlarmScheduler
 import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationTimePickerDialog
 import com.pramod.dailyword.framework.util.CommonUtils
@@ -105,21 +105,15 @@ class AppSettingActivity :
         setupChangeNotificationTimeDialog()
 
         binding.notificationDailyToggle.setOnClickListener {
-            canChangeNotificationSettings {
-                viewModel.notificationPrefManager.toggleDailyWordNotification()
-            }
+            viewModel.notificationPrefManager.toggleDailyWordNotification()
         }
 
         binding.notificationReminderToggle.setOnClickListener {
-            canChangeNotificationSettings {
-                viewModel.notificationPrefManager.toggleReminderNotification()
-            }
+            viewModel.notificationPrefManager.toggleReminderNotification()
         }
 
         binding.notificationMeaningToggle.setOnClickListener {
-            canChangeNotificationSettings {
-                viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
-            }
+            viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
         }
     }
 
@@ -132,31 +126,53 @@ class AppSettingActivity :
             }
         }
         binding.notificationChangeTime.setOnClickListener {
-            canChangeNotificationSettings {
-                NotificationTimePickerDialog.show(
-                    notificationTriggerTime = viewModel.notificationTriggerTime.value,
-                    fragmentManager = supportFragmentManager,
-                    changeNotificationCallback = {
-                        viewModel.setNotificationTriggerTime(it)
-                    })
-            }
+            NotificationTimePickerDialog.show(
+                notificationTriggerTime = viewModel.notificationTriggerTime.value,
+                fragmentManager = supportFragmentManager,
+                changeNotificationCallback = {
+                    viewModel.setNotificationTriggerTime(it)
+                })
         }
     }
 
-    private fun canChangeNotificationSettings(invokeOnYes: () -> Unit) {
+    private fun checkIfRequiredPermissionProvided(): Boolean {
         if (!importantPermissionState.isNotificationEnabled.value) {
-            importantPermissionHandler.launchNotificationPermissionFlow()
-            return
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.dialog_consent_notification_title))
+                .setMessage(resources.getString(R.string.dialog_consent_notification_desc))
+                .setPositiveButton(resources.getString(R.string.dialog_consent_notification_btn)) { _, _ ->
+                    importantPermissionHandler.launchNotificationPermissionFlow()
+                }.show()
+            return false
         }
         if (!importantPermissionState.isBatteryOptimizationDisabled.value) {
-            importantPermissionHandler.launchDisableBatteryOptimizationPermissionFlow()
-            return
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.dialog_consent_disable_optimization_title))
+                .setMessage(resources.getString(R.string.dialog_consent_disable_optimization_desc))
+                .setPositiveButton(resources.getString(R.string.dialog_consent_disable_optimization_btn)) { _, _ ->
+                    importantPermissionHandler.launchDisableBatteryOptimizationPermissionFlow()
+                }.show()
+            return false
         }
         if (!importantPermissionState.isSetAlarmEnabled.value) {
-            importantPermissionHandler.launchAllowSettingAlarmPermissionFlow()
-            return
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.dialog_consent_exact_alarms_title))
+                .setMessage(resources.getString(R.string.dialog_consent_exact_alarms_desc))
+                .setPositiveButton(resources.getString(R.string.dialog_consent_exact_alarms_btn)) { _, _ ->
+                    importantPermissionHandler.launchAllowSettingAlarmPermissionFlow()
+                }.show()
+            return false
         }
-        invokeOnYes()
+        if (!importantPermissionState.isUnusedAppPausingDisabled.value) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.dialog_consent_unused_app_title))
+                .setMessage(resources.getString(R.string.dialog_consent_unused_app_desc))
+                .setPositiveButton(resources.getString(R.string.dialog_consent_unused_app_btn)) { _, _ ->
+                    importantPermissionHandler.launchDisableUnusedAppPaused()
+                }.show()
+            return false
+        }
+        return true
     }
 
     override fun onResume() {
@@ -504,14 +520,16 @@ class AppSettingActivity :
 
     private fun bindNotificationEnabledState() {
         lifecycleScope.launch {
-            importantPermissionState.isNotificationEnabled.collect {
-                //binding.notificationDailyToggle.setEnabled(it, 0.5f)
-                //binding.notificationMeaningToggle.setEnabled(it, 0.5f)
-                //binding.notificationReminderToggle.setEnabled(it, 0.5f)
-                //binding.notificationChangeTime.setEnabled(it, 0.5f)
+            importantPermissionState.isAllImportantPermissionGranted.collect {
+                binding.notificationDailyToggle.setEnabled(it, 0.5f)
+                binding.notificationMeaningToggle.setEnabled(it, 0.5f)
+                binding.notificationReminderToggle.setEnabled(it, 0.5f)
+                binding.notificationChangeTime.setEnabled(it, 0.5f)
                 if (!it) {
                     binding.ivNotificationAlert.isVisible = true
-                    binding.cardNotification.setOnClickListener { importantPermissionHandler.launchNotificationPermissionFlow() }
+                    binding.cardNotification.setOnClickListener {
+                        checkIfRequiredPermissionProvided()
+                    }
                     binding.cardNotification.isEnabled = true
                 } else {
                     binding.ivNotificationAlert.isVisible = false
