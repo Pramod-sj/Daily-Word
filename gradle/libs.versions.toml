@@ -40,7 +40,7 @@ activityCompose = "1.9.2"
 accompanist = "0.35.0-alpha"
 workRuntimeKtx = "2.9.1"
 
-gradlePlugin = "8.6.1"
+gradlePlugin = "8.7.0"
 googleServices = "4.4.2"
 firebaseCrashlytics = "3.0.2"
 ksp = "2.0.0-1.0.21"
