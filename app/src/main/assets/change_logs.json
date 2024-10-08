@@ -1,9 +1,9 @@
 [
   {
-    "version_name": "2.4.3",
-    "version_code": 202410070,
+    "version_name": "3.0.0",
+    "version_code": 202410080,
     "release_name": "\uD83C\uDF8A Maintenance update \uD83C\uDF8A",
-    "date": "07 Oct 2024",
+    "date": "08 Oct 2024",
     "changes": [
       "Scrollable word content in widget itself",
       "Better way to troubleshoot any notifications issues",
