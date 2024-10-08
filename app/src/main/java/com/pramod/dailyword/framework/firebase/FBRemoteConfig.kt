@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.firebase
 
+import androidx.annotation.Keep
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -124,7 +125,7 @@ class FBRemoteConfig @Inject constructor(
         }
     }
 
-
+    @Keep
     data class AdsEnabled(
         @SerializedName("all")
         val enabled_ad_all: Boolean,
