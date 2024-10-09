@@ -146,7 +146,7 @@
 
 
     <string name="setting_section_suggestions">Suggestions</string>
-    <string name="setting_item_hide_badge_title">Badges (Dot)</string>
+    <string name="setting_item_hide_badge_title">Hide badges</string>
     <string name="setting_item_hide_badge_desc">Badges are displayed on newly added words and bookmarks to signify that the words are yet to be read.</string>
 
 
