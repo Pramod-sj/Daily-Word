@@ -166,19 +166,6 @@
                         android:layout_weight="0.25"
                         android:animateLayoutChanges="true">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_update_btn"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:singleLine="true"
-                            android:text="@{mainViewModel.appUpdateModel.buttonText}"
-                            android:textSize="@dimen/text_tiny"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:id="@+id/progress_update_download"
                             style="@style/Widget.MaterialComponents.LinearProgressIndicator"
@@ -194,6 +181,21 @@
                             app:trackCornerRadius="3dp"
                             app:trackThickness="30dp" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_update_btn"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:singleLine="true"
+                            android:textColor="@{(mainViewModel.appUpdateModel.downloadPercentage>50)? CommonUtils.getColor(context,R.color.white) : CommonUtils.getColor(context,R.color.black)}"
+                            android:text="@{mainViewModel.appUpdateModel.buttonText}"
+                            android:textSize="@dimen/text_tiny"
+                            app:elevation="0dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </FrameLayout>
 
