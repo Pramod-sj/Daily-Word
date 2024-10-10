@@ -3,7 +3,7 @@ package com.pramod.dailyword.framework.firebase
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
-import com.google.firebase.logger.Logger
+import androidx.annotation.Keep
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -177,6 +177,7 @@ class FBMessageService : FirebaseMessagingService() {
         }
     }
 
+    @Keep
     data class MessagePayload(
         var title: String = "Title",
         var body: String = "Body",
