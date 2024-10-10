@@ -156,6 +156,26 @@ class FBMessageService : FirebaseMessagingService() {
 
                                     }
                                 }
+                                ?: run {
+
+                                    //if notification time is already elapsed then directly show the notification
+                                    notification = notificationHelper.createNotification(
+                                        title = payload.title,
+                                        body = bodyText,
+                                        pendingIntent = pendingIntent
+                                    )
+
+                                    //remove payload from preference for next notification
+                                    notificationPrefManager.setNotificationMessagePayload(null)
+
+                                    //create a notification object which needs to be shown
+                                    notification = notificationHelper.createNotification(
+                                        title = payload.title,
+                                        body = bodyText,
+                                        pendingIntent = pendingIntent
+                                    )
+
+                                }
 
                         }
 
