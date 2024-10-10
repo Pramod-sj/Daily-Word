@@ -74,22 +74,27 @@ class FBRemoteConfig @Inject constructor(
                     //if this is true then show ads to all the users irrespective of countries
                     true
                 }
+
                 adsEnabled.enable_ad_in -> {
                     //check if current user is IN
                     prefManager.getCountryCode() == SupportedFBTopicCounties.IN.name
                 }
+
                 adsEnabled.enable_ad_us -> {
                     //check if current user is US
                     prefManager.getCountryCode() == SupportedFBTopicCounties.US.name
                 }
+
                 adsEnabled.enable_ad_gb -> {
                     //check if current user is GB (UK)
                     prefManager.getCountryCode() == SupportedFBTopicCounties.GB.name
                 }
+
                 adsEnabled.enabled_ad_other -> {
                     //check if current user is of other country
                     prefManager.getCountryCode() == SupportedFBTopicCounties.OTHERS.name
                 }
+
                 else -> {
                     //if no condition matched return false
                     false
@@ -109,7 +114,7 @@ class FBRemoteConfig @Inject constructor(
         return baseUrl
     }
 
-    fun getReleases(): List<Release> {
+    fun getReleases(): List<Release>? {
         return try {
             val type = TypeToken.getParameterized(List::class.java, Release::class.java).type
             Gson().fromJson(remoteConfig.getString("releases"), type)
@@ -119,7 +124,7 @@ class FBRemoteConfig @Inject constructor(
     }
 
     fun getLatestRelease(): Release? {
-        return getReleases().maxByOrNull { it.versionCode }?.let { note ->
+        return getReleases()?.maxByOrNull { it.versionCode }?.let { note ->
             if (note.versionCode > BuildConfig.VERSION_CODE) note
             else null
         }
