@@ -35,6 +35,9 @@ class FBMessageService : FirebaseMessagingService() {
     @Inject
     lateinit var notificationPrefManager: NotificationPrefManager
 
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
+
     companion object {
         const val EXTRA_NOTIFICATION_PAYLOAD = "notification_payload"
 
@@ -60,7 +63,6 @@ class FBMessageService : FirebaseMessagingService() {
             val payload: MessagePayload =
                 Gson().fromJson(Gson().toJson(p0.data), MessagePayload::class.java)
             Timber.i(Gson().toJson(payload))
-            val notificationHelper = NotificationHelper(applicationContext)
 
             val intentToActivity = Intent(applicationContext, SplashScreenActivity::class.java)
             intentToActivity.putExtra(EXTRA_NOTIFICATION_PAYLOAD, Gson().toJson(p0.data))
