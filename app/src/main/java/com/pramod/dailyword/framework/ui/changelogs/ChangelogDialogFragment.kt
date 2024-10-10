@@ -25,9 +25,9 @@ class ChangelogDialogFragment :
     lateinit var fbRemoteConfig: FBRemoteConfig
 
     private val adapter: ChangelogAdapter by lazy {
-        if (fbRemoteConfig.getReleases().isNotEmpty()) {
+        if (fbRemoteConfig.getReleases()?.isNotEmpty() == true) {
             ChangelogAdapter(
-                fbRemoteConfig.getReleases().filter { it.versionCode <= BuildConfig.VERSION_CODE })
+                fbRemoteConfig.getReleases()?.filter { it.versionCode <= BuildConfig.VERSION_CODE })
         } else {
             val type = TypeToken.getParameterized(List::class.java, Release::class.java).type
             val changelogList = Gson().fromJson<List<Release>>(
@@ -46,7 +46,7 @@ class ChangelogDialogFragment :
 
 
     private fun applyBottomInsetToRecyclerView() {
-        binding.recyclerviewChangeLogs.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+        binding.recyclerviewChangeLogs.doOnApplyWindowInsets { _, windowInsets, _, _ ->
             binding.recyclerviewChangeLogs
                 .updatePadding(
                     bottom = windowInsets.systemWindowInsetBottom
