@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Context
-import android.content.ContextWrapper
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
@@ -23,9 +22,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationHelper @Inject constructor(@ApplicationContext val context: Context) : ContextWrapper(context) {
+class NotificationHelper @Inject constructor(@ApplicationContext val applicationContext: Context) {
+
     private val notificationManager: NotificationManager =
-        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     private val defaultVibrationPattern = longArrayOf(0, 250, 250, 250)
     private val uri = Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
