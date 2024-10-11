@@ -177,21 +177,28 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/progress_update_download"
-                            style="@style/Widget.MaterialComponents.LinearProgressIndicator"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:indeterminate="false"
-                            android:progress="@{mainViewModel.appUpdateModel.downloadPercentage}"
-                            app:indicatorColor="@color/progress_fg"
-                            app:indicatorDirectionLinear="startToEnd"
-                            app:isVisible="@{mainViewModel.appUpdateModel.downloadPercentage>0}"
-                            app:trackColor="@color/progress_bg"
-                            app:trackCornerRadius="3dp"
-                            app:trackThickness="30dp" />
+                            app:cardBackgroundColor="@android:color/transparent"
+                            app:cardCornerRadius="3dp"
+                            app:cardElevation="0dp"
+                            app:isVisible="@{mainViewModel.appUpdateModel.downloadPercentage>0}">
 
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_update_download"
+                                style="@style/Widget.MaterialComponents.LinearProgressIndicator"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:indeterminate="false"
+                                android:progress="@{mainViewModel.appUpdateModel.downloadPercentage}"
+                                app:indicatorColor="@color/progress_fg"
+                                app:indicatorDirectionLinear="startToEnd"
+                                app:trackColor="@color/progress_bg"
+                                app:trackThickness="30dp" />
+
+                        </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
 
