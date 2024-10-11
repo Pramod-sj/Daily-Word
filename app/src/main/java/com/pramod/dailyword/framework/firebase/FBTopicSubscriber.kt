@@ -78,16 +78,16 @@ class FBTopicSubscriber @Inject constructor(
     }
 
 
-    fun subscribeToTestDevice(context: Context) {
+    fun subscribeToTestDevice() {
         subscribeTopic(TOPIC_TEST_DEVICE)
     }
 
 
-    fun subscribeTopic(
+    private fun subscribeTopic(
         topic: String,
         listener: ((String, OperationStatus) -> Unit)? = null
     ) {
-        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_DAILY_WORD_NOTIFICATION)
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Timber.i( "subscribeTopic: $topic :Success")
@@ -135,7 +135,7 @@ class FBTopicSubscriber @Inject constructor(
         private val TAG = FBTopicSubscriber::class.simpleName
         private const val TOPIC_DAILY_WORD_NOTIFICATION = "daily_word_notification"
         private const val TOPIC_COUNTRY_CODE = "country_code"
-        private const val TOPIC_TEST_DEVICE = "test_device"
+        private const val TOPIC_TEST_DEVICE = "test"
 
     }
 }
