@@ -187,11 +187,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         editor.putInt(KEY_WIDGET_BACKGROUND_ALPHA, alpha).apply()
     }
 
-    override fun isSettingIssueWarningMessageDismissed(): Boolean {
-        return sPrefManager.getBoolean(
-            KEY_SETTING_ISSUE_MESSAGE_DISMISSED,
-            false
-        )
+    override fun isSettingIssueWarningMessageDismissed(): LiveData<Boolean> {
+        return SPrefBooleanLiveData(sPrefManager, KEY_SETTING_ISSUE_MESSAGE_DISMISSED, false)
     }
 
     override fun isFullNotificationMessageDismissed(): Boolean {
@@ -332,7 +329,7 @@ interface NotificationPermissionPref {
     }
 
 
-    fun isSettingIssueWarningMessageDismissed(): Boolean
+    fun isSettingIssueWarningMessageDismissed(): LiveData<Boolean>
 
     fun isFullNotificationMessageDismissed(): Boolean
 
