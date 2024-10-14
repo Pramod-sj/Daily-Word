@@ -42,11 +42,11 @@ class HomeViewModel @Inject constructor(
             importantPermissionState.isSetAlarmEnabled,
             importantPermissionState.isNotificationEnabled,
             importantPermissionState.isBatteryOptimizationDisabled,
-            importantPermissionState.isUnusedAppPausingDisabled
-        ) { s, n, b, unused ->
+            importantPermissionState.isUnusedAppPausingDisabled,
+            prefManager.isSettingIssueWarningMessageDismissed().asFlow()
+        ) { s, n, b, unused, isCardDismissed ->
             _canShowSettingIssueWarningMessage.value =
-                prefManager.isSettingIssueWarningMessageDismissed() == false
-                        && (!s || !n || !b || !unused)
+                !isCardDismissed && (!s || !n || !b || !unused)
         }.launchIn(viewModelScope)
 
     }
