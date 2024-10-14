@@ -1,14 +1,15 @@
 [
   {
     "version_name": "3.0.0",
-    "version_code": 202410080,
+    "version_code": 202410140,
     "release_name": "\uD83C\uDF8A Maintenance update \uD83C\uDF8A",
-    "date": "08 Oct 2024",
+    "date": "14 Oct 2024",
     "changes": [
       "Scrollable word content in widget itself",
       "Better way to troubleshoot any notifications issues",
       "Underlying libraries updates",
-      "Bug fixes and optimizations for seamless app functionality"
+      "Bug fixes and optimizations for seamless app functionality",
+      "Optimize app size"
     ],
     "is_force_update": false
   },
