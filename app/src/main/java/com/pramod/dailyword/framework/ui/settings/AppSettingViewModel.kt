@@ -12,14 +12,12 @@ import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.DEEP_L
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.NOTIFICATION_NEW_WORD
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
-import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationAlarmScheduler
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -52,30 +50,35 @@ class AppSettingViewModel @Inject constructor(
         MutableStateFlow<NotificationPrefManager.NotificationTriggerTime?>(null)
 
     fun setNotificationTriggerTime(notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?) {
-        viewModelScope.launch {
-            getWordsInteractor.getWords(1, false)
-                .firstOrNull { it.status != Status.LOADING }
-                ?.let { resource ->
-                    if (resource.status == Status.SUCCESS) {
-                        resource.data?.firstOrNull()?.let { word ->
-                            notificationPrefManager.setNotificationMessagePayload(
-                                FBMessageService.MessagePayload(
-                                    title = "Hey There! Here's your new word '${word.word}'",
-                                    body = "Tap to learn the word",
-                                    noitificationType = NOTIFICATION_NEW_WORD,
-                                    date = word.date.orEmpty(),
-                                    deepLink = DEEP_LINK_TO_WORD_DETAILED,
-                                    wordMeaning = word.meanings?.firstOrNull().orEmpty()
+        if (notificationTriggerTime == null) {
+            notificationPrefManager.setNotificationMessagePayload(null)
+            notificationPrefManager.setNotificationTriggerTime(null)
+        } else {
+            viewModelScope.launch {
+                getWordsInteractor.getWords(1, false)
+                    .firstOrNull { it.status != Status.LOADING }
+                    ?.let { resource ->
+                        if (resource.status == Status.SUCCESS) {
+                            resource.data?.firstOrNull()?.let { word ->
+                                notificationPrefManager.setNotificationMessagePayload(
+                                    FBMessageService.MessagePayload(
+                                        title = "Hey There! Here's your new word '${word.word}'",
+                                        body = "Tap to learn the word",
+                                        noitificationType = NOTIFICATION_NEW_WORD,
+                                        date = word.date.orEmpty(),
+                                        deepLink = DEEP_LINK_TO_WORD_DETAILED,
+                                        wordMeaning = word.meanings?.firstOrNull().orEmpty()
+                                    )
                                 )
-                            )
-                            notificationPrefManager.setNotificationTriggerTime(
-                                notificationTriggerTime
-                            )
+                                notificationPrefManager.setNotificationTriggerTime(
+                                    notificationTriggerTime
+                                )
+                            }
+                        } else {
+                            //handle error state
                         }
-                    } else {
-                        //handle error state
                     }
-                }
+            }
         }
     }
 
