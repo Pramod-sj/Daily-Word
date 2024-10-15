@@ -49,6 +49,7 @@ import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -105,15 +106,21 @@ class AppSettingActivity :
         setupChangeNotificationTimeDialog()
 
         binding.notificationDailyToggle.setOnClickListener {
-            viewModel.notificationPrefManager.toggleDailyWordNotification()
+            if (checkIfNotificationPermissionProvided()) {
+                viewModel.notificationPrefManager.toggleDailyWordNotification()
+            }
         }
 
         binding.notificationReminderToggle.setOnClickListener {
-            viewModel.notificationPrefManager.toggleReminderNotification()
+            if (checkIfNotificationPermissionProvided()) {
+                viewModel.notificationPrefManager.toggleReminderNotification()
+            }
         }
 
         binding.notificationMeaningToggle.setOnClickListener {
-            viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
+            if (checkIfNotificationPermissionProvided()) {
+                viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
+            }
         }
     }
 
@@ -126,12 +133,14 @@ class AppSettingActivity :
             }
         }
         binding.notificationChangeTime.setOnClickListener {
-            NotificationTimePickerDialog.show(
-                notificationTriggerTime = viewModel.notificationTriggerTime.value,
-                fragmentManager = supportFragmentManager,
-                changeNotificationCallback = {
-                    viewModel.setNotificationTriggerTime(it)
-                })
+            if (checkIfRequiredPermissionProvided()) {
+                NotificationTimePickerDialog.show(
+                    notificationTriggerTime = viewModel.notificationTriggerTime.value,
+                    fragmentManager = supportFragmentManager,
+                    changeNotificationCallback = {
+                        viewModel.setNotificationTriggerTime(it)
+                    })
+            }
         }
     }
 
@@ -169,6 +178,19 @@ class AppSettingActivity :
                 .setMessage(resources.getString(R.string.dialog_consent_unused_app_desc))
                 .setPositiveButton(resources.getString(R.string.dialog_consent_unused_app_btn)) { _, _ ->
                     importantPermissionHandler.launchDisableUnusedAppPaused()
+                }.show()
+            return false
+        }
+        return true
+    }
+
+    private fun checkIfNotificationPermissionProvided(): Boolean {
+        if (!importantPermissionState.isNotificationEnabled.value) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(resources.getString(R.string.dialog_consent_notification_title))
+                .setMessage(resources.getString(R.string.dialog_consent_notification_desc))
+                .setPositiveButton(resources.getString(R.string.dialog_consent_notification_btn)) { _, _ ->
+                    importantPermissionHandler.launchNotificationPermissionFlow()
                 }.show()
             return false
         }
@@ -520,23 +542,44 @@ class AppSettingActivity :
 
     private fun bindNotificationEnabledState() {
         lifecycleScope.launch {
-            importantPermissionState.isAllImportantPermissionGranted.collect {
-                binding.notificationDailyToggle.setEnabled(it, 0.5f)
-                binding.notificationMeaningToggle.setEnabled(it, 0.5f)
-                binding.notificationReminderToggle.setEnabled(it, 0.5f)
-                binding.notificationChangeTime.setEnabled(it, 0.5f)
-                if (!it) {
-                    binding.ivNotificationAlert.isVisible = true
-                    binding.cardNotification.setOnClickListener {
-                        checkIfRequiredPermissionProvided()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                importantPermissionState
+                    .isAllImportantPermissionGranted
+                    .collect {
+                        if (!it) {
+                            binding.ivNotificationAlert.isVisible = true
+                            binding.cardNotification.setOnClickListener {
+                                checkIfRequiredPermissionProvided()
+                            }
+                            binding.cardNotification.isEnabled = true
+                        } else {
+                            binding.ivNotificationAlert.isVisible = false
+                            binding.cardNotification.isEnabled = false
+                        }
                     }
-                    binding.cardNotification.isEnabled = true
-                } else {
-                    binding.ivNotificationAlert.isVisible = false
-                    binding.cardNotification.isEnabled = false
-                }
             }
+        }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                importantPermissionState
+                    .isNotificationEnabled
+                    .collect {
+                        binding.notificationDailyToggle.alpha = if (it) 1f else 0.5f
+                        binding.notificationMeaningToggle.alpha = if (it) 1f else 0.5f
+                        binding.notificationReminderToggle.alpha = if (it) 1f else 0.5f
+                    }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                importantPermissionState
+                    .isAllImportantPermissionGranted
+                    .collect {
+                        binding.notificationChangeTime.alpha = if (it) 1f else 0.5f
+                    }
+            }
         }
     }
 
