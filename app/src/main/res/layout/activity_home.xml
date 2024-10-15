@@ -196,12 +196,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:background="@android:color/transparent"
                             android:singleLine="true"
                             android:text="@{mainViewModel.appUpdateModel.buttonText}"
-                            android:textColor="@{(mainViewModel.appUpdateModel.downloadPercentage>50)? CommonUtils.getColor(context,R.color.white) : CommonUtils.getColor(context,R.color.black)}"
                             android:textSize="@dimen/text_tiny"
-                            app:elevation="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
