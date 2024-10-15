@@ -25,7 +25,7 @@ android {
         applicationId "com.pramod.dailyword"
         minSdk 21
         targetSdk 34
-        versionCode 202410150
+        versionCode 202410151
         versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
