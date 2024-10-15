@@ -175,10 +175,29 @@ class ActivityImportantPermissionHandler @Inject constructor(
     }
 
     override fun launchDisableUnusedAppPaused(): Boolean {
-        isNavigatedToAppDetailPage = true
-        val intent =
-            IntentCompat.createManageUnusedAppRestrictionsIntent(context, context.packageName)
-        return (context as? Activity)?.startActivityForResult(intent, 1010)?.let { true } ?: false
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {  // API 30 or higher
+            try {
+                isNavigatedToAppDetailPage = true
+                val intent: Intent = IntentCompat.createManageUnusedAppRestrictionsIntent(
+                    /* context = */ context,
+                    /* packageName = */ context.packageName
+                )
+                (context as? Activity)?.startActivityForResult(intent, 1010)?.let { true } ?: false
+            } catch (e: UnsupportedOperationException) {
+                // Handle the case where the feature is not supported
+                // For example, show a message to the user or log the error
+                Timber.e(
+                    "AppRestrictions",
+                    "Unused App Restrictions feature is not available on this device"
+                )
+                true
+            }
+        } else {
+            // Handle the case where the Android version is below API 30
+            Timber.e("AppRestrictions", "Feature requires Android 11 or higher")
+            true
+        }
     }
 
     override fun onCreate(owner: LifecycleOwner) {
@@ -307,8 +326,12 @@ class ImportantPermissionState @Inject constructor(
         _canShowFullNotificationEnableMessage.value =
             !isNotificationEnabled.value && !prefManager.isFullNotificationMessageDismissed()
 
+
+        val currentUnusedAppRestrictionsStatus =
+            PackageManagerCompat.getUnusedAppRestrictionsStatus(context).get()
         _isUnusedAppPausingDisabled.value =
-            PackageManagerCompat.getUnusedAppRestrictionsStatus(context).get() == DISABLED
+            currentUnusedAppRestrictionsStatus == DISABLED
+                    || currentUnusedAppRestrictionsStatus == FEATURE_NOT_AVAILABLE
     }
 
     fun markSettingIssueMessageDismissed() {
