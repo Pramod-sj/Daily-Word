@@ -18,22 +18,25 @@ object ButtonBA {
     @JvmStatic
     @BindingAdapter("app:buttonTextColorBasedOnWord")
     fun setButtonTextColor(button: MaterialButton, word: Word?) {
-        if (word != null && word.wordColor != -1 && word.wordDesaturatedColor != -1) {
-            val color = if (!ThemeManager.isNightModeActive(button.context)) {
-                CommonUtils.getColor(button.context, word.wordColor)
+        try {
+            if (word != null && word.wordColor != -1 && word.wordDesaturatedColor != -1) {
+                val color = if (!ThemeManager.isNightModeActive(button.context)) {
+                    CommonUtils.getColor(button.context, word.wordColor)
+                } else {
+                    CommonUtils.getColor(button.context, word.wordDesaturatedColor)
+                }
+                setButtonColor(
+                    button,
+                    color
+                )
             } else {
-                CommonUtils.getColor(button.context, word.wordDesaturatedColor)
+                val color = CommonUtils.getColor(button.context, R.color.colorPrimary)
+                setButtonColor(
+                    button,
+                    color
+                )
             }
-            setButtonColor(
-                button,
-                color
-            )
-        } else {
-            val color = CommonUtils.getColor(button.context, R.color.colorPrimary)
-            setButtonColor(
-                button,
-                color
-            )
+        } catch (_: Exception) {
         }
     }
 
