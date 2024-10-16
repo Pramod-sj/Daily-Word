@@ -74,8 +74,8 @@ class NotificationHelper @Inject constructor(@ApplicationContext val application
 
 
     fun createNotification(
-        title: String = DEFAULT_NOTIFICATION_TITLE,
-        body: String,
+        title: String?,
+        body: String?,
         cancelable: Boolean = true,
         pendingIntent: PendingIntent? = null
     ): Notification {
@@ -84,10 +84,10 @@ class NotificationHelper @Inject constructor(@ApplicationContext val application
             NOTIFICATION_CHANNEL
         )
         builder.setSmallIcon(R.drawable.ic_notification)
-        builder.setContentTitle(title)
+        builder.setContentTitle(title ?: DEFAULT_NOTIFICATION_TITLE)
         builder.color = ContextCompat.getColor(applicationContext, R.color.colorPrimaryDesaturated)
         builder.setDefaults(DEFAULT_SOUND + DEFAULT_VIBRATE)
-        builder.setContentText(body)
+        builder.setContentText(body.orEmpty())
         builder.setAutoCancel(cancelable)
         builder.setSound(uri)
         builder.priority = NotificationCompat.PRIORITY_MAX
@@ -102,13 +102,13 @@ class NotificationHelper @Inject constructor(@ApplicationContext val application
         notification: Notification,
         notificationId: Int = generateUniqueNotificationId()
     ) {
-/*
-        if (NotificationPrefManager.newInstance(context).isNotificationEnabled()) {
-            notificationManager.notify(notificationId, notification)
-        } else {
-            Log.i( "Notification are disabled, enable it from settings")
-        }
-*/
+        /*
+                if (NotificationPrefManager.newInstance(context).isNotificationEnabled()) {
+                    notificationManager.notify(notificationId, notification)
+                } else {
+                    Log.i( "Notification are disabled, enable it from settings")
+                }
+        */
         notificationManager.notify(notificationId, notification)
     }
 
