@@ -17,10 +17,13 @@ import com.pramod.dailyword.framework.ui.settings.custom_time_notification.Notif
 import com.pramod.dailyword.framework.util.CalenderUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,12 +52,16 @@ class AppSettingViewModel @Inject constructor(
     val notificationTriggerTime =
         MutableStateFlow<NotificationPrefManager.NotificationTriggerTime?>(null)
 
+    private val _notificationTriggerTimeChangeMessage = Channel<String>()
+    val notificationTriggerTimeChangeMessage: Flow<String>
+        get() = _notificationTriggerTimeChangeMessage.receiveAsFlow()
+
     fun setNotificationTriggerTime(notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?) {
-        if (notificationTriggerTime == null) {
-            notificationPrefManager.setNotificationMessagePayload(null)
-            notificationPrefManager.setNotificationTriggerTime(null)
-        } else {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (notificationTriggerTime == null) {
+                notificationPrefManager.setNotificationMessagePayload(null)
+                notificationPrefManager.setNotificationTriggerTime(null)
+            } else {
                 getWordsInteractor.getWords(1, false)
                     .firstOrNull { it.status != Status.LOADING }
                     ?.let { resource ->
@@ -79,7 +86,29 @@ class AppSettingViewModel @Inject constructor(
                         }
                     }
             }
+            _notificationTriggerTimeChangeMessage.send(getSubtitleNotificationMessage(notificationTriggerTime))
         }
+    }
+
+    private fun getSubtitleNotificationMessage(triggerTime: NotificationPrefManager.NotificationTriggerTime?): String {
+        notificationTriggerTime.value = triggerTime
+        val time = if (triggerTime != null) {
+            val cal = getLocalCalendar().apply { timeInMillis = triggerTime.timeInMillis }
+            CalenderUtil.convertCalenderToString(
+                cal,
+                "hh:mm a"
+            )
+        } else {
+            CalenderUtil.convertCalenderToString(
+                getLocalCalendar(17, 0),
+                "hh:mm a"
+            )
+        }
+        return String.format(
+            context.resources.getString(R.string.setting_notification_change_time_desc),
+            time,
+            if (triggerTime?.isNextDay == true) "next day" else "same day"
+        )
     }
 
     init {
@@ -87,26 +116,7 @@ class AppSettingViewModel @Inject constructor(
             .asFlow()
             .onEach { triggerTime ->
                 notificationTriggerTime.value = triggerTime
-                val time = if (triggerTime != null) {
-                    val cal = getLocalCalendar().apply { timeInMillis = triggerTime.timeInMillis }
-                    CalenderUtil.convertCalenderToString(
-                        cal,
-                        "hh:mm a"
-                    )
-                } else {
-                    CalenderUtil.convertCalenderToString(
-                        getLocalCalendar(17, 0),
-                        "hh:mm a"
-                    )
-                }
-                changeNotificationSubtitle.value =
-                    String.format(
-                        context.resources.getString(R.string.setting_notification_change_time_desc),
-                        time,
-                        if (triggerTime?.isNextDay == true) " next day" else " same day"
-                    )
-
-
+                changeNotificationSubtitle.value = getSubtitleNotificationMessage(triggerTime)
                 //scheduling alarm for the notification when there is any change to time
                 if (triggerTime != null) {
                     notificationAlarmScheduler.scheduleAlarm(triggerTime)
