@@ -18,7 +18,11 @@ fun Context.resolveAttrToDrawable(attr: Int): Drawable? {
 }
 
 fun Context.getContextCompatColor(colorResId: Int): Int {
-    return ContextCompat.getColor(this, colorResId)
+    return try {
+        ContextCompat.getColor(this, colorResId)
+    } catch (_: Exception) {
+        ContextCompat.getColor(this, android.R.color.transparent)
+    }
 }
 
 fun Context.getContextCompatDrawable(drawableResId: Int): Drawable? {
