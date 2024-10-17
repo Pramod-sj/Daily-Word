@@ -30,7 +30,6 @@ class ScrollableWidgetItemService : RemoteViewsService() {
         Timber.i("onGetViewFactory:")
         return ScrollableWidgetItemFactory(
             context = applicationContext,
-            intent = intent,
             widgetPreference = widgetPreference,
             wordCacheDataSource = wordCacheDataSource
         )
@@ -50,7 +49,6 @@ enum class ClickType {
 
 class ScrollableWidgetItemFactory(
     private val context: Context,
-    private val intent: Intent,
     private val widgetPreference: WidgetPreference,
     private val wordCacheDataSource: WordCacheDataSource
 ) : RemoteViewsService.RemoteViewsFactory {
@@ -58,21 +56,11 @@ class ScrollableWidgetItemFactory(
     private var word: Word? = null
 
     override fun onCreate() {
-        word = intent.extras?.getSerializable(EXTRA_WORD_DATA) as? Word
-        Timber.i("ScrollableWidgetItemFactory:onCreate():" + word?.word)
-        /*data = wordData?.let {
-            listOf(
-                WOTDWidget.WordInfo(
-                    word = it.word,
-                    attribute = it.attribute.orEmpty(),
-                    pronounce = it.pronounce.orEmpty(),
-                    pronounceAudioUrl = it.pronounceAudio.orEmpty(),
-                    meaning = it.meanings.orEmpty()
-                ),
-                WOTDWidget.WordUsage(words = it.examples.orEmpty()),
-                WOTDWidget.DidYouKnow(didYouKnowDesc = it.didYouKnow.orEmpty())
-            )
-        } ?: emptyList()*/
+        runBlocking(Dispatchers.Default) {
+            word = widgetPreference.getCurrentWordShown()?.let {
+                wordCacheDataSource.getWordByName(it)
+            }
+        }
     }
 
     override fun onDataSetChanged() {
