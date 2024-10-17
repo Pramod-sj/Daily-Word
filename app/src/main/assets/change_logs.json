@@ -1,11 +1,22 @@
 [
   {
+    "version_name": "3.0.1",
+    "version_code": 202410170,
+    "release_name": "\uD83C\uDF8A New update \uD83C\uDF8A",
+    "date": "17 Oct 2024",
+    "changes": [
+      "Bug fixes and optimizations for seamless app functionality"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "3.0.0",
-    "version_code": 202410140,
+    "version_code": 202410150,
     "release_name": "\uD83C\uDF8A Maintenance update \uD83C\uDF8A",
     "date": "14 Oct 2024",
     "changes": [
       "Scrollable word content in widget itself",
+      "Set Custom time for daily word notification arrival",
       "Better way to troubleshoot any notifications issues",
       "Underlying libraries updates",
       "Bug fixes and optimizations for seamless app functionality",
