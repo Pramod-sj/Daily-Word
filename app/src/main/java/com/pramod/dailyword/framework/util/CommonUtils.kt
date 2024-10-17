@@ -307,15 +307,19 @@ object CommonUtils {
 
     @JvmStatic
     fun getColor(context: Context, colorResId: Int): Int {
-        return ContextCompat.getColor(
-            context,
-            if (colorResId == -1 || colorResId == 0)
-                if (ThemeManager.isNightModeActive(context))
-                    R.color.colorPrimaryDesaturated
-                else
-                    R.color.colorPrimary
-            else colorResId
-        )
+        return try {
+            ContextCompat.getColor(
+                context,
+                if (colorResId == -1 || colorResId == 0)
+                    if (ThemeManager.isNightModeActive(context))
+                        R.color.colorPrimaryDesaturated
+                    else
+                        R.color.colorPrimary
+                else colorResId
+            )
+        } catch (_: Exception) {
+            ContextCompat.getColor(context, android.R.color.transparent)
+        }
 
     }
 
