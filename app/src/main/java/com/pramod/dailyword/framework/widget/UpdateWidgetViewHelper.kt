@@ -14,10 +14,9 @@ import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.framework.util.NetworkUtils
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -152,7 +151,9 @@ class UpdateWidgetViewHelper @Inject constructor(
 
         try {
 
-            val topWord = bookmarkedWordCacheDataSource.getTopOneWord().firstOrNull()
+            val topWord = withContext(Dispatchers.IO) {
+                bookmarkedWordCacheDataSource.getTopOneWord().firstOrNull()
+            }
 
             if (topWord == null || shouldCallApi) {
 
@@ -180,8 +181,10 @@ class UpdateWidgetViewHelper @Inject constructor(
 
                 Timber.i("onStartJob: Calling api")
 
-                val latestWordResource = getWordsInteractor.getWords(1, true)
-                    .firstOrNull { it.status != Status.LOADING }
+                val latestWordResource = withContext(Dispatchers.IO) {
+                    getWordsInteractor.getWords(1, true)
+                        .firstOrNull { it.status != Status.LOADING }
+                }
 
                 Timber.i("onStartJob: " + Gson().toJson(latestWordResource))
 
@@ -189,6 +192,8 @@ class UpdateWidgetViewHelper @Inject constructor(
                     && latestWordResource.data?.isEmpty() == false
                 ) {
                     val word = latestWordResource.data.first()
+
+                    Timber.i("WORD:" + word.word)
 
                     widgetPreference.setCurrentWordShown(word.word) //updating current showing word
 
@@ -200,6 +205,13 @@ class UpdateWidgetViewHelper @Inject constructor(
                             widgetSize.height
                         )
                     )
+
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        appWidgetManager.notifyAppWidgetViewDataChanged(
+                            appWidgetManager.getAppWidgetIds(widgetComponent),
+                            R.id.list_scrollable_content
+                        )
+                    }, 50)
                 } else {
                     appWidgetManager.updateAppWidget(
                         widgetComponent,
