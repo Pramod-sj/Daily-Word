@@ -79,21 +79,26 @@ fun Context.openWebsite(url: String) {
 
 
 fun Context.openGmail(emails: Array<String>, subject: String, body: String) {
-    val intent = Intent(Intent.ACTION_SENDTO)
-        .apply {
-            data = Uri.Builder().scheme("mailto").build()
-            putExtra(Intent.EXTRA_EMAIL, emails)
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, body)
+    val gmailPackageName = "com.google.android.gm"
+    val isGmailInstalled = packageManager.getLaunchIntentForPackage(gmailPackageName) != null
+
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "message/rfc822"
+        putExtra(Intent.EXTRA_EMAIL, emails)
+        putExtra(Intent.EXTRA_SUBJECT, subject)
+        putExtra(Intent.EXTRA_TEXT, body)
+        if (isGmailInstalled) {
+            `package` = gmailPackageName // Explicitly target Gmail
         }
-    if (intent.resolveActivity(packageManager) != null) {
+    }
+
+    if (isGmailInstalled) {
         startActivity(intent)
     } else {
-        Toast.makeText(
-            this,
-            resources.getString(R.string.no_gmail_app_message),
-            Toast.LENGTH_SHORT
-        ).show()
+        // Gmail is not installed, use Intent.createChooser or show an error message
+        startActivity(Intent.createChooser(intent, "Choose an email client"))
+        // or
+        // Toast.makeText(this, resources.getString(R.string.no_gmail_app_message), Toast.LENGTH_SHORT).show()
     }
 }
 

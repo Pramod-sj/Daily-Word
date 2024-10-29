@@ -326,12 +326,25 @@ class ImportantPermissionState @Inject constructor(
         _canShowFullNotificationEnableMessage.value =
             !isNotificationEnabled.value && !prefManager.isFullNotificationMessageDismissed()
 
+        val currentUnusedAppRestrictionsStatusFuture =
+            PackageManagerCompat.getUnusedAppRestrictionsStatus(context)
 
-        val currentUnusedAppRestrictionsStatus =
-            PackageManagerCompat.getUnusedAppRestrictionsStatus(context).get()
-        _isUnusedAppPausingDisabled.value =
-            currentUnusedAppRestrictionsStatus == DISABLED
-                    || currentUnusedAppRestrictionsStatus == FEATURE_NOT_AVAILABLE
+        currentUnusedAppRestrictionsStatusFuture.addListener(
+            {
+                try {
+                    val currentUnusedAppRestrictionsStatus =
+                        currentUnusedAppRestrictionsStatusFuture.get()
+
+                    _isUnusedAppPausingDisabled.value =
+                        currentUnusedAppRestrictionsStatus == DISABLED
+                                || currentUnusedAppRestrictionsStatus == FEATURE_NOT_AVAILABLE
+
+                } catch (_: Exception) {
+                    _isUnusedAppPausingDisabled.value = true
+                }
+            },
+            ContextCompat.getMainExecutor(context)
+        )
     }
 
     fun markSettingIssueMessageDismissed() {

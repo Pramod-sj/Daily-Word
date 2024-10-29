@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.ui.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -120,6 +121,14 @@ class AppSettingActivity :
         binding.notificationMeaningToggle.setOnClickListener {
             if (checkIfNotificationPermissionProvided()) {
                 viewModel.notificationPrefManager.toggleShowWordMeaningInNotification()
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.notificationTriggerTimeChangeMessage.collect {
+                    binding.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    viewModel.setMessage(Message.SnackBarMessage(it))
+                }
             }
         }
     }

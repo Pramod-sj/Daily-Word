@@ -11,7 +11,6 @@ import androidx.core.os.bundleOf
 import com.pramod.dailyword.Constants
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
-import com.pramod.dailyword.framework.helper.compactMutableFlag
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
@@ -205,7 +204,7 @@ class WidgetViewHelper @Inject constructor(
             views.setRemoteAdapter(
                 R.id.list_scrollable_content,
                 Intent(context, ScrollableWidgetItemService::class.java).apply {
-                    putExtra(EXTRA_WORD_DATA, word)
+                    //putExtra(EXTRA_WORD_DATA, word)
                     setData(Uri.parse(toUri(Intent.URI_INTENT_SCHEME)))
                 }
             )
@@ -282,7 +281,7 @@ class WidgetViewHelper @Inject constructor(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
                 fillInIntent,
-                compactMutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
             )
             views.setPendingIntentTemplate(R.id.list_scrollable_content, pendingIntentPlayAudio)
             //endregion

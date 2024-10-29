@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
@@ -104,8 +105,11 @@ open class DailyWordWidgetProvider : AppWidgetProvider() {
                         }
 
                         VIEW_FULL_WORD_DETAIL -> {
-                            i.extras?.getSerializable(EXTRA_WORD_DATA, Word::class.java)
-                                ?.let { word ->
+                            BundleCompat.getSerializable(
+                                i.extras ?: bundleOf(),
+                                EXTRA_WORD_DATA,
+                                Word::class.java
+                            )?.let { word ->
                                     context?.let {
                                         it.startActivity(
                                             Intent(
