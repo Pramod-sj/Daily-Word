@@ -2,9 +2,10 @@
   {
     "version_name": "3.0.1",
     "version_code": 202410170,
-    "release_name": "New update",
+    "release_name": "Big fix update",
     "date": "17 Oct 2024",
     "changes": [
+      "Fix app not working issue for Android 10 device",
       "Bug fixes and optimizations for seamless app functionality"
     ],
     "is_force_update": false
