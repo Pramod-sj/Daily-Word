@@ -40,7 +40,7 @@ class TroubleshootActivity : ThemedActivity() {
 
             TroubleshootScreen(
                 backButtonClick = {
-                    onBackPressed()
+                    onBackPressedDispatcher.onBackPressed()
                 },
                 isNotificationEnabled = isNotificationEnabled,
                 isBatteryOptimizationDisabled = isBatteryOptimizationDisabled,

@@ -38,7 +38,6 @@ class RecapWordsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
-        handleBackPress()
         binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
         binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
@@ -118,13 +117,6 @@ class RecapWordsActivity :
             adapter.submitList(it)
         }
     }
-
-    private fun handleBackPress() {
-        onBackPressedDispatcher.addCallback {
-            finish()
-        }
-    }
-
 
     companion object {
         val TAG = RecapWordsActivity::class.java
