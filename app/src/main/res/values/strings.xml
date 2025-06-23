@@ -301,6 +301,8 @@
     <string name="widget_please_check_internet">Please check your internet</string>
     <string name="widget_something_went_wrong">Something went wrong! try again.</string>
 
+    <string name="auto_start_exception_message">Sorry, Auto Start settings can\'t be opened automatically on this device.!</string>
+
 
     <string name="greeting_hi">Hi, </string>
     <string name="greeting_hello">Hello, </string>
