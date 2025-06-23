@@ -120,3 +120,6 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+-dontwarn com.facebook.infer.annotation.Nullsafe$Mode
+-dontwarn com.facebook.infer.annotation.Nullsafe

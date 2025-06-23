@@ -184,24 +184,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         }
     }
 
+    private val purchaseListener = object : PurchaseListenerImpl() {
+        override fun onBillingPurchasesProcessed() {
+            super.onBillingPurchasesProcessed()
+            lifecycleScope.launch {
+                prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
+                shouldShowSupportDevelopmentDialog()
+            }
+        }
+
+        override fun onPurchasedRestored(sku: String) {
+            super.onPurchasedRestored(sku)
+            prefManager.setHasDonated(true)
+        }
+    }
+
     private fun initBillingHelper() {
         billingHelper = BillingHelper(
             this,
             DONATE_ITEM_LIST.map { it.itemProductId })
-        billingHelper.addPurchaseListener(object : PurchaseListenerImpl() {
-            override fun onBillingPurchasesProcessed() {
-                super.onBillingPurchasesProcessed()
-                lifecycleScope.launch {
-                    prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
-                    shouldShowSupportDevelopmentDialog()
-                }
-            }
-
-            override fun onPurchasedRestored(sku: String) {
-                super.onPurchasedRestored(sku)
-                prefManager.setHasDonated(true)
-            }
-        })
+        billingHelper.addPurchaseListener(purchaseListener)
     }
 
     override fun onResume() {
@@ -513,18 +515,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                 showBasicDialog(
                     title = resources.getString(R.string.dialog_auto_start_title),//"Auto Start",
                     message =
-                    if (!autoStartPrefManager.isClickedOnSetting())
-                        resources.getString(R.string.dialog_auto_start_desc_1)
-                    //"Please enable auto start else notification feature won't work properly!"
-                    else
-                        resources.getString(R.string.dialog_auto_start_desc_2),
+                        if (!autoStartPrefManager.isClickedOnSetting())
+                            resources.getString(R.string.dialog_auto_start_desc_1)
+                        //"Please enable auto start else notification feature won't work properly!"
+                        else
+                            resources.getString(R.string.dialog_auto_start_desc_2),
                     //"It's look like you have already went to setting, if you have enabled AutoStart clicked on 'Already Enabled'",
                     positiveText = resources.getString(R.string.dialog_auto_start_positive),
                     positiveClickCallback = {
-                        if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
-                            viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.auto_start_unable_to_open_setting)))
+                        try {
+                            if (!autoStartPermissionHelper.getAutoStartPermission(this)) {
+                                viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.auto_start_unable_to_open_setting)))
+                            }
+                            autoStartPrefManager.clickedOnSetting()
+                        } catch (e: Exception) {
+                            viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.auto_start_exception_message)))
                         }
-                        autoStartPrefManager.clickedOnSetting()
                     },
                     negativeText = resources.getString(R.string.dialog_auto_start_negative),
                     negativeClickCallback = {
@@ -860,6 +866,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(installStateUpdatedListener)
+        billingHelper.removeBillingListener(purchaseListener)
     }
 
 

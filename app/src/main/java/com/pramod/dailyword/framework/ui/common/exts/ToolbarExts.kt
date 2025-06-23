@@ -19,7 +19,7 @@ fun AppCompatActivity.setUpToolbar(
     toolbar.title = title
     if (showNavAsBack == true) {
         toolbar.setNavigationIcon(R.drawable.ic_round_back_arrow)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
     navIcon?.let { toolbar.setNavigationIcon(it) }
     navIconClickListener?.let {
