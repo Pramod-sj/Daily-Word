@@ -184,24 +184,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         }
     }
 
+    private val purchaseListener = object : PurchaseListenerImpl() {
+        override fun onBillingPurchasesProcessed() {
+            super.onBillingPurchasesProcessed()
+            lifecycleScope.launch {
+                prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
+                shouldShowSupportDevelopmentDialog()
+            }
+        }
+
+        override fun onPurchasedRestored(sku: String) {
+            super.onPurchasedRestored(sku)
+            prefManager.setHasDonated(true)
+        }
+    }
+
     private fun initBillingHelper() {
         billingHelper = BillingHelper(
             this,
             DONATE_ITEM_LIST.map { it.itemProductId })
-        billingHelper.addPurchaseListener(object : PurchaseListenerImpl() {
-            override fun onBillingPurchasesProcessed() {
-                super.onBillingPurchasesProcessed()
-                lifecycleScope.launch {
-                    prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
-                    shouldShowSupportDevelopmentDialog()
-                }
-            }
-
-            override fun onPurchasedRestored(sku: String) {
-                super.onPurchasedRestored(sku)
-                prefManager.setHasDonated(true)
-            }
-        })
+        billingHelper.addPurchaseListener(purchaseListener)
     }
 
     override fun onResume() {
@@ -864,6 +866,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(installStateUpdatedListener)
+        billingHelper.removeBillingListener(purchaseListener)
     }
 
 
