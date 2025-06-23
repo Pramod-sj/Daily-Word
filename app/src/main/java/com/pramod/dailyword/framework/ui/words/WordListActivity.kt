@@ -1,12 +1,10 @@
 package com.pramod.dailyword.framework.ui.words
 
-//import androidx.paging.ExperimentalPagingApi
-
 import android.app.ActivityOptions
 import android.app.SearchManager
 import android.os.Bundle
 import android.view.Menu
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -32,7 +30,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -156,10 +153,18 @@ class WordListActivity :
         }
     }
 
-    private fun handleBackPress() {
-        onBackPressedDispatcher.addCallback {
-            if (searchView?.isIconified == false) searchView?.isIconified = true else finish()
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (searchView?.isIconified == false) {
+                searchView?.isIconified = true
+            }
         }
+    }
+
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        onBackPressedCallback.isEnabled = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -178,10 +183,12 @@ class WordListActivity :
             search.maxWidth = Integer.MAX_VALUE
             search.queryHint = resources.getString(R.string.search_hint)
             search.setOnCloseListener {
+                onBackPressedCallback.isEnabled = false
                 binding.toolbar.contentInsetStartWithNavigation = contentInsetStartWithNavigation
                 false
             }
             search.setOnSearchClickListener {
+                onBackPressedCallback.isEnabled = true
                 binding.toolbar.contentInsetStartWithNavigation = 0
             }
             search.setSearchableInfo(manager.getSearchableInfo(componentName))
