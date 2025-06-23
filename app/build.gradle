@@ -19,12 +19,12 @@ endpointProperties.load(new FileInputStream(endPointPropertiesFile))
 
 android {
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.pramod.dailyword"
         minSdk 21
-        targetSdk 34
+        targetSdk 35
         versionCode 202410290
         versionName "3.0.1"
 
@@ -83,10 +83,6 @@ android {
         dataBinding = true
         compose true
         buildConfig true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
     }
 
     kotlinOptions {

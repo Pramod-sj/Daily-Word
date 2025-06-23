@@ -4,7 +4,6 @@ plugins {
     // Use plugins from the version catalog
     alias(libs.plugins.application) apply false // Apply in individual modules
     alias(libs.plugins.library) apply false
-
     alias(libs.plugins.googleServices) apply false // Apply in individual modules
     alias(libs.plugins.firebaseCrashlytics) apply false // Apply in individual modules
     alias(libs.plugins.hilt) apply false // Apply in individual modules
