@@ -11,7 +11,9 @@ import com.google.android.material.internal.NavigationMenuView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogBottomMenuLayoutBinding
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BottomMenuDialog :
     ExpandingBottomSheetDialogFragment<DialogBottomMenuLayoutBinding>(R.layout.dialog_bottom_menu_layout) {
 

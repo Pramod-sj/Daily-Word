@@ -4,7 +4,10 @@ import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.FloatRange
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatImageView
@@ -16,7 +19,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.pramod.dailyword.R
-import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgePrefManager
+import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgeApplicator
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.exts.configStatusBar
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -25,6 +28,7 @@ import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRange
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeFromFloat
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRangeToFloat
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes val layoutId: Int) :
     DismissibleDialogFragment() {
@@ -36,6 +40,9 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
     val binding get() = _binding!!
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+    @Inject
+    lateinit var edgeToEdgeApplicator: EdgeToEdgeApplicator
 
     abstract fun getBottomSheetBehaviorView(): View
 
@@ -73,9 +80,8 @@ abstract class ExpandingBottomSheetDialogFragment<V : ViewBinding>(@LayoutRes va
 
     override fun onStart() {
         super.onStart()
-        EdgeToEdgePrefManager.newInstance(requireContext())
-            .applyEdgeToEdgeIfEnabled(dialog?.window!!, true)
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        dialog?.window?.let { edgeToEdgeApplicator.applyForDialog(it) }
+        //dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         dialog?.setOnKeyListener { dialog, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN

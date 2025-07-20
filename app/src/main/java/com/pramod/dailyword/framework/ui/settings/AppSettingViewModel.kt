@@ -10,6 +10,7 @@ import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.DEEP_LINK_TO_WORD_DETAILED
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.NOTIFICATION_NEW_WORD
+import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgeEnabler
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
@@ -20,6 +21,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,7 +34,8 @@ class AppSettingViewModel @Inject constructor(
     val notificationPrefManager: NotificationPrefManager,
     @ApplicationContext private val context: Context,
     private val notificationAlarmScheduler: NotificationAlarmScheduler,
-    private val getWordsInteractor: GetWordsInteractor
+    private val getWordsInteractor: GetWordsInteractor,
+    private val edgeToEdgeEnabler: EdgeToEdgeEnabler
 ) : BaseViewModel() {
 
     var settingUseCase: SettingUseCase? = null
@@ -55,6 +58,13 @@ class AppSettingViewModel @Inject constructor(
     private val _notificationTriggerTimeChangeMessage = Channel<String>()
     val notificationTriggerTimeChangeMessage: Flow<String>
         get() = _notificationTriggerTimeChangeMessage.receiveAsFlow()
+
+    init {
+        edgeToEdgeEnabler.isEnabledLiveData.asFlow()
+            .distinctUntilChanged()
+            .onEach { edgeToEdgeValue.value = it }
+            .launchIn(viewModelScope)
+    }
 
     fun setNotificationTriggerTime(notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?) {
         viewModelScope.launch {

@@ -9,7 +9,9 @@ import com.pramod.dailyword.databinding.DialogChipListBinding
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.bindingadapter.OnChipClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChipListDialogFragment :
     ExpandingBottomSheetDialogFragment<DialogChipListBinding>(R.layout.dialog_chip_list) {
 

@@ -41,9 +41,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">?isLightTheme</item>
         <item name="android:windowLightNavigationBar">?isLightTheme</item>
-        <item name="android:navigationBarColor">@color/bottomSheetDialogNavigationBarColor</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
+        <item name="enableEdgeToEdge">true</item>
     </style>
 
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
@@ -59,5 +60,6 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="elevationOverlayEnabled">false</item>
+        <item name="enableEdgeToEdge">true</item>
     </style>
 </resources>

@@ -129,7 +129,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        transparentNavBar = true
         super.onCreate(savedInstanceState)
         supportPostponeEnterTransition()
         checkForUpdate()

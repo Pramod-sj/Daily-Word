@@ -22,7 +22,7 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
         binding.lifecycleOwner = this
-        viewModel.isEdgeToEdgeEnabled = edgeToEdgePrefManager.isEnabled()
+        viewModel.isEdgeToEdgeEnabled = edgeToEdgeEnabler.isEnabled
         binding.setVariable(bindingVariable, viewModel)
         binding.executePendingBindings()
         setMessageObserver()

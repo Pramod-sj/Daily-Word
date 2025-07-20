@@ -122,8 +122,9 @@
         <item name="bottomSheetStyle">@style/AppTheme.BottomSheet</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowIsFloating">false</item>
+        <item name="enableEdgeToEdge">true</item>
     </style>
 
     <style name="AppTheme.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
@@ -142,6 +143,7 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="elevationOverlayEnabled">false</item>
+        <item name="enableEdgeToEdge">true</item>
     </style>
 
 

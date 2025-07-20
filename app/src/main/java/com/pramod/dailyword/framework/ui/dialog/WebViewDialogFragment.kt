@@ -17,7 +17,9 @@ import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import com.pramod.dailyword.framework.ui.common.view.ObservableWebView
 import com.pramod.dailyword.framework.util.NetworkUtils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WebViewDialogFragment :
     ExpandingBottomSheetDialogFragment<DialogWebviewLayoutBinding>(R.layout.dialog_webview_layout) {
 
