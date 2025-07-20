@@ -1,6 +1,8 @@
 package com.pramod.dailyword.framework.ui.settings
 
 import android.content.Context
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
@@ -45,6 +47,10 @@ class AppSettingViewModel @Inject constructor(
     val windowAnimValue = MutableLiveData<Boolean>()
 
     val edgeToEdgeValue = MutableLiveData<Boolean>()
+
+    val edgeToEdgeSettingVisible = MutableLiveData<Boolean>().apply {
+        value = VERSION.SDK_INT < VERSION_CODES.VANILLA_ICE_CREAM
+    }
 
     val hideBadgesValue = MutableLiveData<Boolean>()
 

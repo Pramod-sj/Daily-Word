@@ -30,7 +30,10 @@ class EdgeToEdgePrefManagerImpl @Inject constructor(
     }
 
     override val isEnabled: Boolean
-        get() = sPrefManager.getBoolean(KEY_EDGE_TO_EDGE_ENABLED, VALUE_DEFAULT_EDGE_TO_EDGE)
+        get() = sPrefManager.getBoolean(
+            KEY_EDGE_TO_EDGE_ENABLED,
+            VALUE_DEFAULT_EDGE_TO_EDGE
+        ) || VERSION.SDK_INT >= VERSION_CODES.VANILLA_ICE_CREAM
 
     override val isEnabledLiveData: LiveData<Boolean> = SPrefBooleanLiveData(
         sPrefManager,
