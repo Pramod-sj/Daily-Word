@@ -21,6 +21,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
+            android:paddingHorizontal="12dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp">
 
@@ -55,6 +56,7 @@
 
             <ImageView
                 android:id="@+id/iv_body_bg"
+                android:layout_marginHorizontal="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/background_widget_inner_small_light" />
@@ -86,7 +88,7 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingHorizontal="12dp"
                 android:paddingVertical="3dp"
                 android:visibility="invisible">
 

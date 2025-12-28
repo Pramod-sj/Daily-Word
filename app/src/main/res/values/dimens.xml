@@ -61,4 +61,7 @@
 
 
     <dimen name="card_horizontal_margin_tablet">50dp</dimen>
+
+    <dimen name="widget_background_radius">12dp</dimen>
+    <dimen name="widget_inner_radius">8dp</dimen>
 </resources>
