@@ -9,7 +9,7 @@
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_widget" />
+        android:src="@drawable/background_widget_light" />
 
     <LinearLayout
         android:id="@+id/main_linearLayout_wotd"
@@ -29,12 +29,13 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_vocabulary_24dp_white"
                 android:drawablePadding="@dimen/padding_medium"
+                android:drawableTint="@color/black"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="6dp"
                 android:singleLine="true"
                 android:text="@string/app_name"
-                android:textColor="@color/dark_textColor_highEmphasis"
+                android:textColor="@color/textColor_highEmphasis"
                 android:textSize="@dimen/text_small"
                 android:textStyle="bold" />
 
@@ -53,7 +54,7 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_baseline_bookmark_border_24"
                     android:visibility="gone"
-                    app:tint="@color/white" />
+                    android:tint="@color/black" />
 
                 <ImageView
                     android:id="@+id/widget_retry"
@@ -63,7 +64,7 @@
                     android:layout_marginHorizontal="@dimen/margin_small"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_round_refresh_24"
-                    app:tint="@color/white" />
+                    android:tint="@color/black" />
 
 
             </LinearLayout>
@@ -80,7 +81,7 @@
                 android:id="@+id/iv_body_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/background_widget_inner" />
+                android:src="@drawable/background_widget_inner_light" />
 
             <LinearLayout
                 android:id="@+id/widget_placeholder"
@@ -96,14 +97,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="@dimen/margin_small"
-                    android:tint="@color/dark_textColor_highEmphasis" />
+                    android:tint="@color/textColor_highEmphasis" />
 
                 <TextView
                     android:id="@+id/widget_placeHolder_imageView_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@color/dark_textColor_highEmphasis"
+                    android:textColor="@color/textColor_highEmphasis"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
 
@@ -125,7 +126,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="Testing"
-                    android:textColor="@color/dark_textColor_highEmphasis" />
+                    android:textColor="@color/textColor_highEmphasis" />
 
 
                 <LinearLayout
@@ -143,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:textColor="@color/dark_textColor_highEmphasis"
+                        android:textColor="@color/textColor_highEmphasis"
                         android:textStyle="italic"
                         tools:text="Attribute" />
 
@@ -154,7 +155,7 @@
                         android:gravity="center"
                         android:paddingHorizontal="@dimen/padding_small"
                         android:text="@string/unicode_bullet"
-                        android:textColor="@color/dark_textColor_highEmphasis" />
+                        android:textColor="@color/textColor_highEmphasis" />
 
                     <TextView
                         android:id="@+id/widget_txtView_pronounce"
@@ -162,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:textColor="@color/dark_textColor_highEmphasis"
+                        android:textColor="@color/textColor_highEmphasis"
                         tools:text="Pronounce" />
 
                     <ImageView
@@ -171,7 +172,7 @@
                         android:layout_height="24dp"
                         android:layout_marginHorizontal="@dimen/padding_medium"
                         android:src="@drawable/ic_volume_up_black_24dp"
-                        android:tint="@color/dark_textColor_highEmphasis" />
+                        android:tint="@color/textColor_highEmphasis" />
 
                 </LinearLayout>
 
@@ -183,7 +184,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="3dp"
                     android:ellipsize="end"
-                    android:textColor="@color/dark_textColor_highEmphasis" />
+                    android:textColor="@color/textColor_highEmphasis" />
 
 
             </LinearLayout>
