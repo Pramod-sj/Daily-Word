@@ -866,6 +866,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(installStateUpdatedListener)
+        billingHelper.removePurchaseListener(purchaseListener)
         billingHelper.removeBillingListener(purchaseListener)
     }
 
