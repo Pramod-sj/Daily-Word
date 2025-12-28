@@ -17,6 +17,8 @@ import android.widget.AbsListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -29,9 +31,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BottomSheetDialogLayoutBinding
 import com.pramod.dailyword.databinding.DialogWebviewLayoutBinding
+import com.pramod.dailyword.di.Edge2EdgeModuleEntryPoint
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.aboutapp.AboutAppActivity
 import com.pramod.dailyword.framework.ui.donate.DonateBottomDialogFragment
+import dagger.hilt.android.EntryPointAccessors
 import timber.log.Timber
 
 
@@ -233,6 +237,40 @@ fun Activity.showBottomSheet(
     bottomSheetDialog.setOnDismissListener {
         onDismissCallback?.invoke()
     }
+
+    val edge2EdgeModuleEntryPoint = EntryPointAccessors.fromApplication(
+        applicationContext,
+        Edge2EdgeModuleEntryPoint::class.java
+    )
+
+    bottomSheetDialog.setOnShowListener { dialog ->
+        val d = dialog as BottomSheetDialog
+
+        d.window?.let { edge2EdgeModuleEntryPoint.edgeToEdgeApplicator().applyForDialog(it) }
+
+        val dialogView = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            ?: return@setOnShowListener
+
+        if (edge2EdgeModuleEntryPoint.edgeToEdgeEnabler().isEnabled) {
+            // Handle the design_bottom_sheet (the actual bottom sheet)
+            val bottomPadding = dialogView.paddingBottom
+            ViewCompat.setOnApplyWindowInsetsListener(dialogView) { view, insets ->
+                val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                // Apply bottom padding for navigation bar if needed
+                view.setPadding(
+                    view.paddingLeft,
+                    view.paddingTop,
+                    view.paddingRight,
+                    systemBarInsets.bottom + bottomPadding
+                )
+                insets
+            }
+            dialogView.requestApplyInsets()
+        }
+
+        dialogView.setBackgroundResource(R.drawable.bg_bottom_dialog)
+    }
+
     bottomSheetDialog.show()
 
 }

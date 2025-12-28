@@ -42,9 +42,6 @@ class SplashScreenActivity :
     lateinit var appPrefManager: PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        forceEdgeToEdge(true)
-        transparentNavBar = true
-        lightStatusBar(matchingBackgroundColor = true)
         super.onCreate(savedInstanceState)
         appPrefManager.incrementAppLaunchCount()
         //addGradientToAppIcon()

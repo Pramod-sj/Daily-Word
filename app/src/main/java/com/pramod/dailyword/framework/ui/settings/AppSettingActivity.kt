@@ -99,7 +99,6 @@ class AppSettingActivity :
         setUpToolbar(binding.toolbar, null, true)
         handleUserCase()
         initThemeValue()
-        initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
         bindNotificationEnabledState()
@@ -246,12 +245,6 @@ class AppSettingActivity :
         }
     }
 
-    private fun initEdgeToEdgeValue() {
-        edgeToEdgePrefManager.getLiveData().observe(this) {
-            viewModel.edgeToEdgeValue.value = it
-        }
-    }
-
     private fun initWindowAnimValue() {
         windowAnimPrefManager.liveData().observe(this) {
             viewModel.windowAnimValue.value = it
@@ -282,11 +275,10 @@ class AppSettingActivity :
 
             override fun toggleWindowAnimation() {
                 windowAnimPrefManager.toggle()
-                Timber.i("toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
             }
 
             override fun toggleEdgeToEdge() {
-                edgeToEdgePrefManager.toggle()
+                edgeToEdgeEnabler.toggle()
                 restartActivity(true)
             }
 

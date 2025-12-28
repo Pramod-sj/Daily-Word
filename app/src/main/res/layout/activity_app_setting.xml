@@ -96,13 +96,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginStart="@dimen/setting_stroke_start_margin"
-                            android:background="@color/setting_stroke" />
+                            android:background="@color/setting_stroke"
+                            app:isGone="@{!appSettingViewModel.edgeToEdgeSettingVisible}" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
                             app:checked="@{appSettingViewModel.edgeToEdgeValue}"
+                            app:isGone="@{!appSettingViewModel.edgeToEdgeSettingVisible}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
                             app:subTitle="@string/setting_item_fullscreen_desc"
