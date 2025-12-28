@@ -46,7 +46,10 @@ class EdgeToEdgePrefManagerImpl @Inject constructor(
     }
 
     override fun applyForActivity(activity: ComponentActivity) {
-        if (isEnabled) activity.enableEdgeToEdge()
+        if (isEnabled) {
+            activity.enableEdgeToEdge()
+            activity.window.isNavigationBarContrastEnforced = true
+        }
     }
 
     override fun applyForDialog(window: Window) {

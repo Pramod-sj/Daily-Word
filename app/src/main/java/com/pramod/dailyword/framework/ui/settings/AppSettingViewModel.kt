@@ -49,7 +49,7 @@ class AppSettingViewModel @Inject constructor(
     val edgeToEdgeValue = MutableLiveData<Boolean>()
 
     val edgeToEdgeSettingVisible = MutableLiveData<Boolean>().apply {
-        value = VERSION.SDK_INT < VERSION_CODES.VANILLA_ICE_CREAM
+        value = VERSION.SDK_INT <= VERSION_CODES.VANILLA_ICE_CREAM
     }
 
     val hideBadgesValue = MutableLiveData<Boolean>()
