@@ -1,5 +1,16 @@
 [
   {
+    "version_name": "3.2.0",
+    "version_code": 202512280,
+    "release_name": "Maintenance update",
+    "date": "28 Dec 2025",
+    "changes": [
+      "Widgets now match your system theme (Light/Dark mode)",
+      "Bug fixes and optimizations for seamless app functionality"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "3.1.0",
     "version_code": 202506230,
     "release_name": "Maintenance update",
