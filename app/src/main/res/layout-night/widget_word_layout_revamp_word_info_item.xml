@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:textColor="@color/textColor_highEmphasis"
+        android:textColor="@color/dark_textColor_highEmphasis"
         tools:text="layman" />
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/textColor_highEmphasis"
+            android:textColor="@color/dark_textColor_highEmphasis"
             android:textStyle="italic"
             tools:text="Attribute " />
 
@@ -43,7 +43,7 @@
             android:gravity="center"
             android:paddingHorizontal="@dimen/padding_small"
             android:text="@string/unicode_bullet"
-            android:textColor="@color/textColor_highEmphasis" />
+            android:textColor="@color/dark_textColor_highEmphasis" />
 
         <TextView
             android:id="@+id/widget_txtView_pronounce"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/textColor_highEmphasis"
+            android:textColor="@color/dark_textColor_highEmphasis"
             tools:text="Pronounce" />
 
         <ImageView
@@ -63,7 +63,7 @@
             android:background="@drawable/background_circle_ripple"
             android:padding="8dp"
             android:src="@drawable/ic_volume_up_black_24dp"
-            android:tint="@color/textColor_highEmphasis" />
+            android:tint="@color/dark_textColor_highEmphasis" />
 
     </LinearLayout>
 
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:gravity="center_vertical"
-        android:textColor="@color/textColor_highEmphasis"
+        android:textColor="@color/dark_textColor_highEmphasis"
         tools:text=": a person who is not a member of the clergy" />
 
 </LinearLayout>

@@ -8,7 +8,7 @@
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_widget_small_light" />
+        android:src="@drawable/background_widget_small" />
 
     <LinearLayout
         android:id="@+id/main_linearLayout_wotd"
@@ -21,8 +21,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:paddingHorizontal="12dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
             android:layout_marginBottom="2dp">
 
 
@@ -32,7 +32,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginHorizontal="@dimen/margin_small"
                 android:src="@drawable/ic_vocabulary_24dp_white"
-                android:tint="@color/black" />
+                android:tint="@color/white" />
 
 
             <ImageView
@@ -42,7 +42,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/margin_small"
                 android:src="@drawable/ic_round_refresh_24"
-                android:tint="@color/black" />
+                android:tint="@color/white" />
         </FrameLayout>
 
         <FrameLayout
@@ -56,10 +56,10 @@
 
             <ImageView
                 android:id="@+id/iv_body_bg"
-                android:layout_marginHorizontal="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/background_widget_inner_small_light" />
+                android:layout_marginHorizontal="4dp"
+                android:src="@drawable/background_widget_inner_small" />
 
             <LinearLayout
                 android:id="@+id/widget_placeholder"
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:textColor="@color/textColor_highEmphasis" />
+                    android:textColor="@color/dark_textColor_highEmphasis" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:textColor="@color/textColor_highEmphasis"
+                        android:textColor="@color/dark_textColor_highEmphasis"
                         android:textStyle="italic"
                         tools:text="Attribute" />
 
@@ -127,7 +127,7 @@
                         android:gravity="center"
                         android:paddingHorizontal="@dimen/padding_small"
                         android:text="@string/unicode_bullet"
-                        android:textColor="@color/textColor_highEmphasis" />
+                        android:textColor="@color/dark_textColor_highEmphasis" />
 
                     <TextView
                         android:id="@+id/widget_txtView_pronounce"
@@ -136,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:textColor="@color/textColor_highEmphasis"
+                        android:textColor="@color/dark_textColor_highEmphasis"
                         tools:text="Pronounce" />
 
                 </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:paddingVertical="2dp"
-                    android:textColor="@color/textColor_highEmphasis"
+                    android:textColor="@color/dark_textColor_highEmphasis"
                     android:textSize="@dimen/text_tiny"
                     tools:text="This is the meaning" />
 
@@ -161,7 +161,7 @@
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center"
                 android:indeterminate="true"
-                android:indeterminateTint="@color/black" />
+                android:indeterminateTint="@color/white" />
 
         </FrameLayout>
 

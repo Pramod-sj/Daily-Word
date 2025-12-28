@@ -8,7 +8,7 @@
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_widget_light" />
+        android:src="@drawable/background_widget" />
 
     <LinearLayout
         android:id="@+id/main_linearLayout_wotd"
@@ -30,13 +30,12 @@
                 android:layout_gravity="center_vertical"
                 android:drawableStart="@drawable/ic_vocabulary_24dp_white"
                 android:drawablePadding="@dimen/padding_medium"
-                android:drawableTint="@color/black"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:singleLine="true"
                 android:text="@string/app_name"
-                android:textColor="@color/textColor_highEmphasis"
+                android:textColor="@color/dark_textColor_highEmphasis"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -54,7 +53,7 @@
                     android:background="@android:color/transparent"
                     android:padding="4dp"
                     android:src="@drawable/ic_random_word"
-                    android:tint="@color/black" />
+                    android:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/widget_bookmark"
@@ -65,7 +64,7 @@
                     android:background="@android:color/transparent"
                     android:padding="4dp"
                     android:src="@drawable/ic_baseline_bookmark_border_24"
-                    android:tint="@color/black" />
+                    android:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/widget_retry"
@@ -76,7 +75,7 @@
                     android:background="@android:color/transparent"
                     android:padding="4dp"
                     android:src="@drawable/ic_round_refresh_24"
-                    android:tint="@color/black" />
+                    android:tint="@color/white" />
 
             </LinearLayout>
         </FrameLayout>
@@ -90,7 +89,7 @@
                 android:id="@+id/iv_body_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/background_widget_inner_light" />
+                android:src="@drawable/background_widget_inner" />
 
 
             <ListView

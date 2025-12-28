@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,58 +9,78 @@
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_widget_small_light" />
+        android:src="@drawable/background_widget" />
 
     <LinearLayout
         android:id="@+id/main_linearLayout_wotd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="3dp">
-
+        android:padding="10dp">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:paddingHorizontal="12dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp">
+            android:paddingBottom="10dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_vocabulary_24dp_white"
+                android:drawablePadding="@dimen/padding_medium"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                android:text="@string/app_name"
+                android:textColor="@color/dark_textColor_highEmphasis"
+                android:textSize="@dimen/text_small"
+                android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginHorizontal="@dimen/margin_small"
-                android:src="@drawable/ic_vocabulary_24dp_white"
-                android:tint="@color/black" />
-
-
-            <ImageView
-                android:id="@+id/widget_retry"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginHorizontal="@dimen/margin_small"
-                android:src="@drawable/ic_round_refresh_24"
-                android:tint="@color/black" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/widget_bookmark"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginHorizontal="@dimen/margin_small"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_bookmark_border_24"
+                    android:visibility="gone"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/widget_retry"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginHorizontal="@dimen/margin_small"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_round_refresh_24"
+                    app:tint="@color/white" />
+
+
+            </LinearLayout>
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/fl_widget_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
             android:clipChildren="false"
             android:clipToPadding="false">
 
             <ImageView
                 android:id="@+id/iv_body_bg"
-                android:layout_marginHorizontal="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/background_widget_inner_small_light" />
+                android:src="@drawable/background_widget_inner" />
 
             <LinearLayout
                 android:id="@+id/widget_placeholder"
@@ -68,8 +89,14 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="10dp">
+                android:padding="@dimen/padding_large">
+
+                <ImageView
+                    android:id="@+id/widget_placeHolder_imageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/margin_small"
+                    android:tint="@color/dark_textColor_highEmphasis" />
 
                 <TextView
                     android:id="@+id/widget_placeHolder_imageView_message"
@@ -77,33 +104,34 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/dark_textColor_highEmphasis"
-                    android:textSize="10sp" />
+                    android:textSize="@dimen/text_small" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/widget_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="3dp"
+                android:padding="@dimen/padding_medium"
                 android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/widget_txtView_word_of_the_day"
-                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                    style="@style/AppTheme.Header5TextStyle.Bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:textColor="@color/textColor_highEmphasis" />
+                    android:text="Testing"
+                    android:textColor="@color/dark_textColor_highEmphasis" />
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_small"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:gravity="center_vertical"
@@ -111,46 +139,52 @@
 
                     <TextView
                         android:id="@+id/widget_txtView_attribute"
-                        style="@style/AppTheme.SmallTextStyle"
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:textColor="@color/textColor_highEmphasis"
+                        android:singleLine="true"
+                        android:textColor="@color/dark_textColor_highEmphasis"
                         android:textStyle="italic"
                         tools:text="Attribute" />
 
                     <TextView
-                        style="@style/AppTheme.SmallTextStyle"
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingHorizontal="@dimen/padding_small"
                         android:text="@string/unicode_bullet"
-                        android:textColor="@color/textColor_highEmphasis" />
+                        android:textColor="@color/dark_textColor_highEmphasis" />
 
                     <TextView
                         android:id="@+id/widget_txtView_pronounce"
-                        style="@style/AppTheme.SmallTextStyle"
+                        style="@style/AppTheme.SubTitleTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:textColor="@color/textColor_highEmphasis"
+                        android:singleLine="true"
+                        android:textColor="@color/dark_textColor_highEmphasis"
                         tools:text="Pronounce" />
+
+                    <ImageView
+                        android:id="@+id/widget_img_pronounce"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginHorizontal="@dimen/padding_medium"
+                        android:src="@drawable/ic_volume_up_black_24dp"
+                        android:tint="@color/dark_textColor_highEmphasis" />
 
                 </LinearLayout>
 
 
                 <TextView
                     android:id="@+id/widget_txtView_meanings"
+                    style="@style/AppTheme.SmallTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="3dp"
                     android:ellipsize="end"
-                    android:paddingVertical="2dp"
-                    android:textColor="@color/textColor_highEmphasis"
-                    android:textSize="@dimen/text_tiny"
-                    tools:text="This is the meaning" />
+                    android:textColor="@color/dark_textColor_highEmphasis" />
+
 
             </LinearLayout>
 
@@ -161,7 +195,7 @@
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center"
                 android:indeterminate="true"
-                android:indeterminateTint="@color/black" />
+                android:indeterminateTint="@color/white" />
 
         </FrameLayout>
 
