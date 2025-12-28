@@ -278,7 +278,7 @@ class WidgetViewHelper @Inject constructor(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
                 fillInIntent,
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
             views.setPendingIntentTemplate(R.id.list_scrollable_content, pendingIntentPlayAudio)
             //endregion
@@ -286,6 +286,7 @@ class WidgetViewHelper @Inject constructor(
         } else {
             views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)
         }
+
 
         val tryAgainIntent = Intent(context, DailyWordWidgetProvider::class.java)
         tryAgainIntent.action =
