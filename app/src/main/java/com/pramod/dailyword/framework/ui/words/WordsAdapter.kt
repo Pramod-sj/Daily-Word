@@ -10,14 +10,16 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ItemAdLayoutBinding
 import com.pramod.dailyword.databinding.ItemEmptyLayoutBinding
 import com.pramod.dailyword.databinding.ItemWordListLayoutBinding
+import com.pramod.dailyword.framework.helper.ads.AdController
 import com.pramod.dailyword.framework.ui.common.word.WordComparator
 import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
 
 
 class WordsAdapter(
-    val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
-    val bookmarkCallback: ((pos: Int, word: Word) -> Unit)? = null,
-    private val hideBadges: Boolean = false
+    private val itemClickCallback: ((pos: Int, word: Word) -> Unit)? = null,
+    private val bookmarkCallback: ((pos: Int, word: Word) -> Unit)? = null,
+    private val hideBadges: Boolean = false,
+    private val adController: AdController
 ) : PagingDataAdapter<WordListUiModel, RecyclerView.ViewHolder>(WordComparator) {
 
     private var canStartActivity = true
@@ -61,7 +63,19 @@ class WordsAdapter(
         }
     }
 
-    inner class AdViewHolder(binding: ItemAdLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class AdViewHolder(
+        private val binding: ItemAdLayoutBinding,
+        private val adController: AdController
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun loadAd() {
+            adController.loadBanner(binding.adContainer)
+        }
+
+        fun clearAd() {
+            adController.hideBanner(binding.adContainer)
+        }
+
+    }
 
     inner class EmptyViewHolder(binding: ItemEmptyLayoutBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -86,14 +100,17 @@ class WordsAdapter(
                     false
                 )
             )
+
             ITEM_TYPE_AD -> AdViewHolder(
-                DataBindingUtil.inflate(
+                binding = DataBindingUtil.inflate(
                     inflater,
                     R.layout.item_ad_layout,
                     parent,
                     false
-                )
+                ),
+                adController = adController
             )
+
             else -> EmptyViewHolder(ItemEmptyLayoutBinding.inflate(inflater, parent, false))
         }
     }
@@ -103,6 +120,15 @@ class WordsAdapter(
         if (holder is WordViewHolder) {
             val wordItem = getItem(position) as WordListUiModel.WordItem
             holder.bind(wordItem)
+        } else if (holder is AdViewHolder) {
+            holder.loadAd()
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is AdViewHolder) {
+            holder.clearAd()
         }
     }
 

@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
+import com.pramod.dailyword.framework.helper.ads.AdController
+import com.pramod.dailyword.framework.helper.ads.GoogleAdProviderImpl
 import timber.log.Timber
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
@@ -17,6 +19,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     abstract val viewModel: V
 
     abstract val bindingVariable: Int
+
+    protected val adController: AdController = AdController(GoogleAdProviderImpl(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +46,16 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
                 when (it) {
                     is Message.SnackBarMessage -> {
                         handleSnackBarMessage(it)
-                        Timber.i( "setSnackBarObserver: snackbar message")
+                        Timber.i("setSnackBarObserver: snackbar message")
                     }
+
                     is Message.ToastMessage -> {
                         Toast.makeText(this, it.message, it.duration).show()
-                        Timber.i( "setSnackBarObserver: toast message")
+                        Timber.i("setSnackBarObserver: toast message")
                     }
+
                     is Message.DialogMessage -> {
-                        Timber.i( "setSnackBarObserver: dialog message")
+                        Timber.i("setSnackBarObserver: dialog message")
                     }
                 }
             }
@@ -97,6 +103,11 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         })
         snackBar.show()
 
+    }
+
+    override fun onDestroy() {
+        adController.destroy()
+        super.onDestroy()
     }
 
     companion object {

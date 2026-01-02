@@ -92,39 +92,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:cardCornerRadius="@dimen/ad_card_elevation"
-            app:cardElevation="@dimen/ad_card_elevation"
-            app:isVisible="@{adsEnabled}">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:applyBottomPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled()}">
-
-                <com.facebook.ads.NativeAdLayout
-                    android:id="@+id/native_ad_container_2"
-                    adId="@{AdsManager.NATIVE_BANNER_ID_2}"
-                    showAdWithSomeDelay="@{500}"
-                    showNativeAd="@{adsEnabled}"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="@dimen/padding_small"
-                    android:paddingHorizontal="@dimen/margin_medium"
-                    app:ad_onAdLoaded="@{()->txtViewAdLoading2.setVisibility(View.GONE)}"
-                    app:ad_onLoadAd="@{()->txtViewAdLoading2.setVisibility(View.VISIBLE)}" />
-
-                <TextView
-                    android:id="@+id/txtView_ad_loading_2"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/loading" />
-
-            </FrameLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:applyContentBottomPaddingInset="@{recapWordsViewModel.isEdgeToEdgeEnabled()}"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="2dp"
+            app:isVisible="@{adsEnabled}" />
 
 
         <include

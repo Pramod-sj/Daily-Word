@@ -78,7 +78,8 @@ class WordListActivity :
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
             },
-            hideBadges = prefManager.getHideBadge()
+            hideBadges = prefManager.getHideBadge(),
+            adController = adController
         )
     }
 

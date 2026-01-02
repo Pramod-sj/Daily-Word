@@ -440,45 +440,13 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_ad"
+            android:id="@+id/frame_ad_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="@dimen/ad_card_elevation"
-            app:isVisible="@{adsEnabled}">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:applyBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled()}">
-
-
-                <com.facebook.ads.NativeAdLayout
-                    android:id="@+id/native_ad_container_4"
-                    adId="@{AdsManager.NATIVE_BANNER_ID_4}"
-                    showAdWithSomeDelay="@{500}"
-                    showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="@dimen/margin_small"
-                    android:paddingHorizontal="@dimen/margin_medium"
-                    app:adColorAccent="@{wordColor}"
-                    app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
-                    app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
-
-
-                <TextView
-                    android:id="@+id/txtView_ad_loading_4"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:gravity="center"
-                    android:text="@string/loading" />
-
-            </FrameLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:applyContentBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled()}"
+            app:cardElevation="2dp"
+            app:isVisible="@{adsEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"

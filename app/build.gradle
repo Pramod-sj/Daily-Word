@@ -58,8 +58,8 @@ android {
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
@@ -202,8 +202,11 @@ dependencies {
     implementation(libs.workRuntimeKtx) // WorkManager with KTX
 
     // Debugging library (LeakCanary)
-    debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
+    //debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
 
     // Custom library for playing and storing audio files
     implementation(project(path: ":audioplayer")) // Custom audio player library
+
+
+    implementation(libs.play.services.ads)
 }

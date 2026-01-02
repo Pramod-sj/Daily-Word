@@ -113,6 +113,7 @@ class WordDetailedActivity :
         handleNavigator()
         handleRippleAnimationForAudioEffect()
         shouldShowSupportDevelopmentDialog()
+        adController.loadBanner(binding.frameAd1)
     }
 
     private fun setupViews() {

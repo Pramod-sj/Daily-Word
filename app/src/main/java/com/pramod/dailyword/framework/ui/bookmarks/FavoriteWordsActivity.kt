@@ -69,6 +69,7 @@ class FavoriteWordsActivity :
         binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         bindAdapter()
+        adController.loadBanner(binding.cardAd)
     }
 
     override fun onResume() {
