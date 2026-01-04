@@ -16,6 +16,9 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.pramod.dailyword.databinding.AdsNativeBannerBinding
 import dagger.hilt.android.scopes.ActivityScoped
 import timber.log.Timber
@@ -28,6 +31,8 @@ class GoogleAdProviderImpl @Inject constructor(
 ) : AdProvider {
 
     private var interstitialAd: InterstitialAd? = null
+
+    private var rewardedAd: RewardedAd? = null
 
 
     override fun loadNativeAd(
@@ -135,6 +140,85 @@ class GoogleAdProviderImpl @Inject constructor(
             Timber.e("Interstitial ad wasn't ready")
         }
     }
+
+    override fun loadRewardedAd(
+        adUnitId: String,
+        onLoaded: () -> Unit,
+        onFailed: (Throwable) -> Unit
+    ) {
+        val adRequest = AdRequest.Builder().build()
+
+        RewardedAd.load(
+            activity,
+            adUnitId,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+
+                override fun onAdLoaded(ad: RewardedAd) {
+                    Timber.d("Rewarded ad loaded")
+                    rewardedAd = ad
+                    onLoaded()
+                }
+
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    Timber.e("Failed to load rewarded ad: ${loadAdError.message}")
+                    rewardedAd = null
+                    onFailed(Throwable(loadAdError.message))
+                }
+            }
+        )
+    }
+
+    override fun showRewardedAd(
+        onUserEarnedReward: () -> Unit,
+        onAdDismissed: () -> Unit
+    ) {
+        val ad = rewardedAd
+        if (ad == null) {
+            Timber.e("Rewarded ad not ready")
+            return
+        }
+
+        var isRewarded = false
+
+        ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+
+            override fun onAdShowedFullScreenContent() {
+                Timber.d("Rewarded ad showed fullscreen content")
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                Timber.d("Rewarded ad dismissed")
+                rewardedAd = null
+
+                if (!activity.isFinishing && !activity.isDestroyed && isRewarded) {
+                    onAdDismissed()
+                }
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                Timber.e("Rewarded ad failed to show: ${adError.message}")
+                rewardedAd = null
+            }
+
+            override fun onAdImpression() {
+                Timber.d("Rewarded ad impression recorded")
+            }
+
+            override fun onAdClicked() {
+                Timber.d("Rewarded ad clicked")
+            }
+        }
+
+        ad.show(activity) { rewardItem: RewardItem ->
+            isRewarded = true
+            Timber.d(
+                "User earned reward: ${rewardItem.amount} ${rewardItem.type}"
+            )
+            onUserEarnedReward()
+        }
+    }
+
 
     override fun destroy() {
         interstitialAd = null

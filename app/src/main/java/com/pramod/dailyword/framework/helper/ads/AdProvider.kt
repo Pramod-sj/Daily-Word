@@ -19,6 +19,19 @@ interface AdProvider {
 
     fun showInterstitial(onAdDismissed: () -> Unit)
 
+
+    fun loadRewardedAd(
+        adUnitId: String,
+        onLoaded: () -> Unit,
+        onFailed: (Throwable) -> Unit
+    )
+
+    fun showRewardedAd(
+        onUserEarnedReward: () -> Unit,
+        onAdDismissed: () -> Unit
+    )
+
+
     fun destroy()
 
 }

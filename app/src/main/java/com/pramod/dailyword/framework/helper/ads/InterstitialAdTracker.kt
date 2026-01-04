@@ -2,6 +2,7 @@ package com.pramod.dailyword.framework.helper.ads
 
 
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.firebase.model.AdsConfig
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,24 +24,24 @@ import javax.inject.Singleton
  */
 @Singleton
 class InterstitialAdTracker @Inject constructor(
-    fbRemoteConfig: FBRemoteConfig
+    private val fbRemoteConfig: FBRemoteConfig
 ) {
 
     /**
      * Ads-related configuration fetched from Firebase Remote Config.
      */
-    private val adsConfig = fbRemoteConfig.getAdsConfig()
+    private val adsConfig: AdsConfig get() = fbRemoteConfig.getAdsConfig()
 
     /**
      * Number of user actions required before an interstitial becomes eligible.
      * Example: show an interstitial after every N actions.
      */
-    private val actionsBeforeAd = adsConfig.actionCountForInterstitial
+    private val actionsBeforeAd get() = adsConfig.actionCountForInterstitial
 
     /**
      * Maximum number of interstitials allowed per app session.
      */
-    private val maxInterstitialsPerSession = adsConfig.maxInterstitialsPerSession
+    private val maxInterstitialsPerSession get() = adsConfig.maxInterstitialsPerSession
 
     /**
      * Tracks the number of user actions performed since the last interstitial.

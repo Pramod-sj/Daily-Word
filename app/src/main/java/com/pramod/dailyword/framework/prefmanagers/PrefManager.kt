@@ -5,6 +5,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
+import com.pramod.dailyword.framework.prefmanagers.AdsDisabledPrefManager.Companion.KEY_ADS_DISABLED_UNTIL
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BACKGROUND_ALPHA
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BODY_BACKGROUND_ALPHA
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.KEY_VISIBLE_WIDGET_CONTROL
@@ -27,7 +28,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     DonatedContract,
     SupportUsDialogContract,
     WidgetSettingPreference,
-    NotificationPermissionPref {
+    NotificationPermissionPref,
+    AdsDisabledPrefManager {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -223,6 +225,30 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         ).commit()
     }
 
+    override fun setAdsDisabledUntil(timestamp: Long) {
+        editor.putLong(KEY_ADS_DISABLED_UNTIL, timestamp).apply()
+    }
+
+    private val adDisabledUntil =
+        object : SPreferenceLiveData<Long>(sPrefManager, KEY_ADS_DISABLED_UNTIL, 0L) {
+            override fun getValueFromPreference(
+                key: String,
+                defValue: Long
+            ): Long {
+                return sPrefManager.getLong(key, defValue)
+            }
+        }
+
+    override fun getAdsDisabledUntil(): LiveData<Long> {
+        return adDisabledUntil.apply {
+            value = sPrefManager.getLong(KEY_ADS_DISABLED_UNTIL, 0L)
+        }
+    }
+
+    override fun clearAdsDisabledUntil() {
+        editor.remove(KEY_ADS_DISABLED_UNTIL)
+    }
+
 }
 
 interface AppLaunchCountContracts {
@@ -340,5 +366,19 @@ interface NotificationPermissionPref {
     fun markFullNotificationMessageDismissed()
 
     fun markNotificationPermissionAsked()
+
+}
+
+interface AdsDisabledPrefManager {
+
+    companion object {
+        const val KEY_ADS_DISABLED_UNTIL = "ads_disabled_until"
+    }
+
+    fun setAdsDisabledUntil(timestamp: Long)
+
+    fun getAdsDisabledUntil(): LiveData<Long>
+
+    fun clearAdsDisabledUntil()
 
 }

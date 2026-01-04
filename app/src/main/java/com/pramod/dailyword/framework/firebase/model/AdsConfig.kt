@@ -10,6 +10,8 @@ data class AdsConfig(
     val maxInterstitialsPerSession: Int,
 
     val disableAdForPremiumUser: Boolean,
+
+    val disabledAdsDays: Int?,
 )
 
 data class AdTypeEnableStatus(

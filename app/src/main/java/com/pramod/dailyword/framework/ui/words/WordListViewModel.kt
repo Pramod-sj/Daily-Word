@@ -19,7 +19,9 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -30,13 +32,13 @@ const val PAGE_SIZE = 25
 class WordListViewModel @AssistedInject constructor(
     private val getWordListInteractor: GetWordPagingInteractor,
     private val toggleBookmarkInteractor: ToggleBookmarkInteractor,
-    @Assisted private val isBannerAdsEnabled: Boolean,
+    @Assisted private val isBannerAdsEnabled: StateFlow<Boolean>,
 ) : BaseViewModel() {
 
     @AssistedFactory
     interface Factory {
 
-        fun create(isBannerAdsEnabled: Boolean): WordListViewModel
+        fun create(isBannerAdsEnabled: StateFlow<Boolean>): WordListViewModel
 
     }
 
@@ -52,7 +54,9 @@ class WordListViewModel @AssistedInject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val wordUIModelList: Flow<PagingData<WordListUiModel>> =
-        _searchQuery.flatMapLatest { query ->
+        combine(_searchQuery, isBannerAdsEnabled) { query, _ ->
+            return@combine query
+        }.flatMapLatest { query ->
             getWordListInteractor.getWordList(
                 search = query,
                 pagingConfig = PagingConfig(
@@ -80,7 +84,7 @@ class WordListViewModel @AssistedInject constructor(
                             TimeUnit.MILLISECONDS
                         )
 
-                        return@insertSeparators if (isBannerAdsEnabled && daysElapsed % 6 == 0L) {
+                        return@insertSeparators if (isBannerAdsEnabled.value && daysElapsed % 6 == 0L) {
                             WordListUiModel.AdItem("")
                         } else {
                             null
@@ -103,7 +107,7 @@ class WordListViewModel @AssistedInject constructor(
 
 class WordListViewModelFactory(
     private val assistedFactory: WordListViewModel.Factory,
-    private val isBannerAdsEnabled: Boolean
+    private val isBannerAdsEnabled: StateFlow<Boolean>
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

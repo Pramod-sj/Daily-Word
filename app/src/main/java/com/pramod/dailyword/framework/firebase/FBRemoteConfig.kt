@@ -148,7 +148,8 @@ class FBRemoteConfig @Inject constructor(
                 adsEnabledCountries = emptyList(),
                 actionCountForInterstitial = 0,
                 maxInterstitialsPerSession = 0,
-                disableAdForPremiumUser = false
+                disableAdForPremiumUser = false,
+                disabledAdsDays = 7
             )
         }
     }

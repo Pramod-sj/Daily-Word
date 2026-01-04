@@ -5,9 +5,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.framework.helper.ads.AdController
+import com.pramod.dailyword.framework.helper.ads.rewards.RewardAdDialogFragment
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,11 +34,22 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
         binding.lifecycleOwner = this
         viewModel.isEdgeToEdgeEnabled = edgeToEdgeEnabler.isEnabled
-        binding.setVariable(BR.adsEnabled, adController.isBannerAdEnabled)
         binding.setVariable(bindingVariable, viewModel)
         binding.executePendingBindings()
+        bindAds()
         setMessageObserver()
         adController.loadInterstitialAd()
+    }
+
+    private fun bindAds() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adController.isBannerAdEnabled.collect { isBannerAdEnabled ->
+                    binding.setVariable(BR.adsEnabled, isBannerAdEnabled)
+                    binding.executePendingBindings()
+                }
+            }
+        }
     }
 
     private fun safeViewFinding(parent: View, viewId: Int): View? {

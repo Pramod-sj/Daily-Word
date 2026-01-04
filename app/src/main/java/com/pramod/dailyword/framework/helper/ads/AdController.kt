@@ -6,10 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.map
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.helper.ads.rewards.RewardedAdsManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.util.NetworkUtils
+import dagger.Component
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.util.LinkedList
 import javax.inject.Inject
@@ -19,9 +32,11 @@ class AdController @Inject constructor(
     private val adProvider: AdProvider,
     private val fbRemoteConfig: FBRemoteConfig,
     private val prefManager: PrefManager,
-    private val activity: Activity,
-    private val interstitialAdTracker: InterstitialAdTracker
+    private val myActivity: Activity,
+    private val interstitialAdTracker: InterstitialAdTracker,
+    private val rewardedAdsManager: RewardedAdsManager,
 ) {
+    private val activity = myActivity as ComponentActivity
 
     private val screenName = activity.localClassName.split(".").lastOrNull()
 
@@ -29,19 +44,35 @@ class AdController @Inject constructor(
 
     private val adConfig = fbRemoteConfig.getAdsConfig()
 
-    val isAdEnabled: Boolean by lazy {
-        adConfig.adsEnabled //&& !adConfig.disableAdForPremiumUser
-    }
+    val isAdEnabled: StateFlow<Boolean> = rewardedAdsManager.areAdsDisabled()
+        .map { areAdsDisabled ->
+            adConfig.adsEnabled && !areAdsDisabled
+        }.asFlow()
+        .stateIn(
+            scope = activity.lifecycleScope,
+            started = SharingStarted.Eagerly,
+            initialValue = false
+        )
 
-    val isBannerAdEnabled: Boolean by lazy {
+    val isBannerAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
         isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
             && adConfig.adsEnabledScreen[screenName]?.banner ?: false
-    }
+    }.stateIn(
+        scope = activity.lifecycleScope,
+        started = SharingStarted.Eagerly,
+        initialValue = false
+    )
 
-    val isInterstitialAdEnabled: Boolean by lazy {
+
+    val isInterstitialAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
         isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
             && adConfig.adsEnabledScreen[screenName]?.interstitial ?: false
-    }
+    }.stateIn(
+        scope = activity.lifecycleScope,
+        started = SharingStarted.Eagerly,
+        initialValue = false
+    )
+
 
     // Cache for loaded native ad views. Keyed by the container they are in.
     private val activeAdViews = mutableMapOf<ViewGroup, AdViewWrapper>()
@@ -50,6 +81,8 @@ class AdController @Inject constructor(
     private val shimmerViewCache = LinkedList<ComposeView>()
 
     private var isInterstitialLoaded = false
+
+    private var isRewardedAdLoaded = false
 
     private fun getShimmerView(context: Context): ComposeView {
         // Reuse a cached shimmer view if available, otherwise create a new one.
@@ -76,7 +109,12 @@ class AdController @Inject constructor(
         adUnitId: String = "ca-app-pub-3940256099942544/2247696110" // Test Ad Unit
     ) {
 
-        if (!isBannerAdEnabled) {
+        if (!NetworkUtils.isNetworkActive(activity)) {
+            Timber.i("Network not available, Not loading Banner ads")
+            return
+        }
+
+        if (!isBannerAdEnabled.value) {
             Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
             return
         }
@@ -118,7 +156,7 @@ class AdController @Inject constructor(
     }
 
     fun hideBanner(container: ViewGroup) {
-        if (!isBannerAdEnabled) {
+        if (!isBannerAdEnabled.value) {
             Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
             return
         }
@@ -133,11 +171,16 @@ class AdController @Inject constructor(
 
     fun loadInterstitialAd() {
 
-        if (isAdEnabled) {
+        if (!NetworkUtils.isNetworkActive(activity)) {
+            Timber.i("Network not available, Not loading Interstitial ad")
+            return
+        }
+
+        if (isAdEnabled.value) {
             interstitialAdTracker.incrementActionCount()
         }
 
-        if (!isInterstitialAdEnabled) {
+        if (!isInterstitialAdEnabled.value) {
             Timber.i("Interstitial ad is not enabled for screen: $screenName; country: $countryCode")
             return
         }
@@ -157,7 +200,6 @@ class AdController @Inject constructor(
             adUnitId = "ca-app-pub-3940256099942544/1033173712",
             onLoaded = {
                 isInterstitialLoaded = true
-                showInterstitialAd()
             },
             onFailed = {
                 isInterstitialLoaded = false
@@ -165,8 +207,8 @@ class AdController @Inject constructor(
         )
     }
 
-    fun showInterstitialAd() {
-        if (!isInterstitialAdEnabled) {
+    fun showInterstitialAd(onAdDismissed: () -> Unit) {
+        if (!isInterstitialAdEnabled.value) {
             Timber.i("Interstitial ad is not enabled")
             return
         }
@@ -181,9 +223,7 @@ class AdController @Inject constructor(
             return
         }
 
-        adProvider.showInterstitial(onAdDismissed = {
-
-        })
+        adProvider.showInterstitial(onAdDismissed = onAdDismissed)
 
         // Mark as shown for entire app session
         interstitialAdTracker.markAsShown()
@@ -191,6 +231,71 @@ class AdController @Inject constructor(
 
         Timber.d("Interstitial ad shown, marked as shown for app session")
     }
+
+
+    fun loadRewardedAd(
+        adUnitId: String = "ca-app-pub-3940256099942544/5224354917",
+        onLoaded: () -> Unit = {},
+        onFailed: (Throwable) -> Unit = {}
+    ) {
+        if (!NetworkUtils.isNetworkActive(activity)) {
+            Timber.i("Network not available, Not loading Rewarded ad")
+            return
+        }
+
+        if (!isAdEnabled.value) {
+            Timber.i("Ads is not enabled")
+            onFailed(Throwable("Ads is not enabled"))
+            return
+        }
+
+        // If ads already disabled via reward, don't load
+        if (rewardedAdsManager.areAdsDisabled().value == true) {
+            Timber.i("Ads already disabled via reward, skipping rewarded ad load")
+            onFailed(Throwable("Ads already disabled via reward, skipping rewarded ad load"))
+            return
+        }
+
+        adProvider.loadRewardedAd(
+            adUnitId = adUnitId,
+            onLoaded = {
+                isRewardedAdLoaded = true
+                Timber.d("Rewarded ad loaded")
+                onLoaded()
+            },
+            onFailed = {
+                isRewardedAdLoaded = false
+                Timber.e("Rewarded ad failed to load")
+                onFailed(it)
+            }
+        )
+    }
+
+
+    fun showRewardedAd(
+        onRewardGranted: () -> Unit = {},
+        onDismissed: () -> Unit = {}
+    ) {
+
+        if (!isRewardedAdLoaded) {
+            Timber.w("Rewarded ad not loaded")
+            return
+        }
+
+        adProvider.showRewardedAd(
+            onUserEarnedReward = {
+                Timber.d("User earned rewarded ad benefit")
+                // Disable ads for next x days
+                rewardedAdsManager.onRewardAdCompleted()
+                onRewardGranted()
+            },
+            onAdDismissed = {
+                isRewardedAdLoaded = false
+                onDismissed()
+            }
+        )
+    }
+
 
     fun destroy() {
         // Called from Activity/Fragment's onDestroy.
