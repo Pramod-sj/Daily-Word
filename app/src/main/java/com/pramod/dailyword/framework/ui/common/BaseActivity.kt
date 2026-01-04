@@ -6,9 +6,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.snackbar.Snackbar
+import com.pramod.dailyword.BR
 import com.pramod.dailyword.framework.helper.ads.AdController
-import com.pramod.dailyword.framework.helper.ads.GoogleAdProviderImpl
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     private val layoutId: Int
@@ -20,16 +21,19 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
 
     abstract val bindingVariable: Int
 
-    protected val adController: AdController = AdController(GoogleAdProviderImpl(this))
+    @Inject
+    lateinit var adController: AdController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@BaseActivity, layoutId)
         binding.lifecycleOwner = this
         viewModel.isEdgeToEdgeEnabled = edgeToEdgeEnabler.isEnabled
+        binding.setVariable(BR.adsEnabled, adController.isBannerAdEnabled)
         binding.setVariable(bindingVariable, viewModel)
         binding.executePendingBindings()
         setMessageObserver()
+        adController.loadInterstitialAd()
     }
 
     private fun safeViewFinding(parent: View, viewId: Int): View? {

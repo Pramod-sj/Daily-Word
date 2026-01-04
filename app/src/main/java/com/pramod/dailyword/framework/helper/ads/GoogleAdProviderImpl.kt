@@ -6,10 +6,14 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.pramod.dailyword.databinding.AdsNativeBannerBinding
@@ -17,10 +21,14 @@ import dagger.hilt.android.scopes.ActivityScoped
 import timber.log.Timber
 import javax.inject.Inject
 
+
 @ActivityScoped
 class GoogleAdProviderImpl @Inject constructor(
-    private val activity: Activity
+    private val activity: Activity,
 ) : AdProvider {
+
+    private var interstitialAd: InterstitialAd? = null
+
 
     override fun loadNativeAd(
         context: Context,
@@ -62,12 +70,76 @@ class GoogleAdProviderImpl @Inject constructor(
         onLoaded: () -> Unit,
         onFailed: (Throwable) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            activity,
+            adUnitId,
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    Timber.d("Interstitial ad loaded")
+                    interstitialAd = ad
+                    onLoaded()
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Timber.e("Failed to load interstitial ad: ${adError.message}")
+                    interstitialAd = null
+                    onFailed(Throwable(adError.message))
+                }
+            }
+        )
     }
 
-    override fun showInterstitial() {
-        TODO("Not yet implemented")
+    override fun showInterstitial(
+        onAdDismissed: () -> Unit
+    ) {
+        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdClicked() {
+                // Called when a click is recorded for an ad.
+                Timber.d("Interstitial ad was clicked")
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                Timber.d("Interstitial ad dismissed")
+                interstitialAd = null
+                var activityDestroyed = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    activityDestroyed = activity.isDestroyed
+                }
+                if (activityDestroyed || activity.isFinishing || activity.isChangingConfigurations) {
+                    return
+                }
+                onAdDismissed()
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                // Called when ad fails to show.
+                Timber.e("Interstitial ad failed to show: ${adError.message}")
+                interstitialAd = null
+            }
+
+            override fun onAdImpression() {
+                // Called when an impression is recorded for an ad.
+                Timber.d("Interstitial ad recorded an impression")
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Timber.d("Interstitial ad showed fullscreen content")
+            }
+        }
+        interstitialAd?.show(activity) ?: run {
+            Timber.e("Interstitial ad wasn't ready")
+        }
     }
+
+    override fun destroy() {
+        interstitialAd = null
+    }
+
 
     private fun populateNativeAdView(context: Context, nativeAd: NativeAd): NativeAdView {
 

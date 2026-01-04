@@ -1,25 +1,55 @@
 package com.pramod.dailyword.framework.helper.ads
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.compose.ui.platform.ComposeView
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import dagger.hilt.android.scopes.ActivityScoped
+import timber.log.Timber
 import java.util.LinkedList
 import javax.inject.Inject
 
 @ActivityScoped
 class AdController @Inject constructor(
-    private val adProvider: AdProvider
+    private val adProvider: AdProvider,
+    private val fbRemoteConfig: FBRemoteConfig,
+    private val prefManager: PrefManager,
+    private val activity: Activity,
+    private val interstitialAdTracker: InterstitialAdTracker
 ) {
+
+    private val screenName = activity.localClassName.split(".").lastOrNull()
+
+    private val countryCode = prefManager.getCountryCode()
+
+    private val adConfig = fbRemoteConfig.getAdsConfig()
+
+    val isAdEnabled: Boolean by lazy {
+        adConfig.adsEnabled //&& !adConfig.disableAdForPremiumUser
+    }
+
+    val isBannerAdEnabled: Boolean by lazy {
+        isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
+            && adConfig.adsEnabledScreen[screenName]?.banner ?: false
+    }
+
+    val isInterstitialAdEnabled: Boolean by lazy {
+        isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
+            && adConfig.adsEnabledScreen[screenName]?.interstitial ?: false
+    }
 
     // Cache for loaded native ad views. Keyed by the container they are in.
     private val activeAdViews = mutableMapOf<ViewGroup, AdViewWrapper>()
 
     // Cache for shimmer placeholder views. A simple queue is effective for RecyclerView.
     private val shimmerViewCache = LinkedList<ComposeView>()
+
+    private var isInterstitialLoaded = false
 
     private fun getShimmerView(context: Context): ComposeView {
         // Reuse a cached shimmer view if available, otherwise create a new one.
@@ -45,6 +75,12 @@ class AdController @Inject constructor(
         container: ViewGroup,
         adUnitId: String = "ca-app-pub-3940256099942544/2247696110" // Test Ad Unit
     ) {
+
+        if (!isBannerAdEnabled) {
+            Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
+            return
+        }
+
         activeAdViews[container]?.destroy()
 
         // Get a shimmer view (either from cache or new) and show it.
@@ -82,12 +118,78 @@ class AdController @Inject constructor(
     }
 
     fun hideBanner(container: ViewGroup) {
+        if (!isBannerAdEnabled) {
+            Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
+            return
+        }
         // Called when the view is recycled or hidden.
         activeAdViews.remove(container)?.destroy()
         (container.getChildAt(0) as? ComposeView)?.let {
             releaseShimmerView(it)
         }
         container.removeAllViews()
+    }
+
+
+    fun loadInterstitialAd() {
+
+        if (isAdEnabled) {
+            interstitialAdTracker.incrementActionCount()
+        }
+
+        if (!isInterstitialAdEnabled) {
+            Timber.i("Interstitial ad is not enabled for screen: $screenName; country: $countryCode")
+            return
+        }
+
+        // Don't load if already shown this app session
+        if (!interstitialAdTracker.shouldShowInterstitial()) {
+            Timber.i("Interstitial ad already shown this app session")
+            return
+        }
+
+        if (isInterstitialLoaded) {
+            Timber.i("Interstitial ad already loaded")
+            return
+        }
+
+        adProvider.loadInterstitial(
+            adUnitId = "ca-app-pub-3940256099942544/1033173712",
+            onLoaded = {
+                isInterstitialLoaded = true
+                showInterstitialAd()
+            },
+            onFailed = {
+                isInterstitialLoaded = false
+            }
+        )
+    }
+
+    fun showInterstitialAd() {
+        if (!isInterstitialAdEnabled) {
+            Timber.i("Interstitial ad is not enabled")
+            return
+        }
+
+        if (!interstitialAdTracker.shouldShowInterstitial()) {
+            Timber.i("Interstitial ad already shown this app session, skipping")
+            return
+        }
+
+        if (!isInterstitialLoaded) {
+            Timber.w("Interstitial ad not loaded yet, cannot show")
+            return
+        }
+
+        adProvider.showInterstitial(onAdDismissed = {
+
+        })
+
+        // Mark as shown for entire app session
+        interstitialAdTracker.markAsShown()
+        isInterstitialLoaded = false
+
+        Timber.d("Interstitial ad shown, marked as shown for app session")
     }
 
     fun destroy() {
@@ -98,6 +200,8 @@ class AdController @Inject constructor(
         // Important: Dispose all cached ComposeViews to prevent leaks.
         shimmerViewCache.forEach { it.disposeComposition() }
         shimmerViewCache.clear()
+
+        isInterstitialLoaded = false
     }
 }
 

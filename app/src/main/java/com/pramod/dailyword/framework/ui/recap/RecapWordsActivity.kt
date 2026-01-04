@@ -37,8 +37,6 @@ class RecapWordsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
-        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
-        binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         setWeeklyInfoText()
         initAdapter()

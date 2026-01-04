@@ -17,6 +17,8 @@ interface AdProvider {
         onFailed: (Throwable) -> Unit
     )
 
-    fun showInterstitial()
+    fun showInterstitial(onAdDismissed: () -> Unit)
+
+    fun destroy()
 
 }

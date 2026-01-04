@@ -65,8 +65,6 @@ class FavoriteWordsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
-        binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         bindAdapter()
         adController.loadBanner(binding.cardAd)

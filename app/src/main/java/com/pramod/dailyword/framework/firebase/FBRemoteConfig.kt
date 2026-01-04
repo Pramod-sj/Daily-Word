@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.pramod.dailyword.BuildConfig
+import com.pramod.dailyword.framework.firebase.model.AdsConfig
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.changelogs.Release
 import timber.log.Timber
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class FBRemoteConfig @Inject constructor(
-    private val prefManager: PrefManager
+    private val prefManager: PrefManager,
+    private val gson: Gson
 ) {
 
     private val remoteConfig = Firebase.remoteConfig.apply {
@@ -47,6 +49,8 @@ class FBRemoteConfig @Inject constructor(
 
         const val REMOTE_CONFIG_KET_LATEST_RELEASE_NOTE = "latest_release_json"
 
+        const val REMOTE_CONFIG_KEY_ADS_CONFIG = "ads_config"
+
         private val default_configs = mapOf(
             REMOTE_CONFIG_KEY_BASE_URL to BuildConfig.API_BASE_URL,
             REMOTE_CONFIG_KEY_ADS_ENABLED to "{\"all\":false,\"in\":false,\"us\":false,\"gb\":false,\"others\":false}"
@@ -64,11 +68,12 @@ class FBRemoteConfig @Inject constructor(
     }
 
 
+    @Deprecated("We now have a better AdsConfig to manage this")
     fun isAdsEnabled(): Boolean {
         val adString = remoteConfig.getString(REMOTE_CONFIG_KEY_ADS_ENABLED)
         try {
             val adsEnabled: AdsEnabled =
-                Gson().fromJson(adString, AdsEnabled::class.java)
+                gson.fromJson(adString, AdsEnabled::class.java)
             return when {
                 adsEnabled.enabled_ad_all -> {
                     //if this is true then show ads to all the users irrespective of countries
@@ -117,7 +122,7 @@ class FBRemoteConfig @Inject constructor(
     fun getReleases(): List<Release>? {
         return try {
             val type = TypeToken.getParameterized(List::class.java, Release::class.java).type
-            Gson().fromJson(remoteConfig.getString("releases"), type)
+            gson.fromJson(remoteConfig.getString("releases"), type)
         } catch (_: Exception) {
             listOf()
         }
@@ -127,6 +132,24 @@ class FBRemoteConfig @Inject constructor(
         return getReleases()?.maxByOrNull { it.versionCode }?.let { note ->
             if (note.versionCode > BuildConfig.VERSION_CODE) note
             else null
+        }
+    }
+
+    fun getAdsConfig(): AdsConfig {
+        return try {
+            gson.fromJson(
+                remoteConfig.getString(REMOTE_CONFIG_KEY_ADS_CONFIG),
+                AdsConfig::class.java
+            )
+        } catch (_: Exception) {
+            return AdsConfig(
+                adsEnabled = false,
+                adsEnabledScreen = emptyMap(),
+                adsEnabledCountries = emptyList(),
+                actionCountForInterstitial = 0,
+                maxInterstitialsPerSession = 0,
+                disableAdForPremiumUser = false
+            )
         }
     }
 

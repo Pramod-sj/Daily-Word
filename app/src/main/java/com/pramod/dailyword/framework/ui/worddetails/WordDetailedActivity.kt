@@ -101,7 +101,6 @@ class WordDetailedActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bindAdsInfo()
         supportPostponeEnterTransition()
         initEnterAndReturnTransition()
         keepScreenOn()
@@ -246,11 +245,6 @@ class WordDetailedActivity :
                 binding.nestedScrollView.isVisible = true
             }
         }
-    }
-
-    private fun bindAdsInfo() {
-        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
-        binding.executePendingBindings()
     }
 
     private fun keepScreenOn() {

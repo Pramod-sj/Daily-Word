@@ -1,28 +1,44 @@
 package com.pramod.dailyword.framework.ui.words
 
-import androidx.lifecycle.*
-import androidx.paging.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import androidx.paging.map
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordPagingInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
-import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.word.WordListUiModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 const val PAGE_SIZE = 25
 
-@HiltViewModel
-class WordListViewModel @Inject constructor(
+class WordListViewModel @AssistedInject constructor(
     private val getWordListInteractor: GetWordPagingInteractor,
-    private var toggleBookmarkInteractor: ToggleBookmarkInteractor,
-    fbRemoteConfig: FBRemoteConfig
+    private val toggleBookmarkInteractor: ToggleBookmarkInteractor,
+    @Assisted private val isBannerAdsEnabled: Boolean,
 ) : BaseViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+
+        fun create(isBannerAdsEnabled: Boolean): WordListViewModel
+
+    }
 
     companion object {
         val TAG = WordListViewModel::class.simpleName
@@ -64,7 +80,7 @@ class WordListViewModel @Inject constructor(
                             TimeUnit.MILLISECONDS
                         )
 
-                        return@insertSeparators if (fbRemoteConfig.isAdsEnabled() && daysElapsed % 6 == 0L) {
+                        return@insertSeparators if (isBannerAdsEnabled && daysElapsed % 6 == 0L) {
                             WordListUiModel.AdItem("")
                         } else {
                             null
@@ -85,3 +101,16 @@ class WordListViewModel @Inject constructor(
 
 }
 
+class WordListViewModelFactory(
+    private val assistedFactory: WordListViewModel.Factory,
+    private val isBannerAdsEnabled: Boolean
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(WordListViewModel::class.java)) {
+            return assistedFactory.create(isBannerAdsEnabled) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
