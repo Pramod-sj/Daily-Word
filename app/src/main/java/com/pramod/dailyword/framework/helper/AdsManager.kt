@@ -8,17 +8,21 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import com.facebook.ads.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.facebook.ads.AbstractAdListener
+import com.facebook.ads.Ad
+import com.facebook.ads.AdError
+import com.facebook.ads.AdOptionsView
+import com.facebook.ads.InterstitialAd
+import com.facebook.ads.NativeAdLayout
+import com.facebook.ads.NativeAdListener
+import com.facebook.ads.NativeBannerAd
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.BannerNativeAdBinding
 import com.pramod.dailyword.databinding.BannerNativeAdVerticalBinding
-import com.pramod.dailyword.databinding.DialogNativeAdBinding
 import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -246,7 +250,7 @@ class AdsManager @Inject constructor(
     }
 
 
-    fun showNativeAdOnDialog(
+    /*fun showNativeAdOnDialog(
         binding: DialogNativeAdBinding,
         onAdCompletelyLoadedCallback: (() -> Unit)? = null,
         onAdFailureCallback: ((String) -> Unit)? = null
@@ -325,7 +329,7 @@ class AdsManager @Inject constructor(
             binding.nativeAdIcon,
             clickableViews
         )
-    }
+    }*/
 
 
     fun incrementCountAndShowNativeAdDialog(
@@ -333,10 +337,10 @@ class AdsManager @Inject constructor(
         closeClickCallback: (() -> Unit)? = null
     ) {
         incrementAdActivityCount()
-        showNativeAdDialog(context, closeClickCallback)
+        //showNativeAdDialog(context, closeClickCallback)
     }
 
-    fun showNativeAdDialog(
+    /*fun showNativeAdDialog(
         context: Context,
         closeClickCallback: (() -> Unit)? = null
     ) {
@@ -350,17 +354,17 @@ class AdsManager @Inject constructor(
 
         val binding: DialogNativeAdBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.dialog_native_ad,
+            R.layout.ads_native_medium,
             null,
             false
         )
         val bottomSheetDialog = BottomSheetDialog(context, R.style.AppTheme_BottomSheetDialog)
         bottomSheetDialog.setContentView(binding.root)
 
-        /*val builder = MaterialAlertDialogBuilder(context)
+        *//*val builder = MaterialAlertDialogBuilder(context)
             .setView(binding.root)
             .setCancelable(false)
-        val alertDialog = builder.create()*/
+        val alertDialog = builder.create()*//*
 
         binding.nativeAdCloseButton.setOnClickListener {
             bottomSheetDialog.dismiss()
@@ -375,7 +379,7 @@ class AdsManager @Inject constructor(
         if (shown) {
             bottomSheetDialog.show()
         }
-    }
+    }*/
 
 
     fun destroyAdsIfActive() {

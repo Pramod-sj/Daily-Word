@@ -11,6 +11,13 @@ interface AdProvider {
         onFailed: (Throwable) -> Unit
     )
 
+    fun loadMediumSizedNativeAd(
+        context: Context,
+        adUnitId: String,
+        onLoaded: (AdViewWrapper) -> Unit,
+        onFailed: (Throwable) -> Unit
+    )
+
     fun loadInterstitial(
         adUnitId: String,
         onLoaded: () -> Unit,

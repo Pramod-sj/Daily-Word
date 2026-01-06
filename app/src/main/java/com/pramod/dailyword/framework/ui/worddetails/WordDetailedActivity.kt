@@ -119,6 +119,7 @@ class WordDetailedActivity :
         handleRippleAnimationForAudioEffect()
         shouldShowSupportDevelopmentDialog()
         adController.loadBanner(binding.frameAd1)
+        adController.loadMediumBanner(binding.adPlaceholderMedium)
     }
 
     var job: Job? = null

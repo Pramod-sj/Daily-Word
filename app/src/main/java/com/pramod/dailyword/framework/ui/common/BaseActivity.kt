@@ -121,6 +121,14 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
                 }
             }
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adController.isMediumBannerAdEnabled.collect { isMediumBannerAdEnabled ->
+                    binding.setVariable(BR.mediumBannerAdsEnabled, isMediumBannerAdEnabled)
+                    binding.executePendingBindings()
+                }
+            }
+        }
     }
 
     private fun safeViewFinding(parent: View, viewId: Int): View? {

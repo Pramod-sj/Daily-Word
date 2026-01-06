@@ -16,6 +16,7 @@ data class AdsConfig(
 
 data class AdTypeEnableStatus(
     val banner: Boolean,
+    val mediumBanner: Boolean,
     val interstitial: Boolean,
     val showPostInterstitialDialog: Boolean = false
 )

@@ -60,6 +60,14 @@ class AdController @Inject constructor(
         scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
 
+    val isMediumBannerAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
+        isAdEnabled &&
+            adConfig.adsEnabledCountries.contains(countryCode) &&
+            adConfig.adsEnabledScreen[currentScreenName]?.mediumBanner ?: false
+    }.stateIn(
+        scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
+    )
+
 
     val isInterstitialAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
         isAdEnabled &&
@@ -127,6 +135,56 @@ class AdController @Inject constructor(
         container.addView(shimmer)
 
         adProvider.loadNativeAd(
+            context = container.context,
+            adUnitId = adUnitId,
+            onLoaded = { wrapper ->
+                container.removeAllViews()
+                container.addView(wrapper.getView())
+                activeAdViews[container] = wrapper
+            },
+            onFailed = {
+                // Ad failed to load.
+                // You can either leave the shimmer or hide the container.
+                // For this example, we'll just leave the shimmer.
+                // Make sure to release the shimmer if you hide the view.
+                container.removeAllViews()
+                CollapseHeightAnimation(container).apply {
+                    duration = 100L
+                    setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationStart(animation: Animation?) = Unit
+
+                        override fun onAnimationEnd(animation: Animation?) = Unit
+
+                        override fun onAnimationRepeat(animation: Animation?) = Unit
+                    })
+                    container.startAnimation(this)
+                }
+            })
+    }
+
+    fun loadMediumBanner(
+        container: ViewGroup,
+        adUnitId: String = "ca-app-pub-3940256099942544/2247696110" // Test Ad Unit
+    ) {
+
+        if (!NetworkUtils.isNetworkActive(activity)) {
+            Timber.i("Network not available, Not loading Medium Banner ads")
+            return
+        }
+
+        if (!isMediumBannerAdEnabled.value) {
+            Timber.i("Medium Banner ad is not enabled for screen: $currentScreenName; country: $countryCode")
+            return
+        }
+
+        activeAdViews[container]?.destroy()
+
+        // Get a shimmer view (either from cache or new) and show it.
+        /*val shimmer = getShimmerView(container.context)
+        container.removeAllViews()
+        container.addView(shimmer)*/
+
+        adProvider.loadMediumSizedNativeAd(
             context = container.context,
             adUnitId = adUnitId,
             onLoaded = { wrapper ->
