@@ -9,8 +9,6 @@
 
         <import type="com.pramod.dailyword.framework.ui.recap.RecapWordsViewModel" />
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <import type="android.view.View" />
 
         <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />

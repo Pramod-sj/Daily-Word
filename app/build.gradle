@@ -152,9 +152,6 @@ dependencies {
     // Paging library for efficient data loading
     implementation(libs.pagingRuntimeKtx) // Paging library with KTX
 
-    // Facebook Audience Network SDK for monetization
-    implementation(libs.facebookAudienceNetworkSdk) // Audience Network SDK
-
     // AutoStarter library for managing app permissions
     implementation(libs.autostarter) // Library for auto-start permissions
 

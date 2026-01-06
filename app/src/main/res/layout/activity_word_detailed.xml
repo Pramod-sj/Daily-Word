@@ -4,8 +4,6 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <import type="android.view.View" />

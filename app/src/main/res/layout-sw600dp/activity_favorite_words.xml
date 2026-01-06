@@ -15,8 +15,6 @@
 
         <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <variable
             name="adsEnabled"
             type="Boolean" />

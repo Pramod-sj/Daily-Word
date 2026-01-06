@@ -3,9 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <import type="android.view.View" />
     </data>
 
