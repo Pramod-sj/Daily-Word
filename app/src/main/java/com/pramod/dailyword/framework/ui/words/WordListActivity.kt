@@ -87,6 +87,7 @@ class WordListActivity :
             },
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
+                interstitialAdTracker.incrementActionCount()
             },
             hideBadges = prefManager.getHideBadge(),
             adController = adController

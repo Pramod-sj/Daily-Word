@@ -8,19 +8,18 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.ads.rewards.RewardedAdsManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.ui.common.ScreenNameProvider
 import com.pramod.dailyword.framework.util.NetworkUtils
-import dagger.Component
 import dagger.hilt.android.scopes.ActivityScoped
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
@@ -38,40 +37,41 @@ class AdController @Inject constructor(
 ) {
     private val activity = myActivity as ComponentActivity
 
-    private val screenName = activity.localClassName.split(".").lastOrNull()
+    private val currentScreenName = (activity as? ScreenNameProvider)?.screenName ?: "Unknown"
 
     private val countryCode = prefManager.getCountryCode()
 
     private val adConfig = fbRemoteConfig.getAdsConfig()
 
-    val isAdEnabled: StateFlow<Boolean> = rewardedAdsManager.areAdsDisabled()
-        .map { areAdsDisabled ->
+    val isAdEnabled: StateFlow<Boolean> =
+        rewardedAdsManager.areAdsDisabled().map { areAdsDisabled ->
             adConfig.adsEnabled && !areAdsDisabled
-        }.asFlow()
-        .stateIn(
+        }.asFlow().stateIn(
             scope = activity.lifecycleScope,
             started = SharingStarted.Eagerly,
             initialValue = false
         )
 
     val isBannerAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
-        isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
-            && adConfig.adsEnabledScreen[screenName]?.banner ?: false
+        isAdEnabled &&
+            adConfig.adsEnabledCountries.contains(countryCode) &&
+            adConfig.adsEnabledScreen[currentScreenName]?.banner ?: false
     }.stateIn(
-        scope = activity.lifecycleScope,
-        started = SharingStarted.Eagerly,
-        initialValue = false
+        scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
 
 
     val isInterstitialAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
-        isAdEnabled && adConfig.adsEnabledCountries.contains(countryCode)
-            && adConfig.adsEnabledScreen[screenName]?.interstitial ?: false
+        isAdEnabled &&
+            adConfig.adsEnabledCountries.contains(countryCode) &&
+            adConfig.adsEnabledScreen[currentScreenName]?.interstitial ?: false
     }.stateIn(
-        scope = activity.lifecycleScope,
-        started = SharingStarted.Eagerly,
-        initialValue = false
+        scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
+
+    val showDoNotShowAdsDialogAfterInterstitial: Boolean
+        get() = adConfig.adsEnabledScreen[currentScreenName]?.showPostInterstitialDialog
+            ?: false
 
 
     // Cache for loaded native ad views. Keyed by the container they are in.
@@ -115,7 +115,7 @@ class AdController @Inject constructor(
         }
 
         if (!isBannerAdEnabled.value) {
-            Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
+            Timber.i("Banner ad is not enabled for screen: $currentScreenName; country: $countryCode")
             return
         }
 
@@ -151,13 +151,12 @@ class AdController @Inject constructor(
                     })
                     container.startAnimation(this)
                 }
-            }
-        )
+            })
     }
 
     fun hideBanner(container: ViewGroup) {
         if (!isBannerAdEnabled.value) {
-            Timber.i("Banner ad is not enabled for screen: $screenName; country: $countryCode")
+            Timber.i("Banner ad is not enabled for screen: $currentScreenName; country: $countryCode")
             return
         }
         // Called when the view is recycled or hidden.
@@ -176,17 +175,13 @@ class AdController @Inject constructor(
             return
         }
 
-        if (isAdEnabled.value) {
-            interstitialAdTracker.incrementActionCount()
-        }
-
         if (!isInterstitialAdEnabled.value) {
-            Timber.i("Interstitial ad is not enabled for screen: $screenName; country: $countryCode")
+            Timber.i("Interstitial ad is not enabled for screen: $currentScreenName; country: $countryCode")
             return
         }
 
         // Don't load if already shown this app session
-        if (!interstitialAdTracker.shouldShowInterstitial()) {
+        if (interstitialAdTracker.hasReachedSessionLimit()) {
             Timber.i("Interstitial ad already shown this app session")
             return
         }
@@ -203,8 +198,7 @@ class AdController @Inject constructor(
             },
             onFailed = {
                 isInterstitialLoaded = false
-            }
-        )
+            })
     }
 
     fun showInterstitialAd(onAdDismissed: () -> Unit) {
@@ -214,7 +208,7 @@ class AdController @Inject constructor(
         }
 
         if (!interstitialAdTracker.shouldShowInterstitial()) {
-            Timber.i("Interstitial ad already shown this app session, skipping")
+            Timber.i("Interstitial ad either already shown for this app session or action criteria not met")
             return
         }
 
@@ -223,7 +217,11 @@ class AdController @Inject constructor(
             return
         }
 
-        adProvider.showInterstitial(onAdDismissed = onAdDismissed)
+        adProvider.showInterstitial(onAdDismissed = {
+            // preload interstitial ad again if still eligible
+            loadInterstitialAd()
+            onAdDismissed()
+        })
 
         // Mark as shown for entire app session
         interstitialAdTracker.markAsShown()
@@ -256,25 +254,20 @@ class AdController @Inject constructor(
             return
         }
 
-        adProvider.loadRewardedAd(
-            adUnitId = adUnitId,
-            onLoaded = {
-                isRewardedAdLoaded = true
-                Timber.d("Rewarded ad loaded")
-                onLoaded()
-            },
-            onFailed = {
-                isRewardedAdLoaded = false
-                Timber.e("Rewarded ad failed to load")
-                onFailed(it)
-            }
-        )
+        adProvider.loadRewardedAd(adUnitId = adUnitId, onLoaded = {
+            isRewardedAdLoaded = true
+            Timber.d("Rewarded ad loaded")
+            onLoaded()
+        }, onFailed = {
+            isRewardedAdLoaded = false
+            Timber.e("Rewarded ad failed to load")
+            onFailed(it)
+        })
     }
 
 
     fun showRewardedAd(
-        onRewardGranted: () -> Unit = {},
-        onDismissed: () -> Unit = {}
+        onRewardGranted: () -> Unit = {}, onDismissed: () -> Unit = {}
     ) {
 
         if (!isRewardedAdLoaded) {
@@ -282,18 +275,16 @@ class AdController @Inject constructor(
             return
         }
 
-        adProvider.showRewardedAd(
-            onUserEarnedReward = {
-                Timber.d("User earned rewarded ad benefit")
-                // Disable ads for next x days
-                rewardedAdsManager.onRewardAdCompleted()
-                onRewardGranted()
-            },
-            onAdDismissed = {
-                isRewardedAdLoaded = false
-                onDismissed()
-            }
-        )
+        adProvider.showRewardedAd(onUserEarnedReward = {
+            Timber.d("User earned rewarded ad benefit")
+            // Disable ads for next x days
+            rewardedAdsManager.onRewardAdCompleted()
+            onRewardGranted()
+        }, onAdDismissed = {
+            isRewardedAdLoaded = false
+            onDismissed()
+        })
+
     }
 
 
@@ -308,6 +299,13 @@ class AdController @Inject constructor(
 
         isInterstitialLoaded = false
     }
+
+    fun ComponentActivity.canActivityShowAd(): Boolean {
+        return !isFinishing &&
+            !isDestroyed &&
+            lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
+    }
+
 }
 
 

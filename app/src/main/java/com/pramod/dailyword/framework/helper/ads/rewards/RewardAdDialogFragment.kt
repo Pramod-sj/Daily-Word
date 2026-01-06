@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.helper.ads.rewards
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,8 @@ import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.ads.AdController
 import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
+import com.pramod.dailyword.framework.ui.common.CommonNavigationAction
+import com.pramod.dailyword.framework.ui.common.Event
 import com.pramod.dailyword.framework.ui.common.Message
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -54,8 +57,7 @@ class RewardAdDialogFragment : DialogFragment() {
         (requireActivity() as BaseActivity<*, *>).viewModel
     }
 
-    private var isRewardGranted = false
-
+    private var invokeWatchRewardAd: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = requireContext()
@@ -69,37 +71,11 @@ class RewardAdDialogFragment : DialogFragment() {
                     RewardAdDisableAdsContent(
                         buttonState = isRewardAdReady,
                         onWatchAdClick = {
-                            adController.showRewardedAd(
-                                onRewardGranted = {
-                                    isRewardGranted = true
-                                },
-                                onDismissed = {
-                                    if (isRewardGranted) {
-                                        viewModel.setMessage(
-                                            Message.SnackBarMessage(
-                                                message = "🎉 Thanks for supporting us! Enjoy 7 days of ad-free access.",
-                                                duration = Snackbar.LENGTH_LONG
-                                            )
-                                        )
-                                    } else {
-                                        viewModel.setMessage(
-                                            Message.SnackBarMessage(
-                                                message = "Ads help keep this project alive, Thanks for understanding.",
-                                                duration = Snackbar.LENGTH_LONG
-                                            )
-                                        )
-                                    }
-                                    dismissAllowingStateLoss()
-                                }
-                            )
+                            invokeWatchRewardAd = true
+                            viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowRewardedAd))
+                            dismissAllowingStateLoss()
                         },
                         onDismissClick = {
-                            viewModel.setMessage(
-                                Message.SnackBarMessage(
-                                    message = "Ads help keep this project alive, Thanks for understanding.",
-                                    duration = Snackbar.LENGTH_LONG
-                                )
-                            )
                             dismissAllowingStateLoss()
                         }
                     )
@@ -142,6 +118,18 @@ class RewardAdDialogFragment : DialogFragment() {
                 }
             }
         )
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (!invokeWatchRewardAd) {
+            viewModel.setMessage(
+                Message.SnackBarMessage(
+                    message = "Ads help keep this project alive, Thanks for understanding.",
+                    duration = Snackbar.LENGTH_LONG
+                )
+            )
+        }
     }
 
     override fun onDestroy() {

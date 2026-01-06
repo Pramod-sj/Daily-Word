@@ -48,6 +48,8 @@ import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.CommonNavigationAction
+import com.pramod.dailyword.framework.ui.common.Event
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
 import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
@@ -291,6 +293,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             }
 
                             R.id.menu_about -> openAboutPage()
+
+                            R.id.menu_disable_ads -> {
+                                viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowDoNotShowRewardAdsDialog))
+                            }
                         }
                     }
                 }

@@ -1,12 +1,20 @@
 package com.pramod.dailyword.framework.ui.home
 
 import android.text.SpannableString
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
+import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
@@ -15,9 +23,12 @@ import com.pramod.dailyword.framework.util.CalenderUtil
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +38,7 @@ class HomeViewModel @Inject constructor(
     private val prefManager: PrefManager,
     val audioPlayer: AudioPlayer,
     private val importantPermissionState: ImportantPermissionState,
+    private val interstitialAdTracker: InterstitialAdTracker
 ) : BaseViewModel() {
 
     companion object {
@@ -190,6 +202,18 @@ class HomeViewModel @Inject constructor(
 
     fun navigateToBatteryOptimizationPage() {
         _navigateToBatteryOptimizationPage.value = Event.init(Unit)
+    }
+
+    private var job: Job? = null
+    fun playAudio(url: String) {
+        audioPlayer.play(url)
+        job?.cancel()
+        job = viewModelScope.launch {
+            audioPlayer.audioPlaying.asFlow()
+                .firstOrNull { !it.peekContent() } //wait till audio plays
+            delay(500L)
+            interstitialAdTracker.incrementActionCount()
+        }
     }
 
 }

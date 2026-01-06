@@ -1,6 +1,12 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Resource
@@ -11,16 +17,19 @@ import com.pramod.dailyword.business.interactor.GetWordDetailsByDateInteractor
 import com.pramod.dailyword.business.interactor.MarkBookmarkedWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +41,8 @@ class WordDetailedViewModel @Inject constructor(
     private val homeScreenBadgeManager: HomeScreenBadgeManager,
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
     private val markBookmarkedWordAsSeenInteractor: MarkBookmarkedWordAsSeenInteractor,
-    val audioPlayer: AudioPlayer
+    val audioPlayer: AudioPlayer,
+    private val interstitialAdTracker: InterstitialAdTracker
 ) : BaseViewModel() {
 
     private var isSeenStatusUpdated = false

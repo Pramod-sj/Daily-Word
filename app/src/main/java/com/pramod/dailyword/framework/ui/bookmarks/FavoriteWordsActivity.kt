@@ -60,6 +60,7 @@ class FavoriteWordsActivity :
             }
         }, deleteBookmarkCallback = {
             viewModel.removeBookmark(it)
+            interstitialAdTracker.incrementActionCount()
         }, hideBadges = prefManager.getHideBadge())
     }
 

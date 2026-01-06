@@ -53,6 +53,9 @@ import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
 import com.pramod.dailyword.framework.util.CalenderUtil
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,6 +67,9 @@ class WordDetailedActivity :
     override val viewModel: WordDetailedViewModel by viewModels()
 
     override val bindingVariable: Int = BR.wordDetailedViewModel
+
+    override val screenName: String
+        get() = if (viewModel.wordDate == null) "RandomWordDetailedActivity" else super.screenName
 
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
@@ -115,12 +121,21 @@ class WordDetailedActivity :
         adController.loadBanner(binding.frameAd1)
     }
 
+    var job: Job? = null
+
     private fun setupViews() {
         binding.wordDetailedExamplesRecyclerview.adapter = exampleAdapter
         binding.wordDetailedDefinationsRecyclerview.adapter = definitionAdapter
         binding.lottieSpeaker.setOnClickListener {
             viewModel.word.value?.pronounceAudio?.let {
                 viewModel.audioPlayer.play(it)
+                job?.cancel()
+                job = lifecycleScope.launch {
+                    viewModel.audioPlayer.audioPlaying.asFlow()
+                        .firstOrNull { !it.peekContent() } //wait till audio plays
+                    delay(500L)
+                    interstitialAdTracker.incrementActionCount()
+                }
             }
         }
         binding.composeLoader.setViewTreeLifecycleOwner(this@WordDetailedActivity)
@@ -430,7 +445,10 @@ class WordDetailedActivity :
                 } ?: shareApp()
             }
 
-            R.id.menu_bookmark -> viewModel.bookmark()
+            R.id.menu_bookmark -> {
+                viewModel.bookmark()
+                interstitialAdTracker.incrementActionCount()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

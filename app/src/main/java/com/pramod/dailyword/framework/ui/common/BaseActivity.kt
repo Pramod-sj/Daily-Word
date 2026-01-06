@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.framework.helper.ads.AdController
+import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.helper.ads.rewards.RewardAdDialogFragment
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
     private val layoutId: Int
-) : ThemedActivity() {
+) : ThemedActivity(), ScreenNameProvider {
 
     lateinit var binding: T
 
@@ -26,8 +27,16 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
 
     abstract val bindingVariable: Int
 
+    override val screenName: String
+        get() = localClassName.split(".").lastOrNull() ?: localClassName
+
     @Inject
     lateinit var adController: AdController
+
+    @Inject
+    lateinit var interstitialAdTracker: InterstitialAdTracker
+
+    private var isRewardGranted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +48,68 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         bindAds()
         setMessageObserver()
         adController.loadInterstitialAd()
+        handleEffects()
+        lifecycleScope.launch {
+            interstitialAdTracker.showInterstitial.collect {
+                viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowInterstitialAd))
+            }
+        }
+    }
+
+    private fun handleEffects() {
+        lifecycleScope.launch {
+            viewModel.event.collect {
+                when (it) {
+                    is Event.Navigate -> {
+                        when (it.action) {
+                            CommonNavigationAction.ShowDoNotShowRewardAdsDialog -> {
+                                RewardAdDialogFragment()
+                                    .show(supportFragmentManager, RewardAdDialogFragment.TAG)
+                            }
+
+                            CommonNavigationAction.ShowInterstitialAd -> {
+                                adController.showInterstitialAd(
+                                    onAdDismissed = {
+                                        if (adController.showDoNotShowAdsDialogAfterInterstitial) {
+                                            viewModel.setEvent(
+                                                event = Event.Navigate(
+                                                    action = CommonNavigationAction.ShowDoNotShowRewardAdsDialog
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+
+                            CommonNavigationAction.ShowRewardedAd -> {
+                                adController.showRewardedAd(
+                                    onRewardGranted = {
+                                        isRewardGranted = true
+                                    },
+                                    onDismissed = {
+                                        if (isRewardGranted) {
+                                            viewModel.setMessage(
+                                                Message.SnackBarMessage(
+                                                    message = "🎉 Thanks for supporting us! Enjoy 7 days of ad-free access.",
+                                                    duration = Snackbar.LENGTH_LONG
+                                                )
+                                            )
+                                        } else {
+                                            viewModel.setMessage(
+                                                Message.SnackBarMessage(
+                                                    message = "Ads help keep this project alive, Thanks for understanding.",
+                                                    duration = Snackbar.LENGTH_LONG
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun bindAds() {
@@ -134,4 +205,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         val TAG = BaseActivity::class.java.simpleName
     }
 
+}
+
+
+interface ScreenNameProvider {
+    val screenName: String
 }

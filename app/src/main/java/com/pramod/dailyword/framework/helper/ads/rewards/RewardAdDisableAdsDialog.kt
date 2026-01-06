@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.helper.ads.rewards
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -24,10 +26,14 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.themeadapter.appcompat.AppCompatTheme
+import com.pramod.dailyword.R
 
 
 sealed interface RewardButtonState {
@@ -50,6 +56,9 @@ fun RewardAdDisableAdsContent(
 ) {
 
     val fbRemoteConfig = FBRemoteConfigCompositionLocal.current
+
+    val view = LocalView.current
+
 
     AppCompatTheme {
 
@@ -106,9 +115,16 @@ fun RewardAdDisableAdsContent(
                 ) {
 
                     Button(
-                        onClick = onWatchAdClick,
+                        onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            onWatchAdClick()
+                        },
                         shape = RoundedCornerShape(8.dp),
-                        enabled = buttonState == RewardButtonState.AdReady
+                        enabled = buttonState == RewardButtonState.AdReady,
+                        colors = ButtonDefaults.buttonColors(
+                            disabledBackgroundColor = Color.Transparent,
+                            contentColor = colorResource(R.color.buttonPrimary_textColor)
+                        )
                     ) {
                         AnimatedVisibility(buttonState == RewardButtonState.Loading) {
                             CircularProgressIndicator(

@@ -3,6 +3,9 @@ package com.pramod.dailyword.framework.helper.ads
 
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.firebase.model.AdsConfig
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -53,6 +56,11 @@ class InterstitialAdTracker @Inject constructor(
      */
     private var interstitialShownCount = 0
 
+
+    private val _showInterstitial = Channel<Unit>(Channel.BUFFERED)
+    val showInterstitial: Flow<Unit> = _showInterstitial.receiveAsFlow()
+
+
     /**
      * Increments the action counter used to decide when to show an interstitial.
      *
@@ -63,6 +71,8 @@ class InterstitialAdTracker @Inject constructor(
         if (hasReachedSessionLimit()) return
 
         actionCount++
+
+        if (shouldShowInterstitial()) _showInterstitial.trySend(Unit)
 
         Timber.d(
             "Action count: $actionCount " +
