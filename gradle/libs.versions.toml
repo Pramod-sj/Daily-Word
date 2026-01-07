@@ -22,7 +22,6 @@ firebaseConfigKtx = "22.1.2"
 firebaseAnalyticsKtx = "22.4.0"
 firebaseCrashlyticsKtx = "19.4.3"
 pagingRuntimeKtx = "3.3.6"
-facebookAudienceNetworkSdk = "6.20.0"
 autostarter = "1.1.0"
 lottie = "6.5.2"
 browser = "1.8.0"
@@ -39,6 +38,7 @@ composeBom = "2025.05.01"
 activityCompose = "1.10.1"
 accompanist = "0.36.0"
 workRuntimeKtx = "2.10.1"
+playServicesAds = "23.0.0"
 
 gradlePlugin = "8.13.1"
 googleServices = "4.4.2"
@@ -89,7 +89,7 @@ firebaseCrashlyticsKtx = { module = "com.google.firebase:firebase-crashlytics-kt
 
 pagingRuntimeKtx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 
-facebookAudienceNetworkSdk = { module = "com.facebook.android:audience-network-sdk", version.ref = "facebookAudienceNetworkSdk" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 autostarter = { module = "com.github.judemanutd:autostarter", version.ref = "autostarter" }
 
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }

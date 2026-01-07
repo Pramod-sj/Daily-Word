@@ -126,13 +126,20 @@ class BillingHelper constructor(
      */
     suspend fun queryPurchases(): List<Purchase> {
         if (purchases.isEmpty()) {
-            billingClient.queryPurchasesAsync(
+            val result = billingClient.queryPurchasesAsync(
                 QueryPurchasesParams.newBuilder()
-                    .setProductType(BillingClient.ProductType.INAPP)
+                    .setProductType(INAPP)
                     .build()
-            ).purchasesList.forEach {
-                purchases[it.purchaseToken] = it
-            }
+            )
+
+            result.purchasesList
+                .filter { purchase ->
+                    purchase.purchaseState == Purchase.PurchaseState.PURCHASED &&
+                        purchase.isAcknowledged
+                }
+                .forEach { purchase ->
+                    purchases[purchase.purchaseToken] = purchase
+                }
         }
         return ArrayList(purchases.values)
     }

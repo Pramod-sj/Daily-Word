@@ -564,7 +564,7 @@
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
                                     android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->mainViewModel.audioPlayer.play(mainViewModel.wordOfTheDay.pronounceAudio)}"
+                                    android:onClick="@{()->mainViewModel.playAudio(mainViewModel.wordOfTheDay.pronounceAudio)}"
                                     android:padding="12dp"
                                     app:lottie_animate="@{mainViewModel.audioPlayer.audioPlaying.contentIfNotHandled}"
                                     app:lottie_autoPlay="false"

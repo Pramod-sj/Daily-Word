@@ -132,4 +132,6 @@
 
     <color name="button_textColor_highEmphasis">#B3000000</color>
 
+    <color name="buttonPrimary_textColor">#DEFFFFFF</color>
+
 </resources>

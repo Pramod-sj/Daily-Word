@@ -5,8 +5,6 @@
 
         <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <import type="com.pramod.dailyword.framework.util.CommonUtils" />
 
         <import type="com.pramod.dailyword.business.data.network.Status" />

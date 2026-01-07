@@ -5,6 +5,7 @@ import android.app.job.JobScheduler
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
 import dagger.Module
@@ -55,5 +56,9 @@ object AppModule {
     fun provideAlarmManager(@ApplicationContext context: Context): AlarmManager {
         return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = Gson()
 
 }

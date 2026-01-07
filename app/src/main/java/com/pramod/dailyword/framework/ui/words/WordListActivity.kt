@@ -36,7 +36,17 @@ import javax.inject.Inject
 class WordListActivity :
     BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {
 
-    override val viewModel: WordListViewModel by viewModels()
+    @Inject
+    lateinit var wordListViewModelFactory: WordListViewModel.Factory
+
+    override val viewModel: WordListViewModel by viewModels(
+        factoryProducer = {
+            WordListViewModelFactory(
+                assistedFactory = wordListViewModelFactory,
+                isBannerAdsEnabled = adController.isBannerAdEnabled
+            )
+        }
+    )
 
     override val bindingVariable: Int = BR.wordListViewModel
 
@@ -77,8 +87,10 @@ class WordListActivity :
             },
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
+                interstitialAdTracker.incrementActionCount()
             },
-            hideBadges = prefManager.getHideBadge()
+            hideBadges = prefManager.getHideBadge(),
+            adController = adController
         )
     }
 

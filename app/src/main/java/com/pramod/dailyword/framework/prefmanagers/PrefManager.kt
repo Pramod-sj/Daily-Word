@@ -5,6 +5,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.LiveData
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.framework.firebase.SupportedFBTopicCounties
+import com.pramod.dailyword.framework.prefmanagers.AdsDisabledPrefManager.Companion.KEY_ADS_DISABLED_UNTIL
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BACKGROUND_ALPHA
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.DEFAULT_WIDGET_BODY_BACKGROUND_ALPHA
 import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference.Companion.KEY_VISIBLE_WIDGET_CONTROL
@@ -16,7 +17,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PrefManager @Inject constructor(@ApplicationContext context: Context) :
+class PrefManager @Inject constructor(
+    @ApplicationContext context: Context
+) :
     BasePreferenceManager(null, context),
     AppLaunchCountContracts,
     MWCreditDialogContracts,
@@ -27,7 +30,8 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
     DonatedContract,
     SupportUsDialogContract,
     WidgetSettingPreference,
-    NotificationPermissionPref {
+    NotificationPermissionPref,
+    AdsDisabledPrefManager {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -96,6 +100,7 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         private const val KEY_SHOW_BADGE = "show_badge"
 
         private const val KEY_IS_DONATED = "is_donated"
+        private const val KEY_DONATED_ITEMS = "donated_items"
 
         //how many time support us dialog method was called
         private const val KEY_SUPPORT_US_CALLED_COUNT = "support_us_called_count"
@@ -130,6 +135,25 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
             KEY_IS_DONATED,
             false
         ) else null
+    }
+
+    override fun setDonatedItems(items: Set<String>?) {
+        sPrefManager.edit().putStringSet(KEY_DONATED_ITEMS, items?.toSet()).apply()
+    }
+
+    private val donatedItemsLiveData =
+        object : SPreferenceLiveData<Set<String>?>(sPrefManager, KEY_DONATED_ITEMS, emptySet()) {
+            override fun getValueFromPreference(
+                key: String,
+                defValue: Set<String>?
+            ): Set<String>? {
+                return sPrefManager.getStringSet(KEY_DONATED_ITEMS, emptySet())
+            }
+
+        }
+
+    override fun getDonatedItems(): SPreferenceLiveData<Set<String>?> {
+        return donatedItemsLiveData
     }
 
     override fun incrementSupportUsDialogCalledCount() {
@@ -223,6 +247,30 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         ).commit()
     }
 
+    override fun setAdsDisabledUntil(timestamp: Long) {
+        editor.putLong(KEY_ADS_DISABLED_UNTIL, timestamp).apply()
+    }
+
+    private val adDisabledUntil =
+        object : SPreferenceLiveData<Long>(sPrefManager, KEY_ADS_DISABLED_UNTIL, 0L) {
+            override fun getValueFromPreference(
+                key: String,
+                defValue: Long
+            ): Long {
+                return sPrefManager.getLong(key, defValue)
+            }
+        }
+
+    override fun getAdsDisabledUntil(): LiveData<Long> {
+        return adDisabledUntil.apply {
+            value = sPrefManager.getLong(KEY_ADS_DISABLED_UNTIL, 0L)
+        }
+    }
+
+    override fun clearAdsDisabledUntil() {
+        editor.remove(KEY_ADS_DISABLED_UNTIL)
+    }
+
 }
 
 interface AppLaunchCountContracts {
@@ -280,6 +328,10 @@ interface DonatedContract {
     fun setHasDonated(donated: Boolean)
 
     fun hasDonated(): Boolean?
+
+    fun setDonatedItems(items: Set<String>?)
+
+    fun getDonatedItems(): SPreferenceLiveData<Set<String>?>
 }
 
 interface SupportUsDialogContract {
@@ -340,5 +392,19 @@ interface NotificationPermissionPref {
     fun markFullNotificationMessageDismissed()
 
     fun markNotificationPermissionAsked()
+
+}
+
+interface AdsDisabledPrefManager {
+
+    companion object {
+        const val KEY_ADS_DISABLED_UNTIL = "ads_disabled_until"
+    }
+
+    fun setAdsDisabledUntil(timestamp: Long)
+
+    fun getAdsDisabledUntil(): LiveData<Long>
+
+    fun clearAdsDisabledUntil()
 
 }

@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.common.bindingadapter
 
 import android.view.View
+import androidx.cardview.widget.CardView
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
@@ -80,6 +81,30 @@ class EdgeToEdgeUtils {
                 view.updatePadding(
                     top = initialPadding.top,
                     bottom = if (applyBottomPaddingInset) windowInsets.systemWindowInsetBottom + initialPadding.bottom
+                    else initialPadding.bottom
+                )
+            }
+        }
+
+
+        @JvmStatic
+        @BindingAdapter(
+            value = [
+                "app:applyContentBottomPaddingInset"
+            ], requireAll = false
+        )
+        fun applyBottomInset(
+            cardView: CardView,
+            applyContentBottomPaddingInset: Boolean
+        ) {
+
+            cardView.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
+
+                cardView.setContentPadding(
+                    initialPadding.left,
+                    initialPadding.top,
+                    initialPadding.right,
+                    if (applyContentBottomPaddingInset) windowInsets.systemWindowInsetBottom + initialPadding.bottom
                     else initialPadding.bottom
                 )
             }

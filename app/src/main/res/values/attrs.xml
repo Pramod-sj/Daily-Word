@@ -48,4 +48,6 @@
         </attr>
     </declare-styleable>
 
+    <item name="menu_disable_ads" type="id"/>
+
 </resources>

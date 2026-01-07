@@ -15,8 +15,6 @@
 
         <import type="com.pramod.dailyword.framework.firebase.FBRemoteConfig" />
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <variable
             name="adsEnabled"
             type="Boolean" />
@@ -68,40 +66,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            app:applyContentBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled()}"
             app:cardCornerRadius="0dp"
-            app:cardElevation="@dimen/ad_card_elevation"
-            app:isVisible="@{adsEnabled}">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:applyBottomPaddingInset="@{favoriteWordsViewModel.isEdgeToEdgeEnabled()}">
-
-
-                <com.facebook.ads.NativeAdLayout
-                    android:id="@+id/native_ad_container_4"
-                    adId="@{AdsManager.NATIVE_BANNER_ID_2}"
-                    showAdWithSomeDelay="@{500}"
-                    showNativeAd="@{adsEnabled}"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="@dimen/margin_small"
-                    android:paddingHorizontal="@dimen/margin_medium"
-                    app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
-                    app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
-
-
-                <TextView
-                    android:id="@+id/txtView_ad_loading_4"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:gravity="center"
-                    android:text="@string/loading" />
-
-            </FrameLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:cardElevation="2dp"
+            app:isVisible="@{adsEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"

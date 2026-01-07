@@ -50,9 +50,8 @@ import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 val Activity.CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION: String
@@ -127,6 +126,10 @@ class AppSettingActivity :
                 viewModel.notificationTriggerTimeChangeMessage.collect {
                     binding.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     viewModel.setMessage(Message.SnackBarMessage(it))
+                    lifecycleScope.launch {
+                        delay(1000L)
+                        interstitialAdTracker.incrementActionCount()
+                    }
                 }
             }
         }
@@ -461,11 +464,11 @@ class AppSettingActivity :
             InstallStatus.DOWNLOADING -> {
                 viewModel.subTitleCheckForUpdate.value =
                     resources.getString(R.string.app_update_update_downloading_message) + " " +
-                            try {
-                                ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload())
-                            } catch (_: Exception) {
-                                "0"
-                            } + "%"
+                        try {
+                            ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload())
+                        } catch (_: Exception) {
+                            "0"
+                        } + "%"
 
             }
 

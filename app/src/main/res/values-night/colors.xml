@@ -55,4 +55,6 @@
 
     <color name="notification_timer_background">#191919</color>
 
+    <color name="buttonPrimary_textColor">#B3000000</color>
+
 </resources>
