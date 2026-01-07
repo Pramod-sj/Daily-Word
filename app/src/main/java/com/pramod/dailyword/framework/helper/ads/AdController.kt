@@ -45,41 +45,40 @@ class AdController @Inject constructor(
 
     val isAdEnabled: StateFlow<Boolean> =
         rewardedAdsManager.areAdsDisabled().map { areAdsDisabled ->
-            adConfig.adsEnabled && !areAdsDisabled
+            adConfig.adsEnabled == true
+                && adConfig.adsEnabledCountries?.contains(countryCode) == true
+                && !areAdsDisabled
         }.asFlow().stateIn(
             scope = activity.lifecycleScope,
             started = SharingStarted.Eagerly,
             initialValue = false
         )
 
+    private val bannerAdUnit = adConfig.adUnits?.get("${currentScreenName}_banner")
     val isBannerAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
-        isAdEnabled &&
-            adConfig.adsEnabledCountries.contains(countryCode) &&
-            adConfig.adsEnabledScreen[currentScreenName]?.banner ?: false
+        isAdEnabled && bannerAdUnit?.enabled ?: false
     }.stateIn(
         scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
 
+    private val mediumBannerAdUnit = adConfig.adUnits?.get("${currentScreenName}_mediumBanner")
     val isMediumBannerAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
-        isAdEnabled &&
-            adConfig.adsEnabledCountries.contains(countryCode) &&
-            adConfig.adsEnabledScreen[currentScreenName]?.mediumBanner ?: false
+        isAdEnabled && mediumBannerAdUnit?.enabled ?: false
     }.stateIn(
         scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
 
-
+    private val interstitialAdUnit = adConfig.adUnits?.get("${currentScreenName}_interstitial")
     val isInterstitialAdEnabled: StateFlow<Boolean> = isAdEnabled.map { isAdEnabled ->
-        isAdEnabled &&
-            adConfig.adsEnabledCountries.contains(countryCode) &&
-            adConfig.adsEnabledScreen[currentScreenName]?.interstitial ?: false
+        isAdEnabled && interstitialAdUnit?.enabled ?: false
     }.stateIn(
         scope = activity.lifecycleScope, started = SharingStarted.Eagerly, initialValue = false
     )
+
+    private val rewardAdUnit = adConfig.adUnits?.get("reward")
 
     val showDoNotShowAdsDialogAfterInterstitial: Boolean
-        get() = adConfig.adsEnabledScreen[currentScreenName]?.showPostInterstitialDialog
-            ?: false
+        get() = (interstitialAdUnit?.showPostInterstitialDialog ?: false) && rewardAdUnit?.enabled == true
 
 
     // Cache for loaded native ad views. Keyed by the container they are in.
@@ -113,12 +112,18 @@ class AdController @Inject constructor(
     }
 
     fun loadBanner(
-        container: ViewGroup,
-        adUnitId: String = "ca-app-pub-3940256099942544/2247696110" // Test Ad Unit
+        container: ViewGroup
     ) {
 
         if (!NetworkUtils.isNetworkActive(activity)) {
             Timber.i("Network not available, Not loading Banner ads")
+            return
+        }
+
+        val adUnitId = bannerAdUnit?.adUnitId
+
+        if (adUnitId == null) {
+            Timber.i("Banner ad unit id is null for $currentScreenName")
             return
         }
 
@@ -163,14 +168,21 @@ class AdController @Inject constructor(
     }
 
     fun loadMediumBanner(
-        container: ViewGroup,
-        adUnitId: String = "ca-app-pub-3940256099942544/2247696110" // Test Ad Unit
+        container: ViewGroup
     ) {
 
         if (!NetworkUtils.isNetworkActive(activity)) {
             Timber.i("Network not available, Not loading Medium Banner ads")
             return
         }
+
+        val adUnitId = mediumBannerAdUnit?.adUnitId
+
+        if (adUnitId == null) {
+            Timber.i("Medium Banner ad unit id is null for $currentScreenName")
+            return
+        }
+
 
         if (!isMediumBannerAdEnabled.value) {
             Timber.i("Medium Banner ad is not enabled for screen: $currentScreenName; country: $countryCode")
@@ -233,6 +245,13 @@ class AdController @Inject constructor(
             return
         }
 
+        val adUnitId = interstitialAdUnit?.adUnitId
+
+        if (adUnitId == null) {
+            Timber.i("Interstitial ad unit id is null for $currentScreenName")
+            return
+        }
+
         if (!isInterstitialAdEnabled.value) {
             Timber.i("Interstitial ad is not enabled for screen: $currentScreenName; country: $countryCode")
             return
@@ -250,7 +269,7 @@ class AdController @Inject constructor(
         }
 
         adProvider.loadInterstitial(
-            adUnitId = "ca-app-pub-3940256099942544/1033173712",
+            adUnitId = adUnitId,
             onLoaded = {
                 isInterstitialLoaded = true
             },
@@ -290,7 +309,6 @@ class AdController @Inject constructor(
 
 
     fun loadRewardedAd(
-        adUnitId: String = "ca-app-pub-3940256099942544/5224354917",
         onLoaded: () -> Unit = {},
         onFailed: (Throwable) -> Unit = {}
     ) {
@@ -298,6 +316,14 @@ class AdController @Inject constructor(
             Timber.i("Network not available, Not loading Rewarded ad")
             return
         }
+
+        val adUnitId = rewardAdUnit?.adUnitId
+
+        if (adUnitId == null) {
+            Timber.i("Reward ad unit id is null, check if 'reward' key present in adUnits map on firebase")
+            return
+        }
+
 
         if (!isAdEnabled.value) {
             Timber.i("Ads is not enabled")

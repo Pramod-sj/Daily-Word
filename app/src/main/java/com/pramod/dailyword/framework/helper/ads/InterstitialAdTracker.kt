@@ -91,7 +91,7 @@ class InterstitialAdTracker @Inject constructor(
      */
     fun shouldShowInterstitial(): Boolean {
         val shouldShow =
-            !hasReachedSessionLimit() && actionCount >= actionsBeforeAd
+            !hasReachedSessionLimit() && actionCount >= (actionsBeforeAd ?: 5)
 
         Timber.i(
             "shouldShowInterstitial: $shouldShow " +
@@ -126,7 +126,7 @@ class InterstitialAdTracker @Inject constructor(
      * for the current session has been reached.
      */
     fun hasReachedSessionLimit(): Boolean {
-        return interstitialShownCount >= maxInterstitialsPerSession
+        return interstitialShownCount >= (maxInterstitialsPerSession ?: 1)
     }
 
     /**
@@ -139,7 +139,7 @@ class InterstitialAdTracker @Inject constructor(
      * in the current session.
      */
     fun getRemainingInterstitials(): Int {
-        return maxOf(0, maxInterstitialsPerSession - interstitialShownCount)
+        return maxOf(0, (maxInterstitialsPerSession ?: 1) - interstitialShownCount)
     }
 
     /**

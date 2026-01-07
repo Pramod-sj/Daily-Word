@@ -58,52 +58,54 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
 
     private fun handleEffects() {
         lifecycleScope.launch {
-            viewModel.event.collect {
-                when (it) {
-                    is Event.Navigate -> {
-                        when (it.action) {
-                            CommonNavigationAction.ShowDoNotShowRewardAdsDialog -> {
-                                RewardAdDialogFragment()
-                                    .show(supportFragmentManager, RewardAdDialogFragment.TAG)
-                            }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect {
+                    when (it) {
+                        is Event.Navigate -> {
+                            when (it.action) {
+                                CommonNavigationAction.ShowDoNotShowRewardAdsDialog -> {
+                                    RewardAdDialogFragment()
+                                        .show(supportFragmentManager, RewardAdDialogFragment.TAG)
+                                }
 
-                            CommonNavigationAction.ShowInterstitialAd -> {
-                                adController.showInterstitialAd(
-                                    onAdDismissed = {
-                                        if (adController.showDoNotShowAdsDialogAfterInterstitial) {
-                                            viewModel.setEvent(
-                                                event = Event.Navigate(
-                                                    action = CommonNavigationAction.ShowDoNotShowRewardAdsDialog
+                                CommonNavigationAction.ShowInterstitialAd -> {
+                                    adController.showInterstitialAd(
+                                        onAdDismissed = {
+                                            if (adController.showDoNotShowAdsDialogAfterInterstitial) {
+                                                viewModel.setEvent(
+                                                    event = Event.Navigate(
+                                                        action = CommonNavigationAction.ShowDoNotShowRewardAdsDialog
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
-                                    }
-                                )
-                            }
+                                    )
+                                }
 
-                            CommonNavigationAction.ShowRewardedAd -> {
-                                adController.showRewardedAd(
-                                    onRewardGranted = {
-                                        isRewardGranted = true
-                                    },
-                                    onDismissed = {
-                                        if (isRewardGranted) {
-                                            viewModel.setMessage(
-                                                Message.SnackBarMessage(
-                                                    message = "🎉 Thanks for supporting us! Enjoy 7 days of ad-free access.",
-                                                    duration = Snackbar.LENGTH_LONG
+                                CommonNavigationAction.ShowRewardedAd -> {
+                                    adController.showRewardedAd(
+                                        onRewardGranted = {
+                                            isRewardGranted = true
+                                        },
+                                        onDismissed = {
+                                            if (isRewardGranted) {
+                                                viewModel.setMessage(
+                                                    Message.SnackBarMessage(
+                                                        message = "🎉 Thanks for supporting us! Enjoy 7 days of ad-free access.",
+                                                        duration = Snackbar.LENGTH_LONG
+                                                    )
                                                 )
-                                            )
-                                        } else {
-                                            viewModel.setMessage(
-                                                Message.SnackBarMessage(
-                                                    message = "Ads help keep this project alive, Thanks for understanding.",
-                                                    duration = Snackbar.LENGTH_LONG
+                                            } else {
+                                                viewModel.setMessage(
+                                                    Message.SnackBarMessage(
+                                                        message = "Ads help keep this project alive, Thanks for understanding.",
+                                                        duration = Snackbar.LENGTH_LONG
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }

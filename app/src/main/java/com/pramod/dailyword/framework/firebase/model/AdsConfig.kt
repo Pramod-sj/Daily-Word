@@ -1,22 +1,20 @@
 package com.pramod.dailyword.framework.firebase.model
 
 data class AdsConfig(
-    val adsEnabled: Boolean,
+    val adsEnabled: Boolean?,
 
-    val adsEnabledCountries: List<String>,
-    val adsEnabledScreen: Map<String, AdTypeEnableStatus>,
+    val adsEnabledCountries: List<String>?,
+    val adUnits: Map<String, AdUnitConfig>?,
 
-    val actionCountForInterstitial: Int,
-    val maxInterstitialsPerSession: Int,
+    val actionCountForInterstitial: Int?,
+    val maxInterstitialsPerSession: Int?,
 
-    val disableAdForPremiumUser: Boolean,
+    val disableAdForPremiumUser: Boolean?,
 
-    val disabledAdsDays: Int?,
+    val disabledAdsDays: Int??,
 )
-
-data class AdTypeEnableStatus(
-    val banner: Boolean,
-    val mediumBanner: Boolean,
-    val interstitial: Boolean,
-    val showPostInterstitialDialog: Boolean = false
+data class AdUnitConfig(
+    val adUnitId: String?,
+    val enabled: Boolean?,
+    val showPostInterstitialDialog: Boolean?
 )

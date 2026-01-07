@@ -144,12 +144,12 @@ class FBRemoteConfig @Inject constructor(
         } catch (_: Exception) {
             return AdsConfig(
                 adsEnabled = false,
-                adsEnabledScreen = emptyMap(),
                 adsEnabledCountries = emptyList(),
                 actionCountForInterstitial = 0,
                 maxInterstitialsPerSession = 0,
                 disableAdForPremiumUser = false,
-                disabledAdsDays = 7
+                disabledAdsDays = 7,
+                adUnits = null
             )
         }
     }
