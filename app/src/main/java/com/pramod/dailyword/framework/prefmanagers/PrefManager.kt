@@ -17,7 +17,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PrefManager @Inject constructor(@ApplicationContext context: Context) :
+class PrefManager @Inject constructor(
+    @ApplicationContext context: Context
+) :
     BasePreferenceManager(null, context),
     AppLaunchCountContracts,
     MWCreditDialogContracts,
@@ -98,6 +100,7 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
         private const val KEY_SHOW_BADGE = "show_badge"
 
         private const val KEY_IS_DONATED = "is_donated"
+        private const val KEY_DONATED_ITEMS = "donated_items"
 
         //how many time support us dialog method was called
         private const val KEY_SUPPORT_US_CALLED_COUNT = "support_us_called_count"
@@ -132,6 +135,25 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) :
             KEY_IS_DONATED,
             false
         ) else null
+    }
+
+    override fun setDonatedItems(items: Set<String>?) {
+        sPrefManager.edit().putStringSet(KEY_DONATED_ITEMS, items?.toSet()).apply()
+    }
+
+    private val donatedItemsLiveData =
+        object : SPreferenceLiveData<Set<String>?>(sPrefManager, KEY_DONATED_ITEMS, emptySet()) {
+            override fun getValueFromPreference(
+                key: String,
+                defValue: Set<String>?
+            ): Set<String>? {
+                return sPrefManager.getStringSet(KEY_DONATED_ITEMS, emptySet())
+            }
+
+        }
+
+    override fun getDonatedItems(): SPreferenceLiveData<Set<String>?> {
+        return donatedItemsLiveData
     }
 
     override fun incrementSupportUsDialogCalledCount() {
@@ -306,6 +328,10 @@ interface DonatedContract {
     fun setHasDonated(donated: Boolean)
 
     fun hasDonated(): Boolean?
+
+    fun setDonatedItems(items: Set<String>?)
+
+    fun getDonatedItems(): SPreferenceLiveData<Set<String>?>
 }
 
 interface SupportUsDialogContract {

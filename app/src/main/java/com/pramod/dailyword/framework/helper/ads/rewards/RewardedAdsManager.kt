@@ -39,6 +39,10 @@ class RewardedAdsManager @Inject constructor(
         }
     }
 
+    fun getAdsDisabledUntil(): LiveData<Long> {
+        return prefManager.getAdsDisabledUntil()
+    }
+
     /**
      * Returns remaining time in milliseconds
      * Useful if you want to show "X days left" in UI.

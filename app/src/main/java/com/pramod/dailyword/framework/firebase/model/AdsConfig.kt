@@ -13,6 +13,7 @@ data class AdsConfig(
 
     val disabledAdsDays: Int??,
 )
+
 data class AdUnitConfig(
     val adUnitId: String?,
     val enabled: Boolean?,

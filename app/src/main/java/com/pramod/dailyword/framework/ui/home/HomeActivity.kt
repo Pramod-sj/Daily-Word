@@ -189,7 +189,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         override fun onBillingPurchasesProcessed() {
             super.onBillingPurchasesProcessed()
             lifecycleScope.launch {
-                prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
+                val donatedItems =
+                    billingHelper.queryPurchases().mapNotNull { it.products.firstOrNull() }
+                prefManager.setHasDonated(donatedItems.isNotEmpty())
+                prefManager.setDonatedItems(donatedItems.toSet())
                 shouldShowSupportDevelopmentDialog()
             }
         }

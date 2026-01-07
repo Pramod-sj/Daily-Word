@@ -9,10 +9,9 @@ import android.view.animation.Transformation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.userEntitlement.UserEntitlement
 import com.pramod.dailyword.framework.helper.ads.rewards.RewardedAdsManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.ScreenNameProvider
@@ -34,6 +33,7 @@ class AdController @Inject constructor(
     private val myActivity: Activity,
     private val interstitialAdTracker: InterstitialAdTracker,
     private val rewardedAdsManager: RewardedAdsManager,
+    private val userEntitlement: UserEntitlement
 ) {
     private val activity = myActivity as ComponentActivity
 
@@ -44,11 +44,11 @@ class AdController @Inject constructor(
     private val adConfig = fbRemoteConfig.getAdsConfig()
 
     val isAdEnabled: StateFlow<Boolean> =
-        rewardedAdsManager.areAdsDisabled().map { areAdsDisabled ->
+        userEntitlement.isAdFree.map { isAdFree ->
             adConfig.adsEnabled == true
                 && adConfig.adsEnabledCountries?.contains(countryCode) == true
-                && !areAdsDisabled
-        }.asFlow().stateIn(
+                && !isAdFree
+        }.stateIn(
             scope = activity.lifecycleScope,
             started = SharingStarted.Eagerly,
             initialValue = false
@@ -78,7 +78,8 @@ class AdController @Inject constructor(
     private val rewardAdUnit = adConfig.adUnits?.get("reward")
 
     val showDoNotShowAdsDialogAfterInterstitial: Boolean
-        get() = (interstitialAdUnit?.showPostInterstitialDialog ?: false) && rewardAdUnit?.enabled == true
+        get() = (interstitialAdUnit?.showPostInterstitialDialog
+            ?: false) && rewardAdUnit?.enabled == true
 
 
     // Cache for loaded native ad views. Keyed by the container they are in.
@@ -332,7 +333,7 @@ class AdController @Inject constructor(
         }
 
         // If ads already disabled via reward, don't load
-        if (rewardedAdsManager.areAdsDisabled().value == true) {
+        if (userEntitlement.isAdFree.value) {
             Timber.i("Ads already disabled via reward, skipping rewarded ad load")
             onFailed(Throwable("Ads already disabled via reward, skipping rewarded ad load"))
             return

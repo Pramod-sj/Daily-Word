@@ -51,6 +51,8 @@ class FBRemoteConfig @Inject constructor(
 
         const val REMOTE_CONFIG_KEY_ADS_CONFIG = "ads_config"
 
+        const val REMOTE_PREMIUM_DONATION_ITEMS = "premium_donation_items"
+
         private val default_configs = mapOf(
             REMOTE_CONFIG_KEY_BASE_URL to BuildConfig.API_BASE_URL,
             REMOTE_CONFIG_KEY_ADS_ENABLED to "{\"all\":false,\"in\":false,\"us\":false,\"gb\":false,\"others\":false}"
@@ -138,7 +140,7 @@ class FBRemoteConfig @Inject constructor(
     fun getAdsConfig(): AdsConfig {
         return try {
             gson.fromJson(
-                remoteConfig.getString(REMOTE_CONFIG_KEY_ADS_CONFIG),
+                remoteConfig.getValue(REMOTE_CONFIG_KEY_ADS_CONFIG).asString(),
                 AdsConfig::class.java
             )
         } catch (_: Exception) {
@@ -153,6 +155,22 @@ class FBRemoteConfig @Inject constructor(
             )
         }
     }
+
+    fun getPremiumDonationItems(): PremiumDonationItem {
+        return try {
+            gson.fromJson(
+                remoteConfig.getValue(REMOTE_PREMIUM_DONATION_ITEMS).asString(),
+                PremiumDonationItem::class.java
+            )
+        } catch (_: Exception) {
+            return PremiumDonationItem(emptyList())
+        }
+    }
+
+
+    data class PremiumDonationItem(
+        val premiumDonationItemIds: List<String>?
+    )
 
     @Keep
     data class AdsEnabled(
