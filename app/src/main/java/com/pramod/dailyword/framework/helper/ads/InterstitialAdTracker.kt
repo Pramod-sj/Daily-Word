@@ -30,6 +30,8 @@ class InterstitialAdTracker @Inject constructor(
     private val fbRemoteConfig: FBRemoteConfig
 ) {
 
+    var callback: InterstitialAdEnabledCallback? = null
+
     /**
      * Ads-related configuration fetched from Firebase Remote Config.
      */
@@ -69,6 +71,8 @@ class InterstitialAdTracker @Inject constructor(
      */
     fun incrementActionCount() {
         if (hasReachedSessionLimit()) return
+
+        if (callback?.isAdEnabled() == false) return
 
         actionCount++
 

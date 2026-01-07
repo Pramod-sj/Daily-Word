@@ -50,8 +50,10 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
         adController.loadInterstitialAd()
         handleEffects()
         lifecycleScope.launch {
-            interstitialAdTracker.showInterstitial.collect {
-                viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowInterstitialAd))
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                interstitialAdTracker.showInterstitial.collect {
+                    viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowInterstitialAd))
+                }
             }
         }
     }

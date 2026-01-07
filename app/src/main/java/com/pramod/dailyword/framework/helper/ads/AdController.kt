@@ -8,7 +8,9 @@ import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.userEntitlement.UserEntitlement
@@ -391,6 +393,25 @@ class AdController @Inject constructor(
             lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
     }
 
+    init {
+        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+                interstitialAdTracker.callback = object : InterstitialAdEnabledCallback {
+                    override fun isAdEnabled(): Boolean {
+                        return isInterstitialAdEnabled.value
+                    }
+                }
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                super.onDestroy(owner)
+                activity.lifecycle.removeObserver(this)
+            }
+        })
+    }
+
+
 }
 
 
@@ -415,4 +436,18 @@ class CollapseHeightAnimation(
     override fun willChangeBounds(): Boolean {
         return true
     }
+}
+
+
+/**
+ * A callback interface to dynamically check if interstitial ads are currently enabled.
+ * This is used by [InterstitialAdTracker] to decide whether to count actions
+ * that could potentially trigger an ad.
+ * THis is an Adhoc interface to provide communication between [InterstitialAdTracker]
+ * and [AdController]
+ */
+interface InterstitialAdEnabledCallback {
+
+    fun isAdEnabled(): Boolean
+
 }
