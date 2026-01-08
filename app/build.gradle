@@ -57,6 +57,7 @@ android {
 
     buildTypes {
         debug {
+            versionNameSuffix "-debug"
             debuggable true
             minifyEnabled false
             shrinkResources false

@@ -17,6 +17,8 @@ import com.pramod.dailyword.business.interactor.GetWordDetailsByDateInteractor
 import com.pramod.dailyword.business.interactor.MarkBookmarkedWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
@@ -42,7 +44,7 @@ class WordDetailedViewModel @Inject constructor(
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
     private val markBookmarkedWordAsSeenInteractor: MarkBookmarkedWordAsSeenInteractor,
     val audioPlayer: AudioPlayer,
-    private val interstitialAdTracker: InterstitialAdTracker
+    private val hapticFeedbackManager: HapticFeedbackManager
 ) : BaseViewModel() {
 
     private var isSeenStatusUpdated = false
@@ -129,9 +131,13 @@ class WordDetailedViewModel @Inject constructor(
                             isSeenStatusUpdated = true
                         }
                     }
-
-
                 }
+
+                if (it.status == Status.SUCCESS && shouldForceRefresh) {
+                    shouldForceRefresh = false
+                    hapticFeedbackManager.perform(HapticType.SUCCESS)
+                }
+
             }.launchIn(viewModelScope)
 
     }

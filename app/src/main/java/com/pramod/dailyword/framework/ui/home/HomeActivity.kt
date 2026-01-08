@@ -36,6 +36,8 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
@@ -351,18 +353,22 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
 
             override fun learnAll(v: View?) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 openWordListPage()
             }
 
             override fun gotoBookmark(v: View?) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 openBookmarksPage()
             }
 
             override fun gotoRecap(v: View?) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 openRecapPage()
             }
 
             override fun gotoRandomWord(v: View?) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 openRandomWordPage()
             }
 

@@ -6,12 +6,14 @@ import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -19,6 +21,8 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.CustomItsLayoutBinding
+import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.util.CommonUtils
 import timber.log.Timber
 
@@ -50,6 +54,8 @@ class ITSCustomLayout : LinearLayout {
      * 2 - normal
      */
     private var titleTextStyle = 1
+
+    private val hapticFeedbackManager = AndroidHapticFeedbackManager(context)
 
     companion object {
         @JvmStatic
@@ -158,6 +164,18 @@ class ITSCustomLayout : LinearLayout {
         setIcon(icon)
         shouldShowSwitch(showSwitch)
         applyMarginToTextViewIfSwitchAndIconHidden()
+        rootView.setOnTouchListener { _, event ->
+            if (customItsLayoutBinding.itsSwitch.isVisible) {
+                if (event.action == MotionEvent.ACTION_UP) {
+                    val isChecked = customItsLayoutBinding.itsSwitch.isChecked
+                    hapticFeedbackManager.perform(
+                        type = if (isChecked) HapticType.SWITCH_ON else HapticType.SWITCH_OFF
+                    )
+                }
+            }
+            false // VERY important: don't consume the event
+        }
+
     }
 
     private fun applyMaxLineSubTitle() {
@@ -167,7 +185,7 @@ class ITSCustomLayout : LinearLayout {
 
     private fun applyTitleTextStyle() {
         customItsLayoutBinding.txtViewCustomTitle.apply {
-            Timber.i( "applyTitleTextStyle: $titleTextStyle")
+            Timber.i("applyTitleTextStyle: $titleTextStyle")
             val tf = when (titleTextStyle) {
                 0 -> Typeface.ITALIC
                 1 -> Typeface.BOLD

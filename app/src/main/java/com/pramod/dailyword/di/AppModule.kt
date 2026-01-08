@@ -8,6 +8,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,5 +62,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGson(): Gson = Gson()
+
+    @Provides
+    @Singleton
+    fun provideHapticFeedbackManager(@ApplicationContext context: Context): HapticFeedbackManager =
+        AndroidHapticFeedbackManager(context)
 
 }
