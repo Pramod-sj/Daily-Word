@@ -132,12 +132,6 @@ class WordDetailedViewModel @Inject constructor(
                         }
                     }
                 }
-
-                if (it.status == Status.SUCCESS && shouldForceRefresh) {
-                    shouldForceRefresh = false
-                    hapticFeedbackManager.perform(HapticType.SUCCESS)
-                }
-
             }.launchIn(viewModelScope)
 
     }

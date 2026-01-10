@@ -353,22 +353,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
             }
 
             override fun learnAll(v: View?) {
-                hapticFeedbackManager.perform(HapticType.CLICK)
                 openWordListPage()
             }
 
             override fun gotoBookmark(v: View?) {
-                hapticFeedbackManager.perform(HapticType.CLICK)
                 openBookmarksPage()
             }
 
             override fun gotoRecap(v: View?) {
-                hapticFeedbackManager.perform(HapticType.CLICK)
                 openRecapPage()
             }
 
             override fun gotoRandomWord(v: View?) {
-                hapticFeedbackManager.perform(HapticType.CLICK)
                 openRandomWordPage()
             }
 
