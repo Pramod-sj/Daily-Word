@@ -1,12 +1,16 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.splashscreen.SplashScreenViewProvider
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
@@ -15,14 +19,10 @@ import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
-import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
 import com.pramod.dailyword.framework.ui.common.exts.openHomePage
 import com.pramod.dailyword.framework.ui.common.exts.openNotificationConsentPage
 import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
-import com.pramod.dailyword.framework.util.CommonUtils
-import com.pramod.dailyword.framework.util.GradientUtils
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
@@ -42,35 +42,42 @@ class SplashScreenActivity :
     @Inject
     lateinit var appPrefManager: PrefManager
 
+    private var splashScreenViewProvider: SplashScreenViewProvider? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         appPrefManager.incrementAppLaunchCount()
         //addGradientToAppIcon()
-        animateAppIcon()
         navigateToHomePage()
         setUpAcceptLinks()
         scheduleWeeklyAlarmAt12PM()
         Timber.i("onCreate: " + intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE))
-    }
-
-    private fun addGradientToAppIcon() {
-        try {
-            binding.splashAppIcon.setImageBitmap(
-                GradientUtils.addGradient(
-                    CommonUtils.drawableToBitmap(
-                        getContextCompatDrawable(
-                            R.drawable.ic_vocabulary
-                        )!!
-                    )!!,
-                    getContextCompatColor(R.color.purple_200),
-                    getContextCompatColor(R.color.green_600)
+        splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+            // 1. Run your existing logic
+            // splashScreenViewProvider = splashScreenViewProvider // Only keep this if you need to access it outside this scope
+            viewModel.showSplashText()
+            if (viewModel.isNewUser) {
+                // Create your custom animation.
+                val slideUp = ObjectAnimator.ofFloat(
+                    splashScreenViewProvider.view,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -splashScreenViewProvider.view.height.toFloat()
                 )
-            )
-        } catch (e: Exception) {
-            //if exception occur fallback to normal icon
-            binding.splashAppIcon.setImageResource(R.drawable.ic_vocabulary)
-            binding.splashAppIcon.imageTintList
-            ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
+                slideUp.interpolator = AnticipateInterpolator()
+                slideUp.duration = 200L
+                // Call SplashScreenView.remove at the end of your custom animation.
+                slideUp.doOnEnd { splashScreenViewProvider.remove() }
+                // Run your animation.
+                slideUp.start()
+            } else {
+                splashScreenViewProvider.remove()
+            }
+        }
+
+        viewModel.splashScreenTextVisible().observe(this) {
+            splashScreenViewProvider?.remove()
         }
     }
 
@@ -112,26 +119,6 @@ class SplashScreenActivity :
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private fun animateAppIcon() {
-        viewModel.animateSplashIcon().observe(this) {
-            if (it) {
-
-                CommonUtils.scaleXY(
-                    binding.splashAppIcon,
-                    -0.3f,
-                    -0.3f,
-                    1.0f,
-                    1.0f,
-                    1000L,
-                    {},
-                    { viewModel.showSplashText() }
-                )
-            } else {
-                viewModel.showSplashText()
             }
         }
     }

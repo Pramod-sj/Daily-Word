@@ -24,14 +24,16 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/Theme.App.Starting"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6671143148415009~2795588604"/>
+            android:value="ca-app-pub-6671143148415009~2795588604" />
 
-        <meta-data android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"
             android:value="false" />
 
         <provider
@@ -62,7 +64,7 @@
             android:name=".framework.ui.splash_screen.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="nosensor"
-            android:theme="@style/AppTheme.SplashScreenActivity">
+            android:theme="@style/Theme.App.Starting">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

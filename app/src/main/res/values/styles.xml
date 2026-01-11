@@ -30,6 +30,15 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_splash_icon</item>
+        <item name="windowSplashScreenAnimationDuration">800</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+        <item name="windowSplashScreenBackground">@color/windowBackgroundColor</item>
+        <item name="android:windowSplashScreenBackground">@color/windowBackgroundColor</item>
+    </style>
+
+
     <style name="ThemeOverlay.App.MaterialDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
     </style>
