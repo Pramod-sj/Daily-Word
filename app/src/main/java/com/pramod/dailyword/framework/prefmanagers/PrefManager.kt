@@ -31,7 +31,8 @@ class PrefManager @Inject constructor(
     SupportUsDialogContract,
     WidgetSettingPreference,
     NotificationPermissionPref,
-    AdsDisabledPrefManager {
+    AdsDisabledPrefManager,
+    HapticPref {
 
 
     override fun shouldShowMWCreditDialog(): Boolean {
@@ -90,6 +91,18 @@ class PrefManager @Inject constructor(
 
     override fun getHideBadgeLiveData(): LiveData<Boolean> {
         return SPrefBooleanLiveData(sPrefManager, KEY_SHOW_BADGE, false)
+    }
+
+    override fun isHapticEnabled(): Boolean {
+        return sPrefManager.getBoolean(HapticPref.KEY_HAPTIC_ENABLED, true)
+    }
+
+    override fun toggleHaptic() {
+        editor.putBoolean(HapticPref.KEY_HAPTIC_ENABLED, !isHapticEnabled()).apply()
+    }
+
+    override fun getHapticLiveData(): LiveData<Boolean> {
+        return SPrefBooleanLiveData(sPrefManager, HapticPref.KEY_HAPTIC_ENABLED, true)
     }
 
     companion object {
@@ -407,4 +420,16 @@ interface AdsDisabledPrefManager {
 
     fun clearAdsDisabledUntil()
 
+}
+
+interface HapticPref {
+    companion object {
+        const val KEY_HAPTIC_ENABLED = "haptic_enabled"
+    }
+
+    fun isHapticEnabled(): Boolean
+
+    fun toggleHaptic()
+
+    fun getHapticLiveData(): LiveData<Boolean>
 }

@@ -17,6 +17,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
@@ -87,6 +88,7 @@ class WordListActivity :
             },
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 interstitialAdTracker.incrementActionCount()
             },
             hideBadges = prefManager.getHideBadge(),

@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.pramod.dailyword.BR
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.helper.ads.AdController
 import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.helper.ads.rewards.RewardAdDialogFragment
@@ -35,6 +36,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel>(
 
     @Inject
     lateinit var interstitialAdTracker: InterstitialAdTracker
+
+    @Inject
+    lateinit var hapticFeedbackManager: HapticFeedbackManager
 
     private var isRewardGranted: Boolean = false
 

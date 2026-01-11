@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -28,6 +27,7 @@ import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.databinding.DialogWidgetBackgroundOpacityBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.restartActivity
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
@@ -124,7 +124,7 @@ class AppSettingActivity :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationTriggerTimeChangeMessage.collect {
-                    binding.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    hapticFeedbackManager.perform(HapticType.CLICK)
                     viewModel.setMessage(Message.SnackBarMessage(it))
                     lifecycleScope.launch {
                         delay(1000L)
@@ -274,6 +274,10 @@ class AppSettingActivity :
                 ) { selectedThemeText ->
                     themeManager.applyTheme(selectedThemeText)
                 }
+            }
+
+            override fun toggleHaptic() {
+                prefManager.toggleHaptic()
             }
 
             override fun toggleWindowAnimation() {
@@ -529,6 +533,16 @@ class AppSettingActivity :
             DialogWidgetBackgroundOpacityBinding.inflate(LayoutInflater.from(this), null, false)
         binding.sliderWidgetBodyBgControl.value = prefManager.getWidgetBodyAlpha().toFloat()
         binding.sliderWidgetBgControl.value = prefManager.getWidgetBackgroundAlpha().toFloat()
+        binding.sliderWidgetBodyBgControl.addOnChangeListener { _, _, fromUser ->
+            if (fromUser) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
+            }
+        }
+        binding.sliderWidgetBgControl.addOnChangeListener { _, _, fromUser ->
+            if (fromUser) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
+            }
+        }
         val dialog = MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.background_transparency_dialog_title))
             .setView(binding.root)

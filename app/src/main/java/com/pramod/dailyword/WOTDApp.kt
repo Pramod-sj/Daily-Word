@@ -4,13 +4,18 @@ import android.app.Application
 import android.content.Context
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.util.CustomExceptionHandler
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class WOTDApp : Application() {
+
+    @Inject
+    lateinit var hapticFeedbackManager: HapticFeedbackManager
 
     private val themeManager: ThemeManager by lazy {
         return@lazy ThemeManager.newInstance(this)

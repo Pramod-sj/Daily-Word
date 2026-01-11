@@ -14,6 +14,8 @@ import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
@@ -38,7 +40,8 @@ class HomeViewModel @Inject constructor(
     private val prefManager: PrefManager,
     val audioPlayer: AudioPlayer,
     private val importantPermissionState: ImportantPermissionState,
-    private val interstitialAdTracker: InterstitialAdTracker
+    private val interstitialAdTracker: InterstitialAdTracker,
+    private val hapticFeedbackManager: HapticFeedbackManager
 ) : BaseViewModel() {
 
     companion object {
@@ -206,6 +209,7 @@ class HomeViewModel @Inject constructor(
 
     private var job: Job? = null
     fun playAudio(url: String) {
+        hapticFeedbackManager.perform(HapticType.CLICK)
         audioPlayer.play(url)
         job?.cancel()
         job = viewModelScope.launch {

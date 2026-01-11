@@ -31,6 +31,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.openGmail
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
@@ -129,6 +130,7 @@ class WordDetailedActivity :
         binding.wordDetailedDefinationsRecyclerview.adapter = definitionAdapter
         binding.lottieSpeaker.setOnClickListener {
             viewModel.word.value?.pronounceAudio?.let {
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 viewModel.audioPlayer.play(it)
                 job?.cancel()
                 job = lifecycleScope.launch {
@@ -448,6 +450,7 @@ class WordDetailedActivity :
 
             R.id.menu_bookmark -> {
                 viewModel.bookmark()
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 interstitialAdTracker.incrementActionCount()
             }
         }

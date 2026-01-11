@@ -11,6 +11,7 @@ import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityFavoriteWordsBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
@@ -41,7 +42,6 @@ class FavoriteWordsActivity :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
-
     private val adapter: BookmarkedWordsAdapter by lazy {
         BookmarkedWordsAdapter(itemClickCallback = { i: Int, word: Word ->
             val view = binding.recyclerviewWords.layoutManager!!.findViewByPosition(i)
@@ -59,6 +59,7 @@ class FavoriteWordsActivity :
                 )
             }
         }, deleteBookmarkCallback = {
+            hapticFeedbackManager.perform(HapticType.CLICK)
             viewModel.removeBookmark(it)
             interstitialAdTracker.incrementActionCount()
         }, hideBadges = prefManager.getHideBadge())

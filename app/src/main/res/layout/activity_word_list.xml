@@ -26,7 +26,7 @@
         tools:context=".ui.words.WordListActivity">
 
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.pramod.dailyword.framework.ui.common.view.PullToRefreshLayout
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:splitMotionEvents="false"
                 app:applyVerticalPaddingInset="@{wordListViewModel.isEdgeToEdgeEnabled}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.pramod.dailyword.framework.ui.common.view.PullToRefreshLayout>
 
         <include
             android:id="@+id/incl_placeholder"

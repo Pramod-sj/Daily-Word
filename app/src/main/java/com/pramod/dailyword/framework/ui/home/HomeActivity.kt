@@ -36,6 +36,8 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
@@ -271,9 +273,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         binding.customToolbar.buttonToolbarNavigation.setImageResource(R.drawable.ic_vocabulary_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setImageResource(R.drawable.ic_more_vert_black_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setOnClickListener {
-
-            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-
+            hapticFeedbackManager.perform(HapticType.CLICK)
             val bottomMenuDialog = BottomMenuDialog
                 .show(supportFragmentManager)
             bottomMenuDialog.bottomMenuItemClickListener =

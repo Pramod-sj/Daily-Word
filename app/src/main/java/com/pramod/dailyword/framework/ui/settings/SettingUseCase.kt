@@ -11,4 +11,5 @@ interface SettingUseCase {
     fun clearAppData()
     fun showWidgetBackgroundDialog()
     fun showWidgetControlsDialog()
+    fun toggleHaptic()
 }

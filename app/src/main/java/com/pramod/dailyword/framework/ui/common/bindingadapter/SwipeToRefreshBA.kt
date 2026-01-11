@@ -1,11 +1,11 @@
 package com.pramod.dailyword.framework.ui.common.bindingadapter
 
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.util.TypedValue
+import androidx.core.view.doOnNextLayout
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.appbar.AppBarLayout
 import com.pramod.dailyword.framework.ui.common.exts.doOnApplyWindowInsets
-import com.pramod.dailyword.framework.util.CommonUtils
 
 class SwipeToRefreshBA {
     companion object {
@@ -19,36 +19,34 @@ class SwipeToRefreshBA {
             appBarLayout: AppBarLayout?,
             applyTopPaddingInset: Boolean
         ) {
+            val appBar = appBarLayout ?: return
 
+            // Use doOnNextLayout (KTX) to avoid memory leaks from GlobalLayoutListeners
+            appBar.doOnNextLayout { view ->
+                val resources = view.resources
+                val appBarHeightPx = view.height
 
-            appBarLayout?.viewTreeObserver?.addOnGlobalLayoutListener(object :
-                OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    appBarLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                // Convert 64dp (standard SRR distance) to Pixels based on device density
+                val defaultOptionOffsetPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    64f,
+                    resources.displayMetrics
+                ).toInt()
 
-                    val appBarHeight =
-                        CommonUtils.pixelToDp(appBarLayout.context, appBarLayout.height.toFloat())
-                            .toInt()
+                if (applyTopPaddingInset) {
+                    swipeRefreshLayout.doOnApplyWindowInsets { _, insets, _, _ ->
 
-                    if (applyTopPaddingInset) {
-                        swipeRefreshLayout.doOnApplyWindowInsets { view, windowInsets, initialPadding, initialMargin ->
-                            val top = windowInsets.systemWindowInsetTop + appBarHeight
-                            swipeRefreshLayout.setProgressViewOffset(true, top, 100 + top)
-                        }
-                    } else {
-                        swipeRefreshLayout.setProgressViewOffset(
-                            true,
-                            appBarHeight,
-                            100 + appBarHeight
-                        )
+                        val end = appBarHeightPx + defaultOptionOffsetPx
 
+                        swipeRefreshLayout.setProgressViewOffset(true, appBarHeightPx, end)
                     }
-
+                } else {
+                    val end = appBarHeightPx + defaultOptionOffsetPx
+                    swipeRefreshLayout.setProgressViewOffset(true, appBarHeightPx, end)
                 }
-            })
-
-
+            }
         }
+
 
         @JvmStatic
         @BindingAdapter("app:showSwipeToRefreshProgress")

@@ -1,6 +1,5 @@
 package com.pramod.dailyword.framework.helper.ads.rewards
 
-import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,16 +23,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.themeadapter.appcompat.AppCompatTheme
 import com.pramod.dailyword.R
+import com.pramod.dailyword.WOTDApp
+import com.pramod.dailyword.framework.haptics.HapticType
 
 
 sealed interface RewardButtonState {
@@ -57,7 +59,9 @@ fun RewardAdDisableAdsContent(
 
     val fbRemoteConfig = FBRemoteConfigCompositionLocal.current
 
-    val view = LocalView.current
+    val context = LocalContext.current
+
+    val hapticFeedbackManager = remember { (context as WOTDApp).hapticFeedbackManager }
 
 
     AppCompatTheme {
@@ -116,7 +120,7 @@ fun RewardAdDisableAdsContent(
 
                     Button(
                         onClick = {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            hapticFeedbackManager.perform(HapticType.CLICK)
                             onWatchAdClick()
                         },
                         shape = RoundedCornerShape(8.dp),
