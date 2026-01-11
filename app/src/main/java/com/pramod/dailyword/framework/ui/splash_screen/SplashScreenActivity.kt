@@ -11,6 +11,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
@@ -139,7 +140,7 @@ class SplashScreenActivity :
         val termsAndConditionLink = Pair(
             resources.getString(R.string.term_and_condition_small),
             View.OnClickListener {
-                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.term_and_condition_small),
                     BuildConfig.TERM_AND_CONDITION,
@@ -151,7 +152,7 @@ class SplashScreenActivity :
         val privacyPolicyLink = Pair(
             resources.getString(R.string.privacy_policy_small),
             View.OnClickListener {
-                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.privacy_policy_small),
                     BuildConfig.PRIVACY_POLICY,

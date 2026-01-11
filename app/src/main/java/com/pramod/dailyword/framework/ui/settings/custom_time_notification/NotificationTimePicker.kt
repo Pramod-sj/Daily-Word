@@ -2,7 +2,6 @@
 
 package com.pramod.dailyword.framework.ui.settings.custom_time_notification
 
-import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -47,7 +46,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -60,6 +58,8 @@ import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.themeadapter.appcompat.AppCompatTheme
 import com.pramod.dailyword.R
+import com.pramod.dailyword.WOTDApp
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.util.CalenderUtil
@@ -228,7 +228,8 @@ fun NotificationTimePicker(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
 
-                    VerticalWheelSpinner(modifier = Modifier.width(60.dp),
+                    VerticalWheelSpinner(
+                        modifier = Modifier.width(60.dp),
                         items = startEndHourList,
                         defaultSelected = defaultHourSelection,
                         onMovement = { isUpward, movement ->
@@ -252,7 +253,8 @@ fun NotificationTimePicker(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    VerticalWheelSpinner(modifier = Modifier.width(60.dp),
+                    VerticalWheelSpinner(
+                        modifier = Modifier.width(60.dp),
                         items = startEndMinuteList,
                         defaultSelected = defaultMinSelection,
                         onMovement = { isUpward, movement ->
@@ -378,10 +380,12 @@ fun VerticalWheelSpinner(
     defaultSelected: Int?,
     onMovement: (isUpward: Boolean, totalMovement: Int) -> Unit = { _, _ -> },
 ) {
+    val context = LocalContext.current
+
+    val hapticFeedbackManager =
+        remember { (context.applicationContext as WOTDApp).hapticFeedbackManager }
 
     val coroutineScope = rememberCoroutineScope()
-
-    val view = LocalView.current
 
     val height = 140.dp
 
@@ -417,29 +421,30 @@ fun VerticalWheelSpinner(
 
             if (content != -1) {
 
-                Text(modifier = Modifier
-                    .graphicsLayer {
-                        val pageOffset =
-                            (((pagerState.currentPage + 1) - page) + pagerState.currentPageOffsetFraction).absoluteValue
-                        // We animate the alpha, between 50% and 100%
-                        alpha = lerp(
-                            start = 0.4f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
+                Text(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            val pageOffset =
+                                (((pagerState.currentPage + 1) - page) + pagerState.currentPageOffsetFraction).absoluteValue
+                            // We animate the alpha, between 50% and 100%
+                            alpha = lerp(
+                                start = 0.4f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
 
-                        val scale = lerp(
-                            start = 1f, stop = 1.5f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                        scaleX = scale
-                        scaleY = scale
-                    }
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(page - 1)
+                            val scale = lerp(
+                                start = 1f, stop = 1.5f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
+                            scaleX = scale
+                            scaleY = scale
                         }
-                    },
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(page - 1)
+                            }
+                        },
 
                     text = String.format(
                         Locale.Builder().setLocale(Locale.getDefault()).build(), "%02d", content
@@ -456,7 +461,7 @@ fun VerticalWheelSpinner(
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.filter { it != previousPage }  // Only process changes
             .collect { newPage ->
-                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 val jump = abs(newPage - previousPage)
                 onMovement(previousPage < newPage, jump)
                 previousPage = newPage

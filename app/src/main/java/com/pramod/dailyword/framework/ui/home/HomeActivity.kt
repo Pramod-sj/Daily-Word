@@ -273,9 +273,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         binding.customToolbar.buttonToolbarNavigation.setImageResource(R.drawable.ic_vocabulary_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setImageResource(R.drawable.ic_more_vert_black_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setOnClickListener {
-
-            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-
+            hapticFeedbackManager.perform(HapticType.CLICK)
             val bottomMenuDialog = BottomMenuDialog
                 .show(supportFragmentManager)
             bottomMenuDialog.bottomMenuItemClickListener =

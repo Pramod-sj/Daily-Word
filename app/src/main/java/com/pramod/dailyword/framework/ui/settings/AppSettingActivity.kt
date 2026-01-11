@@ -126,6 +126,7 @@ class AppSettingActivity :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationTriggerTimeChangeMessage.collect {
+                    hapticFeedbackManager.perform(HapticType.CLICK)
                     viewModel.setMessage(Message.SnackBarMessage(it))
                     lifecycleScope.launch {
                         delay(1000L)

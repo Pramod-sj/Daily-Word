@@ -8,6 +8,7 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.pramod.dailyword.WOTDApp
 import kotlin.math.min
 
 /**
@@ -60,6 +61,9 @@ class PullToRefreshLayout @JvmOverloads constructor(
         64f,
         context.resources.displayMetrics
     )
+
+    private val hapticFeedbackManager =
+        (context.applicationContext as WOTDApp).hapticFeedbackManager
 
     private val preDrawListener = ViewTreeObserver.OnPreDrawListener {
         if (wasRefreshing && !isRefreshing) {
@@ -155,6 +159,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performTickHaptic() {
+        hapticFeedbackManager.deviceVibrator ?: return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             HapticFeedbackConstants.TEXT_HANDLE_MOVE
         } else {
@@ -164,6 +169,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performThresholdHaptic() {
+        hapticFeedbackManager.deviceVibrator ?: return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             HapticFeedbackConstants.CONFIRM
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -175,6 +181,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performRefreshCompleteHaptic() {
+        hapticFeedbackManager.deviceVibrator ?: return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             HapticFeedbackConstants.CONFIRM
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {

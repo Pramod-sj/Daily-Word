@@ -53,7 +53,6 @@ class NotificationTimePickerDialog : ComposeExpandingBottomSheetDialogFragment()
         NotificationTimePicker(
             notificationTriggerTime = notificationTriggerTime,
             onSetNotificationTime = {
-                hapticFeedbackManager.perform(HapticType.CONFIRM)
                 changeNotificationCallback(it)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             })
