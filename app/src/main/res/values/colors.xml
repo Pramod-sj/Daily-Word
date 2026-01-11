@@ -87,7 +87,7 @@
     <color name="home_past_word_color">@color/grey_very_extra_light</color>
 
 
-    <color name="splash_wave_color">@color/colorPrimary</color>
+    <color name="splash_wave_color">@color/grey_light</color>
 
 
     <color name="widget_background">#70000000</color>

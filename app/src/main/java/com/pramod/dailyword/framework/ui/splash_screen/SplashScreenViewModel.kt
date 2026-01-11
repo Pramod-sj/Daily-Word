@@ -66,6 +66,8 @@ class SplashScreenViewModel @Inject constructor(
         })
     }
 
+    val isNewUser: Boolean = prefManager.isNewUser()
+
 
     fun animateSplashIcon(): LiveData<Boolean> = animateSplashIcon
     fun splashScreenText(): LiveData<String> = splashScreenText
@@ -77,7 +79,7 @@ class SplashScreenViewModel @Inject constructor(
 
     fun goToHomePage() {
         prefManager.markUserAsOld()
-        if (importantPermissionState.isNotificationEnabled.value == true) {
+        if (importantPermissionState.isNotificationEnabled.value) {
             navigateToHomePage.value = Event.init(true)
         } else {
             if (importantPermissionState.canShowFullNotificationEnableMessage.value == true) {
