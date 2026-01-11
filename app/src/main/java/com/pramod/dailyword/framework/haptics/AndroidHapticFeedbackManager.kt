@@ -23,6 +23,9 @@ class AndroidHapticFeedbackManager @Inject constructor(
         context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
+    override val deviceVibrator: Vibrator?
+        get() = if (!vibrator.hasVibrator()) null else vibrator
+
     override fun perform(type: HapticType) {
         if (!vibrator.hasVibrator()) return
 
