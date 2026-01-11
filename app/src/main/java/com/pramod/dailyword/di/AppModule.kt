@@ -10,6 +10,7 @@ import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -65,7 +66,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHapticFeedbackManager(@ApplicationContext context: Context): HapticFeedbackManager =
-        AndroidHapticFeedbackManager(context)
+    fun provideHapticFeedbackManager(
+        @ApplicationContext context: Context,
+        pref: PrefManager
+    ): HapticFeedbackManager = AndroidHapticFeedbackManager(context, pref)
 
 }

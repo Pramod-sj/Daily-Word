@@ -20,8 +20,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.pramod.dailyword.R
+import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.CustomItsLayoutBinding
-import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.util.CommonUtils
 import timber.log.Timber
@@ -55,7 +55,7 @@ class ITSCustomLayout : LinearLayout {
      */
     private var titleTextStyle = 1
 
-    private val hapticFeedbackManager = AndroidHapticFeedbackManager(context)
+    private val hapticFeedbackManager = (context.applicationContext as WOTDApp).hapticFeedbackManager
 
     companion object {
         @JvmStatic

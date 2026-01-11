@@ -5,13 +5,15 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.pramod.dailyword.framework.prefmanagers.HapticPref
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AndroidHapticFeedbackManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
+    private val hapticPref: HapticPref
 ) : HapticFeedbackManager {
 
     private val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -24,10 +26,12 @@ class AndroidHapticFeedbackManager @Inject constructor(
     }
 
     override val deviceVibrator: Vibrator?
-        get() = if (!vibrator.hasVibrator()) null else vibrator
+        get() = if (!vibrator.hasVibrator() || !hapticPref.isHapticEnabled()) null else vibrator
 
     override fun perform(type: HapticType) {
         if (!vibrator.hasVibrator()) return
+
+        if (!hapticPref.isHapticEnabled()) return
 
         val effect = when (type) {
 

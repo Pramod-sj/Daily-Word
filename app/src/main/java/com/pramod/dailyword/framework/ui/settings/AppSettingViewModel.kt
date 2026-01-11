@@ -14,6 +14,7 @@ import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.DEEP_L
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.NOTIFICATION_NEW_WORD
 import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgeEnabler
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationAlarmScheduler
@@ -37,7 +38,8 @@ class AppSettingViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationAlarmScheduler: NotificationAlarmScheduler,
     private val getWordsInteractor: GetWordsInteractor,
-    private val edgeToEdgeEnabler: EdgeToEdgeEnabler
+    private val edgeToEdgeEnabler: EdgeToEdgeEnabler,
+    private val prefManager: PrefManager
 ) : BaseViewModel() {
 
     var settingUseCase: SettingUseCase? = null
@@ -47,6 +49,8 @@ class AppSettingViewModel @Inject constructor(
     val windowAnimValue = MutableLiveData<Boolean>()
 
     val edgeToEdgeValue = MutableLiveData<Boolean>()
+
+    val hapticValue = MutableLiveData<Boolean>()
 
     val edgeToEdgeSettingVisible = MutableLiveData<Boolean>().apply {
         value = VERSION.SDK_INT <= VERSION_CODES.VANILLA_ICE_CREAM
@@ -69,6 +73,11 @@ class AppSettingViewModel @Inject constructor(
         edgeToEdgeEnabler.isEnabledLiveData.asFlow()
             .distinctUntilChanged()
             .onEach { edgeToEdgeValue.value = it }
+            .launchIn(viewModelScope)
+
+        prefManager.getHapticLiveData().asFlow()
+            .distinctUntilChanged()
+            .onEach { hapticValue.value = it }
             .launchIn(viewModelScope)
     }
 

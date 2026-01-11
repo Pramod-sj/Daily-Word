@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.slider.Slider
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -276,6 +274,10 @@ class AppSettingActivity :
                 ) { selectedThemeText ->
                     themeManager.applyTheme(selectedThemeText)
                 }
+            }
+
+            override fun toggleHaptic() {
+                prefManager.toggleHaptic()
             }
 
             override fun toggleWindowAnimation() {
