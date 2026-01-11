@@ -1,12 +1,13 @@
 [
   {
     "version_name": "3.2.0",
-    "version_code": 202601020,
+    "version_code": 202601110,
     "release_name": "Maintenance update",
-    "date": "2 Jan 2026",
+    "date": "11 Jan 2026",
     "changes": [
-      "Widgets now match your system theme (Light/Dark mode)",
-      "Bug fixes and optimizations for seamless app functionality"
+      "Widgets now perfectly match your system theme - Light and Dark mode support",
+      "Enhanced haptic feedback with new customization options (toggle on/off in Settings)",
+      "Performance improvements and bug fixes for a smoother experience"
     ],
     "is_force_update": false
   },
