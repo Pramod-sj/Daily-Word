@@ -4,11 +4,11 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.splashscreen.SplashScreenViewProvider
 import com.pramod.dailyword.BR
@@ -48,7 +48,7 @@ class SplashScreenActivity :
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         appPrefManager.incrementAppLaunchCount()
-        //addGradientToAppIcon()
+        keepSplashUntilSpecifiedDuration(splashScreen)
         navigateToHomePage()
         setUpAcceptLinks()
         scheduleWeeklyAlarmAt12PM()
@@ -78,6 +78,19 @@ class SplashScreenActivity :
 
         viewModel.splashScreenTextVisible().observe(this) {
             splashScreenViewProvider?.remove()
+        }
+    }
+
+    private fun keepSplashUntilSpecifiedDuration(splashScreen: SplashScreen){
+        // 1. Define your animation duration (Must match your XML duration: 800ms)
+        val animationDuration = resources.getInteger(R.integer.splash_anim_duration)
+        // 2. Track when the app started
+        val startTime = System.currentTimeMillis()
+        // 3. Force the Splash Screen to stay visible until the duration is met
+        splashScreen.setKeepOnScreenCondition {
+            val elapsedTime = System.currentTimeMillis() - startTime
+            // Return TRUE to keep it on screen, FALSE to let it dismiss
+            elapsedTime < animationDuration
         }
     }
 
