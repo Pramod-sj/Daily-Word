@@ -159,7 +159,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performTickHaptic() {
-        hapticFeedbackManager.deviceVibrator ?: return
+        if (hapticFeedbackManager.deviceVibrator == null) return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             HapticFeedbackConstants.TEXT_HANDLE_MOVE
         } else {
@@ -169,7 +169,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performThresholdHaptic() {
-        hapticFeedbackManager.deviceVibrator ?: return
+        if (hapticFeedbackManager.deviceVibrator == null) return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             HapticFeedbackConstants.CONFIRM
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -181,7 +181,7 @@ class PullToRefreshLayout @JvmOverloads constructor(
     }
 
     private fun performRefreshCompleteHaptic() {
-        hapticFeedbackManager.deviceVibrator ?: return
+        if (hapticFeedbackManager.deviceVibrator == null) return
         val hapticType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             HapticFeedbackConstants.CONFIRM
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
