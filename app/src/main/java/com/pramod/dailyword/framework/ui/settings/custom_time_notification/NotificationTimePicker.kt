@@ -85,18 +85,6 @@ fun PreviewNotificationTimePicker() {
     }
 }
 
-private fun isSameDay(
-    userSelectedTimeInMillis: Long, startTimeInMillis: Long
-): Boolean {
-    return userSelectedTimeInMillis in startTimeInMillis until getLocalCalendar().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
-}
-
-
 @Composable
 fun NotificationTimePicker(
     notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?,
@@ -106,7 +94,7 @@ fun NotificationTimePicker(
     val context = LocalContext.current
     val color = colorResource(id = R.color.notification_timer_background)
 
-    // 1. Establish the 5 PM Reference
+    // 1. Establish the 5 PM Reference (The start of the cycle)
     val localTimeAsPer5PMIst = remember {
         getLocalCalendar(17, 0).apply {
             set(Calendar.SECOND, 0)
@@ -118,8 +106,7 @@ fun NotificationTimePicker(
         }
     }
 
-    // 2. State Initialization (Correct Pattern)
-    // 2. State Initialization Fix
+    // 2. State Initialization
     var userSelectionTimeInMillis by remember(notificationTriggerTime, localTimeAsPer5PMIst) {
         val initialTime = if (notificationTriggerTime != null) {
             val cal = getLocalCalendar().apply {
@@ -131,7 +118,6 @@ fun NotificationTimePicker(
                 val ref = localTimeAsPer5PMIst
                 set(Calendar.YEAR, ref.get(Calendar.YEAR))
                 set(Calendar.DAY_OF_YEAR, ref.get(Calendar.DAY_OF_YEAR))
-
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
             }
@@ -350,14 +336,14 @@ fun NotificationTimePicker(
                     onClick = {
                         val triggerCalendar = getLocalCalendar().apply {
                             timeInMillis = userSelectionTimeInMillis
-                            // If the selected time is in the past, add a day
+                            // Adjust date if selected time is in the past
                             if (timeInMillis < System.currentTimeMillis()) {
                                 add(Calendar.DATE, 1)
                             }
                         }
 
-                        val nextDayThreshold = getLocalCalendar().apply {
-                            timeInMillis = localTimeAsPer5PMIst.timeInMillis
+                        // Determine isNextDay: 5PM -> Midnight is Same Day, Midnight -> 5PM is Next Day
+                        val midnight = (localTimeAsPer5PMIst.clone() as Calendar).apply {
                             add(Calendar.DATE, 1)
                             set(Calendar.HOUR_OF_DAY, 0)
                             set(Calendar.MINUTE, 0)
@@ -365,7 +351,8 @@ fun NotificationTimePicker(
                             set(Calendar.MILLISECOND, 0)
                         }
 
-                        val isNextDay = triggerCalendar.timeInMillis >= nextDayThreshold.timeInMillis
+                        val isNextDay = !(userSelectionTimeInMillis >= localTimeAsPer5PMIst.timeInMillis && 
+                                          userSelectionTimeInMillis < midnight.timeInMillis)
 
                         onSetNotificationTime(
                             NotificationPrefManager.NotificationTriggerTime(
