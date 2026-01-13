@@ -327,6 +327,12 @@
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_extra_large"
+                            android:background="@color/setting_stroke" />
+
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
