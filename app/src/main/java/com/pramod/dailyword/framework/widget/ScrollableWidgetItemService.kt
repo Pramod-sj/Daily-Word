@@ -166,7 +166,7 @@ class ScrollableWidgetItemFactory(
 
     private fun createLoadingWidget(context: Context): RemoteViews {
         val views =
-            RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
+            RemoteViews(context.packageName, R.layout.widget_word_loading_layout)
         views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_progress, View.VISIBLE)

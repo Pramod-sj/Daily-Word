@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_bg"
@@ -13,7 +12,7 @@
     <LinearLayout
         android:id="@+id/main_linearLayout_wotd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -81,9 +80,9 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/widget_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/fl_widget_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_body_bg"
@@ -91,15 +90,49 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/background_widget_inner" />
 
+            <LinearLayout
+                android:id="@+id/widget_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_extra_large">
 
-            <ListView
-                android:id="@+id/list_scrollable_content"
+                <ImageView
+                    android:id="@+id/widget_placeHolder_imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:tint="@color/dark_textColor_highEmphasis" />
+
+                <TextView
+                    android:id="@+id/widget_placeHolder_imageView_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/dark_textColor_highEmphasis"
+                    android:textSize="@dimen/text_sub_title" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:listSelector="@android:color/transparent" />
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
+                android:visibility="visible" />
+
+            <ProgressBar
+                android:id="@+id/widget_progress"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/white" />
 
         </FrameLayout>
-
 
     </LinearLayout>
 </FrameLayout>
