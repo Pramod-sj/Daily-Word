@@ -14,7 +14,9 @@ data class AdsConfig(
 
     val disableAdForPremiumUser: Boolean?,
 
-    val disabledAdsDays: Int??,
+    val disabledAdsDays: Int?,
+
+    val showRemoveAdOptionInMenu: Boolean?,
 )
 
 

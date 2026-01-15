@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.internal.NavigationMenuView
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.DialogBottomMenuLayoutBinding
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.helper.ads.AdController
 import com.pramod.dailyword.framework.ui.common.ExpandingBottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,9 @@ class BottomMenuDialog :
 
     @Inject
     lateinit var adController: AdController
+
+    @Inject
+    lateinit var fbRemoteConfig: FBRemoteConfig
 
     var bottomMenuItemClickListener: BottomMenuItemClickListener? = null
 
@@ -41,7 +45,9 @@ class BottomMenuDialog :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleNavItemClick()
-        if (adController.isAdEnabled.value) {
+        if (adController.isAdEnabled.value
+            && fbRemoteConfig.getAdsConfig().showRemoveAdOptionInMenu == true
+        ) {
             binding.navigationView.menu
                 .add(Menu.NONE, R.id.menu_disable_ads, Menu.NONE, "Remove ads")
                 .setIcon(R.drawable.ic_no_ads)

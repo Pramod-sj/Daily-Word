@@ -151,7 +151,8 @@ class FBRemoteConfig @Inject constructor(
                 maxInterstitialsPerSession = 0,
                 disableAdForPremiumUser = false,
                 disabledAdsDays = 7,
-                adUnits = null
+                adUnits = null,
+                showRemoveAdOptionInMenu = false
             )
         }
     }
