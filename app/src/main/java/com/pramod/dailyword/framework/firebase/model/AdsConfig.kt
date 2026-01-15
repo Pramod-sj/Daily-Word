@@ -1,5 +1,8 @@
 package com.pramod.dailyword.framework.firebase.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class AdsConfig(
     val adsEnabled: Boolean?,
 
@@ -14,6 +17,8 @@ data class AdsConfig(
     val disabledAdsDays: Int??,
 )
 
+
+@Keep
 data class AdUnitConfig(
     val adUnitId: String?,
     val enabled: Boolean?,
