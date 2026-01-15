@@ -13,44 +13,53 @@ enum class WidgetLayout {
 }
 
 /**
- * Determines appropriate widget layout based on cell dimensions
+ * Determines appropriate widget layout based on dimensions in DP
  */
 fun getWidgetLayout(
-    rowCell: Int,
-    colCell: Int,
+    widthDp: Int,
+    heightDp: Int,
     isTablet: Boolean
 ): WidgetLayout {
     return if (isTablet) {
-        getTabletLayout(rowCell, colCell)
+        getTabletLayout(widthDp, heightDp)
     } else {
-        getPhoneLayout(rowCell, colCell)
+        getPhoneLayout(widthDp, heightDp)
     }
 }
 
 /**
  * Phone layout logic:
- * - SMALL: 1×1 to 2×2 (very compact)
- * - MEDIUM: 2×2 to 4×3 (moderate space)
- * - LARGE: 4×3+ (plenty of space for scrolling)
+ * - SMALL: Height < 100dp (approx 1 row)
+ * - MEDIUM: Height < 180dp (approx 2 rows) OR Width < 260dp (Narrow)
+ * - LARGE: Height >= 180dp AND Width >= 260dp (Scrollable)
  */
-private fun getPhoneLayout(rowCell: Int, colCell: Int): WidgetLayout {
+private fun getPhoneLayout(widthDp: Int, heightDp: Int): WidgetLayout {
     return when {
-        rowCell <= 1 && colCell <= 5 -> WidgetLayout.SMALL
-        rowCell <= 3 && colCell <= 4 -> WidgetLayout.MEDIUM
+        // Height < 100dp -> 1 Row -> SMALL
+        heightDp < 100 || widthDp < 200 -> WidgetLayout.SMALL
+
+        // Height < 180dp -> 2 Rows -> MEDIUM
+        heightDp < 180 -> WidgetLayout.MEDIUM
+
+        // Tall but narrow (< 260dp width) -> MEDIUM
+        widthDp < 260 -> WidgetLayout.MEDIUM
+
+        // Tall and Wide -> LARGE
         else -> WidgetLayout.LARGE
     }
 }
 
+
 /**
  * Tablet layout logic:
- * - SMALL: 1×1 to 2×3 (compact for tablet)
- * - MEDIUM: 2×3 to 4×4 (moderate)
- * - LARGE: 4×4+ (lots of space)
+ * - SMALL: Compact
+ * - MEDIUM: Moderate
+ * - LARGE: Spacious
  */
-private fun getTabletLayout(rowCell: Int, colCell: Int): WidgetLayout {
+private fun getTabletLayout(widthDp: Int, heightDp: Int): WidgetLayout {
     return when {
-        rowCell <= 2 && colCell <= 3 -> WidgetLayout.SMALL
-        rowCell <= 4 && colCell <= 5 -> WidgetLayout.MEDIUM
+        heightDp < 140 && widthDp < 210 -> WidgetLayout.SMALL
+        heightDp < 280 && widthDp < 350 -> WidgetLayout.MEDIUM
         else -> WidgetLayout.LARGE
     }
 }
