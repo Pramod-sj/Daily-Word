@@ -86,39 +86,71 @@ class BillingHelper constructor(
      * @param sku
      */
     override suspend fun buy(activity: Activity, sku: String) {
-        if (isInitializedAndReady()) {
-            when {
-                !isInAppPurchaseSupported() -> {
-                    emitPurchaseError("In-app purchase service not available, you need to update google play service")
+        if (!isInitializedAndReady()) {
+            emitPurchaseError("Billing service not ready. Please try again.")
+            return
+        }
+
+        when {
+            !isInAppPurchaseSupported() -> {
+                emitPurchaseError("In-app purchase service not available, you need to update Google Play services")
+            }
+
+            isPurchased(sku) -> {
+                if (isPurchasePending(sku)) {
+                    emitPurchaseError("Please wait your purchase is under process, check on this after some time.")
+                } else {
+                    Timber.i("buy: already purchased")
+                    emitPurchaseError("You have already donated this item, Thank you so much ❤")
+                }
+            }
+
+            else -> {
+                val productDetail = sku.toProductDetails(INAPP)
+
+                // Validate product details exist
+                if (productDetail == null) {
+                    emitPurchaseError("Product not available. Please try again later.")
+                    return
                 }
 
-                isPurchased(sku) -> {
-                    if (isPurchasePending(sku)) {
-                        emitPurchaseError("Please wait your purchase is under process, check on this after some time.")
-                    } else {
-                        Timber.i("buy: already purchased")
-                        emitPurchaseError("You have already donated this item, Thank you so much ❤")
+                // For INAPP products, ensure oneTimePurchaseOfferDetails exists
+                if (productDetail.oneTimePurchaseOfferDetails == null) {
+                    emitPurchaseError("Product pricing not available. Please try again later.")
+                    return
+                }
+
+                try {
+                    // Double-check connection before launching (can disconnect between checks)
+                    if (!billingClient.isReady) {
+                        emitPurchaseError("Billing service disconnected. Please try again.")
+                        return
                     }
-                }
 
-                else -> {
-                    sku.toProductDetails(INAPP)?.let {
-                        billingClient.launchBillingFlow(
-                            activity, BillingFlowParams.newBuilder()
-                                .setProductDetailsParamsList(
-                                    ImmutableList.of(
-                                        BillingFlowParams.ProductDetailsParams.newBuilder()
-                                            .setProductDetails(it)
-                                            .build()
-                                    )
+                    val billingResult = billingClient.launchBillingFlow(
+                        activity,
+                        BillingFlowParams.newBuilder()
+                            .setProductDetailsParamsList(
+                                ImmutableList.of(
+                                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                                        .setProductDetails(productDetail)
+                                        .build()
                                 )
-                                .build()
-                        )
+                            )
+                            .build()
+                    )
+
+                    // Check if launch was successful
+                    if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                        Timber.e("launchBillingFlow failed: ${billingResult.debugMessage}")
+                        emitPurchaseError("Unable to start purchase: ${billingResult.debugMessage}")
                     }
+                } catch (e: Exception) {
+                    Timber.e(e, "Exception launching billing flow")
+                    emitPurchaseError("Unable to start purchase. Please try again.")
                 }
             }
         }
-
     }
 
     /**
