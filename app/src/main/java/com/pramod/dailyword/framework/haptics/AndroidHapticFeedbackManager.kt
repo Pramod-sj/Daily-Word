@@ -29,87 +29,70 @@ class AndroidHapticFeedbackManager @Inject constructor(
         get() = if (!vibrator.hasVibrator() || !hapticPref.isHapticEnabled()) null else vibrator
 
     override fun perform(type: HapticType) {
-        if (!vibrator.hasVibrator()) return
+        if (!vibrator.hasVibrator() || !hapticPref.isHapticEnabled()) return
 
-        if (!hapticPref.isHapticEnabled()) return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val effect = when (type) {
+                HapticType.CLICK -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+                    } else {
+                        VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE)
+                    }
+                }
 
-        val effect = when (type) {
+                HapticType.CONFIRM -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                    } else {
+                        VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+                    }
+                }
 
-            HapticType.CLICK ->
-                // Pixel-style light UI tick
-                VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+                HapticType.SUCCESS -> {
+                    val timings = longArrayOf(0, 12, 30, 16)
+                    val amplitudes = intArrayOf(0, 80, 0, 140)
+                    VibrationEffect.createWaveform(timings, amplitudes, -1)
+                }
 
-            HapticType.CONFIRM ->
-                // Pixel confirmation click
-                VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                HapticType.ERROR -> {
+                    val timings = longArrayOf(0, 20, 25, 20)
+                    val amplitudes = intArrayOf(0, 180, 0, 200)
+                    VibrationEffect.createWaveform(timings, amplitudes, -1)
+                }
 
-            HapticType.SUCCESS -> {
-                // Subtle affirmation (transactional, not UI)
-                val timings = longArrayOf(
-                    0,
-                    12,
-                    30,
-                    16
-                )
-                val amplitudes = intArrayOf(
-                    0,
-                    80,
-                    0,
-                    140
-                )
-                VibrationEffect.createWaveform(timings, amplitudes, -1)
-            }
+                HapticType.SWITCH_ON -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        VibrationEffect.startComposition()
+                            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, 0.40f)
+                            .compose()
+                    } else {
+                        VibrationEffect.createOneShot(20, 36)
+                    }
+                }
 
-            HapticType.ERROR -> {
-                // Clear but controlled error signal
-                val timings = longArrayOf(
-                    0,
-                    20,
-                    25,
-                    20
-                )
-                val amplitudes = intArrayOf(
-                    0,
-                    180,
-                    0,
-                    200
-                )
-                VibrationEffect.createWaveform(timings, amplitudes, -1)
-            }
-
-            HapticType.SWITCH_ON -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    VibrationEffect.startComposition()
-                        .addPrimitive(
-                            VibrationEffect.Composition.PRIMITIVE_TICK,
-                            0.40f // Pixel-accurate ON
-                        )
-                        .compose()
-                } else {
-                    VibrationEffect.createOneShot(
-                        20,
-                        36 // soft fallback
-                    )
+                HapticType.SWITCH_OFF -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        VibrationEffect.startComposition()
+                            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_TICK, 0.33f)
+                            .compose()
+                    } else {
+                        VibrationEffect.createOneShot(18, 34)
+                    }
                 }
             }
-
-            HapticType.SWITCH_OFF -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    VibrationEffect.startComposition()
-                        .addPrimitive(
-                            VibrationEffect.Composition.PRIMITIVE_TICK,
-                            0.33f // Pixel-accurate OFF (barely lighter)
-                        )
-                        .compose()
-                } else {
-                    VibrationEffect.createOneShot(
-                        18,
-                        34
-                    )
-                }
+            vibrator.vibrate(effect)
+        } else {
+            // Legacy fallbacks for API < 26
+            @Suppress("DEPRECATION")
+            when (type) {
+                HapticType.CLICK -> vibrator.vibrate(10)
+                HapticType.CONFIRM -> vibrator.vibrate(20)
+                HapticType.SUCCESS -> vibrator.vibrate(longArrayOf(0, 12, 30, 16), -1)
+                HapticType.ERROR -> vibrator.vibrate(longArrayOf(0, 20, 25, 20), -1)
+                HapticType.SWITCH_ON -> vibrator.vibrate(20)
+                HapticType.SWITCH_OFF -> vibrator.vibrate(18)
             }
         }
-
-        vibrator.vibrate(effect)
     }
 }
