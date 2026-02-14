@@ -2,16 +2,20 @@ package com.pramod.dailyword
 
 import android.app.Application
 import android.content.Context
-import com.facebook.ads.AdSettings
-import com.facebook.ads.AudienceNetworkAds
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.ThemeManager
 import com.pramod.dailyword.framework.util.CustomExceptionHandler
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
-
+import javax.inject.Inject
 
 @HiltAndroidApp
 class WOTDApp : Application() {
+
+    @Inject
+    lateinit var hapticFeedbackManager: HapticFeedbackManager
 
     private val themeManager: ThemeManager by lazy {
         return@lazy ThemeManager.newInstance(this)
@@ -43,8 +47,11 @@ class WOTDApp : Application() {
     }
 
     private fun initAds() {
-        AdSettings.addTestDevice("4f19fa27-300a-4786-b9b0-30febb7ad630")
-        AudienceNetworkAds.initialize(this)
+        MobileAds.initialize(this)
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf("1A25639373E9445D562CBC2796BCAB5D")).build()
+        )
     }
 
     private fun setUpCustomCrashHandler() {
@@ -52,6 +59,4 @@ class WOTDApp : Application() {
             Thread.setDefaultUncaughtExceptionHandler(CustomExceptionHandler(this))
         }
     }
-
-
 }

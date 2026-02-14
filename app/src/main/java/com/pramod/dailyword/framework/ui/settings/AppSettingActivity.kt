@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.settings
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -28,6 +27,7 @@ import com.pramod.dailyword.WOTDApp
 import com.pramod.dailyword.databinding.ActivityAppSettingBinding
 import com.pramod.dailyword.databinding.DialogWidgetBackgroundOpacityBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.restartActivity
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
@@ -50,9 +50,8 @@ import com.pramod.dailyword.framework.widget.pref.Controls
 import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import com.pramod.dailyword.framework.widget.refreshWidget
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 val Activity.CHECK_FOR_UPDATE_TEXT_WITH_CURRENT_VERSION: String
@@ -99,7 +98,6 @@ class AppSettingActivity :
         setUpToolbar(binding.toolbar, null, true)
         handleUserCase()
         initThemeValue()
-        initEdgeToEdgeValue()
         initWindowAnimValue()
         initHideBadgeValue()
         bindNotificationEnabledState()
@@ -126,8 +124,12 @@ class AppSettingActivity :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationTriggerTimeChangeMessage.collect {
-                    binding.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    hapticFeedbackManager.perform(HapticType.CLICK)
                     viewModel.setMessage(Message.SnackBarMessage(it))
+                    lifecycleScope.launch {
+                        delay(1000L)
+                        interstitialAdTracker.incrementActionCount()
+                    }
                 }
             }
         }
@@ -246,12 +248,6 @@ class AppSettingActivity :
         }
     }
 
-    private fun initEdgeToEdgeValue() {
-        edgeToEdgePrefManager.getLiveData().observe(this) {
-            viewModel.edgeToEdgeValue.value = it
-        }
-    }
-
     private fun initWindowAnimValue() {
         windowAnimPrefManager.liveData().observe(this) {
             viewModel.windowAnimValue.value = it
@@ -280,13 +276,16 @@ class AppSettingActivity :
                 }
             }
 
+            override fun toggleHaptic() {
+                prefManager.toggleHaptic()
+            }
+
             override fun toggleWindowAnimation() {
                 windowAnimPrefManager.toggle()
-                Timber.i("toggleWindowAnimation: " + edgeToEdgePrefManager.isEnabled())
             }
 
             override fun toggleEdgeToEdge() {
-                edgeToEdgePrefManager.toggle()
+                edgeToEdgeEnabler.toggle()
                 restartActivity(true)
             }
 
@@ -469,11 +468,11 @@ class AppSettingActivity :
             InstallStatus.DOWNLOADING -> {
                 viewModel.subTitleCheckForUpdate.value =
                     resources.getString(R.string.app_update_update_downloading_message) + " " +
-                            try {
-                                ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload())
-                            } catch (_: Exception) {
-                                "0"
-                            } + "%"
+                        try {
+                            ((installState.bytesDownloaded() * 100) / installState.totalBytesToDownload())
+                        } catch (_: Exception) {
+                            "0"
+                        } + "%"
 
             }
 
@@ -534,6 +533,16 @@ class AppSettingActivity :
             DialogWidgetBackgroundOpacityBinding.inflate(LayoutInflater.from(this), null, false)
         binding.sliderWidgetBodyBgControl.value = prefManager.getWidgetBodyAlpha().toFloat()
         binding.sliderWidgetBgControl.value = prefManager.getWidgetBackgroundAlpha().toFloat()
+        binding.sliderWidgetBodyBgControl.addOnChangeListener { _, _, fromUser ->
+            if (fromUser) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
+            }
+        }
+        binding.sliderWidgetBgControl.addOnChangeListener { _, _, fromUser ->
+            if (fromUser) {
+                hapticFeedbackManager.perform(HapticType.CLICK)
+            }
+        }
         val dialog = MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.background_transparency_dialog_title))
             .setView(binding.root)

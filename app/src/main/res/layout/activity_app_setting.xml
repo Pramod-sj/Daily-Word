@@ -96,17 +96,39 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginStart="@dimen/setting_stroke_start_margin"
-                            android:background="@color/setting_stroke" />
+                            android:background="@color/setting_stroke"
+                            app:isGone="@{!appSettingViewModel.edgeToEdgeSettingVisible}" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="@{()->appSettingViewModel.settingUseCase.toggleEdgeToEdge()}"
                             app:checked="@{appSettingViewModel.edgeToEdgeValue}"
+                            app:isGone="@{!appSettingViewModel.edgeToEdgeSettingVisible}"
                             app:showIconBackground="false"
                             app:showRadioButton="true"
                             app:subTitle="@string/setting_item_fullscreen_desc"
                             app:title="@string/setting_item_fullscreen_title"
+                            app:titlePaddingStart="@dimen/margin_small"
+                            app:titleStyle="bold"
+                            app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/setting_stroke_start_margin"
+                            android:background="@color/setting_stroke" />
+
+                        <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
+                            android:id="@+id/haptic_toggle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->appSettingViewModel.settingUseCase.toggleHaptic()}"
+                            app:checked="@{appSettingViewModel.hapticValue}"
+                            app:showIconBackground="false"
+                            app:showRadioButton="true"
+                            app:subTitle="@string/setting_item_haptic_desc"
+                            app:title="@string/setting_item_haptic_title"
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
@@ -304,6 +326,12 @@
                             app:titlePaddingStart="@dimen/margin_small"
                             app:titleStyle="bold"
                             app:titleTextSize="@dimen/text_sub_title" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_extra_large"
+                            android:background="@color/setting_stroke" />
 
                         <com.pramod.dailyword.framework.ui.common.view.ITSCustomLayout
                             android:layout_width="match_parent"

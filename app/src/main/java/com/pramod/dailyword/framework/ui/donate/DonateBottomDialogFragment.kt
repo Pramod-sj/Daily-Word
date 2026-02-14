@@ -143,12 +143,24 @@ class DonateBottomDialogFragment :
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
         viewModel.setMessage(Message.SnackBarMessage(resources.getString(R.string.donate_purchase_success)))
         //setting has donated to true
+        prefManager.setDonatedItems(
+            prefManager.getDonatedItems().value
+                ?.toMutableSet()?.apply {
+                    add(sku)
+                }
+        )
         prefManager.setHasDonated(true)
     }
 
     override fun onPurchasedRestored(sku: String) {
         viewModel.updateDonateItemStatus(sku, DonateItemState.PURCHASED)
         //setting has donated to true
+        prefManager.setDonatedItems(
+            prefManager.getDonatedItems()
+                .value?.toMutableSet()?.apply {
+                    add(sku)
+                }
+        )
         prefManager.setHasDonated(true)
     }
 

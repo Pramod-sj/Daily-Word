@@ -36,6 +36,8 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
 import com.pramod.dailyword.framework.helper.billing.PurchaseListenerImpl
@@ -48,6 +50,8 @@ import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
 import com.pramod.dailyword.framework.transition.doOnViewPreDrawn
 import com.pramod.dailyword.framework.ui.changelogs.ChangelogDialogFragment
 import com.pramod.dailyword.framework.ui.common.BaseActivity
+import com.pramod.dailyword.framework.ui.common.CommonNavigationAction
+import com.pramod.dailyword.framework.ui.common.Event
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.common.bindingadapter.CommonBindindAdapters
 import com.pramod.dailyword.framework.ui.common.exts.changeLayersColor
@@ -129,7 +133,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        transparentNavBar = true
         super.onCreate(savedInstanceState)
         supportPostponeEnterTransition()
         checkForUpdate()
@@ -188,7 +191,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         override fun onBillingPurchasesProcessed() {
             super.onBillingPurchasesProcessed()
             lifecycleScope.launch {
-                prefManager.setHasDonated(billingHelper.queryPurchases().isNotEmpty())
+                val donatedItems =
+                    billingHelper.queryPurchases().mapNotNull { it.products.firstOrNull() }
+                prefManager.setHasDonated(donatedItems.isNotEmpty())
+                prefManager.setDonatedItems(donatedItems.toSet())
                 shouldShowSupportDevelopmentDialog()
             }
         }
@@ -267,9 +273,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         binding.customToolbar.buttonToolbarNavigation.setImageResource(R.drawable.ic_vocabulary_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setImageResource(R.drawable.ic_more_vert_black_24dp)
         binding.customToolbar.buttonToolbarOptionMenu.setOnClickListener {
-
-            it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-
+            hapticFeedbackManager.perform(HapticType.CLICK)
             val bottomMenuDialog = BottomMenuDialog
                 .show(supportFragmentManager)
             bottomMenuDialog.bottomMenuItemClickListener =
@@ -292,6 +296,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
                             }
 
                             R.id.menu_about -> openAboutPage()
+
+                            R.id.menu_disable_ads -> {
+                                viewModel.setEvent(Event.Navigate(CommonNavigationAction.ShowDoNotShowRewardAdsDialog))
+                            }
                         }
                     }
                 }
@@ -866,6 +874,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     override fun onDestroy() {
         super.onDestroy()
         appUpdateManager.unregisterListener(installStateUpdatedListener)
+        billingHelper.removePurchaseListener(purchaseListener)
         billingHelper.removeBillingListener(purchaseListener)
     }
 

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:gravity="center_vertical"
-        android:textColor="@color/dark_textColor_highEmphasis"
+        android:textColor="@color/textColor_highEmphasis"
         tools:text="Example" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:gravity="center_vertical"
-        android:textColor="@color/dark_textColor_highEmphasis"
+        android:textColor="@color/textColor_highEmphasis"
         tools:text=": a person who is not a member of the clergy" />
 
 </LinearLayout>

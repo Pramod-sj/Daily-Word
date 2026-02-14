@@ -1,6 +1,8 @@
 package com.pramod.dailyword.framework.ui.settings
 
 import android.content.Context
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
@@ -10,7 +12,9 @@ import com.pramod.dailyword.business.interactor.GetWordsInteractor
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.DEEP_LINK_TO_WORD_DETAILED
 import com.pramod.dailyword.framework.firebase.FBMessageService.Companion.NOTIFICATION_NEW_WORD
+import com.pramod.dailyword.framework.prefmanagers.EdgeToEdgeEnabler
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.ui.settings.custom_time_notification.NotificationAlarmScheduler
@@ -20,6 +24,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,7 +37,9 @@ class AppSettingViewModel @Inject constructor(
     val notificationPrefManager: NotificationPrefManager,
     @ApplicationContext private val context: Context,
     private val notificationAlarmScheduler: NotificationAlarmScheduler,
-    private val getWordsInteractor: GetWordsInteractor
+    private val getWordsInteractor: GetWordsInteractor,
+    private val edgeToEdgeEnabler: EdgeToEdgeEnabler,
+    private val prefManager: PrefManager
 ) : BaseViewModel() {
 
     var settingUseCase: SettingUseCase? = null
@@ -42,6 +49,12 @@ class AppSettingViewModel @Inject constructor(
     val windowAnimValue = MutableLiveData<Boolean>()
 
     val edgeToEdgeValue = MutableLiveData<Boolean>()
+
+    val hapticValue = MutableLiveData<Boolean>()
+
+    val edgeToEdgeSettingVisible = MutableLiveData<Boolean>().apply {
+        value = VERSION.SDK_INT <= VERSION_CODES.VANILLA_ICE_CREAM
+    }
 
     val hideBadgesValue = MutableLiveData<Boolean>()
 
@@ -55,6 +68,18 @@ class AppSettingViewModel @Inject constructor(
     private val _notificationTriggerTimeChangeMessage = Channel<String>()
     val notificationTriggerTimeChangeMessage: Flow<String>
         get() = _notificationTriggerTimeChangeMessage.receiveAsFlow()
+
+    init {
+        edgeToEdgeEnabler.isEnabledLiveData.asFlow()
+            .distinctUntilChanged()
+            .onEach { edgeToEdgeValue.value = it }
+            .launchIn(viewModelScope)
+
+        prefManager.getHapticLiveData().asFlow()
+            .distinctUntilChanged()
+            .onEach { hapticValue.value = it }
+            .launchIn(viewModelScope)
+    }
 
     fun setNotificationTriggerTime(notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?) {
         viewModelScope.launch {

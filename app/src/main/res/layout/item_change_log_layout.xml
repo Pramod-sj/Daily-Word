@@ -41,6 +41,7 @@
         </FrameLayout>
 
         <TextView
+            android:textColor="@color/textColor_highEmphasis"
             style="@style/AppTheme.SubTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

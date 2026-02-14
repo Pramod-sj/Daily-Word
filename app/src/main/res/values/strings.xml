@@ -359,5 +359,7 @@
     <string name="dialog_consent_unused_app_btn">Okay</string>
 
 
+    <string name="setting_item_haptic_title">Haptic Feedback</string>
+    <string name="setting_item_haptic_desc">Enable or disable vibration feedback on interaction</string>
 
 </resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/root_word_usage_item"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/widget_txtView_title"
+        style="@style/AppTheme.TitleTextStyle.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:gravity="center_vertical"
+        android:textColor="@color/dark_textColor_highEmphasis"
+        tools:text="Example" />
+
+    <TextView
+        android:id="@+id/widget_txtView_examples"
+        style="@style/AppTheme.SubTitleTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:gravity="center_vertical"
+        android:textColor="@color/dark_textColor_highEmphasis"
+        tools:text=": a person who is not a member of the clergy" />
+
+</LinearLayout>

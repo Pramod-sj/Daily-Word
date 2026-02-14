@@ -3,7 +3,6 @@ package com.pramod.dailyword.framework.ui.recap
 import android.app.ActivityOptions
 import android.os.Bundle
 import android.transition.Transition
-import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
@@ -38,11 +37,10 @@ class RecapWordsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
-        binding.adsEnabled = fbRemoteConfig.isAdsEnabled()
-        binding.executePendingBindings()
         setUpToolbar(binding.toolbar, null, true)
         setWeeklyInfoText()
         initAdapter()
+        adController.loadBanner(binding.cardAd)
     }
 
     private fun setWeeklyInfoText() {

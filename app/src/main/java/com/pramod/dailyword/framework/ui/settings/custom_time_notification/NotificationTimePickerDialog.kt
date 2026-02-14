@@ -5,9 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.common.ComposeExpandingBottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NotificationTimePickerDialog : ComposeExpandingBottomSheetDialogFragment() {
 
 
@@ -33,6 +38,9 @@ class NotificationTimePickerDialog : ComposeExpandingBottomSheetDialogFragment()
     var changeNotificationCallback: (NotificationPrefManager.NotificationTriggerTime?) -> Unit = {}
 
     private var notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime? = null
+
+    @Inject
+    lateinit var hapticFeedbackManager: HapticFeedbackManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

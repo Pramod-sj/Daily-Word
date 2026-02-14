@@ -16,11 +16,11 @@ import com.pramod.dailyword.framework.prefmanagers.WidgetSettingPreference
 import com.pramod.dailyword.framework.ui.splash_screen.SplashScreenActivity
 import com.pramod.dailyword.framework.util.convertNumberRangeToAnotherRange
 import com.pramod.dailyword.framework.widget.pref.Controls
+import com.pramod.dailyword.framework.widget.pref.WidgetPreference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.ceil
 
 fun RemoteViews.applyControlVisibility(widgetSettingPreference: WidgetSettingPreference): RemoteViews {
 
@@ -43,24 +43,14 @@ fun RemoteViews.applyControlVisibility(widgetSettingPreference: WidgetSettingPre
 @Singleton
 class WidgetViewHelper @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val widgetSettingPreference: WidgetSettingPreference
+    private val widgetSettingPreference: WidgetSettingPreference,
+    private val widgetPreference: WidgetPreference
 ) {
-
-    /**
-     * Returns number of cells needed for given size of the widget.
-     *
-     * @param size Widget size in dp.
-     * @return Size in number of cells.
-     */
-    private fun getCellsForSize(size: Int): Int {
-        return ceil(((size + 30) / 70).toDouble()).toInt()
-    }
-
 
     private fun isTablet(context: Context): Boolean {
         return ((context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
+            and Configuration.SCREENLAYOUT_SIZE_MASK)
+            >= Configuration.SCREENLAYOUT_SIZE_LARGE)
     }
 
     fun getRemoteViews(
@@ -68,23 +58,23 @@ class WidgetViewHelper @Inject constructor(
         width: Int,
         height: Int
     ): RemoteViews {
-        val rowCell = getCellsForSize(height)
-        val colCell = getCellsForSize(width)
+        val isTablet = isTablet(context)
+        Timber.i("Width:$width ; Height:$height")
+        return (if (isTablet) {
+            when (getWidgetLayout(width, height, true)) {
+                WidgetLayout.SMALL -> {
+                    createWordOfTheDayWidgetMedium(context, word)
+                }
 
-        Timber.i("Col:%s ; Rows:%s", colCell, rowCell)
-        return (if (isTablet(context)) {
-            if (rowCell in 1 until 3 || colCell in 1 until 4) {
-                createWordOfTheDayWidgetMedium(context, word)
-            } else {
-                createWordOfTheDayWidgetScrollable(context, word)
+                WidgetLayout.MEDIUM, WidgetLayout.LARGE -> {
+                    createWordOfTheDayWidgetScrollable(context, word, width)
+                }
             }
         } else {
-            if (rowCell in 1 until 2 || colCell in 1 until 3) {
-                createWordOfTheDayWidgetSmall(context, word, rowCell)
-            } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
-                createWordOfTheDayWidgetMedium(context, word)
-            } else {
-                createWordOfTheDayWidgetScrollable(context, word)
+            when (getWidgetLayout(width, height, false)) {
+                WidgetLayout.SMALL -> createWordOfTheDayWidgetSmall(context, word, height)
+                WidgetLayout.MEDIUM, WidgetLayout.LARGE ->
+                    createWordOfTheDayWidgetScrollable(context, word, width)
             }
         }).apply {
             //setting alpha of widget widget
@@ -112,21 +102,16 @@ class WidgetViewHelper @Inject constructor(
         width: Int,
         height: Int
     ): RemoteViews {
-        val rowCell = getCellsForSize(height)
-        val colCell = getCellsForSize(width)
-        return (if (isTablet(context)) {
-            if (rowCell in 1 until 3 || colCell in 1 until 4) {
-                createLoadingWidgetMedium(context)
-            } else {
-                createLoadingWidget(context)
+        val isTablet = isTablet(context)
+        return (if (isTablet) {
+            when (getWidgetLayout(width, height, true)) {
+                WidgetLayout.SMALL -> createLoadingWidgetMedium(context)
+                WidgetLayout.LARGE, WidgetLayout.MEDIUM -> createLoadingWidget(context)
             }
         } else {
-            if (rowCell in 1 until 2 || colCell in 1 until 3) {
-                createLoadingWidgetSmall(context)
-            } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
-                createLoadingWidgetMedium(context)
-            } else {
-                createLoadingWidget(context)
+            when (getWidgetLayout(width, height, false)) {
+                WidgetLayout.SMALL -> createLoadingWidgetSmall(context)
+                WidgetLayout.MEDIUM, WidgetLayout.LARGE -> createLoadingWidget(context)
             }
         }).apply {
             //setting alpha of widget widget
@@ -153,21 +138,22 @@ class WidgetViewHelper @Inject constructor(
     fun getResponsiveErrorRemoteView(
         resId: Int, message: String, width: Int, height: Int
     ): RemoteViews {
-        val rowCell = getCellsForSize(height)
-        val colCell = getCellsForSize(width)
-        return (if (isTablet(context)) {
-            if (rowCell in 1 until 3 || colCell in 1 until 4) {
-                createPlaceHolderWidgetMedium(context, resId, message)
-            } else {
-                createPlaceHolderWidget(context, resId, message)
+        val isTablet = isTablet(context)
+        return (if (isTablet) {
+            when (getWidgetLayout(width, height, true)) {
+                WidgetLayout.SMALL -> createPlaceHolderWidgetMedium(context, resId, message)
+
+                WidgetLayout.MEDIUM, WidgetLayout.LARGE -> createPlaceHolderWidget(
+                    context,
+                    resId,
+                    message
+                )
             }
         } else {
-            if (rowCell in 1 until 2 || colCell in 1 until 3) {
-                createPlaceHolderWidgetSmall(context, resId, message)
-            } else if (rowCell in 3 until 4 || colCell in 3 until 4) {
-                createPlaceHolderWidgetMedium(context, resId, message)
-            } else {
-                createPlaceHolderWidget(context, resId, message)
+            when (getWidgetLayout(width, height, true)) {
+                WidgetLayout.SMALL -> createPlaceHolderWidgetSmall(context, resId, message)
+                WidgetLayout.MEDIUM, WidgetLayout.LARGE ->
+                    createPlaceHolderWidget(context, resId, message)
             }
         })
             .apply {
@@ -192,7 +178,11 @@ class WidgetViewHelper @Inject constructor(
     }
 
 
-    private fun createWordOfTheDayWidgetScrollable(context: Context, word: Word?): RemoteViews {
+    private fun createWordOfTheDayWidgetScrollable(
+        context: Context,
+        word: Word?,
+        width: Int? = null
+    ): RemoteViews {
         val views =
             RemoteViews(context.packageName, R.layout.widget_word_layout_revamp_scrollable)
         views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
@@ -208,6 +198,14 @@ class WidgetViewHelper @Inject constructor(
                     setData(Uri.parse(toUri(Intent.URI_INTENT_SCHEME)))
                 }
             )
+
+            width?.let {
+                if (it < 250) {
+                    views.setTextViewText(R.id.tv_title, "")
+                } else {
+                    views.setTextViewText(R.id.tv_title, context.getString(R.string.app_name))
+                }
+            }
 
             //region bookmark status
             views.setViewVisibility(R.id.widget_bookmark, View.VISIBLE)
@@ -281,7 +279,7 @@ class WidgetViewHelper @Inject constructor(
                 context,
                 Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
                 fillInIntent,
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
             views.setPendingIntentTemplate(R.id.list_scrollable_content, pendingIntentPlayAudio)
             //endregion
@@ -303,7 +301,6 @@ class WidgetViewHelper @Inject constructor(
         )
         views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
 
-
         val pendingIntentForWidgetClick = PendingIntent.getActivity(
             context,
             Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
@@ -315,146 +312,6 @@ class WidgetViewHelper @Inject constructor(
                 )
             },
             safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
-        )
-        views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
-
-        return views
-    }
-
-
-    private fun createWordOfTheDayWidget(context: Context, word: Word?): RemoteViews {
-        val views =
-            RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
-        views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
-        views.setViewVisibility(R.id.widget_content, View.VISIBLE)
-        views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
-
-        if (word != null) {
-            views.setTextViewText(R.id.widget_txtView_word_of_the_day, word.word)
-            views.setTextViewText(R.id.widget_txtView_attribute, word.attribute)
-            views.setTextViewText(R.id.widget_txtView_pronounce, word.pronounce)
-            if (!word.meanings.isNullOrEmpty()) {
-                views.setTextViewText(R.id.widget_txtView_meanings, word.meanings.get(0))
-            }
-            views.setTextViewText(
-                R.id.widget_txtView_how_to_user_word,
-                "How to use ${word.word}"
-            )
-            if (!word.examples.isNullOrEmpty()) {
-                views.setTextViewText(
-                    R.id.widget_txtView_how_to_user_word_desc,
-                    word.examples.get(0)
-                )
-            }
-            //pronounce audio pending intent
-            val playAudioIntent = Intent(context, DailyWordWidgetProvider::class.java)
-            playAudioIntent.action =
-                DailyWordWidgetProvider.ACTION_PLAY_AUDIO_FROM_WIDGET
-            playAudioIntent.putExtras(
-                bundleOf(
-                    Pair(
-                        DailyWordWidgetProvider.EXTRA_AUDIO_URL,
-                        word.pronounceAudio
-                    )
-                )
-            )
-
-            val pendingIntentPlayAudio = PendingIntent.getBroadcast(
-                context,
-                Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK,
-                playAudioIntent,
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
-            )
-            views.setOnClickPendingIntent(R.id.widget_img_pronounce, pendingIntentPlayAudio)
-            //end
-
-            //bookmark status
-            views.setViewVisibility(R.id.widget_bookmark, View.VISIBLE)
-            views.setImageViewResource(
-                R.id.widget_bookmark,
-                if (word.bookmarkedId != null) R.drawable.ic_round_bookmark_24
-                else R.drawable.ic_baseline_bookmark_border_24
-            )
-            //end
-
-            //bookmark pending intent
-            val bookmarkIntent = Intent(context, DailyWordWidgetProvider::class.java)
-            bookmarkIntent.putExtras(
-                bundleOf(
-                    Pair(
-                        DailyWordWidgetProvider.EXTRA_BOOKMARKED_WORD,
-                        word.word
-                    )
-                )
-            )
-            bookmarkIntent.action =
-                DailyWordWidgetProvider.ACTION_BOOKMARK_FROM_WIDGET
-
-
-            val pendingIntentBookmark = PendingIntent.getBroadcast(
-                context,
-                Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_BOOKMARK,
-                bookmarkIntent,
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
-            )
-            views.setOnClickPendingIntent(R.id.widget_bookmark, pendingIntentBookmark)
-            //end
-
-
-            //bookmark pending intent
-            val randomWordIntent = Intent(context, DailyWordWidgetProvider::class.java)
-            randomWordIntent.putExtras(
-                bundleOf(
-                    Pair(
-                        DailyWordWidgetProvider.EXTRA_BOOKMARKED_WORD,
-                        word.word
-                    )
-                )
-            )
-            randomWordIntent.action =
-                DailyWordWidgetProvider.ACTION_RANDOM_WORD
-
-
-            val pendingIntentRandomWord = PendingIntent.getBroadcast(
-                context,
-                Constants.REQUEST_CODE_PENDING_INTENT_ON_SHOW_RANDOM,
-                randomWordIntent,
-                safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
-            )
-            views.setOnClickPendingIntent(R.id.widget_random_word, pendingIntentRandomWord)
-            //end
-
-
-        } else {
-            views.setViewVisibility(R.id.widget_bookmark, View.INVISIBLE)
-        }
-
-
-        val tryAgainIntent = Intent(context, DailyWordWidgetProvider::class.java)
-        tryAgainIntent.action =
-            DailyWordWidgetProvider.ACTION_TRY_AGAIN_FROM_WIDGET
-
-        val pendingIntentTryAgain = PendingIntent.getBroadcast(
-            context,
-            Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_TRY_AGAIN_CLICK,
-            tryAgainIntent,
-            safeImmutableFlag(PendingIntent.FLAG_UPDATE_CURRENT)
-        )
-        views.setOnClickPendingIntent(R.id.widget_retry, pendingIntentTryAgain)
-
-
-        val pendingIntentForWidgetClick = PendingIntent.getActivity(
-            context,
-            Constants.REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK,
-            Intent(context, SplashScreenActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                putExtras(
-                    bundleOf(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE to word?.date)
-                )
-            },
-            safeImmutableFlag(PendingIntent.FLAG_CANCEL_CURRENT)
         )
         views.setOnClickPendingIntent(R.id.main_linearLayout_wotd, pendingIntentForWidgetClick)
 
@@ -467,7 +324,7 @@ class WidgetViewHelper @Inject constructor(
         message: String
     ): RemoteViews {
         val views =
-            RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
+            RemoteViews(context.packageName, R.layout.widget_word_loading_layout)
         views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_placeholder, View.VISIBLE)
         views.setViewVisibility(R.id.widget_progress, View.INVISIBLE)
@@ -475,18 +332,32 @@ class WidgetViewHelper @Inject constructor(
         views.setImageViewResource(R.id.widget_placeHolder_imageView, resId)
         views.setTextViewText(R.id.widget_placeHolder_imageView_message, message)
 
+        widgetPreference.getWidgetSize()?.width?.let {
+            if (it < 250) {
+                views.setTextViewText(R.id.tv_title, "")
+            } else {
+                views.setTextViewText(R.id.tv_title, context.getString(R.string.app_name))
+            }
+        }
+
         return views
     }
 
     private fun createLoadingWidget(context: Context): RemoteViews {
         val views =
-            RemoteViews(context.packageName, R.layout.widget_word_layout_revamp)
+            RemoteViews(context.packageName, R.layout.widget_word_loading_layout)
         views.setViewVisibility(R.id.widget_content, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_placeholder, View.INVISIBLE)
         views.setViewVisibility(R.id.widget_progress, View.VISIBLE)
+        widgetPreference.getWidgetSize()?.width?.let {
+            if (it < 250) {
+                views.setTextViewText(R.id.tv_title, "")
+            } else {
+                views.setTextViewText(R.id.tv_title, context.getString(R.string.app_name))
+            }
+        }
         return views
     }
-
 
     private fun createWordOfTheDayWidgetMedium(context: Context, word: Word?): RemoteViews {
         val views =
@@ -619,11 +490,10 @@ class WidgetViewHelper @Inject constructor(
         return views
     }
 
-
     private fun createWordOfTheDayWidgetSmall(
         context: Context,
         word: Word?,
-        row: Int
+        heightDp: Int
     ): RemoteViews {
         val views =
             RemoteViews(context.packageName, R.layout.widget_word_layout_small_revamp)
@@ -633,7 +503,7 @@ class WidgetViewHelper @Inject constructor(
 
         views.setViewVisibility(
             R.id.widget_txtView_meanings,
-            if (row >= 3) View.VISIBLE else View.GONE
+            if (heightDp >= 180) View.VISIBLE else View.GONE
         )
 
         if (word != null) {
@@ -677,7 +547,6 @@ class WidgetViewHelper @Inject constructor(
 
         return views
     }
-
 
     private fun createPlaceHolderWidgetSmall(
         context: Context,

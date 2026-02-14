@@ -2,7 +2,6 @@
 
 package com.pramod.dailyword.framework.ui.settings.custom_time_notification
 
-import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -32,6 +31,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -60,6 +59,8 @@ import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.themeadapter.appcompat.AppCompatTheme
 import com.pramod.dailyword.R
+import com.pramod.dailyword.WOTDApp
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.prefmanagers.NotificationPrefManager
 import com.pramod.dailyword.framework.ui.common.exts.getLocalCalendar
 import com.pramod.dailyword.framework.util.CalenderUtil
@@ -84,18 +85,6 @@ fun PreviewNotificationTimePicker() {
     }
 }
 
-private fun isSameDay(
-    userSelectedTimeInMillis: Long, startTimeInMillis: Long
-): Boolean {
-    return userSelectedTimeInMillis in startTimeInMillis until getLocalCalendar().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
-}
-
-
 @Composable
 fun NotificationTimePicker(
     notificationTriggerTime: NotificationPrefManager.NotificationTriggerTime?,
@@ -103,81 +92,85 @@ fun NotificationTimePicker(
 ) {
 
     val context = LocalContext.current
-
     val color = colorResource(id = R.color.notification_timer_background)
 
+    // 1. Establish the 5 PM Reference (The start of the cycle)
     val localTimeAsPer5PMIst = remember {
         getLocalCalendar(17, 0).apply {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-            //if not same day then reduce one day
+            // Ensure reference is not in the future
             if (getLocalCalendar().timeInMillis < timeInMillis) {
                 add(Calendar.DATE, -1)
             }
         }
     }
 
-    val defaultHourSelection = remember {
-        //if user have not select hour then show the default server triggering time
-        notificationTriggerTime?.let {
-            getLocalCalendar().apply { timeInMillis = it.timeInMillis }.get(Calendar.HOUR_OF_DAY)
-        } ?: localTimeAsPer5PMIst.get(Calendar.HOUR_OF_DAY)
-    }
-
-    val defaultMinSelection = remember {
-        //if user have not select min then show the default server triggering time
-        notificationTriggerTime?.let {
-            getLocalCalendar().apply { timeInMillis = it.timeInMillis }.get(Calendar.MINUTE)
-        } ?: localTimeAsPer5PMIst.get(Calendar.MINUTE)
-    }
-
-    var userSelectionTimeInMillis by remember(localTimeAsPer5PMIst, notificationTriggerTime) {
-        if (notificationTriggerTime != null) {
-            val notificationTriggerTimeInMillis = getLocalCalendar().apply {
+    // 2. State Initialization
+    var userSelectionTimeInMillis by remember(notificationTriggerTime, localTimeAsPer5PMIst) {
+        val initialTime = if (notificationTriggerTime != null) {
+            val cal = getLocalCalendar().apply {
+                // 1. Load the saved time (e.g., 11:00 PM)
                 timeInMillis = notificationTriggerTime.timeInMillis
+
+                // 2. Force the DATE to match the reference "Today" (localTimeAsPer5PMIst)
+                // This ensures we are comparing the time on the same day as the reference
+                val ref = localTimeAsPer5PMIst
+                set(Calendar.YEAR, ref.get(Calendar.YEAR))
+                set(Calendar.DAY_OF_YEAR, ref.get(Calendar.DAY_OF_YEAR))
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)
-                //if not same day then reduce one day
-                if (getLocalCalendar().timeInMillis < timeInMillis) {
-                    add(Calendar.DATE, -1)
-                }
-            }.timeInMillis
-            mutableLongStateOf(notificationTriggerTimeInMillis)
+            }
+            cal.timeInMillis
         } else {
-            mutableLongStateOf(localTimeAsPer5PMIst.timeInMillis)
+            localTimeAsPer5PMIst.timeInMillis
         }
+        mutableLongStateOf(initialTime)
     }
 
-    val startEndHourList = remember(localTimeAsPer5PMIst) { (0..23).toList() }
 
-    val startEndMinuteList = remember(localTimeAsPer5PMIst) { (0..59).toList() }
+    // 3. Extract default selections from current state
+    val defaultHourSelection = remember(userSelectionTimeInMillis) {
+        getLocalCalendar().apply { timeInMillis = userSelectionTimeInMillis }.get(Calendar.HOUR_OF_DAY)
+    }
 
-    val notificationTriggerTimeText = remember(userSelectionTimeInMillis) {
+    val defaultMinSelection = remember(userSelectionTimeInMillis) {
+        getLocalCalendar().apply { timeInMillis = userSelectionTimeInMillis }.get(Calendar.MINUTE)
+    }
 
-        val calendar = getLocalCalendar().apply {
-            timeInMillis = userSelectionTimeInMillis
-            if (userSelectionTimeInMillis < getLocalCalendar().timeInMillis) {
-                add(Calendar.DATE, 1)
-            }
-        }
+    val startEndHourList = remember { (0..23).toList() }
+    val startEndMinuteList = remember { (0..59).toList() }
 
-        val time = CalenderUtil.convertCalenderToString(
-            calender = calendar, dateFormat = CalenderUtil.TIME_FORMAT
-        )
-
-        String.format(
-            context.resources.getString(R.string.dialog_notification_triggering_text_able),
-            time,
-            if (userSelectionTimeInMillis in localTimeAsPer5PMIst.timeInMillis..getLocalCalendar().apply {
-                    timeInMillis = localTimeAsPer5PMIst.timeInMillis
+    // 4. Use derivedStateOf for complex text transformations
+    val notificationTriggerTimeText by remember(userSelectionTimeInMillis) {
+        derivedStateOf {
+            // Adjust for display (UI logic: if selected time < now, show as "Next Day")
+            val displayCalendar = getLocalCalendar().apply {
+                timeInMillis = userSelectionTimeInMillis
+                if (userSelectionTimeInMillis < getLocalCalendar().timeInMillis) {
                     add(Calendar.DATE, 1)
-                    set(Calendar.HOUR_OF_DAY, 0)
-                    set(Calendar.MINUTE, 0)
-                    set(Calendar.SECOND, 0)
-                    set(Calendar.MILLISECOND, 0)
-                }.timeInMillis
-            ) "same day" else "next day"
-        )
+                }
+            }
+
+            val timeString = CalenderUtil.convertCalenderToString(
+                calender = displayCalendar,
+                dateFormat = CalenderUtil.TIME_FORMAT
+            )
+
+            // Logic: Is it before midnight of the next cycle?
+            val midnightOfNextDay = (localTimeAsPer5PMIst.clone() as Calendar).apply {
+                add(Calendar.DATE, 1)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.timeInMillis
+
+            val isSameDay = userSelectionTimeInMillis in localTimeAsPer5PMIst.timeInMillis until midnightOfNextDay
+            val dayLabel = if (isSameDay) "same day" else "next day"
+
+            context.getString(R.string.dialog_notification_triggering_text_able, timeString, dayLabel)
+        }
     }
 
     AppCompatTheme {
@@ -228,7 +221,8 @@ fun NotificationTimePicker(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
 
-                    VerticalWheelSpinner(modifier = Modifier.width(60.dp),
+                    VerticalWheelSpinner(
+                        modifier = Modifier.width(60.dp),
                         items = startEndHourList,
                         defaultSelected = defaultHourSelection,
                         onMovement = { isUpward, movement ->
@@ -252,7 +246,8 @@ fun NotificationTimePicker(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    VerticalWheelSpinner(modifier = Modifier.width(60.dp),
+                    VerticalWheelSpinner(
+                        modifier = Modifier.width(60.dp),
                         items = startEndMinuteList,
                         defaultSelected = defaultMinSelection,
                         onMovement = { isUpward, movement ->
@@ -339,23 +334,33 @@ fun NotificationTimePicker(
                         .height(35.dp),
                     shape = RoundedCornerShape(4.dp),
                     onClick = {
+                        val triggerCalendar = getLocalCalendar().apply {
+                            timeInMillis = userSelectionTimeInMillis
+                            // Adjust date if selected time is in the past
+                            if (timeInMillis < System.currentTimeMillis()) {
+                                add(Calendar.DATE, 1)
+                            }
+                        }
+
+                        // Determine isNextDay: 5PM -> Midnight is Same Day, Midnight -> 5PM is Next Day
+                        val midnight = (localTimeAsPer5PMIst.clone() as Calendar).apply {
+                            add(Calendar.DATE, 1)
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }
+
+                        val isNextDay = !(userSelectionTimeInMillis >= localTimeAsPer5PMIst.timeInMillis && 
+                                          userSelectionTimeInMillis < midnight.timeInMillis)
+
                         onSetNotificationTime(
                             NotificationPrefManager.NotificationTriggerTime(
-                                isNextDay = userSelectionTimeInMillis !in localTimeAsPer5PMIst.timeInMillis..getLocalCalendar().apply {
-                                    timeInMillis = localTimeAsPer5PMIst.timeInMillis
-                                    add(Calendar.DATE, 1)
-                                    set(Calendar.HOUR_OF_DAY, 0)
-                                    set(Calendar.MINUTE, 0)
-                                    set(Calendar.SECOND, 0)
-                                    set(Calendar.MILLISECOND, 0)
-                                }.timeInMillis, timeInMillis = getLocalCalendar().apply {
-                                    timeInMillis = userSelectionTimeInMillis
-                                    if (getLocalCalendar().timeInMillis > userSelectionTimeInMillis) {
-                                        add(Calendar.DATE, 1)
-                                    }
-                                }.timeInMillis
+                                isNextDay = isNextDay,
+                                timeInMillis = triggerCalendar.timeInMillis
                             )
                         )
+
                     },
                 ) {
                     Text(
@@ -378,10 +383,12 @@ fun VerticalWheelSpinner(
     defaultSelected: Int?,
     onMovement: (isUpward: Boolean, totalMovement: Int) -> Unit = { _, _ -> },
 ) {
+    val context = LocalContext.current
+
+    val hapticFeedbackManager =
+        remember { (context.applicationContext as WOTDApp).hapticFeedbackManager }
 
     val coroutineScope = rememberCoroutineScope()
-
-    val view = LocalView.current
 
     val height = 140.dp
 
@@ -417,29 +424,30 @@ fun VerticalWheelSpinner(
 
             if (content != -1) {
 
-                Text(modifier = Modifier
-                    .graphicsLayer {
-                        val pageOffset =
-                            (((pagerState.currentPage + 1) - page) + pagerState.currentPageOffsetFraction).absoluteValue
-                        // We animate the alpha, between 50% and 100%
-                        alpha = lerp(
-                            start = 0.4f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
+                Text(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            val pageOffset =
+                                (((pagerState.currentPage + 1) - page) + pagerState.currentPageOffsetFraction).absoluteValue
+                            // We animate the alpha, between 50% and 100%
+                            alpha = lerp(
+                                start = 0.4f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
 
-                        val scale = lerp(
-                            start = 1f, stop = 1.5f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                        )
-                        scaleX = scale
-                        scaleY = scale
-                    }
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(page - 1)
+                            val scale = lerp(
+                                start = 1f, stop = 1.5f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                            )
+                            scaleX = scale
+                            scaleY = scale
                         }
-                    },
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(page - 1)
+                            }
+                        },
 
                     text = String.format(
                         Locale.Builder().setLocale(Locale.getDefault()).build(), "%02d", content
@@ -456,7 +464,7 @@ fun VerticalWheelSpinner(
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.filter { it != previousPage }  // Only process changes
             .collect { newPage ->
-                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 val jump = abs(newPage - previousPage)
                 onMovement(previousPage < newPage, jump)
                 previousPage = newPage

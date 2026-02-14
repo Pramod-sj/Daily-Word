@@ -5,8 +5,12 @@ import android.app.job.JobScheduler
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
+import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
+import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,5 +59,16 @@ object AppModule {
     fun provideAlarmManager(@ApplicationContext context: Context): AlarmManager {
         return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = Gson()
+
+    @Provides
+    @Singleton
+    fun provideHapticFeedbackManager(
+        @ApplicationContext context: Context,
+        pref: PrefManager
+    ): HapticFeedbackManager = AndroidHapticFeedbackManager(context, pref)
 
 }

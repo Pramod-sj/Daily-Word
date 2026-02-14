@@ -4,8 +4,6 @@
 
     <data>
 
-        <import type="com.pramod.dailyword.framework.helper.AdsManager" />
-
         <import type="com.pramod.dailyword.framework.util.CalenderUtil" />
 
         <import type="android.view.View" />
@@ -18,6 +16,10 @@
 
         <variable
             name="adsEnabled"
+            type="Boolean" />
+
+        <variable
+            name="mediumBannerAdsEnabled"
             type="Boolean" />
 
         <variable
@@ -42,471 +44,420 @@
             android:layout_height="0dp"
             android:focusableInTouchMode="true" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.pramod.dailyword.framework.ui.common.view.PullToRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:appBarLayoutForSwipeRefreshLayoutInset="@{appBar}"
             app:applyTopPaddingInsetForSwipeRefreshLayoutInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}"
-            app:onRefreshListener="@{()->wordDetailedViewModel.refresh()}"
-            app:showSwipeToRefreshProgress="@{wordDetailedViewModel.loadingLiveData}">
+            app:onRefreshListener="@{()->wordDetailedViewModel.refresh()}">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingTop="?attr/actionBarSize"
-                app:applyVerticalPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}"
-                app:isVisible="@{wordDetailedViewModel.word.date!=null}">
+                android:layout_height="match_parent">
 
-                <LinearLayout
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nestedScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:orientation="vertical"
-                    app:paddingBottom="@{adsEnabled?@dimen/ad_banner_height:0}">
+                    android:overScrollMode="never"
+                    android:paddingTop="?attr/actionBarSize"
+                    app:applyVerticalPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}">
 
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details">
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:orientation="vertical"
+                        app:paddingBottom="@{adsEnabled?@dimen/ad_banner_height:0}">
 
-                        <LinearLayout
-                            android:id="@+id/linearLayout_word_info"
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:animateLayoutChanges="true"
-                            android:orientation="vertical"
-                            android:paddingVertical="@dimen/padding_medium">
-
-                            <TextView
-                                android:id="@+id/txtView_word_of_the_day_date"
-                                style="@style/AppTheme.SubTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_large"
-                                android:background="@drawable/background_home_word"
-                                android:backgroundTint="@{CommonUtils.changeAlpha(wordColor,30)}"
-                                android:ellipsize="marquee"
-                                android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
-                                android:paddingHorizontal="@dimen/padding_medium"
-                                android:paddingVertical="@dimen/padding_small"
-                                android:singleLine="true"
-                                android:text="@{CalenderUtil.convertDateStringToSpecifiedDateString(wordDetailedViewModel.word.date,CalenderUtil.DATE_FORMAT,CalenderUtil.DATE_WITH_YEAR_FORMAT_DISPLAY)+` - Merriam Webster Word`}"
-                                android:textColor="@{wordColor}"
-                                android:textStyle="bold"
-                                app:selected="@{true}" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/txtView_word_of_the_day"
-                                style="@style/AppTheme.Header1TextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_large"
-                                android:drawablePadding="@dimen/padding_medium"
-                                android:ellipsize="end"
-                                android:gravity="center_vertical"
-                                android:paddingTop="@dimen/padding_small"
-                                android:singleLine="true"
-                                android:text="@{wordDetailedViewModel.word.word}"
-                                android:textIsSelectable="true" />
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
 
                             <LinearLayout
+                                android:id="@+id/linearLayout_word_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/margin_large"
-                                android:gravity="center_vertical">
-
-                                <TextView
-                                    style="@style/AppTheme.TitleTextStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{wordDetailedViewModel.word.attribute}"
-                                    android:textSize="@dimen/text_h5"
-                                    android:textStyle="italic" />
-
-                                <TextView
-                                    style="@style/AppTheme.TitleTextStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:paddingHorizontal="@dimen/padding_small"
-                                    android:text="@string/unicode_bullet" />
-
-                                <TextView
-                                    style="@style/AppTheme.TitleTextStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@{wordDetailedViewModel.word.pronounce}" />
-
-                                <com.airbnb.lottie.LottieAnimationView
-                                    android:id="@+id/lottie_speaker"
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:layout_marginHorizontal="@dimen/padding_medium"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->wordDetailedViewModel.audioPlayer.play(wordDetailedViewModel.word.pronounceAudio)}"
-                                    android:padding="12dp"
-                                    app:lottie_animate="@{wordDetailedViewModel.audioPlayer.audioPlaying.contentIfNotHandled}"
-                                    app:lottie_autoPlay="false"
-                                    app:lottie_fallbackRes="@drawable/ic_volume_up_black_24dp"
-                                    app:lottie_fileName="lottie_speaker_anim_2.json"
-                                    app:lottie_loop="true" />
-
-
-                            </LinearLayout>
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/word_detailed_definations_recyclerview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:nestedScrollingEnabled="false"
-                                android:overScrollMode="never"
-                                android:paddingHorizontal="@dimen/margin_large"
-                                android:paddingVertical="@dimen/padding_small"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{wordDetailedViewModel.word.otherWords.size()==0}">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipChildren="false"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/padding_medium">
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingHorizontal="@dimen/margin_large"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical"
                                 android:paddingVertical="@dimen/padding_medium">
 
-                                <com.google.android.material.textview.MaterialTextView
-                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                <TextView
+                                    android:id="@+id/txtView_word_of_the_day_date"
+                                    style="@style/AppTheme.SubTitleTextStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_large"
+                                    android:background="@drawable/background_home_word"
+                                    android:backgroundTint="@{CommonUtils.changeAlpha(wordColor,30)}"
+                                    android:ellipsize="marquee"
+                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
+                                    android:paddingHorizontal="@dimen/padding_medium"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    android:singleLine="true"
+                                    android:textColor="@{wordColor}"
+                                    android:textStyle="bold"
+                                    app:selected="@{true}" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/txtView_word_of_the_day"
+                                    style="@style/AppTheme.Header1TextStyle.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_large"
+                                    android:drawablePadding="@dimen/padding_medium"
+                                    android:ellipsize="end"
                                     android:gravity="center_vertical"
-                                    android:text="@string/other_words"
-                                    android:textColor="@color/textColor_highEmphasis" />
+                                    android:paddingTop="@dimen/padding_small"
+                                    android:singleLine="true"
+                                    android:textIsSelectable="true" />
 
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginHorizontal="@dimen/padding_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/other_words_info)}"
-                                    android:src="@drawable/ic_info_outline_black_24dp"
-                                    android:tint="@color/app_icon_tint" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/margin_large"
+                                    android:gravity="center_vertical">
 
+                                    <TextView
+                                        android:id="@+id/tv_word_attribute"
+                                        style="@style/AppTheme.TitleTextStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/text_h5"
+                                        android:textStyle="italic" />
+
+                                    <TextView
+                                        style="@style/AppTheme.TitleTextStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="@dimen/padding_small"
+                                        android:text="@string/unicode_bullet" />
+
+                                    <TextView
+                                        android:id="@+id/tv_word_pronounce"
+                                        style="@style/AppTheme.TitleTextStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content" />
+
+                                    <com.airbnb.lottie.LottieAnimationView
+                                        android:id="@+id/lottie_speaker"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:layout_marginHorizontal="@dimen/padding_medium"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->wordDetailedViewModel.audioPlayer.play(wordDetailedViewModel.word.pronounceAudio)}"
+                                        android:padding="12dp"
+                                        app:lottie_animate="@{wordDetailedViewModel.audioPlayer.audioPlaying.contentIfNotHandled}"
+                                        app:lottie_autoPlay="false"
+                                        app:lottie_fallbackRes="@drawable/ic_volume_up_black_24dp"
+                                        app:lottie_fileName="lottie_speaker_anim_2.json"
+                                        app:lottie_loop="true" />
+
+
+                                </LinearLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/word_detailed_definations_recyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:nestedScrollingEnabled="false"
+                                    android:overScrollMode="never"
+                                    android:paddingHorizontal="@dimen/margin_large"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                             </LinearLayout>
 
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/chipGroup_other_words"
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_other_words"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:clipChildren="false"
-                                android:clipToPadding="false"
-                                android:paddingHorizontal="@dimen/padding_large"
-                                android:paddingVertical="@dimen/padding_small"
-                                app:chipColor="@{wordColor}"
-                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.otherWords,6)}"
-                                app:chipShowViewMoreButton="@{false}"
-                                app:chipSpacingHorizontal="@dimen/padding_small"
-                                app:chipSpacingVertical="@dimen/padding_medium"
-                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToMerriamWebsterPage(value)}"
-                                app:selectionRequired="false" />
-
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingHorizontal="@dimen/margin_large"
-                            android:paddingBottom="@dimen/padding_medium">
-
-                            <TextView
-                                style="@style/AppTheme.SubTitleTextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingVertical="@dimen/padding_medium"
-                                android:text="@{`How to use `+wordDetailedViewModel.word.word}"
-                                android:textColor="@color/textColor_highEmphasis"
-                                android:textStyle="bold" />
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/word_detailed_examples_recyclerview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:nestedScrollingEnabled="false"
-                                android:overScrollMode="never"
-                                android:paddingVertical="@dimen/padding_small"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{wordDetailedViewModel.word.synonyms.size()==0}">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipChildren="false"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/padding_medium">
+                                android:orientation="vertical"
+                                android:paddingBottom="@dimen/padding_medium">
 
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingHorizontal="@dimen/margin_large"
-                                android:paddingVertical="@dimen/padding_medium">
-
-                                <com.google.android.material.textview.MaterialTextView
-                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    android:text="@string/synonyms"
-                                    android:textColor="@color/textColor_highEmphasis" />
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="@dimen/margin_large"
+                                    android:paddingVertical="@dimen/padding_medium">
 
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginHorizontal="@dimen/padding_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/syn_info)}"
-                                    android:src="@drawable/ic_info_outline_black_24dp"
-                                    android:tint="@color/app_icon_tint" />
+                                    <com.google.android.material.textview.MaterialTextView
+                                        style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/other_words"
+                                        android:textColor="@color/textColor_highEmphasis" />
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginHorizontal="@dimen/padding_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/other_words_info)}"
+                                        android:src="@drawable/ic_info_outline_black_24dp"
+                                        android:tint="@color/app_icon_tint" />
+
+                                </LinearLayout>
+
+                                <com.google.android.material.chip.ChipGroup
+                                    android:id="@+id/chipGroup_other_words"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clipChildren="false"
+                                    android:clipToPadding="false"
+                                    android:paddingHorizontal="@dimen/padding_large"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    app:chipSpacingHorizontal="@dimen/padding_small"
+                                    app:chipSpacingVertical="@dimen/padding_medium"
+                                    app:selectionRequired="false" />
 
                             </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/chipGroup_synonyms"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="@dimen/padding_large"
-                                android:paddingVertical="@dimen/padding_small"
-                                app:chipColor="@{wordColor}"
-                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.synonyms,6)}"
-                                app:chipShowViewMoreButton="@{wordDetailedViewModel.word.synonyms.size()>6}"
-                                app:chipSpacingHorizontal="@dimen/padding_small"
-                                app:chipSpacingVertical="@dimen/padding_medium"
-                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
-                                app:onChipViewMoreClick="@{()->wordDetailedViewModel.navigator.navigateToShowSynonymsList(wordDetailedViewModel.word.synonyms)}"
-                                app:selectionRequired="false" />
-
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details"
-                        app:isGone="@{wordDetailedViewModel.word.antonyms.size()==0}">
-
-                        <LinearLayout
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:paddingBottom="@dimen/padding_medium">
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
+                                android:orientation="vertical"
                                 android:paddingHorizontal="@dimen/margin_large"
-                                android:paddingVertical="@dimen/padding_medium">
+                                android:paddingBottom="@dimen/padding_medium">
 
-                                <com.google.android.material.textview.MaterialTextView
+                                <TextView
+                                    android:id="@+id/tv_how_to_use_title"
                                     style="@style/AppTheme.SubTitleTextStyle.Bold"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/antonyms"
-                                    android:textColor="@color/textColor_highEmphasis" />
+                                    android:paddingVertical="@dimen/padding_medium"
+                                    android:textColor="@color/textColor_highEmphasis"
+                                    android:textStyle="bold" />
 
-                                <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginHorizontal="@dimen/padding_small"
-                                    android:background="?actionBarItemBackground"
-                                    android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/ant_info)}"
-                                    android:src="@drawable/ic_info_outline_black_24dp"
-                                    android:tint="@color/app_icon_tint" />
-
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/word_detailed_examples_recyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:nestedScrollingEnabled="false"
+                                    android:overScrollMode="never"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                             </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/chipGroup_antonyms"
-                                style="@style/Widget.MaterialComponents.ChipGroup"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_synonyms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:clipChildren="false"
-                                android:clipToPadding="false"
-                                android:paddingHorizontal="@dimen/padding_large"
-                                android:paddingVertical="@dimen/padding_small"
-                                app:chipColor="@{wordColor}"
-                                app:chipEntries="@{CommonUtils.getTopNItemFromList(wordDetailedViewModel.word.antonyms,6)}"
-                                app:chipShowViewMoreButton="@{wordDetailedViewModel.word.antonyms.size()>6}"
-                                app:chipSpacingHorizontal="@dimen/padding_small"
-                                app:chipSpacingVertical="@dimen/padding_medium"
-                                app:onChipClick="@{(value)->wordDetailedViewModel.navigator.navigateToWeb(@string/google_search_url+value)}"
-                                app:onChipViewMoreClick="@{()->wordDetailedViewModel.navigator.navigateToShowAntonymsList(wordDetailedViewModel.word.antonyms)}" />
+                                android:orientation="vertical"
+                                android:paddingBottom="@dimen/padding_medium">
 
 
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="@dimen/margin_large"
+                                    android:paddingVertical="@dimen/padding_medium">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/padding_medium"
-                        app:cardCornerRadius="0dp"
-                        app:cardElevation="@dimen/card_elevation_word_details">
+                                    <com.google.android.material.textview.MaterialTextView
+                                        style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/synonyms"
+                                        android:textColor="@color/textColor_highEmphasis" />
 
-                        <LinearLayout
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginHorizontal="@dimen/padding_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/syn_info)}"
+                                        android:src="@drawable/ic_info_outline_black_24dp"
+                                        android:tint="@color/app_icon_tint" />
+
+                                </LinearLayout>
+
+                                <com.google.android.material.chip.ChipGroup
+                                    android:id="@+id/chipGroup_synonyms"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingHorizontal="@dimen/padding_large"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    app:chipSpacingHorizontal="@dimen/padding_small"
+                                    app:chipSpacingVertical="@dimen/padding_medium"
+                                    app:selectionRequired="false" />
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_antonyms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical"
+                                android:paddingBottom="@dimen/padding_medium">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="@dimen/margin_large"
+                                    android:paddingVertical="@dimen/padding_medium">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/antonyms"
+                                        android:textColor="@color/textColor_highEmphasis" />
+
+                                    <androidx.appcompat.widget.AppCompatImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginHorizontal="@dimen/padding_small"
+                                        android:background="?actionBarItemBackground"
+                                        android:onClick="@{()->wordDetailedViewModel.navigator.navigateToShowThesaurusInfo(`Please read me`,@string/ant_info)}"
+                                        android:src="@drawable/ic_info_outline_black_24dp"
+                                        android:tint="@color/app_icon_tint" />
+
+                                </LinearLayout>
+
+                                <com.google.android.material.chip.ChipGroup
+                                    android:id="@+id/chipGroup_antonyms"
+                                    style="@style/Widget.MaterialComponents.ChipGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clipChildren="false"
+                                    android:clipToPadding="false"
+                                    android:paddingHorizontal="@dimen/padding_large"
+                                    android:paddingVertical="@dimen/padding_small"
+                                    app:chipSpacingHorizontal="@dimen/padding_small"
+                                    app:chipSpacingVertical="@dimen/padding_medium" />
+
+
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details">
+
+                            <LinearLayout
+                                android:id="@+id/ll_did_you_know_section"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="@dimen/margin_large"
+                                android:paddingBottom="@dimen/padding_medium">
+
+                                <TextView
+                                    style="@style/AppTheme.SubTitleTextStyle.Bold"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingVertical="@dimen/padding_medium"
+                                    android:text="@string/did_you_know"
+                                    android:textColor="@color/textColor_highEmphasis"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_did_you_know_synopsis"
+                                    style="@style/AppTheme.SubTitleTextStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/adPlaceholder_medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:cardCornerRadius="0dp"
+                            app:cardElevation="@dimen/card_elevation_word_details"
+                            app:isVisible="@{mediumBannerAdsEnabled}" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_go_to_merriam_webster"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingHorizontal="@dimen/margin_large"
-                            android:paddingBottom="@dimen/padding_medium"
-                            android:visibility="@{wordDetailedViewModel.word.didYouKnow.isEmpty()?View.GONE:View.VISIBLE}">
+                            android:layout_gravity="end"
+                            android:layout_margin="@dimen/margin_large"
+                            android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
+                            android:text="@string/go_to_merriam_webster"
+                            android:textAllCaps="false"
+                            app:icon="@drawable/ic_round_arrow_forward_24"
+                            app:iconGravity="end" />
+                    </LinearLayout>
 
-                            <TextView
-                                style="@style/AppTheme.SubTitleTextStyle.Bold"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingVertical="@dimen/padding_medium"
-                                android:text="@string/did_you_know"
-                                android:textColor="@color/textColor_highEmphasis"
-                                android:textStyle="bold" />
+                </androidx.core.widget.NestedScrollView>
 
-                            <TextView
-                                style="@style/AppTheme.SubTitleTextStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@{wordDetailedViewModel.word.didYouKnow}" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose_loader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="?attr/actionBarSize"
+                    app:applyTopPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled}" />
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_margin="@dimen/margin_large"
-                        android:onClick="@{()->wordDetailedViewModel.navigator.navigateToWeb(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
-                        android:text="@string/go_to_merriam_webster"
-                        android:textAllCaps="false"
-                        app:buttonTextColorBasedOnWord="@{wordDetailedViewModel.word}"
-                        app:icon="@drawable/ic_round_arrow_forward_24"
-                        app:iconGravity="end" />
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </FrameLayout>
+        </com.pramod.dailyword.framework.ui.common.view.PullToRefreshLayout>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_ad"
+            android:id="@+id/frame_ad_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="@dimen/ad_card_elevation"
-            app:isVisible="@{adsEnabled}">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:applyBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled()}">
-
-
-                <com.facebook.ads.NativeAdLayout
-                    android:id="@+id/native_ad_container_4"
-                    adId="@{AdsManager.NATIVE_BANNER_ID_4}"
-                    showAdWithSomeDelay="@{500}"
-                    showNativeAd="@{adsEnabled &amp;&amp; wordColor!=null}"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="@dimen/margin_small"
-                    android:paddingHorizontal="@dimen/margin_medium"
-                    app:adColorAccent="@{wordColor}"
-                    app:ad_onAdLoaded="@{()->txtViewAdLoading4.setVisibility(View.GONE)}"
-                    app:ad_onLoadAd="@{()->txtViewAdLoading4.setVisibility(View.VISIBLE)}" />
-
-
-                <TextView
-                    android:id="@+id/txtView_ad_loading_4"
-                    style="@style/AppTheme.SubTitleTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:gravity="center"
-                    android:text="@string/loading" />
-
-            </FrameLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <!--
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/fab_got_to_mw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_margin="@dimen/margin_large"
-                    android:height="56dp"
-                    android:onClick="@{()->wordDetailedViewModel.navigateToWordMW(context.resources.getString(R.string.app_merriam_webster_icon_url)+`/`+wordDetailedViewModel.word.date)}"
-                    android:text="@string/go_to_merriam_webster"
-                    android:textColor="?android:attr/windowBackground"
-                    app:backgroundTint="@color/colorPrimary"
-                    app:icon="@drawable/ic_round_format_align_left_24"
-                    app:iconTint="?android:attr/windowBackground"
-                    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
-        -->
-        <!--
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:onClick="@{()->fabGotToMw.isShown()?fabGotToMw.hide():fabGotToMw.show()}" />-->
+            app:applyContentBottomPaddingInset="@{wordDetailedViewModel.isEdgeToEdgeEnabled()}"
+            app:cardElevation="2dp"
+            app:isVisible="@{adsEnabled}" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
@@ -529,35 +480,11 @@
                 app:contentInsetStart="0dp"
                 app:navigationIcon="@drawable/ic_round_back_arrow">
 
-                <!--
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:animateLayoutChanges="true"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-                                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/margin_medium"
-                                        android:layout_marginEnd="@dimen/margin_medium"
-                                        android:src="@drawable/ic_close_black_24dp"
-                                        app:backgroundTint="?android:attr/windowBackground"
-                                        app:fabSize="mini"
-                                        app:elevation="@dimen/card_elevation_min"
-                                        app:tint="@android:color/darker_gray"
-                                        app:useCompatPadding="true" />
-
-                                </LinearLayout>
-                -->
-
-
                 <TextView
+                    android:id="@+id/tv_toolbar_title"
                     style="@style/ToolbarTitleTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{wordDetailedViewModel.word.word}"
                     android:visibility="@{wordDetailedViewModel.showTitle()?View.VISIBLE:View.INVISIBLE}" />
 
             </com.google.android.material.appbar.MaterialToolbar>

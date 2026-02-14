@@ -17,6 +17,7 @@ import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordListBinding
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.openWebsite
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.prefmanagers.WindowAnimPrefManager
@@ -36,7 +37,17 @@ import javax.inject.Inject
 class WordListActivity :
     BaseActivity<ActivityWordListBinding, WordListViewModel>(R.layout.activity_word_list) {
 
-    override val viewModel: WordListViewModel by viewModels()
+    @Inject
+    lateinit var wordListViewModelFactory: WordListViewModel.Factory
+
+    override val viewModel: WordListViewModel by viewModels(
+        factoryProducer = {
+            WordListViewModelFactory(
+                assistedFactory = wordListViewModelFactory,
+                isBannerAdsEnabled = adController.isBannerAdEnabled
+            )
+        }
+    )
 
     override val bindingVariable: Int = BR.wordListViewModel
 
@@ -77,8 +88,11 @@ class WordListActivity :
             },
             bookmarkCallback = { i: Int, word: Word ->
                 viewModel.toggleBookmark(word)
+                hapticFeedbackManager.perform(HapticType.CLICK)
+                interstitialAdTracker.incrementActionCount()
             },
-            hideBadges = prefManager.getHideBadge()
+            hideBadges = prefManager.getHideBadge(),
+            adController = adController
         )
     }
 

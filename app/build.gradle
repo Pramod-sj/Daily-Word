@@ -25,8 +25,8 @@ android {
         applicationId "com.pramod.dailyword"
         minSdk 21
         targetSdk 35
-        versionCode 202506230
-        versionName "3.1.0"
+        versionCode 202601260
+        versionName "3.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -57,9 +57,10 @@ android {
 
     buildTypes {
         debug {
+            versionNameSuffix "-debug"
             debuggable true
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
@@ -152,9 +153,6 @@ dependencies {
     // Paging library for efficient data loading
     implementation(libs.pagingRuntimeKtx) // Paging library with KTX
 
-    // Facebook Audience Network SDK for monetization
-    implementation(libs.facebookAudienceNetworkSdk) // Audience Network SDK
-
     // AutoStarter library for managing app permissions
     implementation(libs.autostarter) // Library for auto-start permissions
 
@@ -202,8 +200,13 @@ dependencies {
     implementation(libs.workRuntimeKtx) // WorkManager with KTX
 
     // Debugging library (LeakCanary)
-    debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
+    //debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
 
     // Custom library for playing and storing audio files
     implementation(project(path: ":audioplayer")) // Custom audio player library
+
+
+    implementation(libs.play.services.ads)
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

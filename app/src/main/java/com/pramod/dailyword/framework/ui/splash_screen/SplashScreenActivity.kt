@@ -1,27 +1,28 @@
 package com.pramod.dailyword.framework.ui.splash_screen
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.splashscreen.SplashScreenViewProvider
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ActivitySplashScreenBinding
+import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.scheduleWeeklyAlarmAt12PM
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.framework.ui.common.BaseActivity
-import com.pramod.dailyword.framework.ui.common.exts.getContextCompatColor
-import com.pramod.dailyword.framework.ui.common.exts.getContextCompatDrawable
 import com.pramod.dailyword.framework.ui.common.exts.openHomePage
 import com.pramod.dailyword.framework.ui.common.exts.openNotificationConsentPage
 import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
-import com.pramod.dailyword.framework.util.CommonUtils
-import com.pramod.dailyword.framework.util.GradientUtils
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
@@ -41,38 +42,55 @@ class SplashScreenActivity :
     @Inject
     lateinit var appPrefManager: PrefManager
 
+    private var splashScreenViewProvider: SplashScreenViewProvider? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        forceEdgeToEdge(true)
-        transparentNavBar = true
-        lightStatusBar(matchingBackgroundColor = true)
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         appPrefManager.incrementAppLaunchCount()
-        //addGradientToAppIcon()
-        animateAppIcon()
+        keepSplashUntilSpecifiedDuration(splashScreen)
         navigateToHomePage()
         setUpAcceptLinks()
         scheduleWeeklyAlarmAt12PM()
         Timber.i("onCreate: " + intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE))
+        splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+            // 1. Run your existing logic
+            // splashScreenViewProvider = splashScreenViewProvider // Only keep this if you need to access it outside this scope
+            viewModel.showSplashText()
+            if (viewModel.isNewUser) {
+                // Create your custom animation.
+                val slideUp = ObjectAnimator.ofFloat(
+                    splashScreenViewProvider.view,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -splashScreenViewProvider.view.height.toFloat()
+                )
+                slideUp.interpolator = AnticipateInterpolator()
+                slideUp.duration = 200L
+                // Call SplashScreenView.remove at the end of your custom animation.
+                slideUp.doOnEnd { splashScreenViewProvider.remove() }
+                // Run your animation.
+                slideUp.start()
+            } else {
+                splashScreenViewProvider.remove()
+            }
+        }
+
+        viewModel.splashScreenTextVisible().observe(this) {
+            splashScreenViewProvider?.remove()
+        }
     }
 
-    private fun addGradientToAppIcon() {
-        try {
-            binding.splashAppIcon.setImageBitmap(
-                GradientUtils.addGradient(
-                    CommonUtils.drawableToBitmap(
-                        getContextCompatDrawable(
-                            R.drawable.ic_vocabulary
-                        )!!
-                    )!!,
-                    getContextCompatColor(R.color.purple_200),
-                    getContextCompatColor(R.color.green_600)
-                )
-            )
-        } catch (e: Exception) {
-            //if exception occur fallback to normal icon
-            binding.splashAppIcon.setImageResource(R.drawable.ic_vocabulary)
-            binding.splashAppIcon.imageTintList
-            ColorStateList.valueOf(getContextCompatColor(R.color.app_icon_tint))
+    private fun keepSplashUntilSpecifiedDuration(splashScreen: SplashScreen){
+        // 1. Define your animation duration (Must match your XML duration: 800ms)
+        val animationDuration = resources.getInteger(R.integer.splash_anim_duration)
+        // 2. Track when the app started
+        val startTime = System.currentTimeMillis()
+        // 3. Force the Splash Screen to stay visible until the duration is met
+        splashScreen.setKeepOnScreenCondition {
+            val elapsedTime = System.currentTimeMillis() - startTime
+            // Return TRUE to keep it on screen, FALSE to let it dismiss
+            elapsedTime < animationDuration
         }
     }
 
@@ -118,31 +136,11 @@ class SplashScreenActivity :
         }
     }
 
-    private fun animateAppIcon() {
-        viewModel.animateSplashIcon().observe(this) {
-            if (it) {
-
-                CommonUtils.scaleXY(
-                    binding.splashAppIcon,
-                    -0.3f,
-                    -0.3f,
-                    1.0f,
-                    1.0f,
-                    1000L,
-                    {},
-                    { viewModel.showSplashText() }
-                )
-            } else {
-                viewModel.showSplashText()
-            }
-        }
-    }
-
     private fun setUpAcceptLinks() {
         val termsAndConditionLink = Pair(
             resources.getString(R.string.term_and_condition_small),
             View.OnClickListener {
-                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.term_and_condition_small),
                     BuildConfig.TERM_AND_CONDITION,
@@ -154,7 +152,7 @@ class SplashScreenActivity :
         val privacyPolicyLink = Pair(
             resources.getString(R.string.privacy_policy_small),
             View.OnClickListener {
-                it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                hapticFeedbackManager.perform(HapticType.CLICK)
                 WebViewDialogFragment.show(
                     resources.getString(R.string.privacy_policy_small),
                     BuildConfig.PRIVACY_POLICY,
