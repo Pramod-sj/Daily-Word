@@ -8,16 +8,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class IPNetworkServiceImpl @Inject constructor(
-    private val ipService: IPService,
-    private val ipInfoNEMapper: IPInfoNEMapper
-) :
-    IPNetworkService {
-    override suspend fun getPublicIp(): String? {
-        return ipService.getPublicIp()
-    }
+class IPNetworkServiceImpl
+    @Inject
+    constructor(
+        private val ipService: IPService,
+        private val ipInfoNEMapper: IPInfoNEMapper,
+    ) : IPNetworkService {
+        override suspend fun getPublicIp(): String? = ipService.getPublicIp()
 
-    override suspend fun getIPDetails(publicIp: String): IPInfo? {
-        return ipService.getIPDetails(publicIp)?.let { ipInfoNEMapper.fromEntity(it) }
+        override suspend fun getIPDetails(publicIp: String): IPInfo? =
+            ipService.getIPDetails(publicIp)?.let { ipInfoNEMapper.fromEntity(it) }
     }
-}

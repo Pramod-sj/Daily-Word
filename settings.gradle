@@ -21,3 +21,5 @@ rootProject.name='Today\'s Word'
 // Include sub-projects or modules
 include(":app") // Include your application module
 include(":audioplayer")
+include ':games'
+include ':games:crossword'

@@ -26,6 +26,7 @@ import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
+import com.pramod.games.crossword.CrosswordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -81,7 +82,7 @@ class SplashScreenActivity :
         }
     }
 
-    private fun keepSplashUntilSpecifiedDuration(splashScreen: SplashScreen){
+    private fun keepSplashUntilSpecifiedDuration(splashScreen: SplashScreen) {
         // 1. Define your animation duration (Must match your XML duration: 800ms)
         val animationDuration = resources.getInteger(R.integer.splash_anim_duration)
         // 2. Track when the app started
@@ -101,7 +102,8 @@ class SplashScreenActivity :
                     isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
                         Timber.i("isImageCached: $isCached")
                         if (isCached) {
-                            openHomePage(withFadeAnimation = true, finish = true)
+                            startActivity(Intent(this, CrosswordActivity::class.java))
+                            //openHomePage(withFadeAnimation = true, finish = true)
                         } else {
                             binding.btnGetStarted.showProgress(true)
                             preloadImage(BuildConfig.HOME_BACKGROUND_URL) {

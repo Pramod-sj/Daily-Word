@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "grid": {
+    "rows": 18,
+    "cols": 18
+  },
+  "total_placed": 5,
+  "puzzle": [
+    {
+      "answer": "PREROGATIVE",
+      "clue": "Special right or privilege",
+      "row": 7,
+      "col": 3,
+      "direction": "horizontal",
+      "length": 11
+    },
+    {
+      "answer": "GOLDILOCKS",
+      "clue": "No clue provided",
+      "row": 7,
+      "col": 8,
+      "direction": "vertical",
+      "length": 10
+    },
+    {
+      "answer": "SYLLOGISM",
+      "clue": "Deductive reasoning method",
+      "row": 1,
+      "col": 11,
+      "direction": "vertical",
+      "length": 9
+    },
+    {
+      "answer": "ABDICATE",
+      "clue": "No clue provided",
+      "row": 0,
+      "col": 5,
+      "direction": "vertical",
+      "length": 8
+    },
+    {
+      "answer": "LACONIC",
+      "clue": "Using very few words",
+      "row": 12,
+      "col": 8,
+      "direction": "horizontal",
+      "length": 7
+    }
+  ]
+}

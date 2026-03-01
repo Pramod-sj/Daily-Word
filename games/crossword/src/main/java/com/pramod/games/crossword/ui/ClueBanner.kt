@@ -1,0 +1,126 @@
+package com.pramod.games.crossword.ui
+
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.pramod.games.crossword.CrosswordClue
+import com.pramod.games.crossword.PuzzleResultUiState
+import kotlinx.coroutines.flow.StateFlow
+
+@Composable
+fun ClueBanner(
+    clueMap: State<Map<Int, CrosswordClue>>,
+    clueNumber: State<Int?>,
+    result: StateFlow<PuzzleResultUiState?>,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val clue = clueMap.value[clueNumber.value]
+    val numberText = clueNumber.value?.toString() ?: ""
+
+    val result by result.collectAsState()
+
+    // ✅ Replaced Box with Surface to match the Timer pill aesthetic
+    Surface(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .animateContentSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp), // Matches the Timer pill's 16.dp shape
+        color = MaterialTheme.colorScheme.secondaryContainer, // Ties the color to the Timer
+        // Removed the hard border for a cleaner, modern Material 3 card look.
+        // If you still want a border, you can add: border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            // Added slight vertical padding inside the surface to let the text breathe
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+        ) {
+            // 1. Previous Arrow
+            IconButton(onClick = onPreviousClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                    contentDescription = "Previous Clue",
+                    tint = MaterialTheme.colorScheme.primary, // Matches your Lightbulb icon
+                )
+            }
+
+            if (result != null) {
+                Column(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .wrapContentHeight()
+                            .padding(horizontal = 4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = "$numberText. ${clue?.answer}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        text = clue?.clueText ?: "No clue provided",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer, // Matches the Timer text color
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(
+                        text = "($numberText)",
+                        // ✅ Switched to standard Material typography
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
+                    Text(
+                        text = clue?.clueText ?: "No clue provided",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer, // Matches the Timer text color
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
+            // 3. Next Arrow
+            IconButton(onClick = onNextClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = "Next Clue",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+        }
+    }
+}
