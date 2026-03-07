@@ -102,8 +102,7 @@ class SplashScreenActivity :
                     isImageCached(BuildConfig.HOME_BACKGROUND_URL) { isCached ->
                         Timber.i("isImageCached: $isCached")
                         if (isCached) {
-                            startActivity(Intent(this, CrosswordActivity::class.java))
-                            //openHomePage(withFadeAnimation = true, finish = true)
+                            openHomePage(withFadeAnimation = true, finish = true)
                         } else {
                             binding.btnGetStarted.showProgress(true)
                             preloadImage(BuildConfig.HOME_BACKGROUND_URL) {

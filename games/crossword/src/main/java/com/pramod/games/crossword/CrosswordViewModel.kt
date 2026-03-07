@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
 import com.pramod.games.crossword.network.CrosswordRepository
 import com.pramod.games.crossword.ui.boardGenerator.CellState
 import com.pramod.games.crossword.ui.boardGenerator.CrosswordMapGenerator
@@ -11,12 +12,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.Int
+import kotlin.String
 import kotlin.math.roundToInt
 
 @HiltViewModel
@@ -82,6 +87,10 @@ internal class CrosswordViewModel @Inject constructor(
 
     private val _showCompletionDialog = MutableStateFlow(false)
     val showCompletionDialog = _showCompletionDialog.asStateFlow()
+
+    // Used to send one-time messages to the UI (like a Snackbar)
+    private val _puzzleMessage = MutableSharedFlow<SnackBarMessage>(extraBufferCapacity = 1)
+    val puzzleMessage = _puzzleMessage.asSharedFlow()
     // endregion
 
     // region 4. Mutable UI Selection State
@@ -89,6 +98,9 @@ internal class CrosswordViewModel @Inject constructor(
     var activeWordId = mutableStateOf<Int?>(null)
     var isAcrossMode = mutableStateOf(true)
     private var timerJob: Job? = null
+
+    // Tracks if we already warned them so we don't spam the UI
+    private var hasShownBoardFullWarning = false
     // endregion
 
     // region 5. Initialization
@@ -163,6 +175,12 @@ internal class CrosswordViewModel @Inject constructor(
         val key = selectedCellKey.value ?: return
         val currentCell = cellMap.value[key] ?: return
 
+        if (currentCell.state == CellState.REVEALED) {
+            moveToNextCell(currentCell) // Still move the cursor forward
+            if (timerJob == null) startTimer()
+            return // Stop execution here so it doesn't overwrite the revealed letter
+        }
+
         val updatedMap = cellMap.value.toMutableMap()
         updatedMap[key] = currentCell.copy(
             userInput = letter.toString(),
@@ -181,6 +199,11 @@ internal class CrosswordViewModel @Inject constructor(
 
         val currSelectedKey = selectedCellKey.value ?: return
         val currentCell = cellMap.value[currSelectedKey] ?: return
+
+        if (currentCell.state == CellState.REVEALED) {
+            moveToPreviousCell(currentCell) // Still move the cursor backward
+            return // Stop execution here so it doesn't clear the revealed letter
+        }
 
         val updatedMap = cellMap.value.toMutableMap()
         updatedMap[currSelectedKey] = currentCell.copy(
@@ -374,6 +397,66 @@ internal class CrosswordViewModel @Inject constructor(
     }
     // endregion
 
+    // region 9. Check Features
+    fun checkLetter() {
+        val key = selectedCellKey.value ?: return
+        val cell = cellMap.value[key] ?: return
+
+        // Don't check if empty or already revealed
+        if (cell.userInput.isEmpty() || cell.state == CellState.REVEALED) return
+
+        val updatedMap = cellMap.value.toMutableMap()
+        updatedMap[key] = cell.copy(
+            state = CellState.CHECKED,
+            isCheckedLetterCorrect = cell.correctChar.toString()
+                .equals(cell.userInput, ignoreCase = true)
+        )
+        cellMap.value = updatedMap
+    }
+
+    fun checkWord() {
+        val wordId = activeWordId.value ?: return
+        val isAcross = isAcrossMode.value
+        val updatedMap = cellMap.value.toMutableMap()
+
+        updatedMap
+            .filter { it.value.state != CellState.NO_WORD }
+            .forEach { (key, cell) ->
+                val belongsToWord =
+                    if (isAcross) cell.acrossWordId == wordId else cell.downWordId == wordId
+
+                // Only check cells in the word that have user input and aren't already revealed
+                if (belongsToWord && cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED) {
+                    updatedMap[key] = cell.copy(
+                        state = CellState.CHECKED,
+                        isCheckedLetterCorrect = cell.correctChar.toString()
+                            .equals(cell.userInput, ignoreCase = true)
+                    )
+                }
+            }
+        cellMap.value = updatedMap
+    }
+
+    fun checkPuzzle() {
+        val updatedMap = cellMap.value.toMutableMap()
+
+        updatedMap
+            .filter { it.value.state != CellState.NO_WORD }
+            .forEach { (key, cell) ->
+                // Only check cells that have user input and aren't already revealed
+                if (cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED) {
+                    updatedMap[key] = cell.copy(
+                        state = CellState.CHECKED,
+                        isCheckedLetterCorrect = cell.correctChar.toString()
+                            .equals(cell.userInput, ignoreCase = true)
+                    )
+                }
+            }
+        cellMap.value = updatedMap
+    }
+
+    // endregion
+
     // region 9. Scoring & Completion Logic
     private fun evaluateScoreAndCompletion() {
         val cells = cellMap.value.values.filter { it.state != CellState.NO_WORD }
@@ -388,6 +471,10 @@ internal class CrosswordViewModel @Inject constructor(
 
         cells.forEach { if (it.userInput.isNotEmpty()) filledCellsCount++ }
         val isBoardFull = filledCellsCount == cells.size
+
+        if (!isBoardFull) {
+            hasShownBoardFullWarning = false
+        }
 
         acrossWords.forEach { wordId ->
             val wordCells = cells.filter { it.acrossWordId == wordId }
@@ -409,11 +496,30 @@ internal class CrosswordViewModel @Inject constructor(
 
         val allCorrect =
             cells.all { it.userInput.equals(it.correctChar.toString(), ignoreCase = true) }
-        if (isBoardFull && allCorrect) {
-            isPuzzleComplete.value = true
-            stopTimer()
-            onPuzzleCompleted(generateResultState(calculatedScore))
+
+        if (isBoardFull) {
+            if (allCorrect) {
+                // VICTORY!
+                isPuzzleComplete.value = true
+                stopTimer()
+                onPuzzleCompleted(generateResultState(calculatedScore))
+            } else {
+                if(!hasShownBoardFullWarning) {
+                    hasShownBoardFullWarning = true
+                    // FULL BUT WRONG!
+                    // Alert the user so they aren't confused
+                    _puzzleMessage.tryEmit(
+                        value = SnackBarMessage(
+                            message = "So close! Want to spot the mistakes?",
+                            action = Action("Check puzzle") {
+                                checkPuzzle()
+                            }
+                        )
+                    )
+                }
+            }
         }
+
     }
 
     private fun onPuzzleCompleted(state: PuzzleResultUiState) {
@@ -522,6 +628,7 @@ data class CrosswordCell(
     val correctChar: Char? = null,
     val userInput: String = "",
     val state: CellState = CellState.EMPTY,
+    val isCheckedLetterCorrect: Boolean? = null
 )
 
 // ✅ Separate model to hold clues — don't put them in the cell
@@ -543,4 +650,20 @@ data class PuzzleResultUiState(
     val buttonText: String,
     val tier: ScoreTier,
     val score: Int,
+)
+
+
+data class SnackBarMessage(
+    val message: String,
+    val duration: Int = Snackbar.LENGTH_SHORT,
+    val animation: Int = Snackbar.ANIMATION_MODE_SLIDE,
+    val action: Action? = null,
+    val parentViewId: Int? = null,
+    val anchorId: Int? = null
+)
+
+
+data class Action(
+    val name: String? = null,
+    val callback: (() -> Unit)? = null
 )

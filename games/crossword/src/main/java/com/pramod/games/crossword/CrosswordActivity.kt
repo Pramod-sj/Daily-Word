@@ -17,6 +17,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +37,7 @@ import com.pramod.games.crossword.ui.ClueBanner
 import com.pramod.games.crossword.ui.CrosswordTopAppBar
 import com.pramod.games.crossword.ui.DynamicCrosswordGrid
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class CrosswordActivity : AppCompatActivity() {
@@ -54,7 +59,34 @@ class CrosswordActivity : AppCompatActivity() {
                         showExitDialog = true
                     }
 
+                    // 1. Create the state that controls the Snackbar
+                    val snackbarHostState = remember { SnackbarHostState() }
+
+                    // 2. Listen to the SharedFlow from your ViewModel
+                    LaunchedEffect(Unit) {
+                        viewModel.puzzleMessage.collect { message ->
+
+                            // Show the snackbar and wait for the user's response
+                            val result = snackbarHostState.showSnackbar(
+                                message = message.message,
+                                actionLabel = message.action?.name, // ✅ Adds the custom action button
+                                duration = SnackbarDuration.Long, // Give them slightly longer to click it
+                            )
+                            when (result) {
+                                SnackbarResult.ActionPerformed -> {
+                                    message.action?.callback?.invoke()
+                                }
+
+                                SnackbarResult.Dismissed -> Unit
+                            }
+
+                        }
+                    }
+
                     Scaffold(
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState)
+                        },
                         topBar = {
                             CrosswordTopAppBar(
                                 viewModel = viewModel,

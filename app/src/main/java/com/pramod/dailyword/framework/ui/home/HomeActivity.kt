@@ -79,6 +79,8 @@ import com.pramod.dailyword.framework.util.buildUpdateAvailableToInstallSpannabl
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import com.pramod.dailyword.framework.widget.refreshWidget
+import com.pramod.games.crossword.CrosswordActivity
+import com.pramod.games.crossword.ui.CrosswordFeatureCard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -153,6 +155,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleNotificationPermissionLaunch()
         handlePermissionChangedScenario()
         handleNavigationToDisableBatteryOptimization()
+
+        binding.composeView?.setContent {
+            CrosswordFeatureCard {
+                startActivity(Intent(this, CrosswordActivity::class.java))
+            }
+        }
     }
 
     private fun handleNavigationToDisableBatteryOptimization() {

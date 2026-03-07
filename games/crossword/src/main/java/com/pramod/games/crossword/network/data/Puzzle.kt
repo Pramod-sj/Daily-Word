@@ -1,7 +1,8 @@
 package com.pramod.games.crossword.network.data
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
-
+@Keep
 internal data class Puzzle(
     @SerializedName("answer")
     val answer: String,

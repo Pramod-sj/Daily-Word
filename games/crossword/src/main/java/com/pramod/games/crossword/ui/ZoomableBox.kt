@@ -1,6 +1,8 @@
 package com.pramod.games.crossword.ui
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -35,12 +37,11 @@ data class WordFocusTarget(
 @Composable
 fun ZoomableBox(
     modifier: Modifier = Modifier,
-    minZoom: Float = 0.8f, // Allows zooming out slightly before snapping back
+    minZoom: Float = 0.8f,
     maxZoom: Float = 4f,
     focusTarget: WordFocusTarget? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    // ✅ 1. Changed scale to an Animatable
     val scale = remember { Animatable(1f) }
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
@@ -49,141 +50,146 @@ fun ZoomableBox(
     val coroutineScope = rememberCoroutineScope()
     val decay = rememberSplineBasedDecay<Float>()
 
-    LaunchedEffect(focusTarget, containerSize) {
-        if (focusTarget != null && containerSize.width > 0) {
-            // 1. Calculate how big the word currently appears on screen
-            val scaledWordWidth = focusTarget.widthPx * scale.value
-            val scaledWordHeight = focusTarget.heightPx * scale.value
+    // Low stiffness makes the camera smoothly catch up to your typing rather than violently snapping.
+    val cameraPanSpec = remember {
+        spring<Float>(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    }
 
-            // 2. Does it fit? (20% margin)
+    // We extract ONLY the exact geometry. If the focusTarget updates a string but
+    // stays in the same coordinate, the animation won't needlessly restart.
+    val targetStartX = focusTarget?.startOffset?.x
+    val targetStartY = focusTarget?.startOffset?.y
+    val targetCenterX = focusTarget?.centerOffset?.x
+    val targetCenterY = focusTarget?.centerOffset?.y
+    val targetWidth = focusTarget?.widthPx
+    val targetHeight = focusTarget?.heightPx
+
+    LaunchedEffect(
+        targetStartX, targetStartY, targetCenterX, targetCenterY, targetWidth, targetHeight, containerSize
+    ) {
+        if (focusTarget != null && containerSize.width > 0) {
+
+            // Use targetValue to calculate bounds so it doesn't glitch if a zoom is currently finishing
+            val currentScale = scale.targetValue
+
+            val scaledWordWidth = focusTarget.widthPx * currentScale
+            val scaledWordHeight = focusTarget.heightPx * currentScale
+
             val fitsHorizontally = scaledWordWidth < (containerSize.width * 0.8f)
             val fitsVertically = scaledWordHeight < (containerSize.height * 0.8f)
 
-            // 3. SMART DECISION: Evaluate X and Y independently!
-            // If an Across word is too wide, only snap X to the start letter. Keep Y centered.
-            // If a Down word is too tall, only snap Y to the top letter. Keep X centered.
-            val targetX =
-                if (fitsHorizontally) focusTarget.centerOffset.x else focusTarget.startOffset.x
-            val targetY =
-                if (fitsVertically) focusTarget.centerOffset.y else focusTarget.startOffset.y
+            val targetX = if (fitsHorizontally) focusTarget.centerOffset.x else focusTarget.startOffset.x
+            val targetY = if (fitsVertically) focusTarget.centerOffset.y else focusTarget.startOffset.y
 
-            // Find the center of the screen viewport
             val gridCenterX = containerSize.width / 2f
             val gridCenterY = containerSize.height / 2f
 
-            // Calculate the required movement for BOTH axes
-            val desiredOffsetX = (gridCenterX - targetX) * scale.value
-            val desiredOffsetY = (gridCenterY - targetY) * scale.value
+            val desiredOffsetX = (gridCenterX - targetX) * currentScale
+            val desiredOffsetY = (gridCenterY - targetY) * currentScale
 
-            val maxX = ((containerSize.width * (scale.value - 1)) / 2f).coerceAtLeast(0f)
-            val maxY = ((containerSize.height * (scale.value - 1)) / 2f).coerceAtLeast(0f)
+            val maxX = ((containerSize.width * (currentScale - 1)) / 2f).coerceAtLeast(0f)
+            val maxY = ((containerSize.height * (currentScale - 1)) / 2f).coerceAtLeast(0f)
 
-            // Animate the camera for both axes simultaneously
+            // Update bounds BEFORE animating to prevent stuttering against the invisible walls
+            offsetX.updateBounds(-maxX, maxX)
+            offsetY.updateBounds(-maxY, maxY)
+
             launch {
-                offsetX.animateTo(desiredOffsetX.coerceIn(-maxX, maxX))
+                offsetX.animateTo(
+                    targetValue = desiredOffsetX.coerceIn(-maxX, maxX),
+                    animationSpec = cameraPanSpec
+                )
             }
             launch {
-                offsetY.animateTo(desiredOffsetY.coerceIn(-maxY, maxY))
+                offsetY.animateTo(
+                    targetValue = desiredOffsetY.coerceIn(-maxY, maxY),
+                    animationSpec = cameraPanSpec
+                )
             }
         }
     }
 
     Box(
-        modifier =
-            modifier
-                .onSizeChanged { containerSize = it }
-                .clipToBounds()
-                .pointerInput(Unit) {
-                    detectTransformGestures(
-                        panZoomLock = true,
-                        onGesture = { _, pan, zoom, _ ->
-                            coroutineScope.launch {
-                                // Update scale with bounds
-                                val newScale = (scale.value * zoom).coerceIn(minZoom, maxZoom)
-                                scale.snapTo(newScale)
-
-                                val maxX =
-                                    ((containerSize.width * (newScale - 1)) / 2f).coerceAtLeast(0f)
-                                val maxY =
-                                    ((containerSize.height * (newScale - 1)) / 2f).coerceAtLeast(0f)
-
-                                offsetX.stop()
-                                offsetY.stop()
-
-                                offsetX.updateBounds(-maxX, maxX)
-                                offsetY.updateBounds(-maxY, maxY)
-                                offsetX.snapTo((offsetX.value + pan.x).coerceIn(-maxX, maxX))
-                                offsetY.snapTo((offsetY.value + pan.y).coerceIn(-maxY, maxY))
-                            }
-                        },
-                    )
-                }.pointerInput(Unit) {
-                    awaitEachGesture {
-                        val velocityTracker = VelocityTracker()
-                        var pointerCount = 0
-
-                        awaitFirstDown()
-                        do {
-                            val event = awaitPointerEvent()
-                            pointerCount = maxOf(pointerCount, event.changes.count { it.pressed })
-                            event.changes.forEach { change ->
-                                velocityTracker.addPosition(
-                                    change.uptimeMillis,
-                                    change.position,
-                                )
-                            }
-                        } while (event.changes.any { it.pressed })
-
-                        // ✅ 2. Gesture ended! If zoomed out, snap back to 1x and center
-                        if (scale.value < 1f) {
-                            coroutineScope.launch {
-                                launch { scale.animateTo(1f) }
-                                launch { offsetX.animateTo(0f) }
-                                launch { offsetY.animateTo(0f) }
-                            }
-                            return@awaitEachGesture // Exit early, no fling needed
-                        }
-
-                        // Only fling if it was a single finger gesture (no pinch involved)
-                        if (pointerCount > 1) return@awaitEachGesture
-
-                        val velocity = velocityTracker.calculateVelocity()
-
-                        // Only fling if velocity exceeds threshold
-                        val minFlingVelocity = 200f
-                        if (abs(velocity.x) < minFlingVelocity && abs(velocity.y) < minFlingVelocity) return@awaitEachGesture
-
+        modifier = modifier
+            .onSizeChanged { containerSize = it }
+            .clipToBounds()
+            .pointerInput(Unit) {
+                detectTransformGestures(
+                    panZoomLock = true,
+                    onGesture = { _, pan, zoom, _ ->
                         coroutineScope.launch {
-                            val maxX =
-                                ((containerSize.width * (scale.value - 1)) / 2f).coerceAtLeast(0f)
-                            val maxY =
-                                ((containerSize.height * (scale.value - 1)) / 2f).coerceAtLeast(0f)
+                            // 🔥 FIX 4: Stop auto-panning immediately if the user touches the screen
+                            offsetX.stop()
+                            offsetY.stop()
+
+                            val newScale = (scale.value * zoom).coerceIn(minZoom, maxZoom)
+                            scale.snapTo(newScale)
+
+                            val maxX = ((containerSize.width * (newScale - 1)) / 2f).coerceAtLeast(0f)
+                            val maxY = ((containerSize.height * (newScale - 1)) / 2f).coerceAtLeast(0f)
 
                             offsetX.updateBounds(-maxX, maxX)
                             offsetY.updateBounds(-maxY, maxY)
 
-                            launch {
-                                offsetX.animateDecay(
-                                    initialVelocity = velocity.x,
-                                    animationSpec = decay,
-                                )
-                            }
-                            launch {
-                                offsetY.animateDecay(
-                                    initialVelocity = velocity.y,
-                                    animationSpec = decay,
-                                )
-                            }
+                            offsetX.snapTo((offsetX.value + pan.x).coerceIn(-maxX, maxX))
+                            offsetY.snapTo((offsetY.value + pan.y).coerceIn(-maxY, maxY))
                         }
+                    },
+                )
+            }
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    val velocityTracker = VelocityTracker()
+                    var pointerCount = 0
+
+                    awaitFirstDown()
+                    do {
+                        val event = awaitPointerEvent()
+                        pointerCount = maxOf(pointerCount, event.changes.count { it.pressed })
+                        event.changes.forEach { change ->
+                            velocityTracker.addPosition(
+                                change.uptimeMillis,
+                                change.position,
+                            )
+                        }
+                    } while (event.changes.any { it.pressed })
+
+                    if (scale.value < 1f) {
+                        coroutineScope.launch {
+                            launch { scale.animateTo(1f) }
+                            launch { offsetX.animateTo(0f) }
+                            launch { offsetY.animateTo(0f) }
+                        }
+                        return@awaitEachGesture
+                    }
+
+                    if (pointerCount > 1) return@awaitEachGesture
+
+                    val velocity = velocityTracker.calculateVelocity()
+                    val minFlingVelocity = 200f
+                    if (abs(velocity.x) < minFlingVelocity && abs(velocity.y) < minFlingVelocity) return@awaitEachGesture
+
+                    coroutineScope.launch {
+                        val maxX = ((containerSize.width * (scale.value - 1)) / 2f).coerceAtLeast(0f)
+                        val maxY = ((containerSize.height * (scale.value - 1)) / 2f).coerceAtLeast(0f)
+
+                        offsetX.updateBounds(-maxX, maxX)
+                        offsetY.updateBounds(-maxY, maxY)
+
+                        launch { offsetX.animateDecay(initialVelocity = velocity.x, animationSpec = decay) }
+                        launch { offsetY.animateDecay(initialVelocity = velocity.y, animationSpec = decay) }
                     }
                 }
-                // ✅ 3. Used the lambda version of graphicsLayer for better performance
-                .graphicsLayer {
-                    scaleX = scale.value
-                    scaleY = scale.value
-                    translationX = offsetX.value
-                    translationY = offsetY.value
-                },
+            }
+            .graphicsLayer {
+                scaleX = scale.value
+                scaleY = scale.value
+                translationX = offsetX.value
+                translationY = offsetY.value
+            },
         content = content,
     )
 }

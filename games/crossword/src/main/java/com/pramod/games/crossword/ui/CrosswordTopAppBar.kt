@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.FactCheck
 import androidx.compose.material.icons.rounded.Lightbulb
 import androidx.compose.material.icons.rounded.Spellcheck
 import androidx.compose.material.icons.rounded.Timer
@@ -48,20 +49,19 @@ internal fun CrosswordTopAppBar(
     onBackClick: () -> Unit,
 ) {
     val elapsedTimerText by viewModel.elapsedTimerText.collectAsState()
-
     val result by viewModel.puzzleResult.collectAsState()
 
-    // State to manage the Dropdown Menu visibility
+    // States to manage the Dropdown Menu visibilities
     var showRevealMenu by remember { mutableStateOf(false) }
+    var showCheckMenu by remember { mutableStateOf(false) } // ✅ Added state for Check Menu
 
     TopAppBar(
-        // ✅ Add the navigationIcon slot here
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                     contentDescription = "Navigate back",
-                    tint = MaterialTheme.colorScheme.primary, // Matches your title/icons
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         },
@@ -70,11 +70,11 @@ internal fun CrosswordTopAppBar(
                 text = "Crossword",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.primary, // Optional: match the back button
+                color = MaterialTheme.colorScheme.primary,
             )
         },
         actions = {
-            // 1. The Timer (Styled as a distinct pill/badge)
+            // 1. The Timer
             Surface(
                 shape = RoundedCornerShape(16.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer,
@@ -100,8 +100,57 @@ internal fun CrosswordTopAppBar(
                 }
             }
 
-            // 2. The Reveal (Hint) Menu
             if (result == null) {
+                // 2. The Check Menu (NEW)
+                Box {
+                    IconButton(onClick = { showCheckMenu = true }) {
+                        Icon(
+                            imageVector = Icons.Rounded.FactCheck, // Or Icons.Rounded.CheckCircle
+                            contentDescription = "Check Options",
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = showCheckMenu,
+                        onDismissRequest = { showCheckMenu = false },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Check Letter") },
+                            onClick = {
+                                viewModel.checkLetter() // Ensure this exists in ViewModel
+                                showCheckMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Rounded.Title, contentDescription = null)
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Check Word") },
+                            onClick = {
+                                viewModel.checkWord() // Ensure this exists in ViewModel
+                                showCheckMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Rounded.Spellcheck, contentDescription = null)
+                            },
+                        )
+                        HorizontalDivider()
+                        DropdownMenuItem(
+                            text = { Text("Check Entire Puzzle") },
+                            onClick = {
+                                viewModel.checkPuzzle() // Ensure this exists in ViewModel
+                                showCheckMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Rounded.FactCheck, contentDescription = null)
+                            },
+                        )
+                    }
+                }
+
+                // 3. The Reveal Menu (EXISTING)
                 Box {
                     IconButton(onClick = { showRevealMenu = true }) {
                         Icon(

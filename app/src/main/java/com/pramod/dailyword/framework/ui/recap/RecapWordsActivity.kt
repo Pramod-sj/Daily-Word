@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.recap
 
 import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.transition.Transition
 import androidx.activity.viewModels
@@ -16,6 +17,8 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CalenderUtil
+import com.pramod.games.crossword.CrosswordActivity
+import com.pramod.games.crossword.ui.CrosswordFeatureCard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,6 +44,12 @@ class RecapWordsActivity :
         setWeeklyInfoText()
         initAdapter()
         adController.loadBanner(binding.cardAd)
+
+        binding.composeView.setContent {
+            CrosswordFeatureCard {
+                startActivity(Intent(this, CrosswordActivity::class.java))
+            }
+        }
     }
 
     private fun setWeeklyInfoText() {
