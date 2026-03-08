@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
 import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -29,6 +30,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.R
+import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityWordDetailedBinding
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.haptics.HapticType
@@ -493,6 +495,16 @@ class WordDetailedActivity :
                 return data.getBoolean(EXTRA_WAS_BOOKMARK_STATUS_CHANGED, false)
             }
             return false
+        }
+
+
+        fun newIntent(context: Context, wordDate: String, word: Word?): Intent {
+            val intent = Intent(context, WordDetailedActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("WORD_DATE", wordDate)
+            bundle.putSerializable("WORD", word)
+            intent.putExtras(bundle)
+            return intent
         }
 
     }

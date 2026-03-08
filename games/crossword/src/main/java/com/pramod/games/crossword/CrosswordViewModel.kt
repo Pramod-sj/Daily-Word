@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
+import com.pramod.dialyword.router.AppRouter
 import com.pramod.games.crossword.network.CrosswordRepository
 import com.pramod.games.crossword.ui.boardGenerator.CellState
 import com.pramod.games.crossword.ui.boardGenerator.CrosswordMapGenerator
@@ -29,6 +30,7 @@ internal class CrosswordViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val crosswordRepository: CrosswordRepository,
     private val cellProcessor: CrosswordMapGenerator,
+    private val appRouter: AppRouter
 ) : ViewModel() {
 
     // region 1. Constants & Persistence Keys
@@ -39,6 +41,9 @@ internal class CrosswordViewModel @Inject constructor(
         private const val KEY_PUZZLE_COMPLETE = "puzzle_complete"
     }
     // endregion
+
+
+    private val crosswordId = savedStateHandle.get<String>(CrosswordActivity.EXTRA_CROSSWORD_ID)
 
     // region 2. SavedStateHandle Getters & Setters
     private val savedStateUserAnswers: Map<String, String>
@@ -110,7 +115,8 @@ internal class CrosswordViewModel @Inject constructor(
 
     private fun fetchPuzzle() {
         viewModelScope.launch {
-            val resource = crosswordRepository.getWeeklyPuzzle()
+            crosswordId ?: return@launch
+            val resource = crosswordRepository.getCrossword(crosswordId)
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let { response ->
@@ -504,7 +510,7 @@ internal class CrosswordViewModel @Inject constructor(
                 stopTimer()
                 onPuzzleCompleted(generateResultState(calculatedScore))
             } else {
-                if(!hasShownBoardFullWarning) {
+                if (!hasShownBoardFullWarning) {
                     hasShownBoardFullWarning = true
                     // FULL BUT WRONG!
                     // Alert the user so they aren't confused
@@ -638,6 +644,7 @@ data class CrosswordClue(
     val direction: String, // "across" or "down"
     val answer: String, // optional, useful for hint feature
     val startCellKey: String,
+    val wordIdDate: String,
 )
 
 enum class ScoreTier {

@@ -36,7 +36,7 @@ import com.pramod.games.crossword.CrosswordTheme
 
 @Preview
 @Composable
-fun Preview() {
+internal fun Preview() {
     CrosswordFeatureCard { }
 }
 

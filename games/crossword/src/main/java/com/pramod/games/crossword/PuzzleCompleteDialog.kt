@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun PuzzleCompleteDialog(
+internal fun PuzzleCompleteDialog(
     timeTaken: String,
     resultState: PuzzleResultUiState, // <-- Pass the state from ViewModel here
     onDismiss: () -> Unit,

@@ -5,6 +5,6 @@ import com.pramod.games.crossword.network.data.CrosswordResponse
 
 internal interface CrosswordRepository {
 
-    suspend fun getWeeklyPuzzle(): Resource<CrosswordResponse?>
+    suspend fun getCrossword(crosswordId: String): Resource<CrosswordResponse?>
 
 }

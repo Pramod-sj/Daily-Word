@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-data class WordFocusTarget(
+internal data class WordFocusTarget(
     val startOffset: Offset,
     val centerOffset: Offset,
     val widthPx: Float,
@@ -35,7 +35,7 @@ data class WordFocusTarget(
 )
 
 @Composable
-fun ZoomableBox(
+internal fun ZoomableBox(
     modifier: Modifier = Modifier,
     minZoom: Float = 0.8f,
     maxZoom: Float = 4f,

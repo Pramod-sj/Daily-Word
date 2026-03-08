@@ -7,6 +7,7 @@
   "total_placed": 5,
   "puzzle": [
     {
+      "wordId" : "2026-02-16",
       "answer": "PREROGATIVE",
       "clue": "Special right or privilege",
       "row": 7,
@@ -15,6 +16,7 @@
       "length": 11
     },
     {
+      "wordId" : "2026-02-18",
       "answer": "GOLDILOCKS",
       "clue": "No clue provided",
       "row": 7,

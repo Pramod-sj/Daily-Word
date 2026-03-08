@@ -108,7 +108,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun CrosswordTheme(
+internal fun CrosswordTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {

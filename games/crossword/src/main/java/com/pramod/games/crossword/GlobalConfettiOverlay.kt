@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
-fun GlobalConfettiOverlay() {
+internal fun GlobalConfettiOverlay() {
     val play by GlobalOverlayController.playConfetti.collectAsState()
 
     if (play) {

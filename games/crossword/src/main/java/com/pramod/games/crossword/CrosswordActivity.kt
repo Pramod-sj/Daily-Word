@@ -2,6 +2,8 @@
 
 package com.pramod.games.crossword
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.activity.enableEdgeToEdge
@@ -33,15 +35,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pramod.dialyword.router.routes.CoreRoute
+import com.pramod.dialyword.router.AppRouter
 import com.pramod.games.crossword.ui.ClueBanner
 import com.pramod.games.crossword.ui.CrosswordTopAppBar
 import com.pramod.games.crossword.ui.DynamicCrosswordGrid
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class CrosswordActivity : AppCompatActivity() {
+internal class CrosswordActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var appRouter: AppRouter
+
     private val viewModel: CrosswordViewModel by viewModels()
+
+    companion object {
+        const val EXTRA_CROSSWORD_ID = "crosswordId"
+
+        fun newIntent(context: Context, crosswordId: String): Intent {
+            return Intent(context, CrosswordActivity::class.java).apply {
+                putExtra(EXTRA_CROSSWORD_ID, crosswordId)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +128,12 @@ class CrosswordActivity : AppCompatActivity() {
                                     },
                                     onPreviousClick = {
                                         viewModel.previousClue()
+                                    },
+                                    onViewWord = { wordId ->
+                                        appRouter.navigateTo(
+                                            context = this@CrosswordActivity,
+                                            routeUriString = CoreRoute.wordDetailPath(wordId)
+                                        )
                                     },
                                     result = viewModel.puzzleResult,
                                 )

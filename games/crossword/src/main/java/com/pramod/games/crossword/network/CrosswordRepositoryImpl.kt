@@ -8,9 +8,9 @@ internal class CrosswordRepositoryImpl constructor(
     private val crossWordApiService: CrossWordApiService
 ) : CrosswordRepository {
 
-    override suspend fun getWeeklyPuzzle(): Resource<CrosswordResponse?> {
+    override suspend fun getCrossword(crosswordId: String): Resource<CrosswordResponse?> {
         val apiResult = safeApiCall(Dispatchers.Default) {
-            crossWordApiService.getWeeklyPuzzle()
+            crossWordApiService.getCrossword(id = crosswordId)
         }
         return when (apiResult) {
             is ApiResult.GenericError -> Resource.error(Throwable(apiResult.message))

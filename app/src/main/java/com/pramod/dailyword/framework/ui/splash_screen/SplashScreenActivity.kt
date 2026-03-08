@@ -26,7 +26,6 @@ import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
-import com.pramod.games.crossword.CrosswordActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject

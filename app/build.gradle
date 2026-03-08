@@ -214,4 +214,7 @@ dependencies {
     implementation(project(path: ":games:crossword"))
 
     implementation(libs.composeMaterialIconsExtended) // Full set of Material Icons
+
+
+    implementation(project(":router"))
 }

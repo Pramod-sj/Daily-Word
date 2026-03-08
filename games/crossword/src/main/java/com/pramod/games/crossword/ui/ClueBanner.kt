@@ -1,6 +1,7 @@
 package com.pramod.games.crossword.ui
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +29,13 @@ import com.pramod.games.crossword.PuzzleResultUiState
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun ClueBanner(
+internal fun ClueBanner(
     clueMap: State<Map<Int, CrosswordClue>>,
     clueNumber: State<Int?>,
     result: StateFlow<PuzzleResultUiState?>,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
+    onViewWord: (wordId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val clue = clueMap.value[clueNumber.value]
@@ -76,7 +78,10 @@ fun ClueBanner(
                         Modifier
                             .weight(1f)
                             .wrapContentHeight()
-                            .padding(horizontal = 4.dp),
+                            .padding(horizontal = 4.dp)
+                            .clickable {
+                                clue?.wordIdDate?.let { onViewWord(it) }
+                            },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(

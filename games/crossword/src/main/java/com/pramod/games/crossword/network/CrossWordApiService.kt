@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 internal interface CrossWordApiService {
 
-    @GET("/getWeeklyPuzzle")
-    suspend fun getWeeklyPuzzle(): CrosswordResponse
+    @GET("/getCrossword")
+    suspend fun getCrossword(id: String): CrosswordResponse
 
 }

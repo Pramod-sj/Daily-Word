@@ -22,16 +22,16 @@ internal class CrosswordMapGenerator @Inject constructor() {
                 val currentWordId = puzzleIndex + 1
                 var isSerialSet = false
 
-                puzzle.answer.toCharArray().forEachIndexed { index, char ->
+                puzzle.answer.orEmpty().toCharArray().forEachIndexed { index, char ->
                     val row: Int
                     val col: Int
 
                     if (puzzle.direction == "across" || puzzle.direction == "horizontal") {
-                        row = puzzle.row
-                        col = puzzle.col + index
+                        row = puzzle.row ?: 0
+                        col = (puzzle.col ?: 0) + index
                     } else {
-                        row = puzzle.row + index
-                        col = puzzle.col
+                        row = (puzzle.row ?: 0) + index
+                        col = puzzle.col ?: 0
                     }
 
                     val key = "$row-$col"
@@ -40,10 +40,11 @@ internal class CrosswordMapGenerator @Inject constructor() {
                         clues[currentWordId] =
                             CrosswordClue(
                                 wordId = currentWordId,
-                                clueText = puzzle.clue,
-                                direction = puzzle.direction,
-                                answer = puzzle.answer,
+                                clueText = puzzle.clue.orEmpty(),
+                                direction = puzzle.direction.orEmpty(),
+                                answer = puzzle.answer.orEmpty(),
                                 startCellKey = key,
+                                wordIdDate = puzzle.wordId.orEmpty()
                             )
                     }
 

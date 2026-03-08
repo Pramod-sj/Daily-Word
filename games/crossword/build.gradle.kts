@@ -79,4 +79,7 @@ dependencies {
     implementation(libs.accompanistThemeAdapter) // Theme adapter for Compose
 
     implementation(libs.lottieCompose) // Lottie for Jetpack Compose
+
+
+    implementation(project(":router"))
 }

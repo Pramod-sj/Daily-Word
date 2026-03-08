@@ -11,7 +11,7 @@ internal class DummyRepositoryImpl constructor(
     private val context: Context,
     private val gson: Gson,
 ) : CrosswordRepository {
-    override suspend fun getWeeklyPuzzle(): Resource<CrosswordResponse?> =
+    override suspend fun getCrossword(crosswordId: String): Resource<CrosswordResponse?> =
         withContext(Dispatchers.IO) {
             val puzzle =
                 context.assets

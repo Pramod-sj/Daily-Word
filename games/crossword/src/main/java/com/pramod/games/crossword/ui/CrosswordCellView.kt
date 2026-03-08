@@ -50,7 +50,7 @@ import com.pramod.games.crossword.ui.boardGenerator.CellState
 import kotlinx.coroutines.delay
 
 @Composable
-fun CrosswordCellView(
+internal fun CrosswordCellView(
     cell: CrosswordCell,
     cellSizePx: Int,
     selectedCellId: State<String?>,
