@@ -78,9 +78,8 @@ import com.pramod.dailyword.framework.util.buildUpdateAvailableToInstallSpannabl
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import com.pramod.dailyword.framework.widget.refreshWidget
+import com.pramod.dialyword.games.core.GameFeatureCards
 import com.pramod.dialyword.router.AppRouter
-import com.pramod.games.crossword.router.CrosswordRoute
-import com.pramod.games.crossword.ui.CrosswordFeatureCard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -160,10 +159,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleNavigationToDisableBatteryOptimization()
 
         binding.composeView?.setContent {
-            CrosswordFeatureCard {
+            GameFeatureCards { uri ->
                 appRouter.navigateTo(
                     context = this,
-                    routeUriString = CrosswordRoute.crosswordGameRoute("week1")
+                    routeUriString = uri
                 )
             }
         }

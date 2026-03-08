@@ -210,11 +210,11 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-
-    implementation(project(path: ":games:crossword"))
-
     implementation(libs.composeMaterialIconsExtended) // Full set of Material Icons
 
 
     implementation(project(":router"))
+    implementation(project(path: ":games:core"))
+    implementation(project(path: ":games:crossword"))
+
 }

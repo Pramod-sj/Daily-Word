@@ -18,9 +18,8 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CalenderUtil
+import com.pramod.dialyword.games.core.GameFeatureCards
 import com.pramod.dialyword.router.AppRouter
-import com.pramod.games.crossword.router.CrosswordRoute
-import com.pramod.games.crossword.ui.CrosswordFeatureCard
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,11 +50,8 @@ class RecapWordsActivity :
         adController.loadBanner(binding.cardAd)
 
         binding.composeView.setContent {
-            CrosswordFeatureCard {
-                appRouter.navigateTo(
-                    context = this,
-                    routeUriString = CrosswordRoute.crosswordGameRoute("week1")
-                )
+            GameFeatureCards { uri ->
+                appRouter.navigateTo(context = this, routeUriString = uri)
             }
         }
     }
