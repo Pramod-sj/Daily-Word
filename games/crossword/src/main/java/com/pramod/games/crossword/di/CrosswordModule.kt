@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(value = [SingletonComponent::class])
+@InstallIn(SingletonComponent::class)
 internal class CrosswordModule {
 
     @Singleton
@@ -21,10 +21,10 @@ internal class CrosswordModule {
 
 
 @Module
-@InstallIn(value = [SingletonComponent::class])
+@InstallIn(SingletonComponent::class)
 internal abstract class CrosswordDataModule {
 
     @Binds
-    abstract fun provideCrosswordRepo(crosswordRepositoryImpl: CrosswordRepositoryImpl): CrosswordRepository
+    abstract fun bindCrosswordRepo(crosswordRepositoryImpl: CrosswordRepositoryImpl): CrosswordRepository
 
 }

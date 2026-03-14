@@ -44,6 +44,8 @@ internal fun ClueBanner(
 
     val result by result.collectAsState()
 
+    if (clue == null) return
+
     // ✅ Replaced Box with Surface to match the Timer pill aesthetic
     Surface(
         modifier =

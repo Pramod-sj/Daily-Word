@@ -24,4 +24,5 @@ include(":audioplayer")
 include ':games'
 include ':games:crossword'
 include ':router'
-include ':games:core'
+include ':games:feature-card'
+include ':games:results'

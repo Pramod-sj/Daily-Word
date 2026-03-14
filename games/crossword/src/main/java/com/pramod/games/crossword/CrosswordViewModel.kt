@@ -8,6 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.pramod.dailyword.games.results.GameResultEntity
 import com.pramod.games.crossword.network.CrosswordRepository
 import com.pramod.games.crossword.ui.boardGenerator.CellState
 import com.pramod.games.crossword.ui.boardGenerator.CrosswordMapGenerator
@@ -24,7 +26,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.collections.get
 import kotlin.math.roundToInt
 
 @Stable
@@ -41,6 +42,7 @@ internal class CrosswordViewModel @Inject constructor(
         private const val KEY_USER_ANSWERS = "user_answers"
         private const val KEY_REVEALED_CELLS = "revealed_cells"
         private const val KEY_PUZZLE_COMPLETE = "puzzle_complete"
+        private const val GAME_TYPE_CROSSWORD = "CROSSWORD"
     }
     // endregion
 
@@ -126,31 +128,37 @@ internal class CrosswordViewModel @Inject constructor(
                         clueMap.clear()
                         clueMap.putAll(crosswordPuzzleData.clueMap)
 
-                        val restoredCells =
-                            restoreCellStates(generatedMap = crosswordPuzzleData.cellMap)
-
-                        cellMap.clear()
-                        cellMap.putAll(restoredCells)
-
-                        if (savedStateUserAnswers.isNotEmpty()) {
-                            // Safely find the "furthest" cell the user has filled in
-                            cellMap.values
-                                .filter { it.serialNumber != null }
-                                .firstOrNull { it.userInput.isNotEmpty() }
-                                ?.let { lastAnsweredCell ->
-                                    onCellSelected(lastAnsweredCell.key)
-                                    startTimer()
-                                }
+                        // 1. Restore from Database if available
+                        val dbResult = response.result
+                        if (dbResult != null) {
+                            restoreFromDb(dbResult, crosswordPuzzleData.cellMap)
                         } else {
-                            // Safely find the absolute first playable cell in the grid (Top-Left-most)
-                            val firstPlayableCell = cellMap.values
-                                .filter { it.serialNumber != null }
-                                .minBy { it.serialNumber?.toIntOrNull() ?: 0 }
-                            onCellSelected(firstPlayableCell.key)
-                        }
+                            // 2. Otherwise restore from SavedStateHandle (in-progress)
+                            val restoredCells =
+                                restoreCellStates(generatedMap = crosswordPuzzleData.cellMap)
+                            cellMap.clear()
+                            cellMap.putAll(restoredCells)
 
-                        if (savedStatePuzzleComplete) {
-                            evaluateScoreAndCompletion()
+                            if (savedStateUserAnswers.isNotEmpty()) {
+                                // Safely find the "furthest" cell the user has filled in
+                                cellMap.values
+                                    .filter { it.serialNumber != null }
+                                    .firstOrNull { it.userInput.isNotEmpty() }
+                                    ?.let { lastAnsweredCell ->
+                                        onCellSelected(lastAnsweredCell.key)
+                                        if (!isPuzzleComplete.value) startTimer()
+                                    }
+                            } else {
+                                // Safely find the absolute first playable cell in the grid (Top-Left-most)
+                                val firstPlayableCell = cellMap.values
+                                    .filter { it.serialNumber != null }
+                                    .minBy { it.serialNumber?.toIntOrNull() ?: 0 }
+                                onCellSelected(firstPlayableCell.key)
+                            }
+
+                            if (savedStatePuzzleComplete) {
+                                evaluateScoreAndCompletion()
+                            }
                         }
                     }
                 }
@@ -161,6 +169,45 @@ internal class CrosswordViewModel @Inject constructor(
             }
             _isLoading.value = false
         }
+    }
+
+    private fun restoreFromDb(
+        dbResult: GameResultEntity,
+        baseMap: Map<String, CrosswordCell>
+    ) {
+        isPuzzleComplete.value = true
+        savedStatePuzzleComplete = true
+        _puzzleResult.value = generateResultState(dbResult.score)
+        elapsedSeconds = dbResult.completionTimeMillis
+        elapsedTimerText.value = formatMillis(elapsedSeconds)
+        stopTimer()
+
+        val gson = Gson()
+        val crosswordData: CrosswordGameData? = try {
+            gson.fromJson(dbResult.gameData, CrosswordGameData::class.java)
+        } catch (e: Exception) {
+            null
+        }
+
+        val dbAnswers = crosswordData?.userAnswers ?: emptyMap()
+        val dbRevealed = crosswordData?.revealedCells ?: emptySet()
+
+        val completedCells = baseMap.mapValues { (id, cell) ->
+            if (cell.state != CellState.NO_WORD) {
+                val input = dbAnswers[id] ?: ""
+                cell.copy(
+                    userInput = input,
+                    state = if (dbRevealed.contains(id)) CellState.REVEALED else if (input.isNotEmpty()) CellState.DRAFT else CellState.EMPTY
+                )
+            } else cell
+        }
+        cellMap.clear()
+        cellMap.putAll(completedCells)
+
+        val firstPlayableCell = cellMap.values
+            .filter { it.serialNumber != null }
+            .minBy { it.serialNumber?.toIntOrNull() ?: 0 }
+        onCellSelected(firstPlayableCell.key)
     }
 
     private fun restoreCellStates(generatedMap: Map<String, CrosswordCell>): Map<String, CrosswordCell> {
@@ -510,10 +557,35 @@ internal class CrosswordViewModel @Inject constructor(
         }
     }
 
+    private fun savePuzzleResult(score: Int, tier: ScoreTier) {
+        viewModelScope.launch {
+            crosswordId?.let { id ->
+                val gson = Gson()
+                val crosswordData = CrosswordGameData(
+                    userAnswers = savedStateUserAnswers,
+                    revealedCells = savedStateRevealedAnswerSet
+                )
+                val gameDataJson = gson.toJson(crosswordData)
+
+                crosswordRepository.saveCrosswordResult(
+                    GameResultEntity(
+                        puzzleId = id,
+                        gameType = GAME_TYPE_CROSSWORD,
+                        completionTimeMillis = elapsedSeconds,
+                        score = score,
+                        scoreTier = tier.name,
+                        gameData = gameDataJson
+                    )
+                )
+            }
+        }
+    }
+
     private fun onPuzzleCompleted(state: PuzzleResultUiState) {
         _puzzleResult.value = state
         _showCompletionDialog.value = true
         savedStatePuzzleComplete = true
+        savePuzzleResult(state.score, state.tier)
     }
 
     fun dismissCompletionDialog() {
@@ -665,4 +737,9 @@ data class SnackBarMessage(
 data class Action(
     val name: String? = null,
     val callback: (() -> Unit)? = null
+)
+
+data class CrosswordGameData(
+    val userAnswers: Map<String, String>,
+    val revealedCells: Set<String>
 )

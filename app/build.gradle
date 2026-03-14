@@ -214,7 +214,8 @@ dependencies {
 
 
     implementation(project(":router"))
-    implementation(project(path: ":games:core"))
+    implementation(project(path: ":games:results"))
+    implementation(project(path: ':games:feature-card'))
     implementation(project(path: ":games:crossword"))
 
 }

@@ -18,7 +18,7 @@ internal class CrosswordMapGenerator @Inject constructor() {
             val grid = mutableMapOf<String, CrosswordCell>()
             val clues = mutableMapOf<Int, CrosswordClue>()
 
-            response.puzzle.forEachIndexed { puzzleIndex, puzzle ->
+            response.puzzle?.forEachIndexed { puzzleIndex, puzzle ->
                 val currentWordId = puzzleIndex + 1
                 var isSerialSet = false
 
@@ -93,8 +93,8 @@ internal class CrosswordMapGenerator @Inject constructor() {
             }
 
             // Fill remaining cells with NO_WORD
-            for (row in 0 until response.gridInfo.rows) {
-                for (col in 0 until response.gridInfo.cols) {
+            for (row in 0 until (response.gridInfo?.rows ?: 0)) {
+                for (col in 0 until (response.gridInfo?.cols ?: 0)) {
                     val cell = grid["$row-$col"]
                     if (cell == null) {
                         grid["$row-$col"] =

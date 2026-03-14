@@ -78,7 +78,7 @@ import com.pramod.dailyword.framework.util.buildUpdateAvailableToInstallSpannabl
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import com.pramod.dailyword.framework.widget.refreshWidget
-import com.pramod.dialyword.games.core.GameFeatureCards
+import com.pramod.dialyword.games.featureCard.GameFeatureCards
 import com.pramod.dialyword.router.AppRouter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

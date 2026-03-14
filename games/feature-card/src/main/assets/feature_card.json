@@ -1,0 +1,41 @@
+{
+  "feature_cards": [
+    {
+      "id": "feat_cw_wk42",
+      "game_id": "1",
+      "game_type": "CROSSWORD",
+      "status": "NEW",
+      "content": {
+        "title": "Weekly Crossword",
+        "subtitle": "Review this week's words in a fun, interactive puzzle."
+      },
+      "visuals": {
+        "badge_icon": "EXTENSION",
+        "watermark_icon": "GRID_ON",
+        "color_theme": "PRIMARY"
+      },
+      "action": {
+        "button_text": "Play now",
+        "route_uri": "app://dailyword.games/crossword?id=wk42"
+      }
+    },
+    {
+      "id": "feat_qz_daily",
+      "game_type": "QUIZ",
+      "status": "IN_PROGRESS",
+      "content": {
+        "title": "Daily Quick Quiz",
+        "subtitle": "Test your memory on the 5 words you learned yesterday."
+      },
+      "visuals": {
+        "badge_icon": "LIGHTBULB",
+        "watermark_icon": "HELP_OUTLINE",
+        "color_theme": "SECONDARY"
+      },
+      "action": {
+        "button_text": "Resume",
+        "route_uri": "app://dailyword.games/quiz?id=daily_vocab"
+      }
+    }
+  ]
+}

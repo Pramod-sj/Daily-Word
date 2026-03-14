@@ -11,6 +11,9 @@ import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.games.results.di.ResultsDataModule
+import com.pramod.dailyword.games.results.di.ResultsModule
+import com.pramod.dialyword.games.featureCard.di.FeatureCardDataModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +21,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [ResultsDataModule::class, ResultsModule::class, FeatureCardDataModule::class])
 @InstallIn(value = [SingletonComponent::class])
 object AppModule {
 
