@@ -5,41 +5,14 @@ package com.pramod.games.crossword
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.compose.BackHandler
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.pramod.dialyword.router.routes.CoreRoute
 import com.pramod.dialyword.router.AppRouter
-import com.pramod.games.crossword.ui.ClueBanner
-import com.pramod.games.crossword.ui.CrosswordTopAppBar
-import com.pramod.games.crossword.ui.DynamicCrosswordGrid
+import com.pramod.dialyword.router.routes.CoreRoute
+import com.pramod.games.crossword.ui.CrosswordScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -68,164 +41,16 @@ internal class CrosswordActivity : AppCompatActivity() {
         findViewById<ComposeView>(R.id.compose)
             .setContent {
                 CrosswordTheme {
-                    var showExitDialog by remember { mutableStateOf(false) }
-
-                    val result by viewModel.puzzleResult.collectAsState()
-                    val isPuzzleComplete = result != null
-
-                    BackHandler(!isPuzzleComplete) {
-                        showExitDialog = true
-                    }
-
-                    // 1. Create the state that controls the Snackbar
-                    val snackbarHostState = remember { SnackbarHostState() }
-
-                    // 2. Listen to the SharedFlow from your ViewModel
-                    LaunchedEffect(Unit) {
-                        viewModel.puzzleMessage.collect { message ->
-
-                            // Show the snackbar and wait for the user's response
-                            val result = snackbarHostState.showSnackbar(
-                                message = message.message,
-                                actionLabel = message.action?.name, // ✅ Adds the custom action button
-                                duration = SnackbarDuration.Long, // Give them slightly longer to click it
-                            )
-                            when (result) {
-                                SnackbarResult.ActionPerformed -> {
-                                    message.action?.callback?.invoke()
-                                }
-
-                                SnackbarResult.Dismissed -> Unit
-                            }
-
-                        }
-                    }
-
-                    Scaffold(
-                        snackbarHost = {
-                            SnackbarHost(hostState = snackbarHostState)
-                        },
-                        topBar = {
-                            CrosswordTopAppBar(
-                                viewModel = viewModel,
-                                onBackClick = {
-                                    if (isPuzzleComplete) {
-                                        onNavigateBack() // Leave instantly
-                                    } else {
-                                        showExitDialog = true // Show the warning
-                                    }
-                                },
-                            )
-                        },
-                        bottomBar = {
-                            Column(modifier = Modifier.fillMaxWidth()) {
-                                // The Clue Display
-                                ClueBanner(
-                                    clueMap = viewModel.clueMap.collectAsState(),
-                                    clueNumber = viewModel.activeWordId, // e.g., "5"
-                                    onNextClick = {
-                                        viewModel.nextClue()
-                                    },
-                                    onPreviousClick = {
-                                        viewModel.previousClue()
-                                    },
-                                    onViewWord = { wordId ->
-                                        appRouter.navigateTo(
-                                            context = this@CrosswordActivity,
-                                            routeUriString = CoreRoute.wordDetailPath(wordId)
-                                        )
-                                    },
-                                    result = viewModel.puzzleResult,
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp)) // A little breathing room before the keyboard
-
-                                GridKeyboard(
-                                    onKeyPress = {
-                                        viewModel.onKeyPress(it)
-                                    },
-                                    onToggleDirection = {
-                                        viewModel.toggleDirection()
-                                    },
-                                    onBackspacePress = {
-                                        viewModel.onBackPress()
-                                    },
-                                )
-                            }
-                        },
-                    ) {
-                        Box(modifier = Modifier.padding(it)) {
-                            DynamicCrosswordGrid(
-                                cellMap = viewModel.cellMap,
-                                selectedCellId = viewModel.selectedCellKey,
-                                activeWordId = viewModel.activeWordId,
-                                isPuzzleComplete = viewModel.isPuzzleComplete.collectAsState(),
-                                onCellClick = {
-                                    viewModel.onCellSelected("${it.row}-${it.col}")
-                                },
+                    CrosswordScreen(
+                        viewModel = viewModel,
+                        onNavigateBack = ::onNavigateBack,
+                        onViewWord = { wordId ->
+                            appRouter.navigateTo(
+                                context = this@CrosswordActivity,
+                                routeUriString = CoreRoute.wordDetailPath(wordId)
                             )
                         }
-
-                        val elapsedTimerText by viewModel.elapsedTimerText.collectAsState()
-
-                        // Show Dialog when puzzle is complete
-                        val resultState by viewModel.puzzleResult.collectAsState()
-
-                        val showResultDialog by viewModel.showCompletionDialog.collectAsState()
-
-                        // Only show the dialog if we have a generated result state
-                        if (showResultDialog) {
-                            resultState?.let { state ->
-                                PuzzleCompleteDialog(
-                                    timeTaken = elapsedTimerText,
-                                    resultState = state,
-                                    onDismiss = {
-                                        viewModel.dismissCompletionDialog()
-                                    },
-                                )
-                                LaunchedEffect(resultState) {
-                                    GlobalOverlayController.triggerConfetti()
-                                }
-                            }
-                        }
-
-                        // 3. The Dialog UI
-                        if (showExitDialog) {
-                            AlertDialog(
-                                onDismissRequest = { showExitDialog = false },
-                                title = {
-                                    Text(
-                                        text = "Leave Puzzle?",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Bold,
-                                    )
-                                },
-                                text = {
-                                    Text(
-                                        text = "Your progress will be saved safely. Are you sure you want to exit?",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                    )
-                                },
-                                confirmButton = {
-                                    TextButton(
-                                        onClick = {
-                                            showExitDialog = false
-                                            onNavigateBack() // Actually trigger the navigation
-                                        },
-                                    ) {
-                                        Text("Leave", color = MaterialTheme.colorScheme.error)
-                                    }
-                                },
-                                dismissButton = {
-                                    TextButton(onClick = { showExitDialog = false }) {
-                                        Text("Stay", fontWeight = FontWeight.Bold)
-                                    }
-                                },
-                            )
-                        }
-
-                        GlobalConfettiOverlay()
-                    }
+                    )
                 }
             }
     }

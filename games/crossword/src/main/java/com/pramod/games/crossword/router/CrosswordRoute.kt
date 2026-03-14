@@ -4,7 +4,7 @@ import com.pramod.dialyword.router.routes.CoreRoute.APP_BASE
 
 object CrosswordRoute {
 
-    const val CROSSWORD_PATH = "crossword"
+    const val CROSSWORD_PATH = "games/crossword"
     private const val CROSSWORD_ROUTE = "${APP_BASE}.games/$CROSSWORD_PATH"
 
     fun crosswordGameRoute(puzzleId: String): String {

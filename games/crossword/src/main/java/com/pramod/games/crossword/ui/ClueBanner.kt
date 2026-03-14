@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 internal fun ClueBanner(
-    clueMap: State<Map<Int, CrosswordClue>>,
+    clueMap: SnapshotStateMap<Int, CrosswordClue>,
     clueNumber: State<Int?>,
     result: StateFlow<PuzzleResultUiState?>,
     onPreviousClick: () -> Unit,
@@ -38,7 +39,7 @@ internal fun ClueBanner(
     onViewWord: (wordId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val clue = clueMap.value[clueNumber.value]
+    val clue = clueMap[clueNumber.value]
     val numberText = clueNumber.value?.toString() ?: ""
 
     val result by result.collectAsState()

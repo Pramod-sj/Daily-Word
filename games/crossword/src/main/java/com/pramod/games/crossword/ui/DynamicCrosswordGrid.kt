@@ -9,29 +9,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onSizeChanged
 import com.pramod.games.crossword.CrosswordCell
 import com.pramod.games.crossword.ui.boardGenerator.CellState
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 internal fun DynamicCrosswordGrid(
-    cellMap: StateFlow<Map<String, CrosswordCell>>,
+    cellMap: SnapshotStateMap<String, CrosswordCell>,
     activeWordId: MutableState<Int?>,
     selectedCellId: MutableState<String?>,
     isPuzzleComplete: State<Boolean>,
     onCellClick: (CrosswordCell) -> Unit,
 ) {
-    val cellMap by cellMap.collectAsState()
 
     val (rows, cols) = remember(cellMap) { calculateGridDimensions(cellMap) }
 
@@ -84,9 +82,13 @@ internal fun DynamicCrosswordGrid(
                 Row(modifier = Modifier.fillMaxWidth()) {
                     for (c in 0 until cols) {
                         val key = "$r-$c"
-                        val cell = cellMap[key] ?: CrosswordCell(r, c, state = CellState.NO_WORD)
+                        val cell = cellMap[key] ?: CrosswordCell(
+                            row = r,
+                            col = c,
+                            state = CellState.NO_WORD
+                        )
 
-                        key(key) {
+                        key(cell.key) {
                             Box(modifier = Modifier.weight(1f)) {
                                 CrosswordCellView(
                                     cell = cell,

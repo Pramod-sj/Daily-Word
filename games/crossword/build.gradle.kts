@@ -82,4 +82,8 @@ dependencies {
 
 
     implementation(project(":router"))
+
+
+    // Logging with OkHttp
+    implementation(libs.okhttpLoggingInterceptor) // Logging interceptor for OkHttp
 }

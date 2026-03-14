@@ -3,8 +3,9 @@ package com.pramod.games.crossword.network
 import com.pramod.games.crossword.Resource
 import com.pramod.games.crossword.network.data.CrosswordResponse
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
 
-internal class CrosswordRepositoryImpl constructor(
+internal class CrosswordRepositoryImpl @Inject constructor(
     private val crossWordApiService: CrossWordApiService
 ) : CrosswordRepository {
 

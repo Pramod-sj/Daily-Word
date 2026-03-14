@@ -1,11 +1,13 @@
 package com.pramod.games.crossword
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
-import com.pramod.dialyword.router.AppRouter
 import com.pramod.games.crossword.network.CrosswordRepository
 import com.pramod.games.crossword.ui.boardGenerator.CellState
 import com.pramod.games.crossword.ui.boardGenerator.CrosswordMapGenerator
@@ -15,22 +17,22 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.Int
-import kotlin.String
+import kotlin.collections.get
 import kotlin.math.roundToInt
 
+@Stable
 @HiltViewModel
 internal class CrosswordViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val crosswordRepository: CrosswordRepository,
-    private val cellProcessor: CrosswordMapGenerator,
-    private val appRouter: AppRouter
+    private val cellProcessor: CrosswordMapGenerator
 ) : ViewModel() {
 
     // region 1. Constants & Persistence Keys
@@ -41,7 +43,6 @@ internal class CrosswordViewModel @Inject constructor(
         private const val KEY_PUZZLE_COMPLETE = "puzzle_complete"
     }
     // endregion
-
 
     private val crosswordId = savedStateHandle.get<String>(CrosswordActivity.EXTRA_CROSSWORD_ID)
 
@@ -80,11 +81,11 @@ internal class CrosswordViewModel @Inject constructor(
     }
     // endregion
 
-    // region 3. Observable UI State (Flows)
-    val cellMap = MutableStateFlow<Map<String, CrosswordCell>>(emptyMap())
-    val clueMap = MutableStateFlow<Map<Int, CrosswordClue>>(emptyMap())
-    val elapsedTimerText = MutableStateFlow(formatMillis(elapsedSeconds))
+    // region 3. Observable UI State (Compose Native Maps)
+    val cellMap = mutableStateMapOf<String, CrosswordCell>()
+    val clueMap = mutableStateMapOf<Int, CrosswordClue>()
 
+    val elapsedTimerText = MutableStateFlow(formatMillis(elapsedSeconds))
     val isPuzzleComplete = MutableStateFlow(false)
 
     private val _puzzleResult = MutableStateFlow<PuzzleResultUiState?>(null)
@@ -93,7 +94,6 @@ internal class CrosswordViewModel @Inject constructor(
     private val _showCompletionDialog = MutableStateFlow(false)
     val showCompletionDialog = _showCompletionDialog.asStateFlow()
 
-    // Used to send one-time messages to the UI (like a Snackbar)
     private val _puzzleMessage = MutableSharedFlow<SnackBarMessage>(extraBufferCapacity = 1)
     val puzzleMessage = _puzzleMessage.asSharedFlow()
     // endregion
@@ -103,9 +103,10 @@ internal class CrosswordViewModel @Inject constructor(
     var activeWordId = mutableStateOf<Int?>(null)
     var isAcrossMode = mutableStateOf(true)
     private var timerJob: Job? = null
-
-    // Tracks if we already warned them so we don't spam the UI
     private var hasShownBoardFullWarning = false
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     // endregion
 
     // region 5. Initialization
@@ -116,29 +117,36 @@ internal class CrosswordViewModel @Inject constructor(
     private fun fetchPuzzle() {
         viewModelScope.launch {
             crosswordId ?: return@launch
+            _isLoading.value = true
             val resource = crosswordRepository.getCrossword(crosswordId)
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let { response ->
                         val crosswordPuzzleData = cellProcessor.generate(response = response)
-                        clueMap.value = crosswordPuzzleData.clueMap
+                        clueMap.clear()
+                        clueMap.putAll(crosswordPuzzleData.clueMap)
 
                         val restoredCells =
                             restoreCellStates(generatedMap = crosswordPuzzleData.cellMap)
 
-                        cellMap.value = restoredCells
+                        cellMap.clear()
+                        cellMap.putAll(restoredCells)
 
                         if (savedStateUserAnswers.isNotEmpty()) {
-                            // if user had done some selection previous just select last cell and start timer
-                            cellMap.value.entries.lastOrNull { it.value.userInput.isNotEmpty() }
-                                ?.let {
-                                    onCellSelected(it.key)
+                            // Safely find the "furthest" cell the user has filled in
+                            cellMap.values
+                                .filter { it.serialNumber != null }
+                                .firstOrNull { it.userInput.isNotEmpty() }
+                                ?.let { lastAnsweredCell ->
+                                    onCellSelected(lastAnsweredCell.key)
                                     startTimer()
                                 }
                         } else {
-                            cellMap.value.keys.firstOrNull()?.let { key ->
-                                onCellSelected(key)
-                            }
+                            // Safely find the absolute first playable cell in the grid (Top-Left-most)
+                            val firstPlayableCell = cellMap.values
+                                .filter { it.serialNumber != null }
+                                .minBy { it.serialNumber?.toIntOrNull() ?: 0 }
+                            onCellSelected(firstPlayableCell.key)
                         }
 
                         if (savedStatePuzzleComplete) {
@@ -151,13 +159,10 @@ internal class CrosswordViewModel @Inject constructor(
                     println(resource.error)
                 }
             }
+            _isLoading.value = false
         }
     }
 
-
-    /**
-     * Merges the freshly generated grid with answers and revealed states from SavedStateHandle.
-     */
     private fun restoreCellStates(generatedMap: Map<String, CrosswordCell>): Map<String, CrosswordCell> {
         return generatedMap.mapValues { (id, cell) ->
             val savedInput = savedStateUserAnswers[id]
@@ -171,7 +176,6 @@ internal class CrosswordViewModel @Inject constructor(
             }
         }
     }
-
     // endregion
 
     // region 6. User Input Actions (Keyboard)
@@ -179,20 +183,18 @@ internal class CrosswordViewModel @Inject constructor(
         if (isPuzzleComplete.value) return
 
         val key = selectedCellKey.value ?: return
-        val currentCell = cellMap.value[key] ?: return
+        val currentCell = cellMap[key] ?: return
 
         if (currentCell.state == CellState.REVEALED) {
-            moveToNextCell(currentCell) // Still move the cursor forward
+            moveToNextCell(currentCell)
             if (timerJob == null) startTimer()
-            return // Stop execution here so it doesn't overwrite the revealed letter
+            return
         }
 
-        val updatedMap = cellMap.value.toMutableMap()
-        updatedMap[key] = currentCell.copy(
+        cellMap[key] = currentCell.copy(
             userInput = letter.toString(),
             state = CellState.DRAFT,
         )
-        cellMap.value = updatedMap
         updateUserAnswer(key, letter.toString())
 
         moveToNextCell(currentCell)
@@ -204,19 +206,17 @@ internal class CrosswordViewModel @Inject constructor(
         if (isPuzzleComplete.value) return
 
         val currSelectedKey = selectedCellKey.value ?: return
-        val currentCell = cellMap.value[currSelectedKey] ?: return
+        val currentCell = cellMap[currSelectedKey] ?: return
 
         if (currentCell.state == CellState.REVEALED) {
-            moveToPreviousCell(currentCell) // Still move the cursor backward
-            return // Stop execution here so it doesn't clear the revealed letter
+            moveToPreviousCell(currentCell)
+            return
         }
 
-        val updatedMap = cellMap.value.toMutableMap()
-        updatedMap[currSelectedKey] = currentCell.copy(
+        cellMap[currSelectedKey] = currentCell.copy(
             userInput = "",
             state = CellState.EMPTY,
         )
-        cellMap.value = updatedMap
         updateUserAnswer(currSelectedKey, "")
 
         moveToPreviousCell(currentCell)
@@ -226,7 +226,7 @@ internal class CrosswordViewModel @Inject constructor(
 
     // region 7. Navigation & Selection Logic
     fun onCellSelected(key: String) {
-        val cell = cellMap.value[key] ?: return
+        val cell = cellMap[key] ?: return
         val previousKey = selectedCellKey.value
 
         if (previousKey == key) {
@@ -250,7 +250,7 @@ internal class CrosswordViewModel @Inject constructor(
     }
 
     fun toggleDirection() {
-        val cell = cellMap.value[selectedCellKey.value] ?: return
+        val cell = cellMap[selectedCellKey.value] ?: return
         if (isAcrossMode.value) {
             if (cell.downWordId != null) {
                 isAcrossMode.value = false
@@ -274,7 +274,7 @@ internal class CrosswordViewModel @Inject constructor(
             val nextRow = if (isAcross) current.row else current.row + step
             val nextCol = if (isAcross) current.col + step else current.col
             val nextKey = "$nextRow-$nextCol"
-            val nextCell = cellMap.value[nextKey]
+            val nextCell = cellMap[nextKey]
             val sameWord =
                 if (isAcross) nextCell?.acrossWordId == wordId else nextCell?.downWordId == wordId
 
@@ -294,7 +294,7 @@ internal class CrosswordViewModel @Inject constructor(
         val prevCol = if (isAcrossMode.value) current.col - 1 else current.col
         val prevKey = "$prevRow-$prevCol"
 
-        val prevCell = cellMap.value[prevKey]
+        val prevCell = cellMap[prevKey]
         val sameWord = if (isAcrossMode.value) {
             prevCell?.acrossWordId == activeWordId.value
         } else {
@@ -330,7 +330,7 @@ internal class CrosswordViewModel @Inject constructor(
         activeWordId.value = targetWordId
         isAcrossMode.value = targetIsAcross
 
-        val wordCells = cellMap.value.values.filter { cell ->
+        val wordCells = cellMap.values.filter { cell ->
             if (targetIsAcross) cell.acrossWordId == targetWordId else cell.downWordId == targetWordId
         }
         val startingCell = wordCells.minWithOrNull(compareBy({ it.row }, { it.col }))
@@ -338,7 +338,7 @@ internal class CrosswordViewModel @Inject constructor(
     }
 
     private fun getOrderedClues(): List<Pair<Int, Boolean>> {
-        val cells = cellMap.value.values
+        val cells = cellMap.values
         val across = cells.mapNotNull { it.acrossWordId }.distinct().sorted().map { it to true }
         val down = cells.mapNotNull { it.downWordId }.distinct().sorted().map { it to false }
         return (across + down).sortedBy { it.first }
@@ -348,14 +348,12 @@ internal class CrosswordViewModel @Inject constructor(
     // region 8. Reveal Features
     fun revealLetter() {
         val key = selectedCellKey.value ?: return
-        val cell = cellMap.value[key] ?: return
+        val cell = cellMap[key] ?: return
 
-        val updatedMap = cellMap.value.toMutableMap()
-        updatedMap[key] = cell.copy(
+        cellMap[key] = cell.copy(
             userInput = cell.correctChar.toString(),
             state = CellState.REVEALED,
         )
-        cellMap.value = updatedMap
 
         updateUserAnswer(key, cell.correctChar.toString())
         savedStateHandle[KEY_REVEALED_CELLS] =
@@ -366,39 +364,36 @@ internal class CrosswordViewModel @Inject constructor(
     fun revealWord() {
         val wordId = activeWordId.value ?: return
         val isAcross = isAcrossMode.value
-        val updatedMap = cellMap.value.toMutableMap()
 
-        updatedMap.forEach { (key, cell) ->
-            val belongsToWord =
-                if (isAcross) cell.acrossWordId == wordId else cell.downWordId == wordId
-            if (belongsToWord) {
-                updatedMap[key] =
-                    cell.copy(userInput = cell.correctChar.toString(), state = CellState.REVEALED)
-                updateUserAnswer(key, cell.correctChar.toString())
-                savedStateHandle[KEY_REVEALED_CELLS] =
-                    savedStateRevealedAnswerSet.toMutableSet().apply { add(key) }
-            }
+        val cellsToUpdate = cellMap.filter { (_, cell) ->
+            if (isAcross) cell.acrossWordId == wordId else cell.downWordId == wordId
         }
-        cellMap.value = updatedMap
+
+        cellsToUpdate.forEach { (key, cell) ->
+            cellMap[key] =
+                cell.copy(userInput = cell.correctChar.toString(), state = CellState.REVEALED)
+            updateUserAnswer(key, cell.correctChar.toString())
+            savedStateHandle[KEY_REVEALED_CELLS] =
+                savedStateRevealedAnswerSet.toMutableSet().apply { add(key) }
+        }
         evaluateScoreAndCompletion()
     }
 
     fun revealPuzzle() {
-        val updatedMap = cellMap.value.toMutableMap()
-        updatedMap.forEach { (key, cell) ->
-            if (cell.state != CellState.NO_WORD && !cell.userInput.equals(
-                    cell.correctChar.toString(),
-                    ignoreCase = true,
-                )
-            ) {
-                updatedMap[key] =
-                    cell.copy(userInput = cell.correctChar.toString(), state = CellState.REVEALED)
-                updateUserAnswer(key, cell.correctChar.toString())
-                savedStateHandle[KEY_REVEALED_CELLS] =
-                    savedStateRevealedAnswerSet.toMutableSet().apply { add(key) }
-            }
+        val cellsToUpdate = cellMap.filter { (_, cell) ->
+            cell.state != CellState.NO_WORD && !cell.userInput.equals(
+                cell.correctChar.toString(),
+                ignoreCase = true
+            )
         }
-        cellMap.value = updatedMap
+
+        cellsToUpdate.forEach { (key, cell) ->
+            cellMap[key] =
+                cell.copy(userInput = cell.correctChar.toString(), state = CellState.REVEALED)
+            updateUserAnswer(key, cell.correctChar.toString())
+            savedStateHandle[KEY_REVEALED_CELLS] =
+                savedStateRevealedAnswerSet.toMutableSet().apply { add(key) }
+        }
         evaluateScoreAndCompletion()
     }
     // endregion
@@ -406,66 +401,54 @@ internal class CrosswordViewModel @Inject constructor(
     // region 9. Check Features
     fun checkLetter() {
         val key = selectedCellKey.value ?: return
-        val cell = cellMap.value[key] ?: return
+        val cell = cellMap[key] ?: return
 
-        // Don't check if empty or already revealed
         if (cell.userInput.isEmpty() || cell.state == CellState.REVEALED) return
 
-        val updatedMap = cellMap.value.toMutableMap()
-        updatedMap[key] = cell.copy(
+        cellMap[key] = cell.copy(
             state = CellState.CHECKED,
             isCheckedLetterCorrect = cell.correctChar.toString()
                 .equals(cell.userInput, ignoreCase = true)
         )
-        cellMap.value = updatedMap
     }
 
     fun checkWord() {
         val wordId = activeWordId.value ?: return
         val isAcross = isAcrossMode.value
-        val updatedMap = cellMap.value.toMutableMap()
 
-        updatedMap
-            .filter { it.value.state != CellState.NO_WORD }
-            .forEach { (key, cell) ->
-                val belongsToWord =
-                    if (isAcross) cell.acrossWordId == wordId else cell.downWordId == wordId
+        val cellsToUpdate = cellMap.filter { (_, cell) ->
+            val belongsToWord =
+                if (isAcross) cell.acrossWordId == wordId else cell.downWordId == wordId
+            belongsToWord && cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED && cell.state != CellState.NO_WORD
+        }
 
-                // Only check cells in the word that have user input and aren't already revealed
-                if (belongsToWord && cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED) {
-                    updatedMap[key] = cell.copy(
-                        state = CellState.CHECKED,
-                        isCheckedLetterCorrect = cell.correctChar.toString()
-                            .equals(cell.userInput, ignoreCase = true)
-                    )
-                }
-            }
-        cellMap.value = updatedMap
+        cellsToUpdate.forEach { (key, cell) ->
+            cellMap[key] = cell.copy(
+                state = CellState.CHECKED,
+                isCheckedLetterCorrect = cell.correctChar.toString()
+                    .equals(cell.userInput, ignoreCase = true)
+            )
+        }
     }
 
     fun checkPuzzle() {
-        val updatedMap = cellMap.value.toMutableMap()
+        val cellsToUpdate = cellMap.filter { (_, cell) ->
+            cell.state != CellState.NO_WORD && cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED
+        }
 
-        updatedMap
-            .filter { it.value.state != CellState.NO_WORD }
-            .forEach { (key, cell) ->
-                // Only check cells that have user input and aren't already revealed
-                if (cell.userInput.isNotEmpty() && cell.state != CellState.REVEALED) {
-                    updatedMap[key] = cell.copy(
-                        state = CellState.CHECKED,
-                        isCheckedLetterCorrect = cell.correctChar.toString()
-                            .equals(cell.userInput, ignoreCase = true)
-                    )
-                }
-            }
-        cellMap.value = updatedMap
+        cellsToUpdate.forEach { (key, cell) ->
+            cellMap[key] = cell.copy(
+                state = CellState.CHECKED,
+                isCheckedLetterCorrect = cell.correctChar.toString()
+                    .equals(cell.userInput, ignoreCase = true)
+            )
+        }
     }
-
     // endregion
 
-    // region 9. Scoring & Completion Logic
+    // region 10. Scoring & Completion Logic
     private fun evaluateScoreAndCompletion() {
-        val cells = cellMap.value.values.filter { it.state != CellState.NO_WORD }
+        val cells = cellMap.values.filter { it.state != CellState.NO_WORD }
         val acrossWords = cells.mapNotNull { it.acrossWordId }.distinct()
         val downWords = cells.mapNotNull { it.downWordId }.distinct()
         val totalWords = acrossWords.size + downWords.size
@@ -525,7 +508,6 @@ internal class CrosswordViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     private fun onPuzzleCompleted(state: PuzzleResultUiState) {
@@ -561,7 +543,11 @@ internal class CrosswordViewModel @Inject constructor(
 
         score >= 80 -> {
             PuzzleResultUiState(
-                "Outstanding!", "Brilliant job!", "Awesome", ScoreTier.EXCELLENT, score = score
+                title = "Outstanding!",
+                message = "Brilliant job!",
+                buttonText = "Awesome",
+                tier = ScoreTier.EXCELLENT,
+                score = score
             )
         }
 
@@ -597,7 +583,7 @@ internal class CrosswordViewModel @Inject constructor(
     }
     // endregion
 
-    // region 10. Timer & Formatting Helpers
+    // region 11. Timer & Formatting Helpers
     private fun startTimer() {
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
@@ -624,33 +610,41 @@ internal class CrosswordViewModel @Inject constructor(
     // endregion
 }
 
+// ==========================================
+// MODELS & DATA CLASSES
+// ==========================================
+
+@Immutable
 data class CrosswordCell(
     val row: Int,
     val col: Int,
     val serialNumber: String? = null,
-    // Explicitly link to the Word IDs from your JSON
     val acrossWordId: Int? = null,
     val downWordId: Int? = null,
     val correctChar: Char? = null,
     val userInput: String = "",
     val state: CellState = CellState.EMPTY,
     val isCheckedLetterCorrect: Boolean? = null
-)
+) {
+    val key = "$row-$col"
+}
 
-// ✅ Separate model to hold clues — don't put them in the cell
+@Immutable
 data class CrosswordClue(
     val wordId: Int,
     val clueText: String,
-    val direction: String, // "across" or "down"
-    val answer: String, // optional, useful for hint feature
+    val direction: String,
+    val answer: String,
     val startCellKey: String,
     val wordIdDate: String,
 )
 
+@Immutable
 enum class ScoreTier {
     EXCELLENT, GOOD, FAIR, LEARNING,
 }
 
+@Immutable
 data class PuzzleResultUiState(
     val title: String,
     val message: String,
@@ -658,7 +652,6 @@ data class PuzzleResultUiState(
     val tier: ScoreTier,
     val score: Int,
 )
-
 
 data class SnackBarMessage(
     val message: String,
@@ -668,7 +661,6 @@ data class SnackBarMessage(
     val parentViewId: Int? = null,
     val anchorId: Int? = null
 )
-
 
 data class Action(
     val name: String? = null,

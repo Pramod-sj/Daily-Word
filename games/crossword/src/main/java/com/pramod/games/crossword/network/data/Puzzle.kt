@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 internal data class Puzzle(
-    @SerializedName("wordId")
+    @SerializedName("word_id")
     val wordId: String?,
     @SerializedName("answer")
     val answer: String?,
