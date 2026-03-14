@@ -61,7 +61,7 @@ internal class CrosswordViewModel @Inject constructor(
             savedStateHandle[KEY_PUZZLE_COMPLETE] = value
         }
 
-    private var elapsedSeconds: Long
+    private var elapsedMillis: Long
         get() = savedStateHandle[KEY_ELAPSED_SECONDS] ?: 0
         set(value) {
             savedStateHandle[KEY_ELAPSED_SECONDS] = value
@@ -87,7 +87,7 @@ internal class CrosswordViewModel @Inject constructor(
     val cellMap = mutableStateMapOf<String, CrosswordCell>()
     val clueMap = mutableStateMapOf<Int, CrosswordClue>()
 
-    val elapsedTimerText = MutableStateFlow(formatMillis(elapsedSeconds))
+    val elapsedTimerText = MutableStateFlow(formatMillis(elapsedMillis))
     val isPuzzleComplete = MutableStateFlow(false)
 
     private val _puzzleResult = MutableStateFlow<PuzzleResultUiState?>(null)
@@ -178,8 +178,8 @@ internal class CrosswordViewModel @Inject constructor(
         isPuzzleComplete.value = true
         savedStatePuzzleComplete = true
         _puzzleResult.value = generateResultState(dbResult.score)
-        elapsedSeconds = dbResult.completionTimeMillis
-        elapsedTimerText.value = formatMillis(elapsedSeconds)
+        elapsedMillis = dbResult.completionTimeMillis
+        elapsedTimerText.value = formatMillis(elapsedMillis)
         stopTimer()
 
         val gson = Gson()
@@ -571,7 +571,7 @@ internal class CrosswordViewModel @Inject constructor(
                     GameResultEntity(
                         puzzleId = id,
                         gameType = GAME_TYPE_CROSSWORD,
-                        completionTimeMillis = elapsedSeconds,
+                        completionTimeMillis = elapsedMillis,
                         score = score,
                         scoreTier = tier.name,
                         gameData = gameDataJson
@@ -662,8 +662,8 @@ internal class CrosswordViewModel @Inject constructor(
             withContext(Dispatchers.Default) {
                 while (true) {
                     delay(1000L)
-                    elapsedSeconds += 1000L
-                    elapsedTimerText.value = formatMillis(elapsedSeconds)
+                    elapsedMillis += 1000L
+                    elapsedTimerText.value = formatMillis(elapsedMillis)
                 }
             }
         }
