@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(value = [SingletonComponent::class])
-interface FeatureCardDataModule {
+internal interface FeatureCardDataModule {
 
     @Singleton
     @Binds

@@ -1,5 +1,6 @@
 package com.pramod.dialyword.games.featureCard
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,9 +24,10 @@ import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Replay
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -34,8 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -108,30 +109,74 @@ internal fun PreviewFeatureCard() {
                 ),
                 onPlayClick = {}
             )
+
+            FeatureNudge(
+                card = FeatureCard(
+                    id = "feat_cw_wk42",
+                    gameId = "1",
+                    gameType = "CROSSWORD",
+                    status = "NEW",
+                    content = CardContent(
+                        title = "Weekly Crossword",
+                        subtitle = "Review this week's words in a fun puzzle."
+                    ),
+                    visuals = CardVisuals(
+                        badgeIcon = "EXTENSION",
+                        watermarkIcon = "GRID_ON",
+                        colorTheme = "PRIMARY"
+                    ),
+                    action = CardAction(
+                        buttonText = "Play now",
+                        routeUri = "app://dailyword.games/crossword/wk42"
+                    ),
+                ),
+                onTap = {},
+                onDismiss = {}
+            )
+
         }
     }
 }
 
 @Composable
 fun GameFeatureCards(
+    screenName: String,
     onPlayClick: (uri: String) -> Unit
 ) {
 
     val viewModel = hiltViewModel<FeatureCardViewModel>()
 
-    val featuresState by viewModel.featuresState.collectAsStateWithLifecycle()
+    val featuresState by viewModel.featureCardsState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(screenName) { viewModel.getFeatureCard(screenName) }
 
     when (featuresState) {
         is FeatureUiState.Error -> Unit
         FeatureUiState.Loading -> Unit
         is FeatureUiState.Success -> {
-            Column {
+            Column(modifier = Modifier.animateContentSize()) {
                 (featuresState as FeatureUiState.Success).cards.forEach { card ->
                     key(card.id) {
-                        FeatureCard(
-                            card = card,
-                            onPlayClick = onPlayClick
-                        )
+                        when (card.placement?.cardTypeEnum) {
+                            CardDispayType.CARD -> {
+                                FeatureCard(
+                                    card = card,
+                                    onPlayClick = onPlayClick
+                                )
+                            }
+
+                            CardDispayType.NUDGE -> {
+                                FeatureNudge(
+                                    card = card,
+                                    onTap = onPlayClick,
+                                    onDismiss = { card ->
+                                        viewModel.onCardDismissed(card)
+                                    }
+                                )
+                            }
+
+                            else -> Unit
+                        }
                     }
                 }
             }
@@ -140,7 +185,7 @@ fun GameFeatureCards(
 }
 
 @Composable
-fun FeatureCard(
+internal fun FeatureCard(
     card: FeatureCard,
     onPlayClick: (uri: String) -> Unit
 ) {
@@ -177,6 +222,22 @@ fun FeatureCard(
             onClick = { card.action?.routeUri?.let { onPlayClick(it) } },
             modifier = Modifier
                 .fillMaxWidth()
+                .then(
+                    if (card.animation != null && card.result == null) {
+                        when (card.animation.typeEnum) {
+                            // glitter is perform in child view
+                            CardAnimationType.BOUNCE -> {
+                                Modifier.bounceAnimation(
+                                    key = card.id.orEmpty(),
+                                    playCount = card.animation.playCount ?: 1,
+                                    startDelayMs = card.animation.startDelayMs ?: 0L
+                                )
+                            }
+
+                            else -> Modifier
+                        }
+                    } else Modifier
+                )
                 .padding(horizontal = 16.dp, vertical = 6.dp),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = colorScheme.surfaceContainer),
@@ -185,7 +246,23 @@ fun FeatureCard(
                 color = containerColor
             )
         ) {
-            Column {
+            Column(
+                modifier = Modifier.then(
+                    if (card.animation != null && card.result == null) {
+                        when (card.animation.typeEnum) {
+                            CardAnimationType.GLITTER_SHIMMER -> {
+                                Modifier.glitterShimmer(
+                                    key = card.id.orEmpty(),
+                                    playCount = card.animation.playCount ?: 1,
+                                    startDelayMs = card.animation.startDelayMs ?: 0L
+                                )
+                            }
+
+                            else -> Modifier
+                        }
+                    } else Modifier
+                )
+            ) {
 
                 // ── Top section ───────────────────────────────────────────
                 Box(
@@ -363,6 +440,171 @@ fun FeatureCard(
 }
 
 @Composable
+internal fun FeatureNudge(
+    card: FeatureCard,
+    onTap: (uri: String) -> Unit,
+    onDismiss: ((FeatureCard) -> Unit)? = null
+) {
+    CrosswordTheme {
+        val colorScheme = MaterialTheme.colorScheme
+        val safeColorTheme = card.visuals?.colorTheme?.uppercase()
+
+        val containerColor = when (safeColorTheme) {
+            "PRIMARY" -> colorScheme.primaryContainer
+            "SECONDARY" -> colorScheme.secondaryContainer
+            else -> colorScheme.tertiaryContainer
+        }
+        val onContainerColor = when (safeColorTheme) {
+            "PRIMARY" -> colorScheme.onPrimaryContainer
+            "SECONDARY" -> colorScheme.onSecondaryContainer
+            else -> colorScheme.onTertiaryContainer
+        }
+        val colorAccent = when (safeColorTheme) {
+            "PRIMARY" -> colorScheme.primary
+            "SECONDARY" -> colorScheme.secondary
+            else -> colorScheme.tertiary
+        }
+
+        val onColorAccent = when (safeColorTheme) {
+            "PRIMARY" -> colorScheme.onPrimary
+            "SECONDARY" -> colorScheme.onSecondary
+            else -> colorScheme.onTertiary
+        }
+
+        Surface(
+            onClick = { card.action?.routeUri?.let { onTap(it) } },
+            modifier = Modifier
+                .then(
+                    if (card.animation != null && card.result == null) {
+                        when (card.animation.typeEnum) {
+                            // glitter is perform in child view
+                            CardAnimationType.BOUNCE -> {
+                                Modifier.bounceAnimation(
+                                    key = card.id.orEmpty(),
+                                    playCount = card.animation.playCount ?: 1,
+                                    startDelayMs = card.animation.startDelayMs ?: 0L
+                                )
+                            }
+
+                            else -> Modifier
+                        }
+                    } else Modifier
+                )
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            shape = RoundedCornerShape(10.dp),
+            color = containerColor.copy(alpha = 0.5f),
+            border = BorderStroke(1.dp, containerColor)
+        ) {
+            Row(
+                modifier = Modifier
+                    .then(
+                        if (card.animation != null && card.result == null) {
+                            when (card.animation.typeEnum) {
+                                CardAnimationType.GLITTER_SHIMMER -> {
+                                    Modifier.glitterShimmer(
+                                        key = card.id.orEmpty(),
+                                        playCount = card.animation.playCount ?: 1,
+                                        startDelayMs = card.animation.startDelayMs ?: 0L
+                                    )
+                                }
+
+                                else -> Modifier
+                            }
+                        } else Modifier
+                    )
+                    .padding(
+                        start = 10.dp,
+                        end = if (onDismiss != null) 6.dp else 10.dp,
+                        top = 8.dp,
+                        bottom = 8.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // Badge icon
+                val badgeIcon = when (card.visuals?.badgeIcon?.uppercase()) {
+                    "LIGHTBULB" -> Icons.Outlined.Lightbulb
+                    "EXTENSION" -> Icons.Outlined.Extension
+                    else -> null
+                }
+                badgeIcon?.let {
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = colorAccent,
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = it,
+                                contentDescription = null,
+                                tint = onColorAccent,
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                    }
+                }
+
+                // Title + subtitle inline
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = card.content?.title.orEmpty(),
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = onContainerColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    card.content?.subtitle?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = onContainerColor.copy(alpha = 0.55f),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            softWrap = false
+                        )
+                    }
+                }
+
+                // Right slot — close button or chevron
+                if (onDismiss != null) {
+                    Box(modifier = Modifier.padding(end = 2.dp)) {
+                        Surface(
+                            onClick = { onDismiss(card) },
+                            shape = CircleShape,
+                            color = containerColor,
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Close,
+                                    contentDescription = "Dismiss",
+                                    tint = onContainerColor,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    Icon(
+                        imageVector = Icons.Rounded.ChevronRight,
+                        contentDescription = null,
+                        tint = onContainerColor.copy(alpha = 0.4f),
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun CardWatermark(
     key: String?,
     tint: Color,
@@ -409,7 +651,7 @@ private fun Long.formatAsTime(): String {
 }
 
 
-enum class WatermarkIcon(val key: String) {
+internal enum class WatermarkIcon(val key: String) {
     GRID_ON("GRID_ON"),
     HELP_OUTLINE("HELP_OUTLINE"),
     EXTENSION("EXTENSION"),
@@ -423,7 +665,7 @@ enum class WatermarkIcon(val key: String) {
     }
 }
 
-fun WatermarkIcon.toImageVector(): ImageVector = when (this) {
+internal fun WatermarkIcon.toImageVector(): ImageVector = when (this) {
     WatermarkIcon.GRID_ON -> Icons.Outlined.GridOn
     WatermarkIcon.HELP_OUTLINE -> Icons.Outlined.Help
     WatermarkIcon.EXTENSION -> Icons.Outlined.Extension

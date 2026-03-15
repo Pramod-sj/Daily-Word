@@ -50,7 +50,7 @@ class RecapWordsActivity :
         adController.loadBanner(binding.cardAd)
 
         binding.composeView.setContent {
-            GameFeatureCards { uri ->
+            GameFeatureCards(screenName = screenName) { uri ->
                 appRouter.navigateTo(context = this, routeUriString = uri)
             }
         }

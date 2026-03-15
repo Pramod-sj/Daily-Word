@@ -159,7 +159,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleNavigationToDisableBatteryOptimization()
 
         binding.composeView?.setContent {
-            GameFeatureCards { uri ->
+            GameFeatureCards(screenName = screenName) { uri ->
                 appRouter.navigateTo(
                     context = this,
                     routeUriString = uri

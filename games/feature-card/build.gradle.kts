@@ -73,4 +73,7 @@ dependencies {
     debugImplementation(libs.composeUiTooling) // UI tooling for debugging Compose
 
     implementation(project(":games:results"))
+
+    implementation(libs.preferenceKtx) // Kotlin extensions for shared preferences
+
 }

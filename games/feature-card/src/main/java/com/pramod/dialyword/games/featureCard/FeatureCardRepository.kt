@@ -8,4 +8,6 @@ interface FeatureCardRepository {
 
     suspend fun fetchLiveFeatures()
 
+    suspend fun getFeatureCard(screenName: String): StateFlow<FeatureUiState>
+
 }

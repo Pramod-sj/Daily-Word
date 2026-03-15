@@ -13,7 +13,6 @@ import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.games.results.di.ResultsDataModule
 import com.pramod.dailyword.games.results.di.ResultsModule
-import com.pramod.dialyword.games.featureCard.di.FeatureCardDataModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +20,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module(includes = [ResultsDataModule::class, ResultsModule::class, FeatureCardDataModule::class])
+@Module(includes = [ResultsDataModule::class, ResultsModule::class])
 @InstallIn(value = [SingletonComponent::class])
 object AppModule {
 

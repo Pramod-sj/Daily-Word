@@ -3,19 +3,23 @@ package com.pramod.dialyword.games.featureCard
 import com.pramod.dailyword.games.results.GameResultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FeatureCardRepositoryImpl @Inject constructor(
+internal class FeatureCardRepositoryImpl @Inject constructor(
     private val apiService: GamesApiService,
-    private val gameResultRepository: GameResultRepository
+    gameResultRepository: GameResultRepository,
 ) : FeatureCardRepository {
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val _apiState = MutableStateFlow<FeatureUiState>(FeatureUiState.Loading)
 
@@ -23,7 +27,6 @@ class FeatureCardRepositoryImpl @Inject constructor(
         _apiState,
         gameResultRepository.getAllResults()
     ) { apiState, allLocalResults ->
-
         when (apiState) {
             is FeatureUiState.Success -> {
                 // Enrich the cards with the latest Room data
@@ -37,7 +40,7 @@ class FeatureCardRepositoryImpl @Inject constructor(
             else -> apiState
         }
     }.stateIn(
-        scope = CoroutineScope(context = Dispatchers.Default),
+        scope = coroutineScope,
         started = SharingStarted.Lazily,
         initialValue = FeatureUiState.Loading
     )
@@ -54,5 +57,22 @@ class FeatureCardRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             _apiState.value = FeatureUiState.Error(e.message ?: "Network Error")
         }
+    }
+
+    override suspend fun getFeatureCard(screenName: String): StateFlow<FeatureUiState> {
+        return featuresState.map { state ->
+            when (state) {
+                is FeatureUiState.Error,
+                FeatureUiState.Loading -> state
+
+                is FeatureUiState.Success -> state.copy(
+                    cards = state.cards.filter { screenName in it.placement?.screens.orEmpty() }
+                )
+            }
+        }.stateIn(
+            scope = CoroutineScope(context = Dispatchers.Default),
+            started = SharingStarted.Lazily,
+            initialValue = FeatureUiState.Loading
+        )
     }
 }
