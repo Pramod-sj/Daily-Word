@@ -1,52 +1,73 @@
 {
   "status": "success",
   "grid": {
-    "rows": 18,
-    "cols": 18
+    "rows": 17,
+    "cols": 17
   },
-  "total_placed": 5,
+  "total_placed": 7,
   "puzzle": [
     {
-      "wordId" : "2026-02-16",
-      "answer": "PREROGATIVE",
-      "clue": "Special right or privilege",
-      "row": 7,
-      "col": 3,
-      "direction": "horizontal",
-      "length": 11
-    },
-    {
-      "wordId" : "2026-02-18",
-      "answer": "GOLDILOCKS",
-      "clue": "No clue provided",
-      "row": 7,
-      "col": 8,
-      "direction": "vertical",
-      "length": 10
-    },
-    {
-      "answer": "SYLLOGISM",
-      "clue": "Deductive reasoning method",
-      "row": 1,
-      "col": 11,
-      "direction": "vertical",
-      "length": 9
-    },
-    {
-      "answer": "ABDICATE",
-      "clue": "No clue provided",
-      "row": 0,
+      "word_id": "2026-03-10",
+      "answer": "MEACULPA",
+      "clue": "Statement of guilt",
+      "row": 6,
       "col": 5,
+      "direction": "horizontal",
+      "length": 8
+    },
+    {
+      "word_id": "2026-03-11",
+      "answer": "BESOTTED",
+      "clue": "Completely smitten",
+      "row": 5,
+      "col": 6,
       "direction": "vertical",
       "length": 8
     },
     {
-      "answer": "LACONIC",
-      "clue": "Using very few words",
-      "row": 12,
-      "col": 8,
-      "direction": "horizontal",
+      "word_id": "2026-03-15",
+      "answer": "TRANCHE",
+      "clue": "Slice of a fund",
+      "row": 4,
+      "col": 12,
+      "direction": "vertical",
       "length": 7
+    },
+    {
+      "word_id": "2026-03-09",
+      "answer": "HECTOR",
+      "clue": "Badger and intimidate",
+      "row": 4,
+      "col": 8,
+      "direction": "vertical",
+      "length": 6
+    },
+    {
+      "word_id": "2026-03-12",
+      "answer": "GAMBIT",
+      "clue": "Conversation starting remark",
+      "row": 9,
+      "col": 1,
+      "direction": "horizontal",
+      "length": 6
+    },
+    {
+      "word_id": "2026-03-13",
+      "answer": "IMMURE",
+      "clue": "Entomb within walls",
+      "row": 11,
+      "col": 1,
+      "direction": "horizontal",
+      "length": 6
+    },
+    {
+      "word_id": "2026-03-14",
+      "answer": "RASH",
+      "clue": "Skin irritation spot",
+      "row": 5,
+      "col": 12,
+      "direction": "horizontal",
+      "length": 4
     }
   ]
 }

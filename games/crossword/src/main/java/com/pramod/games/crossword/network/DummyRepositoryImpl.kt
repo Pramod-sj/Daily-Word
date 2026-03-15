@@ -5,12 +5,14 @@ import com.google.gson.Gson
 import com.pramod.dailyword.games.results.GameResultEntity
 import com.pramod.games.crossword.Resource
 import com.pramod.games.crossword.network.data.CrosswordResponse
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-internal class DummyRepositoryImpl constructor(
-    private val context: Context,
+internal class DummyRepositoryImpl @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     private val gson: Gson,
 ) : CrosswordRepository {
     override suspend fun getCrossword(crosswordId: String): Resource<CrosswordResponse?> =
