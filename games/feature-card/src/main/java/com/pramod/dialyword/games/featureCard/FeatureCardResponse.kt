@@ -25,7 +25,9 @@ data class FeatureCard(
 )
 
 data class CardContent(
-    @SerializedName("title") val title: String?, @SerializedName("subtitle") val subtitle: String?
+    @SerializedName("headerTitle") val overlineText: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("subtitle") val subtitle: String?
 )
 
 
@@ -45,11 +47,26 @@ data class CardAction(
 data class DismissConfig(
     @SerializedName("enabled") val enabled: Boolean?,
     @SerializedName("scope") val scope: String?,
-    @SerializedName("ttl_hours") val ttlHours: Int?
+    @SerializedName("ttl_hours") val ttlHours: Int?,
+    @SerializedName("triggers") val triggers: List<String>?,
 ) {
     val scopeEnum: DismissScope get() = DismissScope.from(scope)
 }
 
+fun DismissConfig?.isDismissTrigger(trigger: DismissTrigger): Boolean {
+    return this?.triggers?.contains(trigger.name.uppercase()) == true
+}
+
+
+enum class DismissTrigger {
+    CLOSE_BUTTON,
+    ON_CARD_TAP;
+
+    companion object {
+        fun from(value: String?): DismissTrigger =
+            DismissTrigger.entries.find { it.name.equals(value, ignoreCase = true) } ?: CLOSE_BUTTON
+    }
+}
 
 data class CardPlacement(
     @SerializedName("promoted") val promoted: Boolean?,

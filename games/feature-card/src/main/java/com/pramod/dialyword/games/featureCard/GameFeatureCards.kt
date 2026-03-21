@@ -70,7 +70,8 @@ internal fun PreviewFeatureCard() {
                     gameType = "CROSSWORD",
                     status = "NEW",
                     content = CardContent(
-                        title = "Weekly Crossword",
+                        overlineText = "1 JAN - 8 JAN' 25",
+                        title = "Weekly Crossword - WEEK 1",
                         subtitle = "Review this week's words in a fun puzzle."
                     ),
                     visuals = CardVisuals(
@@ -94,6 +95,7 @@ internal fun PreviewFeatureCard() {
                     gameType = "QUIZ",
                     status = "COMPLETED",
                     content = CardContent(
+                        overlineText = "TODAY'S",
                         title = "Daily Quick Quiz",
                         subtitle = "Lock this week’s vocabulary permanently into your long-term memory."
                     ),
@@ -117,7 +119,8 @@ internal fun PreviewFeatureCard() {
                     gameType = "CROSSWORD",
                     status = "NEW",
                     content = CardContent(
-                        title = "Weekly Crossword",
+                        overlineText = "LAST WEEK'S CROSSWORD",
+                        title = "Weekly Crossword - 1",
                         subtitle = "Review this week's words in a fun puzzle."
                     ),
                     visuals = CardVisuals(
@@ -161,14 +164,28 @@ fun GameFeatureCards(
                             CardDispayType.CARD -> {
                                 FeatureCard(
                                     card = card,
-                                    onPlayClick = onPlayClick
+                                    onPlayClick = {
+                                        if (card.dismissConfig
+                                                .isDismissTrigger(DismissTrigger.ON_CARD_TAP)
+                                        ) {
+                                            viewModel.onCardDismissed(card)
+                                        }
+                                        onPlayClick(it)
+                                    }
                                 )
                             }
 
                             CardDispayType.NUDGE -> {
                                 FeatureNudge(
                                     card = card,
-                                    onTap = onPlayClick,
+                                    onTap = {
+                                        if (card.dismissConfig
+                                                .isDismissTrigger(DismissTrigger.ON_CARD_TAP)
+                                        ) {
+                                            viewModel.onCardDismissed(card)
+                                        }
+                                        onPlayClick(it)
+                                    },
                                     onDismiss = { card ->
                                         viewModel.onCardDismissed(card)
                                     }
@@ -219,13 +236,16 @@ internal fun FeatureCard(
         }
 
         Card(
-            onClick = { card.action?.routeUri?.let { onPlayClick(it) } },
+            onClick = {
+                card.action?.routeUri?.let {
+                    onPlayClick(it)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .then(
                     if (card.animation != null && card.result == null) {
                         when (card.animation.typeEnum) {
-                            // glitter is perform in child view
                             CardAnimationType.BOUNCE -> {
                                 Modifier.bounceAnimation(
                                     key = card.id.orEmpty(),
@@ -318,7 +338,20 @@ internal fun FeatureCard(
                             Spacer(modifier = Modifier.width(12.dp))
                         }
 
+                        // ── TEXT COLUMN ─────────────────────────────────────
                         Column(modifier = Modifier.weight(1f)) {
+
+                            card.content?.overlineText?.let { overlineText ->
+                                Text(
+                                    text = card.content?.overlineText.orEmpty(),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colorAccent.copy(alpha = 0.8f),
+                                    modifier = Modifier.padding(bottom = 2.dp),
+                                    letterSpacing = 0.5.sp // Adds a nice premium feel to small caps
+                                )
+                            }
+
                             Text(
                                 text = card.content?.title.orEmpty(),
                                 style = MaterialTheme.typography.titleSmall,
@@ -464,7 +497,6 @@ internal fun FeatureNudge(
             "SECONDARY" -> colorScheme.secondary
             else -> colorScheme.tertiary
         }
-
         val onColorAccent = when (safeColorTheme) {
             "PRIMARY" -> colorScheme.onPrimary
             "SECONDARY" -> colorScheme.onSecondary
@@ -474,6 +506,7 @@ internal fun FeatureNudge(
         Surface(
             onClick = { card.action?.routeUri?.let { onTap(it) } },
             modifier = Modifier
+                .fillMaxWidth()
                 .then(
                     if (card.animation != null && card.result == null) {
                         when (card.animation.typeEnum) {
@@ -490,10 +523,11 @@ internal fun FeatureNudge(
                         }
                     } else Modifier
                 )
-                .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             shape = RoundedCornerShape(10.dp),
-            color = containerColor.copy(alpha = 0.5f),
+            // Match FeatureCard background logic (surfaceContainer)
+            color = colorScheme.surfaceContainer,
+            // Match FeatureCard border logic
             border = BorderStroke(1.dp, containerColor)
         ) {
             Row(
@@ -531,14 +565,16 @@ internal fun FeatureNudge(
                 badgeIcon?.let {
                     Surface(
                         shape = RoundedCornerShape(6.dp),
-                        color = colorAccent,
+                        // Match FeatureCard badge background
+                        color = containerColor,
                         modifier = Modifier.size(28.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = it,
                                 contentDescription = null,
-                                tint = onColorAccent,
+                                // Match FeatureCard badge icon tint
+                                tint = onContainerColor,
                                 modifier = Modifier.size(14.dp)
                             )
                         }
@@ -555,7 +591,8 @@ internal fun FeatureNudge(
                         text = card.content?.title.orEmpty(),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.SemiBold,
-                        color = onContainerColor,
+                        // Match FeatureCard title color
+                        color = colorAccent,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false)
@@ -564,7 +601,8 @@ internal fun FeatureNudge(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.labelMedium,
-                            color = onContainerColor.copy(alpha = 0.55f),
+                            // Match FeatureCard subtitle color
+                            color = colorScheme.onSurface.copy(alpha = 0.6f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             softWrap = false
@@ -578,14 +616,16 @@ internal fun FeatureNudge(
                         Surface(
                             onClick = { onDismiss(card) },
                             shape = CircleShape,
-                            color = containerColor,
+                            // Subtle background for the close button
+                            color = containerColor.copy(alpha = 0.5f),
                             modifier = Modifier.size(32.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Rounded.Close,
                                     contentDescription = "Dismiss",
-                                    tint = onContainerColor,
+                                    // Match accent color for consistency
+                                    tint = colorAccent,
                                     modifier = Modifier.size(12.dp)
                                 )
                             }
@@ -595,7 +635,8 @@ internal fun FeatureNudge(
                     Icon(
                         imageVector = Icons.Rounded.ChevronRight,
                         contentDescription = null,
-                        tint = onContainerColor.copy(alpha = 0.4f),
+                        // Tint chevron to match accent color slightly muted
+                        tint = colorAccent.copy(alpha = 0.6f),
                         modifier = Modifier.size(16.dp)
                     )
                 }
