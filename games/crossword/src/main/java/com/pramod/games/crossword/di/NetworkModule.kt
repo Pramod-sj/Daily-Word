@@ -1,5 +1,6 @@
 package com.pramod.games.crossword.di
 
+import com.pramod.dailyword.games.results.GameEndpointProvider
 import com.pramod.games.crossword.network.CrossWordApiService
 import dagger.Module
 import dagger.Provides
@@ -17,9 +18,11 @@ internal object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCrossWordApiService(): CrossWordApiService {
+    fun provideCrossWordApiService(
+        endpointProvider: GameEndpointProvider
+    ): CrossWordApiService {
         return Retrofit.Builder()
-            .baseUrl("https://dailyword.xyz/ci/index.php/")
+            .baseUrl(endpointProvider.getBaseUrl())
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))

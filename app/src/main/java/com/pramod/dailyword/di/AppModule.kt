@@ -8,11 +8,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.framework.GameEndpointProviderImpl
+import com.pramod.dailyword.framework.firebase.FBRemoteConfig
 import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
 import com.pramod.dailyword.games.results.di.ResultsDataModule
 import com.pramod.dailyword.games.results.di.ResultsModule
+import com.pramod.dailyword.games.results.GameEndpointProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,5 +75,12 @@ object AppModule {
         @ApplicationContext context: Context,
         pref: PrefManager
     ): HapticFeedbackManager = AndroidHapticFeedbackManager(context, pref)
+
+    @Provides
+    @Singleton
+    fun provideGameEndpointProvider(
+        remoteConfig: FBRemoteConfig
+    ): GameEndpointProvider = GameEndpointProviderImpl(remoteConfig)
+
 
 }
