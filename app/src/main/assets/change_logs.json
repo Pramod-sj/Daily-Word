@@ -1,5 +1,15 @@
 [
   {
+    "version_name": "3.3.0",
+    "version_code": 202603210,
+    "release_name": "Feature update",
+    "date": "21 Mar 2026",
+    "changes": [
+      "Added Crossword game"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "3.2.0",
     "version_code": 202601260,
     "release_name": "Maintenance update",
