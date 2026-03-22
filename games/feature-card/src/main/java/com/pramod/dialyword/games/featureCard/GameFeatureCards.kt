@@ -343,7 +343,7 @@ internal fun FeatureCard(
 
                             card.content?.overlineText?.let { overlineText ->
                                 Text(
-                                    text = card.content?.overlineText.orEmpty(),
+                                    text = overlineText,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = colorAccent.copy(alpha = 0.8f),

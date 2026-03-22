@@ -25,7 +25,7 @@ data class FeatureCard(
 )
 
 data class CardContent(
-    @SerializedName("headerTitle") val overlineText: String?,
+    @SerializedName("overlineText") val overlineText: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("subtitle") val subtitle: String?
 )
