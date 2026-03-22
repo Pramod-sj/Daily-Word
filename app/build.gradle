@@ -72,6 +72,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
             ndk { debugSymbolLevel 'SYMBOL_TABLE' }
+            signingConfig signingConfigs.debug
         }
     }
 
