@@ -18,14 +18,15 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      # Create property files from Secrets so the build doesn't fail on missing properties
-      - name: Create property files from Secrets
+      - name: Create key.properties files from Secrets
         run: |
           touch key.properties
           echo "GOOGLE_LICENSE_KEY=${{ secrets.GOOGLE_LICENSE_KEY }}" >> key.properties
           echo "MERCHANT_ID=${{ secrets.MERCHANT_ID }}" >> key.properties
           echo "GOOGLE_IN_APP_RSA_KEY=${{ secrets.GOOGLE_IN_APP_RSA_KEY }}" >> key.properties
-          
+
+      - name: Create endpoint.properties files from Secrets
+        run: |          
           touch endpoint.properties
           echo "BASE_URL=${{ secrets.BASE_URL }}" >> endpoint.properties
           echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> endpoint.properties
@@ -39,6 +40,10 @@ jobs:
           echo "GET_PUBLIC_IP=${{ secrets.GET_PUBLIC_IP }}" >> endpoint.properties
           echo "GET_IP_DETAILS=${{ secrets.GET_IP_DETAILS }}" >> endpoint.properties
           echo "HOME_BACKGROUND_URL=${{ secrets.HOME_BACKGROUND_URL }}" >> endpoint.properties
+
+      - name: Create google-services.json from Secrets
+        run: |
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
 
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
