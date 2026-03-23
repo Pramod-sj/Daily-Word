@@ -93,6 +93,10 @@ android {
 
     namespace 'com.pramod.dailyword'
 
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
 }
 
 kapt {
