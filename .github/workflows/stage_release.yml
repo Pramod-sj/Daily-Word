@@ -1,0 +1,129 @@
+name: "Release to BETA track"
+
+on:
+  pull_request:
+    branches: [ staging ]
+
+jobs:
+  tests:
+    name: Lint Check and Unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Create configuration files from Secrets
+        run: |
+          touch key.properties
+          echo "GOOGLE_LICENSE_KEY=\"${{ secrets.GOOGLE_LICENSE_KEY }}\"" >> key.properties
+          echo "MERCHANT_ID=\"${{ secrets.MERCHANT_ID }}\"" >> key.properties
+          echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
+          
+          touch endpoint.properties
+          echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
+          echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
+          echo "WORLD_TIME_BASE_URL=\"${{ secrets.WORLD_TIME_BASE_URL }}\"" >> endpoint.properties
+          echo "GET_WORD_OF_THE_DAY=\"${{ secrets.GET_WORD_OF_THE_DAY }}\"" >> endpoint.properties
+          echo "GET_WORDS=\"${{ secrets.GET_WORDS }}\"" >> endpoint.properties
+          echo "GET_WORDS_PAGING=\"${{ secrets.GET_WORDS_PAGING }}\"" >> endpoint.properties
+          echo "GET_RANDOM_WORD=\"${{ secrets.GET_RANDOM_WORD }}\"" >> endpoint.properties
+          echo "PRIVACY_POLICY=\"${{ secrets.PRIVACY_POLICY }}\"" >> endpoint.properties
+          echo "TERM_AND_CONDITION=\"${{ secrets.TERM_AND_CONDITION }}\"" >> endpoint.properties
+          echo "GET_PUBLIC_IP=\"${{ secrets.GET_PUBLIC_IP }}\"" >> endpoint.properties
+          echo "GET_IP_DETAILS=\"${{ secrets.GET_IP_DETAILS }}\"" >> endpoint.properties
+          echo "HOME_BACKGROUND_URL=\"${{ secrets.HOME_BACKGROUND_URL }}\"" >> endpoint.properties
+          
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
+
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
+
+      - name: Run lint
+        run: ./gradlew lintDebug
+
+      - name: Run unit tests
+        run: ./gradlew testDebug
+
+  distributes:
+    name: Distribute Bundle to Play store
+    needs: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Create configuration files from Secrets
+        run: |
+          touch key.properties
+          echo "GOOGLE_LICENSE_KEY=\"${{ secrets.GOOGLE_LICENSE_KEY }}\"" >> key.properties
+          echo "MERCHANT_ID=\"${{ secrets.MERCHANT_ID }}\"" >> key.properties
+          echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
+          
+          touch endpoint.properties
+          echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
+          echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
+          echo "WORLD_TIME_BASE_URL=\"${{ secrets.WORLD_TIME_BASE_URL }}\"" >> endpoint.properties
+          echo "GET_WORD_OF_THE_DAY=\"${{ secrets.GET_WORD_OF_THE_DAY }}\"" >> endpoint.properties
+          echo "GET_WORDS=\"${{ secrets.GET_WORDS }}\"" >> endpoint.properties
+          echo "GET_WORDS_PAGING=\"${{ secrets.GET_WORDS_PAGING }}\"" >> endpoint.properties
+          echo "GET_RANDOM_WORD=\"${{ secrets.GET_RANDOM_WORD }}\"" >> endpoint.properties
+          echo "PRIVACY_POLICY=\"${{ secrets.PRIVACY_POLICY }}\"" >> endpoint.properties
+          echo "TERM_AND_CONDITION=\"${{ secrets.TERM_AND_CONDITION }}\"" >> endpoint.properties
+          echo "GET_PUBLIC_IP=\"${{ secrets.GET_PUBLIC_IP }}\"" >> endpoint.properties
+          echo "GET_IP_DETAILS=\"${{ secrets.GET_IP_DETAILS }}\"" >> endpoint.properties
+          echo "HOME_BACKGROUND_URL=\"${{ secrets.HOME_BACKGROUND_URL }}\"" >> endpoint.properties
+          
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
+
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
+
+      - name: Assemble Release Bundle
+        run: ./gradlew bundleRelease
+
+      - name: Sign Release Bundle
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEY_STORE }}
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Prepare Release Notes
+        run: |
+          mkdir -p whatsnew
+          jq -r '.[0].changes | join("\n")' app/src/main/assets/change_logs.json > whatsnew/whatsnew-en-US
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+
+      - name: Upload Bundle to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ steps.auth.outputs.credentials_file_path }}
+          packageName: com.pramod.dailyword
+          releaseFiles: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          whatsNewDirectory: whatsnew
+          track: beta
+          status: inProgress
+          userFraction: 0.50
