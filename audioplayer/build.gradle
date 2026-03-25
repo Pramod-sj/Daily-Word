@@ -30,6 +30,10 @@ android {
         jvmTarget = '17'
     }
     namespace 'com.library.audioplayer'
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {
