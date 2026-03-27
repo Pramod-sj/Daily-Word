@@ -50,15 +50,15 @@
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{word.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
-                android:text="@{word.meanings.size() > 0 ? word.meanings.get(0) : ``}" />
+                android:visibility="@{word.meanings!=null &amp;&amp; word.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
+                android:text="@{word.meanings!=null &amp;&amp; word.meanings.size() > 0 ? word.meanings.get(0) : ``}" />
 
             <TextView
                 style="@style/AppTheme.SmallTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{word.examples.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
-                android:text="@{word.examples.size() > 0 ? word.examples.get(0) : ``}"
+                android:visibility="@{word.examples!=null &amp;&amp; word.examples.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
+                android:text="@{word.examples!=null &amp;&amp;word.examples.size() > 0 ? word.examples.get(0) : ``}"
                 android:textStyle="italic" />
         </LinearLayout>
 

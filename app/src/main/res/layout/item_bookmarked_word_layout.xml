@@ -68,14 +68,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:text="@{word.meanings.size() > 0 ? word.meanings.get(0) : ``}"
-                android:visibility="@{word.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}" />
+                android:text="@{word.meanings!=null &amp;&amp; word.meanings.size() > 0 ? word.meanings.get(0) : ``}"
+                android:visibility="@{word.meanings!=null &amp;&amp; word.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:isGone="@{word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
+                app:isGone="@{word.synonyms!=null &amp;&amp; word.synonyms.size()==0 &amp;&amp; word.antonyms.size()==0}">
 
                 <TextView
                     android:layout_width="wrap_content"
