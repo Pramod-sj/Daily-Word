@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.pramod.dailyword.R
 import com.pramod.dailyword.di.NotificationHelperEntryPoint
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.safeImmutableFlag
@@ -34,8 +35,8 @@ class AlarmReceiver : BroadcastReceiver() {
             ACTION_WEEKLY_12_PM_RECAP_WORDS_REMINDER -> {
                 if (this::notificationHelper.isInitialized) {
                     val notification = notificationHelper.createNotification(
-                        title = "Good Afternoon folks!",
-                        body = "Let's review this week's words",
+                        title = context.resources?.getString(R.string.notification_weekly_recap_title),
+                        body = context.resources?.getString(R.string.notification_weekly_recap_body),
                         pendingIntent = PendingIntent.getActivity(
                             context,
                             REQUEST_CODE_WEEKLY_12_PM_RECAP_WORDS_REMINDER,
