@@ -583,7 +583,8 @@
                             android:layout_marginBottom="@dimen/margin_small"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@{mainViewModel.wordOfTheDay.meanings[0]}" />
+                            android:text="@{mainViewModel.wordOfTheDay.meanings.size() > 0 ? mainViewModel.wordOfTheDay.meanings.get(0) : ``}"
+                            android:visibility="@{mainViewModel.wordOfTheDay.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"

@@ -582,13 +582,15 @@
                             android:layout_marginBottom="@dimen/margin_small"
                             android:ellipsize="end"
                             android:maxLines="4"
-                            android:text="@{mainViewModel.wordOfTheDay.meanings[0]}" />
+                            android:text="@{mainViewModel.wordOfTheDay.meanings.size() > 0 ? mainViewModel.wordOfTheDay.meanings.get(0) : ``}"
+                            android:visibility="@{mainViewModel.wordOfTheDay.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="@{mainViewModel.wordOfTheDay.examples.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}">
 
                             <TextView
                                 style="@style/AppTheme.SubTitleTextStyle"
@@ -605,7 +607,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="6"
-                                android:text="@{mainViewModel.wordOfTheDay.examples[0]}" />
+                                android:text="@{mainViewModel.wordOfTheDay.examples.size() > 0 ? mainViewModel.wordOfTheDay.examples.get(0) : ``}" />
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton

@@ -89,7 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:text="@{wordItem.word.meanings.get(0)}" />
+                    android:visibility="@{wordItem.word.meanings.size() > 0 ? android.view.View.VISIBLE : android.view.View.GONE}"
+                    android:text="@{wordItem.word.meanings.size() > 0 ? wordItem.word.meanings.get(0) : ``}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
