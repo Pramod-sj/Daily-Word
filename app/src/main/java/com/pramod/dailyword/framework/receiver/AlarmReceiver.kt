@@ -35,7 +35,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 if (this::notificationHelper.isInitialized) {
                     val notification = notificationHelper.createNotification(
                         title = "Good Afternoon folks!",
-                        body = "Let's revise this week's words",
+                        body = "Let's review this week's words",
                         pendingIntent = PendingIntent.getActivity(
                             context,
                             REQUEST_CODE_WEEKLY_12_PM_RECAP_WORDS_REMINDER,
