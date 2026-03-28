@@ -1,4 +1,5 @@
 [versions]
+coreSplashscreen = "1.2.0"
 hiltNavigationCompose = "1.0.0"
 kotlin = "2.1.21"
 junit = "4.13.2"
@@ -50,6 +51,7 @@ okhttp = "4.12.0"
 material3 = "1.4.0"
 
 [libraries]
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }

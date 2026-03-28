@@ -1,5 +1,3 @@
-// settings.gradle.kts
-
 pluginManagement {
     repositories {
         gradlePluginPortal() // Access plugins from the Gradle Plugin Portal
@@ -17,16 +15,17 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name='Today\'s Word'
-// Include sub-projects or modules
-include(":app") // Include your application module
-include(":audioplayer")
-include ':games'
-include ':games:crossword'
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "DW"
+
+include ':app'
+include ':audioplayer'
 include ':router'
-include ':features:feature-card'
-include ':games:common:game-results'
-include ':games:common:game-rules'
 include ':core:network'
 include ':core:preferences'
 include ':core:shared-preference-impl'
+include ':features:feature-card'
+include ':features:games:common:game-results'
+include ':features:games:common:game-rules'
+include ':features:games:crossword'

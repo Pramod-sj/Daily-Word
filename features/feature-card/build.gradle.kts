@@ -64,9 +64,10 @@ dependencies {
     implementation(libs.composeUiToolingPreview) // UI tooling preview for Compose
     implementation(libs.activityCompose) // Activity support for Jetpack Compose
     debugImplementation(libs.composeUiTooling)
-    implementation(project(":games:common:game-results")) // UI tooling for debugging Compose
-    implementation(project(":core:network"))
 
     implementation(libs.preferenceKtx) // Kotlin extensions for shared preferences
+
+    implementation(projects.features.games.common.gameResults) // UI tooling for debugging Compose
+    implementation(projects.core.network)
 
 }

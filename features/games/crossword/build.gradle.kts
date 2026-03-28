@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pramod.dailyword.games.common.game_rules"
+    namespace = "com.pramod.games.crossword"
     compileSdk {
         version = release(35)
     }
@@ -24,7 +24,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -35,21 +35,23 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures { compose = true }
 }
 
 dependencies {
     implementation(libs.coreKtx)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.constraintlayout)
     implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidxTestJunit)
     androidTestImplementation(libs.espressoCore)
 
-    // Retrofit libraries for network calls
-    implementation(libs.retrofit) // Core Retrofit library
-    implementation(libs.retrofitGson) // Gson converter for Retrofit
-    implementation(libs.retrofitScalars) // Scalars converter for Retrofit
+    // Android lifecycle libraries
+    implementation(libs.viewmodelKtx) // ViewModel support with KTX
+    implementation(libs.livedataKtx) // LiveData support with KTX
+    implementation(libs.lifecycleExtensions) // Extensions for Android lifecycle
 
     // Jetpack Compose libraries
     implementation(platform(libs.composeBom)) // Jetpack Compose BOM for versioning
@@ -68,5 +70,18 @@ dependencies {
     implementation(libs.hiltNavigationFragment) // Hilt navigation fragment support
     implementation(libs.hiltWork) // Hilt support for WorkManager
 
-    implementation(project(":core:network"))
+    // Accompanist library for additional Compose utilities
+    implementation(libs.accompanistThemeAdapter) // Theme adapter for Compose
+
+    implementation(libs.lottieCompose) // Lottie for Jetpack Compose
+
+
+    implementation(projects.router)
+    implementation(projects.core.network)
+    implementation(projects.core.preferences)
+    implementation(projects.features.games.common.gameRules)
+    implementation(projects.features.games.common.gameResults)
+
+    // Logging with OkHttp
+    implementation(libs.okhttpLoggingInterceptor) // Logging interceptor for OkHttp
 }

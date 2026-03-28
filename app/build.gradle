@@ -208,21 +208,22 @@ dependencies {
     //debugImplementation(libs.leakCanary) // LeakCanary for detecting memory leaks
 
     // Custom library for playing and storing audio files
-    implementation(project(path: ":audioplayer")) // Custom audio player library
-
+    implementation(projects.audioplayer) // Custom audio player library
 
     implementation(libs.play.services.ads)
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.core.splashscreen)
 
     implementation(libs.composeMaterialIconsExtended) // Full set of Material Icons
 
 
-    implementation(project(":router"))
-    implementation implementation(project(path: ':games:common:game-results'))
-    implementation(project(path: ':features:feature-card'))
-    implementation(project(path: ":games:crossword"))
-    implementation(project(path: ":core:network"))
-    implementation(project(path: ":core:shared-preference-impl"))
+    implementation(projects.router)
+    implementation(projects.core.network)
+    implementation(projects.core.sharedPreferenceImpl)
+
+    implementation(projects.features.featureCard)
+    implementation(projects.features.games.common.gameResults)
+    implementation(projects.features.games.crossword)
+
 
 }
