@@ -70,9 +70,8 @@ dependencies {
     implementation(libs.composeMaterialIconsExtended) // Full set of Material Icons
     implementation(libs.composeUiToolingPreview) // UI tooling preview for Compose
     implementation(libs.activityCompose) // Activity support for Jetpack Compose
-    debugImplementation(libs.composeUiTooling) // UI tooling for debugging Compose
-
-    implementation(project(":games:results"))
+    debugImplementation(libs.composeUiTooling)
+    implementation(project(":games:common:game-results")) // UI tooling for debugging Compose
 
     implementation(libs.preferenceKtx) // Kotlin extensions for shared preferences
 

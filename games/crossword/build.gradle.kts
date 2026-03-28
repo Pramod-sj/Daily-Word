@@ -82,7 +82,7 @@ dependencies {
 
 
     implementation(project(":router"))
-    implementation(project(":games:results"))
+    implementation(project(":games:common:game-results"))
 
 
     // Logging with OkHttp
