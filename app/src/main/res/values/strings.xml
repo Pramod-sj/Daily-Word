@@ -362,4 +362,6 @@
     <string name="setting_item_haptic_title">Haptic Feedback</string>
     <string name="setting_item_haptic_desc">Enable or disable vibration feedback on interaction</string>
 
+    <string name="notification_weekly_recap_title">Good Afternoon folks!</string>
+    <string name="notification_weekly_recap_body">Let\'s review this week\'s words</string>
 </resources>

@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.splashscreen.SplashScreenViewProvider
+import androidx.lifecycle.coroutineScope
 import com.pramod.dailyword.BR
 import com.pramod.dailyword.BuildConfig
 import com.pramod.dailyword.R
@@ -25,8 +25,9 @@ import com.pramod.dailyword.framework.ui.common.exts.showLinks
 import com.pramod.dailyword.framework.ui.dialog.WebViewDialogFragment
 import com.pramod.dailyword.framework.util.isImageCached
 import com.pramod.dailyword.framework.util.preloadImage
-import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,8 +43,6 @@ class SplashScreenActivity :
     @Inject
     lateinit var appPrefManager: PrefManager
 
-    private var splashScreenViewProvider: SplashScreenViewProvider? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -52,13 +51,8 @@ class SplashScreenActivity :
         navigateToHomePage()
         setUpAcceptLinks()
         scheduleWeeklyAlarmAt12PM()
-        Timber.i("onCreate: " + intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE))
         splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
-            // 1. Run your existing logic
-            // splashScreenViewProvider = splashScreenViewProvider // Only keep this if you need to access it outside this scope
-            viewModel.showSplashText()
             if (viewModel.isNewUser) {
-                // Create your custom animation.
                 val slideUp = ObjectAnimator.ofFloat(
                     splashScreenViewProvider.view,
                     View.TRANSLATION_Y,
@@ -67,29 +61,24 @@ class SplashScreenActivity :
                 )
                 slideUp.interpolator = AnticipateInterpolator()
                 slideUp.duration = 200L
-                // Call SplashScreenView.remove at the end of your custom animation.
                 slideUp.doOnEnd { splashScreenViewProvider.remove() }
-                // Run your animation.
                 slideUp.start()
             } else {
                 splashScreenViewProvider.remove()
             }
         }
-
-        viewModel.splashScreenTextVisible().observe(this) {
-            splashScreenViewProvider?.remove()
+        lifecycle.coroutineScope.launch {
+            // This isn't a good fix, but since it was affecting a lot of users, so adding a patch
+            delay(resources.getInteger(R.integer.splash_anim_duration).toLong())
+            viewModel.showSplashText()
         }
     }
 
     private fun keepSplashUntilSpecifiedDuration(splashScreen: SplashScreen) {
-        // 1. Define your animation duration (Must match your XML duration: 800ms)
         val animationDuration = resources.getInteger(R.integer.splash_anim_duration)
-        // 2. Track when the app started
         val startTime = System.currentTimeMillis()
-        // 3. Force the Splash Screen to stay visible until the duration is met
         splashScreen.setKeepOnScreenCondition {
             val elapsedTime = System.currentTimeMillis() - startTime
-            // Return TRUE to keep it on screen, FALSE to let it dismiss
             elapsedTime < animationDuration
         }
     }

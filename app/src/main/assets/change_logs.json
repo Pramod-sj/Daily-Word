@@ -10,6 +10,16 @@
     "is_force_update": false
   },
   {
+    "version_name": "3.2.1",
+    "version_code": 202603230,
+    "release_name": "Maintenance update",
+    "date": "23 Mar 2026",
+    "changes": [
+      "Bug fixes and stability improvements"
+    ],
+    "is_force_update": false
+  },
+  {
     "version_name": "3.2.0",
     "version_code": 202601260,
     "release_name": "Maintenance update",

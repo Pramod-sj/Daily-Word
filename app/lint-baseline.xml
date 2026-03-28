@@ -1,0 +1,3656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.13.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.13.1)" variant="all" version="8.13.1">
+
+    <issue
+        id="SuspiciousImport"
+        message="Don&apos;t include `android.R` here; use a fully qualified name for each usage instead"
+        errorLine1="import android.R"
+        errorLine2="~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="3"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="CanvasSize"
+        message="Calling `Canvas.getWidth()` is usually wrong; you should be calling `getWidth()` instead"
+        errorLine1="            canvasSize = canvas.getWidth();"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/CircularImageView.java"
+            line="147"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="CanvasSize"
+        message="Calling `Canvas.getHeight()` is usually wrong; you should be calling `getHeight()` instead"
+        errorLine1="            if (canvas.getHeight() &lt; canvasSize) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/CircularImageView.java"
+            line="148"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="CanvasSize"
+        message="Calling `Canvas.getHeight()` is usually wrong; you should be calling `getHeight()` instead"
+        errorLine1="                canvasSize = canvas.getHeight();"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/CircularImageView.java"
+            line="149"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;widget_placeholder&quot; in layout &quot;widget_word_loading_layout&quot; is missing from the following layout configurations: layout (present in layout-night)"
+        errorLine1="                android:id=&quot;@+id/widget_placeholder&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="94"
+            column="17"
+            message="Occurrence in layout-night"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;widget_placeHolder_imageView&quot; in layout &quot;widget_word_loading_layout&quot; is missing from the following layout configurations: layout (present in layout-night)"
+        errorLine1="                    android:id=&quot;@+id/widget_placeHolder_imageView&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="103"
+            column="21"
+            message="Occurrence in layout-night"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;widget_placeHolder_imageView_message&quot; in layout &quot;widget_word_loading_layout&quot; is missing from the following layout configurations: layout (present in layout-night)"
+        errorLine1="                    android:id=&quot;@+id/widget_placeHolder_imageView_message&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="110"
+            column="21"
+            message="Occurrence in layout-night"/>
+    </issue>
+
+    <issue
+        id="KotlinNullnessAnnotation"
+        message="Do not use `@NonNull` in Kotlin; the nullability is already implied by the Kotlin type `Int` **not** ending with `?`"
+        errorLine1="    @NonNull"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/datasource/cache/model/BookmarkCE.kt"
+            line="10"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="KotlinNullnessAnnotation"
+        message="Do not use `@NonNull` in Kotlin; the nullability is already implied by the Kotlin type `String` **not** ending with `?`"
+        errorLine1="    @NonNull"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/datasource/cache/model/SeenCE.kt"
+            line="10"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="KotlinNullnessAnnotation"
+        message="Do not use `@NonNull` in Kotlin; the nullability is already implied by the Kotlin type `String` **not** ending with `?`"
+        errorLine1="    @NonNull"
+        errorLine2="    ~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/datasource/cache/model/WordCE.kt"
+            line="10"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="`android:windowSplashScreenBackground` requires API level 31 (current min is 21)"
+        errorLine1="        &lt;item name=&quot;android:windowSplashScreenBackground&quot;>@color/windowBackgroundColor&lt;/item>"
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="38"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="OldTargetApi"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+        errorLine1="        targetSdk 35"
+        errorLine2="        ~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="27"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `scrollIndicators` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                    android:scrollIndicators=&quot;top&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_changelog.xml"
+            line="59"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `scrollIndicators` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                    android:scrollIndicators=&quot;top&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_chip_list.xml"
+            line="64"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `scrollIndicators` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                    android:scrollIndicators=&quot;top&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/dialog_donate.xml"
+            line="50"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `scrollIndicators` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                    android:scrollIndicators=&quot;top&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_donate.xml"
+            line="50"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `scrollIndicators` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                    android:scrollIndicators=&quot;top&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_webview_layout.xml"
+            line="35"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `drawableTint` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="32"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `drawableTint` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="33"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `drawableTint` is only used in API level 23 and higher (current min is 21)"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="32"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="SpecifyJobSchedulerIdRange"
+        message="Specify a valid range of job id&apos;s for `WorkManager` to use."
+        errorLine1="class WidgetDataLoadService : JobService() {"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/widget/WidgetDataLoadService.kt"
+            line="15"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;512dp&quot;"
+        errorLine2="                   ~~~~~">
+        <location
+            file="src/main/res/drawable/ic_moon.xml"
+            line="2"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;512dp&quot;"
+        errorLine2="                   ~~~~~">
+        <location
+            file="src/main/res/drawable/ic_notification.xml"
+            line="2"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Resource references will not work correctly in images generated for this vector icon for API &lt; 24; check generated icon to make sure it looks acceptable"
+        errorLine1="    android:tint=&quot;?attr/colorControlNormal&quot;>"
+        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/drawable/ic_round_horizontal_rule_24.xml"
+            line="6"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Resource references will not work correctly in images generated for this vector icon for API &lt; 24; check generated icon to make sure it looks acceptable"
+        errorLine1="      android:fillColor=&quot;@android:color/white&quot;"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/drawable/ic_round_horizontal_rule_24.xml"
+            line="8"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;512dp&quot;"
+        errorLine2="                   ~~~~~">
+        <location
+            file="src/main/res/drawable/ic_sun.xml"
+            line="2"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;512dp&quot;"
+        errorLine2="                   ~~~~~">
+        <location
+            file="src/main/res/drawable/ic_vocabulary.xml"
+            line="2"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="VectorRaster"
+        message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
+        errorLine1="    android:width=&quot;1440dp&quot;"
+        errorLine2="                   ~~~~~~">
+        <location
+            file="src/main/res/drawable/ic_wave.xml"
+            line="2"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="AndroidGradlePluginVersion"
+        message="A newer version of Gradle than 8.13 is available: 8.14.4"
+        errorLine1="distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-bin.zip"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/wrapper/gradle-wrapper.properties"
+            line="3"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="AndroidGradlePluginVersion"
+        message="A newer version of com.android.application than 8.13.1 is available: 9.1.0. (There is also a newer version of 8.13.𝑥 available, if upgrading to 9.1.0 is difficult: 8.13.2)"
+        errorLine1="gradlePlugin = &quot;8.13.1&quot;"
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="43"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="AndroidGradlePluginVersion"
+        message="A newer version of com.android.library than 8.13.1 is available: 9.1.0. (There is also a newer version of 8.13.𝑥 available, if upgrading to 9.1.0 is difficult: 8.13.2)"
+        errorLine1="gradlePlugin = &quot;8.13.1&quot;"
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="43"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of `compileSdkVersion` than 35 is available: 36"
+        errorLine1="    compileSdk 35"
+        errorLine2="    ~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="22"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.core:core-splashscreen than 1.0.1 is available: 1.2.0"
+        errorLine1="    implementation(&quot;androidx.core:core-splashscreen:1.0.1&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="215"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of org.jetbrains.kotlin:kotlin-stdlib than 2.1.21 is available: 2.2.20"
+        errorLine1="kotlin = &quot;2.1.21&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="2"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of org.jetbrains.kotlin:kotlin-stdlib-jdk8 than 2.1.21 is available: 2.2.10"
+        errorLine1="kotlin = &quot;2.1.21&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="2"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.test.ext:junit than 1.2.1 is available: 1.3.0"
+        errorLine1="androidxTestJunit = &quot;1.2.1&quot;"
+        errorLine2="                    ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="4"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.test.espresso:espresso-core than 3.6.1 is available: 3.7.0"
+        errorLine1="espresso = &quot;3.6.1&quot;"
+        errorLine2="           ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="5"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.android.material:material than 1.12.0 is available: 1.13.0"
+        errorLine1="material = &quot;1.12.0&quot;"
+        errorLine2="           ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="6"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.swiperefreshlayout:swiperefreshlayout than 1.1.0 is available: 1.2.0"
+        errorLine1="swiperefreshlayout = &quot;1.1.0&quot;"
+        errorLine2="                     ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="7"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.appcompat:appcompat than 1.7.0 is available: 1.7.1"
+        errorLine1="appcompat = &quot;1.7.0&quot;"
+        errorLine2="            ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="8"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.core:core-ktx than 1.16.0 is available: 1.18.0"
+        errorLine1="coreKtx = &quot;1.16.0&quot;"
+        errorLine2="          ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="9"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-compiler than 2.7.1 is available: 2.8.4"
+        errorLine1="room = &quot;2.7.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-ktx than 2.7.1 is available: 2.8.4"
+        errorLine1="room = &quot;2.7.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-paging than 2.7.1 is available: 2.8.4"
+        errorLine1="room = &quot;2.7.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.room:room-runtime than 2.7.1 is available: 2.8.4"
+        errorLine1="room = &quot;2.7.1&quot;"
+        errorLine2="       ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.lifecycle:lifecycle-livedata-ktx than 2.9.0 is available: 2.10.0"
+        errorLine1="lifecycle = &quot;2.9.0&quot;"
+        errorLine2="            ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.lifecycle:lifecycle-viewmodel-ktx than 2.9.0 is available: 2.10.0"
+        errorLine1="lifecycle = &quot;2.9.0&quot;"
+        errorLine2="            ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="18"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.firebase:firebase-messaging than 24.1.1 is available: 25.0.1"
+        errorLine1="firebaseMessaging = &quot;24.1.1&quot;"
+        errorLine2="                    ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="20"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.firebase:firebase-analytics-ktx than 22.4.0 is available: 22.5.0"
+        errorLine1="firebaseAnalyticsKtx = &quot;22.4.0&quot;"
+        errorLine2="                       ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="22"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.firebase:firebase-crashlytics-ktx than 19.4.3 is available: 19.4.4"
+        errorLine1="firebaseCrashlyticsKtx = &quot;19.4.3&quot;"
+        errorLine2="                         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="23"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.paging:paging-runtime-ktx than 3.3.6 is available: 3.4.2"
+        errorLine1="pagingRuntimeKtx = &quot;3.3.6&quot;"
+        errorLine2="                   ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="24"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.browser:browser than 1.8.0 is available: 1.9.0"
+        errorLine1="browser = &quot;1.8.0&quot;"
+        errorLine2="          ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="27"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.webkit:webkit than 1.13.0 is available: 1.15.0"
+        errorLine1="webkit = &quot;1.13.0&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.hilt:hilt-navigation-fragment than 1.2.0 is available: 1.3.0"
+        errorLine1="hiltNavigation = &quot;1.2.0&quot;"
+        errorLine2="                 ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="30"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.hilt:hilt-work than 1.2.0 is available: 1.3.0"
+        errorLine1="hiltWork = &quot;1.2.0&quot;  # Add Hilt Work version"
+        errorLine2="           ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="31"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.android.billingclient:billing-ktx than 7.1.1 is available: 8.3.0"
+        errorLine1="billingKtx = &quot;7.1.1&quot;"
+        errorLine2="             ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="34"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.compose:compose-bom than 2025.05.01 is available: 2026.03.00"
+        errorLine1="composeBom = &quot;2025.05.01&quot;"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="37"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.activity:activity-compose than 1.10.1 is available: 1.13.0"
+        errorLine1="activityCompose = &quot;1.10.1&quot;"
+        errorLine2="                  ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="38"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.work:work-runtime-ktx than 2.10.1 is available: 2.11.1"
+        errorLine1="workRuntimeKtx = &quot;2.10.1&quot;"
+        errorLine2="                 ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="40"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.android.gms:play-services-ads than 23.0.0 is available: 25.1.0"
+        errorLine1="playServicesAds = &quot;23.0.0&quot;"
+        errorLine2="                  ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="41"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.gms.google-services than 4.4.2 is available: 4.4.4"
+        errorLine1="googleServices = &quot;4.4.2&quot;"
+        errorLine2="                 ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="44"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.firebase.crashlytics than 3.0.3 is available: 3.0.6"
+        errorLine1="firebaseCrashlytics = &quot;3.0.3&quot;"
+        errorLine2="                      ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="45"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of org.jetbrains.kotlin.android than 2.1.21 is available: 2.3.20"
+        errorLine1="kotlin = &quot;2.1.21&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="2"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of org.jetbrains.kotlin.kapt than 2.1.21 is available: 2.3.20"
+        errorLine1="kotlin = &quot;2.1.21&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="2"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of org.jetbrains.kotlin.plugin.compose than 2.1.21 is available: 2.3.20"
+        errorLine1="kotlin = &quot;2.1.21&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="2"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.squareup.retrofit2:converter-gson than 2.11.0 is available: 3.0.0"
+        errorLine1="retrofit = &quot;2.11.0&quot;"
+        errorLine2="           ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="16"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.squareup.retrofit2:converter-scalars than 2.11.0 is available: 3.0.0"
+        errorLine1="retrofit = &quot;2.11.0&quot;"
+        errorLine2="           ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="16"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.squareup.retrofit2:retrofit than 2.11.0 is available: 3.0.0"
+        errorLine1="retrofit = &quot;2.11.0&quot;"
+        errorLine2="           ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="16"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.airbnb.android:lottie than 6.5.2 is available: 6.7.1"
+        errorLine1="lottie = &quot;6.5.2&quot;"
+        errorLine2="         ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="26"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.airbnb.android:lottie-compose than 6.5.2 is available: 6.7.1"
+        errorLine1="lottie = &quot;6.5.2&quot;"
+        errorLine2="         ~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="26"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.google.dagger.hilt.android than 2.56.2 is available: 2.59.2"
+        errorLine1="hilt = &quot;2.56.2&quot;"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="29"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.google.dagger:hilt-android than 2.56.2 is available: 2.59.2"
+        errorLine1="hilt = &quot;2.56.2&quot;"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="29"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.google.dagger:hilt-compiler than 2.56.2 is available: 2.59.2"
+        errorLine1="hilt = &quot;2.56.2&quot;"
+        errorLine2="       ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="29"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.github.bumptech.glide:glide than 4.16.0 is available: 5.0.5"
+        errorLine1="glide = &quot;4.16.0&quot;"
+        errorLine2="        ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="32"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.github.bumptech.glide:compiler than 4.16.0 is available: 5.0.5"
+        errorLine1="glideCompiler = &quot;4.16.0&quot;"
+        errorLine2="                ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="33"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.squareup.okhttp3:logging-interceptor than 4.12.0 is available: 5.3.2"
+        errorLine1="okhttpLoggingInterceptor = &quot;4.12.0&quot;"
+        errorLine2="                           ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="35"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="NewerVersionAvailable"
+        message="A newer version of com.squareup.okhttp3:okhttp than 4.12.0 is available: 5.3.2"
+        errorLine1="okhttp = &quot;4.12.0&quot;"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="$HOME/Downloads/DW/gradle/libs.versions.toml"
+            line="48"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="RestrictedApi"
+        message="NavigationMenuView can only be accessed from within the same library group (referenced groupId=`com.google.android.material` from groupId=`Today&apos;s Word`)"
+        errorLine1="        (binding.navigationView.getChildAt(0) as NavigationMenuView)"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/dialog/BottomMenuDialog.kt"
+            line="58"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="CompositionLocalNaming"
+        message="CompositionLocal properties should be prefixed with `Local`"
+        errorLine1="val FBRemoteConfigCompositionLocal = staticCompositionLocalOf&lt;FBRemoteConfig?> { null }"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDialogFragment.kt"
+            line="141"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Button"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/NotificationConsentScreen.kt"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.MaterialTheme"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/NotificationConsentScreen.kt"
+            line="18"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Scaffold"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/NotificationConsentScreen.kt"
+            line="19"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Text"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/NotificationConsentScreen.kt"
+            line="20"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.TextButton"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/NotificationConsentScreen.kt"
+            line="21"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Button"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="14"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.ButtonDefaults"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="15"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Card"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="16"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.CircularProgressIndicator"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Icon"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="18"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.MaterialTheme"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="19"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Text"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="20"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.TextButton"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDisableAdsDialog.kt"
+            line="21"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Button"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="17"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Card"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="18"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Icon"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="19"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.IconButton"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="20"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.MaterialTheme"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="21"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Scaffold"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="22"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.Text"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="23"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="UsingMaterialAndMaterial3Libraries"
+        message="Using a material import while also using the material3 library"
+        errorLine1="import androidx.compose.material.TopAppBar"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/troubleshoot/TroubleshootScreen.kt"
+            line="24"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="51"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="60"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="66"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="78"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="82"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="86"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="90"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="94"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="99"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
+        errorLine1="            android:screenOrientation=&quot;nosensor&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="105"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="190"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="191"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="206"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="207"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="222"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="223"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="238"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                                        android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="239"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_bookmarked_word_layout.xml"
+            line="54"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;@color/app_icon_tint&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/layout_custom_toolbar.xml"
+            line="22"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;@color/app_icon_tint&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/layout_custom_toolbar.xml"
+            line="56"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="55"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="56"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="66"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="76"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/dark_textColor_highEmphasis&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="108"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/textColor_highEmphasis&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="109"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                        android:tint=&quot;@color/dark_textColor_highEmphasis&quot; />"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="183"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                        android:tint=&quot;@color/textColor_highEmphasis&quot; />"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="184"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="56"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="57"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="67"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="68"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="78"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="79"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;@color/dark_textColor_highEmphasis&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_word_info_item.xml"
+            line="66"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="            android:tint=&quot;@color/textColor_highEmphasis&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_word_info_item.xml"
+            line="66"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                android:tint=&quot;@color/white&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="34"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                android:tint=&quot;@color/black&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="34"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="51"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="51"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="55"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="56"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="66"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="67"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/white&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="77"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/black&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="78"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseAppTint"
+        message="Must use `app:tint` instead of `android:tint`"
+        errorLine1="                    android:tint=&quot;@color/dark_textColor_highEmphasis&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="107"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseCompatLoadingForDrawables"
+        message="Use `ResourcesCompat.getDrawable()`"
+        errorLine1="                context.resources.getDrawable("
+        errorLine2="                ^">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/rewards/RewardAdDialogFragment.kt"
+            line="87"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="30"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="30"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableTint` instead of `android:drawableTint`"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="32"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="31"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="31"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableTint` instead of `android:drawableTint`"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="33"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="30"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
+        errorLine1="                android:drawableStart=&quot;@drawable/ic_vocabulary_24dp_white&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="30"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseCompatTextViewDrawableXml"
+        message="Use `app:drawableTint` instead of `android:drawableTint`"
+        errorLine1="                android:drawableTint=&quot;@color/black&quot;"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="32"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="LogNotTimber"
+        message="Using &apos;Log&apos; instead of &apos;Timber&apos;"
+        errorLine1="        Log.i(TAG, &quot;destroy: ad&quot;)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/DefaultAdViewWrapperImpl.kt"
+            line="22"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="DataExtractionRules"
+        message="The attribute `android:allowBackup` is deprecated from Android 12 and higher and may be removed in future versions. Consider adding the attribute `android:dataExtractionRules` specifying an `@xml` resource which configures cloud backups and device transfers on Android 12 and higher."
+        errorLine1="        android:allowBackup=&quot;false&quot;"
+        errorLine2="                             ~~~~~">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="17"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/CircularImageView.java"
+            line="190"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="    fun isAtLeastAndroidL() = Build.VERSION.SDK_INT >= 21"
+        errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/util/CommonUtils.kt"
+            line="250"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &amp;&amp; parent.clipToPadding) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="59"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &amp;&amp; parent.clipToPadding) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="92"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 35"
+        errorLine1="            if (VERSION.SDK_INT >= VERSION_CODES.Q) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/EdgeToEdgePrefManagerImpl.kt"
+            line="51"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/GoogleAdProviderImpl.kt"
+            line="52"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/GoogleAdProviderImpl.kt"
+            line="90"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/GoogleAdProviderImpl.kt"
+            line="159"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 21"
+        errorLine1="                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/ads/GoogleAdProviderImpl.kt"
+            line="159"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 33"
+        errorLine1="                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/notification_consent/ImportantPermissionState.kt"
+            line="138"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
+        errorLine1="            &lt;LinearLayout"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="94"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
+        errorLine1="            &lt;LinearLayout"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="95"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="UseCompoundDrawables"
+        message="This tag and its children can be replaced by one `&lt;TextView/>` and a compound drawable"
+        errorLine1="            &lt;LinearLayout"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="93"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="VectorPath"
+        message="Very long vector path (4184 characters), which is bad for performance. Considering reducing precision, removing minor details or rasterizing vector."
+        errorLine1="      android:pathData=&quot;M504.111,242.743c-6.374,-8.433 -15.64,-13.721 -25.898,-14.918l-33.983,-58.861l-5.397,-82.532c-0.614,-9.389 -6.019,-17.482 -14.459,-21.645c-8.439,-4.163 -18.149,-3.529 -25.974,1.699l-62.505,41.75c-3.143,-3.166 -7.093,-5.52 -11.525,-6.767c-7.213,-2.027 -14.943,-0.818 -21.246,3.312c-3.402,-4.344 -8.154,-7.53 -13.736,-9.025L180.606,66.607c-9.088,-2.438 -18.489,0.082 -25.143,6.736c-6.655,6.655 -9.173,16.053 -6.737,25.144l2.723,10.164l-49.341,-32.806c-7.838,-5.211 -17.549,-5.827 -25.979,-1.643c-8.43,4.181 -13.817,12.284 -14.411,21.676l-3.587,56.738l-0.607,-0.162c-9.089,-2.436 -18.488,0.083 -25.143,6.736c-6.655,6.655 -9.173,16.053 -6.737,25.144l11.591,43.261c-11.611,0.318 -22.263,5.792 -29.354,15.16c-7.395,9.769 -9.727,22.142 -6.397,33.945c13.674,48.471 50.616,90.733 104.232,119.397c1.136,14.287 7.447,27.532 17.941,37.533c11.035,10.518 25.473,16.311 40.653,16.311h183.405c15.18,0 29.618,-5.793 40.654,-16.311c10.491,-9.999 16.801,-23.24 17.94,-37.519c53.542,-28.62 90.46,-70.82 104.18,-119.224C513.857,265.005 511.532,252.56 504.111,242.743zM429.971,175.29l30.18,52.273h-52.14c1.768,-1.422 2.9,-3.599 2.9,-6.044c-0.002,-4.283 -3.475,-7.756 -7.759,-7.756c-4.284,0 -7.757,3.473 -7.757,7.757c0,2.445 1.134,4.622 2.901,6.044h-8.24l8.314,-30.095c2.235,-8.092 0.539,-16.496 -4.656,-23.057c-2.48,-3.131 -5.613,-5.605 -9.108,-7.303l11.214,-19.423c1.901,-3.292 5.305,-5.257 9.107,-5.257c3.802,0 7.206,1.965 9.107,5.257l15.917,27.568C429.957,175.267 429.963,175.278 429.971,175.29zM407.018,79.386c3.161,-2.112 7.084,-2.37 10.493,-0.686c3.409,1.682 5.592,4.95 5.84,8.743l3.351,51.256c-4.82,-7.403 -12.853,-11.785 -21.778,-11.785c-9.411,0 -17.838,4.865 -22.543,13.015l-14.524,25.155c-0.375,0.081 -0.751,0.163 -1.122,0.26l-20.326,5.278l-3.05,-45.805c-0.06,-0.908 -0.178,-1.804 -0.329,-2.692L407.018,79.386zM341.326,187.97c0.016,-0.004 0.032,-0.008 0.048,-0.012l29.263,-7.599c0.759,-0.196 1.545,-0.313 2.331,-0.343c3.273,-0.108 6.485,1.38 8.582,4.029c1.228,1.549 3.102,4.818 1.865,9.293l-9.455,34.226h-14.563c1.767,-1.422 2.899,-3.599 2.899,-6.043c0,-4.284 -3.473,-7.757 -7.757,-7.757c-4.284,0 -7.757,3.473 -7.757,7.757c0,2.445 1.134,4.622 2.901,6.044h-67.597c-0.101,-4.279 -1.269,-8.522 -3.501,-12.389l-5.479,-9.49L341.326,187.97zM304.441,122.56c0.014,-0.009 0.029,-0.02 0.043,-0.029l7.051,-4.722c2.602,-1.743 5.667,-2.242 8.633,-1.408c3.021,0.85 5.487,2.925 6.764,5.695c0.54,1.171 0.858,2.433 0.946,3.75l3.246,48.745l-66.067,17.156l-17.826,-30.876L304.441,122.56zM266.566,227.564H132.898c0.082,-1.413 0.47,-2.989 1.417,-4.632l56.31,-97.532c1.901,-3.293 5.305,-5.258 9.107,-5.258c3.802,0 7.206,1.965 9.107,5.258l56.31,97.532C266.096,224.574 266.484,226.15 266.566,227.564zM166.433,84.313c2.688,-2.689 6.484,-3.704 10.157,-2.721l108.782,29.148c1.875,0.502 3.49,1.445 4.763,2.73l-50.677,33.938l-17.184,-29.763c-4.705,-8.15 -13.133,-13.016 -22.543,-13.016s-17.838,4.865 -22.543,13.016l-3.387,5.867l-2.809,-1.868l-7.281,-27.172C162.727,90.798 163.745,87 166.433,84.313zM77.2,96.857c0.24,-3.794 2.416,-7.067 5.822,-8.756c3.405,-1.69 7.328,-1.443 10.494,0.665l72.512,48.208l-22.278,38.586l-70.336,-18.846L77.2,96.857zM43.351,170.16c2.688,-2.689 6.485,-3.704 10.158,-2.721l9.703,2.6c0.017,0.004 0.034,0.009 0.051,0.013l72.459,19.415l-14.842,25.708c-2.232,3.866 -3.4,8.11 -3.501,12.389H53.289l-12.66,-47.247C39.645,176.645 40.663,172.847 43.351,170.16zM495.563,272.656c-12.604,44.469 -47.039,83.433 -97.126,110.054H183.598c-4.284,0 -7.757,3.472 -7.757,7.757c0,4.285 3.473,7.757 7.757,7.757H390.42c-3.338,20.385 -21.471,36.201 -42.703,36.201H164.311c-21.234,0 -39.368,-15.817 -42.703,-36.201h30.962c4.284,0 7.757,-3.472 7.757,-7.757c0,-4.285 -3.473,-7.757 -7.757,-7.757h-38.957c-50.17,-26.661 -84.632,-65.688 -97.196,-110.223c-1.998,-7.085 -0.601,-14.509 3.835,-20.37c4.348,-5.745 10.925,-9.039 18.047,-9.039h9.009c0.008,0 0.017,0.002 0.025,0.002c0.01,0 0.021,-0.002 0.031,-0.002h79.214c0.03,0 0.06,0 0.09,0h146.154c0.013,0 0.027,0.002 0.04,0.002c0.009,0 0.019,-0.002 0.028,-0.002h106.947c0.01,0 0.02,0.002 0.03,0.002c0.008,0 0.017,-0.002 0.025,-0.002h93.683c0.005,0 0.01,0.001 0.016,0.001s0.01,-0.001 0.016,-0.001h0.123c7.11,0 13.672,3.288 18.005,9.02C496.197,258.002 497.593,265.494 495.563,272.656z&quot;/>"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/drawable/ic_snacks.xml"
+            line="8"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.background_widget_small_title` appears to be unused"
+        errorLine1="&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/drawable/background_widget_small_title.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.drawable.background_widget_title` appears to be unused"
+        errorLine1="&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/drawable/background_widget_title.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.grey_dark` appears to be unused"
+        errorLine1="    &lt;color name=&quot;grey_dark&quot;>#ACABAB&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="13"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.widget_background` appears to be unused"
+        errorLine1="    &lt;color name=&quot;widget_background&quot;>#70000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="93"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.widget_background_small` appears to be unused"
+        errorLine1="    &lt;color name=&quot;widget_background_small&quot;>#90000000&lt;/color>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="94"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.dimen.ad_card_elevation` appears to be unused"
+        errorLine1="    &lt;dimen name=&quot;ad_card_elevation&quot;>12dp&lt;/dimen>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="58"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.animator.splash_icon_alpha` appears to be unused"
+        errorLine1="&lt;objectAnimator xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/animator/splash_icon_alpha.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.animator.splash_icon_scale` appears to be unused"
+        errorLine1="&lt;objectAnimator xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2="^">
+        <location
+            file="src/main/res/animator/splash_icon_scale.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.other` appears to be unused"
+        errorLine1="    &lt;string name=&quot;other&quot;>Other&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="83"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.notification` appears to be unused"
+        errorLine1="    &lt;string name=&quot;notification&quot;>Notification&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="84"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.personalize` appears to be unused"
+        errorLine1="    &lt;string name=&quot;personalize&quot;>Personalize&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="85"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.loading` appears to be unused"
+        errorLine1="    &lt;string name=&quot;loading&quot;>Loading…&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="119"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.setting_item_check_update_desc` appears to be unused"
+        errorLine1="    &lt;string name=&quot;setting_item_check_update_desc&quot;>You are currently on %s, Tap to check for update&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="173"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.setting_item_about_title` appears to be unused"
+        errorLine1="    &lt;string name=&quot;setting_item_about_title&quot;>About&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="174"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.setting_item_about_desc` appears to be unused"
+        errorLine1="    &lt;string name=&quot;setting_item_about_desc&quot;>Links, developer, license, others&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="175"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_gmail_app_message` appears to be unused"
+        errorLine1="    &lt;string name=&quot;no_gmail_app_message&quot;>Please install Gmail app&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="239"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.snackbar_removed_from_bookmarks` appears to be unused"
+        errorLine1="    &lt;string name=&quot;snackbar_removed_from_bookmarks&quot;>Removed %s from bookmarks&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="247"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.snackbar_undo_action` appears to be unused"
+        errorLine1="    &lt;string name=&quot;snackbar_undo_action&quot;>Undo&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="248"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.dialog_notification_triggering_text_not_able` appears to be unused"
+        errorLine1="    &lt;string name=&quot;dialog_notification_triggering_text_not_able&quot;>We cannot send you a notification at %s due to word unavailability&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="342"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.style.AppTheme_SplashScreenActivity` appears to be unused"
+        errorLine1="    &lt;style name=&quot;AppTheme.SplashScreenActivity&quot; parent=&quot;AppTheme&quot;>"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="29"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `FrameLayout` layout or its `FrameLayout` parent is possibly unnecessary; transfer the `background` attribute to the other view"
+        errorLine1="            &lt;FrameLayout"
+        errorLine2="             ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/custom_its_layout.xml"
+            line="22"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `FrameLayout` parent is unnecessary"
+        errorLine1="        &lt;LinearLayout"
+        errorLine2="         ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/list_placeholder_layout.xml"
+            line="32"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="TooDeepLayout"
+        message="`activity_about_app.xml` has more than 10 levels, bad for performance"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="183"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="TooDeepLayout"
+        message="`activity_about_app.xml` has more than 10 levels, bad for performance"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="184"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="TooDeepLayout"
+        message="`activity_word_detailed.xml` has more than 10 levels, bad for performance"
+        errorLine1="                                    &lt;TextView"
+        errorLine2="                                     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_word_detailed.xml"
+            line="128"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="IconXmlAndPng"
+        message="The following images appear both as density independent `.xml` files and as bitmap files: src/main/res/drawable-anydpi-v24/ic_notification.xml, src/main/res/drawable-hdpi/ic_notification.png">
+        <location
+            file="src/main/res/drawable/ic_notification.xml"/>
+        <location
+            file="src/main/res/drawable-xxhdpi/ic_notification.png"/>
+        <location
+            file="src/main/res/drawable-xhdpi/ic_notification.png"/>
+        <location
+            file="src/main/res/drawable-mdpi/ic_notification.png"/>
+        <location
+            file="src/main/res/drawable-hdpi/ic_notification.png"/>
+        <location
+            file="src/main/res/drawable-anydpi-v24/ic_notification.xml"/>
+    </issue>
+
+    <issue
+        id="MonochromeLauncherIcon"
+        message="The application adaptive icon is missing a monochrome tag"
+        errorLine1="&lt;adaptive-icon xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;>"
+        errorLine2="^">
+        <location
+            file="src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="MonochromeLauncherIcon"
+        message="The application adaptive roundIcon is missing a monochrome tag"
+        errorLine1="&lt;adaptive-icon xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;>"
+        errorLine2="^">
+        <location
+            file="src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+            line="2"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/dev_profile.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/dev_profile.webp"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/donation.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/donation.webp"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/ic_app_icon.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/ic_app_icon.webp"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/ic_no_ads.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/ic_no_ads.webp"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/merriam_webster_logo.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/merriam_webster_logo.webp"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/widget_preview.webp` in densityless folder">
+        <location
+            file="src/main/res/drawable/widget_preview.webp"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="                        android:textSize=&quot;10sp&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_home.xml"
+            line="257"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="                        android:textSize=&quot;10sp&quot; />"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_home.xml"
+            line="273"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="                    android:textSize=&quot;10sp&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="88"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="SmallSp"
+        message="Avoid using sizes smaller than `11sp`: `10sp`"
+        errorLine1="                    android:textSize=&quot;10sp&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="89"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="AlwaysShowAction"
+        message="Prefer &quot;`ifRoom`&quot; instead of &quot;`always`&quot;"
+        errorLine1="        app:showAsAction=&quot;always&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/word_detail_menu.xml"
+            line="10"
+            column="9"/>
+        <location
+            file="src/main/res/menu/word_detail_menu.xml"
+            line="16"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX function `createBitmap` instead?"
+        errorLine1="        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/util/CommonUtils.kt"
+            line="61"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX function `createBitmap` instead?"
+        errorLine1="        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/util/CommonUtils.kt"
+            line="81"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Canvas.withSave` instead?"
+        errorLine1="        canvas.save()"
+        errorLine2="        ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="54"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Canvas.withSave` instead?"
+        errorLine1="        canvas.save()"
+        errorLine2="        ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="89"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Context.withStyledAttributes` instead?"
+        errorLine1="        val a = context.obtainStyledAttributes(ATTRS)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/DividerItemDecoration.kt"
+            line="159"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Context.withStyledAttributes` instead?"
+        errorLine1="            val a = context.obtainStyledAttributes(attrs, R.styleable.GradientTextView)"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/GradientTextView.kt"
+            line="48"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX function `createBitmap` instead?"
+        errorLine1="        val updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/util/GradientUtils.kt"
+            line="10"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putString("
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/HomeScreenBadgeManager.kt"
+            line="31"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putString("
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/HomeScreenBadgeManager.kt"
+            line="60"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Context.withStyledAttributes` instead?"
+        errorLine1="        val a = context.obtainStyledAttributes(attrs, R.styleable.ITSCustomLayout, 0, 0)"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/ITSCustomLayout.kt"
+            line="110"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="        customTabsIntent.launchUrl(this, Uri.parse(url))"
+        errorLine2="                                         ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/IntentHelper.kt"
+            line="61"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="        val webpageUri = Uri.parse(url)"
+        errorLine2="                         ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/IntentHelper.kt"
+            line="64"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="        Uri.parse(&quot;market://details?id=$packageName&quot;)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/helper/IntentHelper.kt"
+            line="108"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putString(KEY_USER_COUNTRY_CODE, code).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/PrefManager.kt"
+            line="134"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putBoolean(KEY_IS_DONATED, donated).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/PrefManager.kt"
+            line="143"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putStringSet(KEY_DONATED_ITEMS, items?.toSet()).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/PrefManager.kt"
+            line="154"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putInt(KEY_SUPPORT_US_CALLED_COUNT, getSupportUsDialogCalledCount() + 1)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/PrefManager.kt"
+            line="173"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putBoolean(KEY_SHOW_SUPPORT_US_NEVER, neverShow).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/PrefManager.kt"
+            line="182"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().putBoolean(KEY_REACHED_TO_END, end).apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/prefmanagers/RemoteKeyPrefManager.kt"
+            line="24"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `Canvas.withSave` instead?"
+        errorLine1="        canvas.save()"
+        errorLine2="        ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/VerticalTextView.kt"
+            line="32"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `SharedPreferences.edit` instead?"
+        errorLine1="        sPrefManager.edit().clear().apply()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/widget/pref/WidgetPreference.kt"
+            line="47"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="                    setData(Uri.parse(toUri(Intent.URI_INTENT_SCHEME)))"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/widget/WidgetViewHelper.kt"
+            line="198"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UseKtx"
+        message="Use the KTX extension function `String.toUri` instead?"
+        errorLine1="            fillInIntent.setData(Uri.parse(fillInIntent.toUri(Intent.URI_INTENT_SCHEME)));"
+        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/widget/WidgetViewHelper.kt"
+            line="277"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="UseTomlInstead"
+        message="Use version catalog instead"
+        errorLine1="    implementation(&quot;androidx.core:core-splashscreen:1.0.1&quot;)"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="215"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="`onTouch` lambda should call `View#performClick` when a click is detected"
+        errorLine1="        rootView.setOnTouchListener { _, event ->"
+        errorLine2="                                    ^">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/common/view/ITSCustomLayout.kt"
+            line="167"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                        &lt;ImageView"
+        errorLine2="                         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="54"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                        &lt;ImageView"
+        errorLine2="                         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="55"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="183"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="184"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="199"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="200"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="215"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="216"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="231"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                                    &lt;ImageButton"
+        errorLine2="                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="232"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_splash_screen.xml"
+            line="26"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                    &lt;ImageView"
+        errorLine2="                     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_banner.xml"
+            line="36"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                    &lt;ImageView"
+        errorLine2="                     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_medium.xml"
+            line="36"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/custom_its_layout.xml"
+            line="32"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_support_development.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageButton"
+        errorLine2="                 ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_bookmarked_word_layout.xml"
+            line="47"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageButton"
+        errorLine2="             ~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_word_list_layout.xml"
+            line="129"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/list_placeholder_layout.xml"
+            line="39"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="8"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="47"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="48"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="57"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="58"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="67"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="68"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="88"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="89"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="103"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="104"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                    &lt;ImageView"
+        errorLine2="                     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="177"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                    &lt;ImageView"
+        errorLine2="                     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="178"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="7"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="7"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="47"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="48"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="58"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="59"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="69"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="70"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_scrollable.xml"
+            line="88"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_scrollable.xml"
+            line="89"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_revamp_word_info_item.xml"
+            line="58"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_revamp_word_info_item.xml"
+            line="58"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="7"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="7"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="29"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="29"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="43"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="43"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_small_revamp.xml"
+            line="65"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_small_revamp.xml"
+            line="66"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="6"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="6"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="46"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="47"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="57"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="58"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="68"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="69"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="87"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="            &lt;ImageView"
+        errorLine2="             ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_loading_layout.xml"
+            line="88"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="                &lt;ImageView"
+        errorLine2="                 ~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_loading_layout.xml"
+            line="102"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                        &quot;Please connect to an active internet connection!&quot;"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/dialog/WebViewDialogFragment.kt"
+            line="62"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                        &quot;Please connect to an active internet connection!&quot;"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/dialog/WebViewDialogFragment.kt"
+            line="62"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    binding.txtViewErrorMessage.text = &quot;Something went wrong!&quot;"
+        errorLine2="                                                        ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/dialog/WebViewDialogFragment.kt"
+            line="66"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                    binding.txtViewErrorMessage.text = &quot;Something went wrong!&quot;"
+        errorLine2="                                                        ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/dialog/WebViewDialogFragment.kt"
+            line="66"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        binding.txtViewWordOfTheDayDate.text = &quot;${"
+        errorLine2="                                                               ^">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/worddetails/WordDetailedActivity.kt"
+            line="171"
+            column="64"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                        } - Merriam Webster Word&quot;"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/worddetails/WordDetailedActivity.kt"
+            line="177"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        binding.tvHowToUseTitle.text = &quot;How to use ${word.word}&quot;"
+        errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/worddetails/WordDetailedActivity.kt"
+            line="180"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                        binding.tvHowToUseTitle.text = &quot;How to use ${word.word}&quot;"
+        errorLine2="                                                        ~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/pramod/dailyword/framework/ui/worddetails/WordDetailedActivity.kt"
+            line="180"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Credits&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;Credits&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_about_app.xml"
+            line="341"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Credits&quot;, should use `@string` resource"
+        errorLine1="                            android:text=&quot;Credits&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/activity_about_app.xml"
+            line="344"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Notification not enabled!&quot;, should use `@string` resource"
+        errorLine1="                                android:contentDescription=&quot;Notification not enabled!&quot;"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_app_setting.xml"
+            line="218"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Ad title&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;Ad title&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_banner.xml"
+            line="57"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Ad Desc&quot;, should use `@string` resource"
+        errorLine1="                        android:text=&quot;Ad Desc&quot;"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_banner.xml"
+            line="65"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Download&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Download&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_banner.xml"
+            line="81"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Ad&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Ad&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/ads_native_medium.xml"
+            line="83"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Main menu&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Main menu&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_bottom_menu_layout.xml"
+            line="36"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Changelog&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Changelog&quot; />"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_changelog.xml"
+            line="51"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Support Daily Word&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Support Daily Word&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_support_development.xml"
+            line="21"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;If you liked my work, help me to keep this project alive.&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;If you liked my work, help me to keep this project alive.&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_support_development.xml"
+            line="29"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Widget background opacity&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Widget background opacity&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_widget_background_opacity.xml"
+            line="20"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Widget body background opacity&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;Widget body background opacity&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/dialog_widget_background_opacity.xml"
+            line="38"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Donate&quot;, should use `@string` resource"
+        errorLine1="            android:title=&quot;Donate&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/home_more_menu.xml"
+            line="9"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Share with your friends&quot;, should use `@string` resource"
+        errorLine1="            android:title=&quot;Share with your friends&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/home_more_menu.xml"
+            line="14"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Settings&quot;, should use `@string` resource"
+        errorLine1="            android:title=&quot;Settings&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/home_more_menu.xml"
+            line="19"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;About&quot;, should use `@string` resource"
+        errorLine1="            android:title=&quot;About&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/home_more_menu.xml"
+            line="25"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Hello&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;Hello&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/item_chip_layout.xml"
+            line="13"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Daily Word&quot;, should use `@string` resource"
+        errorLine1="                android:text=&quot;Daily Word&quot; />"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/layout_custom_toolbar.xml"
+            line="39"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Search&quot;, should use `@string` resource"
+        errorLine1="        android:title=&quot;Search&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/menu/menu_word_list.xml"
+            line="7"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Testing&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Testing&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-night/widget_word_layout_medium_revamp.xml"
+            line="136"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;Testing&quot;, should use `@string` resource"
+        errorLine1="                    android:text=&quot;Testing&quot;"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/widget_word_layout_medium_revamp.xml"
+            line="137"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="RtlSymmetry"
+        message="When you define `paddingStart` you should probably also define `paddingEnd` for right-to-left symmetry"
+        errorLine1="                    android:paddingStart=&quot;4dp&quot;>"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/activity_home.xml"
+            line="230"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="RtlSymmetry"
+        message="When you define `paddingStart` you should probably also define `paddingEnd` for right-to-left symmetry"
+        errorLine1="            android:paddingStart=&quot;@dimen/padding_medium&quot;>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/custom_its_layout.xml"
+            line="72"
+            column="13"/>
+    </issue>
+
+</issues>
