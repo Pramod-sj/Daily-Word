@@ -44,17 +44,10 @@ dependencies {
     androidTestImplementation(libs.androidxTestJunit)
     androidTestImplementation(libs.espressoCore)
 
-
-    // Retrofit libraries for network calls
-    implementation(libs.retrofit) // Core Retrofit library
-    implementation(libs.retrofitGson) // Gson converter for Retrofit
-    implementation(libs.retrofitScalars) // Scalars converter for Retrofit
-
     // Android lifecycle libraries
     implementation(libs.viewmodelKtx) // ViewModel support with KTX
     implementation(libs.livedataKtx) // LiveData support with KTX
     implementation(libs.lifecycleExtensions) // Extensions for Android lifecycle
-
 
     // Dagger Hilt for dependency injection
     implementation(libs.hiltAndroid) // Hilt for Android dependency injection
@@ -72,6 +65,7 @@ dependencies {
     implementation(libs.activityCompose) // Activity support for Jetpack Compose
     debugImplementation(libs.composeUiTooling)
     implementation(project(":games:common:game-results")) // UI tooling for debugging Compose
+    implementation(project(":core:network"))
 
     implementation(libs.preferenceKtx) // Kotlin extensions for shared preferences
 

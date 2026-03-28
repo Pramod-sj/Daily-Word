@@ -1,6 +1,7 @@
 package com.pramod.games.crossword.ui
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pramod.games.crossword.CrosswordClue
@@ -46,17 +48,16 @@ internal fun ClueBanner(
 
     if (clue == null) return
 
-    // ✅ Replaced Box with Surface to match the Timer pill aesthetic
     Surface(
         modifier =
             modifier
                 .fillMaxWidth()
                 .animateContentSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { onViewWord(clue.wordIdDate) },
         shape = RoundedCornerShape(16.dp), // Matches the Timer pill's 16.dp shape
         color = MaterialTheme.colorScheme.secondaryContainer, // Ties the color to the Timer
-        // Removed the hard border for a cleaner, modern Material 3 card look.
-        // If you still want a border, you can add: border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -81,10 +82,7 @@ internal fun ClueBanner(
                         Modifier
                             .weight(1f)
                             .wrapContentHeight()
-                            .padding(horizontal = 4.dp)
-                            .clickable {
-                                clue?.wordIdDate?.let { onViewWord(it) }
-                            },
+                            .padding(horizontal = 4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(

@@ -222,5 +222,7 @@ dependencies {
     implementation implementation(project(path: ':games:common:game-results'))
     implementation(project(path: ':features:feature-card'))
     implementation(project(path: ":games:crossword"))
+    implementation(project(path: ":core:network"))
+    implementation(project(path: ":core:shared-preference-impl"))
 
 }

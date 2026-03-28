@@ -48,11 +48,6 @@ dependencies {
     androidTestImplementation(libs.androidxTestJunit)
     androidTestImplementation(libs.espressoCore)
 
-    // Retrofit libraries for network calls
-    implementation(libs.retrofit) // Core Retrofit library
-    implementation(libs.retrofitGson) // Gson converter for Retrofit
-    implementation(libs.retrofitScalars) // Scalars converter for Retrofit
-
     // Android lifecycle libraries
     implementation(libs.viewmodelKtx) // ViewModel support with KTX
     implementation(libs.livedataKtx) // LiveData support with KTX
@@ -82,8 +77,10 @@ dependencies {
 
 
     implementation(project(":router"))
+    implementation(project(":core:network"))
+    implementation(project(":core:preferences"))
+    implementation(project(":games:common:game-rules"))
     implementation(project(":games:common:game-results"))
-
 
     // Logging with OkHttp
     implementation(libs.okhttpLoggingInterceptor) // Logging interceptor for OkHttp

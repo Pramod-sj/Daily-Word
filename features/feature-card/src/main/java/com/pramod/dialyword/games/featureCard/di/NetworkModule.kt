@@ -1,14 +1,12 @@
 package com.pramod.dialyword.games.featureCard.di
 
-import com.pramod.dailyword.games.results.GameEndpointProvider
+import com.pramod.dailyword.network.di.NetworkCoreInstance
 import com.pramod.dialyword.games.featureCard.GamesApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -18,13 +16,9 @@ internal object NetworkModule {
     @Singleton
     @Provides
     fun provideGamesApiService(
-        endpointProvider: GameEndpointProvider
+        @NetworkCoreInstance retrofit: Retrofit
     ): GamesApiService {
-        return Retrofit.Builder()
-            .baseUrl(endpointProvider.getBaseUrl())
-            .client(OkHttpClient.Builder().build())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(GamesApiService::class.java)
+        return retrofit.create(GamesApiService::class.java)
     }
 
 }

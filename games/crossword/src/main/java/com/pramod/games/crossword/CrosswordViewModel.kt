@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.pramod.dailyword.core.preferences.RulesPreference
+import com.pramod.dailyword.games.common.game_rules.model.GameRule
+import com.pramod.dailyword.games.common.game_rules.repo.GameRulesRepository
 import com.pramod.dailyword.games.results.GameResultEntity
 import com.pramod.games.crossword.network.CrosswordRepository
 import com.pramod.games.crossword.ui.boardGenerator.CellState
@@ -19,9 +22,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -33,7 +38,9 @@ import kotlin.math.roundToInt
 internal class CrosswordViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val crosswordRepository: CrosswordRepository,
-    private val cellProcessor: CrosswordMapGenerator
+    private val cellProcessor: CrosswordMapGenerator,
+    private val rulesPreference: RulesPreference,
+    private val gameRulesRepository: GameRulesRepository
 ) : ViewModel() {
 
     // region 1. Constants & Persistence Keys
@@ -66,6 +73,14 @@ internal class CrosswordViewModel @Inject constructor(
         set(value) {
             savedStateHandle[KEY_ELAPSED_SECONDS] = value
         }
+
+    val isFirstTimePlayer: StateFlow<Boolean> =
+        rulesPreference.isFirstTimePlayer(GAME_TYPE_CROSSWORD)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = false
+            )
 
     /**
      * Updates a single cell's answer in the persistent storage.
@@ -111,8 +126,19 @@ internal class CrosswordViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     // endregion
 
+    private val _rules = MutableStateFlow<List<GameRule>>(emptyList())
+    val rules = _rules.asStateFlow()
+
     // region 5. Initialization
     init {
+        viewModelScope.launch {
+            val rules = gameRulesRepository.fetchRules(GAME_TYPE_CROSSWORD)
+            rules.onSuccess {
+                _rules.value = it
+            }.onFailure {
+
+            }
+        }
         fetchPuzzle()
     }
 
@@ -680,6 +706,12 @@ internal class CrosswordViewModel @Inject constructor(
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
     }
     // endregion
+
+    fun markRulesAsSeen() {
+        viewModelScope.launch {
+            rulesPreference.markRulesAsSeen(GAME_TYPE_CROSSWORD)
+        }
+    }
 }
 
 // ==========================================
