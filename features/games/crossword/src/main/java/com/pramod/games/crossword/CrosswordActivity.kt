@@ -34,6 +34,8 @@ internal class CrosswordActivity : AppCompatActivity() {
         }
     }
 
+    private val controller = GlobalOverlayController()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,7 +51,8 @@ internal class CrosswordActivity : AppCompatActivity() {
                                 context = this@CrosswordActivity,
                                 routeUriString = CoreRoute.wordDetailPath(wordId)
                             )
-                        }
+                        },
+                        controller = controller
                     )
                 }
             }

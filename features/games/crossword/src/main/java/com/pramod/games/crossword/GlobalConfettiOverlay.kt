@@ -21,8 +21,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
-internal fun GlobalConfettiOverlay() {
-    val play by GlobalOverlayController.playConfetti.collectAsState()
+internal fun GlobalConfettiOverlay(
+    controller: GlobalOverlayController
+) {
+    val play by controller.playConfetti.collectAsState()
 
     if (play) {
         Dialog(
@@ -52,14 +54,14 @@ internal fun GlobalConfettiOverlay() {
 
             FullScreenConfetti(
                 modifier = Modifier.fillMaxSize(),
-                onFinished = { GlobalOverlayController.onConfettiFinished() },
+                onFinished = { controller.onConfettiFinished() },
             )
         }
     }
 }
 
 // This can be accessed from ANY ViewModel or screen in your app
-object GlobalOverlayController {
+class GlobalOverlayController {
     private val _playConfetti = MutableStateFlow(false)
     val playConfetti = _playConfetti.asStateFlow()
 

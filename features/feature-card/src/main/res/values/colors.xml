@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">@color/green_600</color>
+    <color name="colorPrimary">@color/green_500</color>
+    <color name="colorAccent">@color/green_500</color>
+    <color name="colorPrimaryDesaturated">@color/green_200</color>
+
+    <color name="app_icon_tint">@color/grey_very_extra_dark</color>
+
+
+    <color name="grey_very_extra_dark">#4C4B4B</color>
+    <color name="grey_extra_dark">#5E5D5D</color>
+    <color name="grey_dark">#ACABAB</color>
+    <color name="grey_light">#E6E6E6</color>
+    <color name="grey_extra_light">#F5F3F3</color>
+    <color name="grey_very_extra_light">#FAF7F7</color>
+
+
+    <!-- with increasing level transparency increases-->
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="red_600">#e53935</color>
+    <color name="red_400">#EF5350</color>
+    <color name="red_200">#ef9a9a</color>
+
+    <color name="pink_600">#d81b60</color>
+    <color name="pink_400">#ec407a</color>
+    <color name="pink_200">#f48fb1</color>
+
+    <color name="purple_600">#8e24aa</color>
+    <color name="purple_200">#ce93d8</color>
+
+    <color name="orange_600">#fb8c00</color>
+    <color name="orange_200">#ffcc80</color>
+
+    <color name="deepOrange_600">#f4511e</color>
+    <color name="deepOrange_200">#ffab91</color>
+
+    <color name="green_600">#43a047</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_400">#66bb6a</color>
+    <color name="green_200">#a5d6a7</color>
+    <color name="progress_bg">#33A5D6A7</color>
+    <color name="progress_fg">#4DA5D6A7</color>
+
+
+    <color name="blue_600">#1e88e5</color>
+    <color name="blue_400">#42a5f5</color>
+    <color name="blue_200">#90caf9</color>
+
+
+    <!--Text Colors-->
+    <color name="textColor_highEmphasis">#B3000000</color>
+    <color name="textColor_mediumEmphasis">#99000000</color>
+    <color name="textColor_disabled">#61000000</color>
+    <!--Text Colors for Dark-->
+
+    <!--Text Colors-->
+    <color name="dark_textColor_highEmphasis">#DEFFFFFF</color>
+    <color name="dark_textColor_mediumEmphasis">#99FFFFFF</color>
+    <color name="dark_textColor_disabled">#61FFFFFF</color>
+
+    <!--days colors-->
+    <color name="color_sun">@color/blue_600</color>
+    <color name="color_mon">@color/orange_600</color>
+    <color name="color_tue">@color/deepOrange_600</color>
+    <color name="color_wed">@color/red_600</color>
+    <color name="color_thur">@color/purple_600</color>
+    <color name="color_fri">@color/pink_600</color>
+    <color name="color_sat">@color/green_600</color>
+    <!--ended days colors-->
+
+
+    <!--days desaturated colors-->
+    <color name="desaturated_color_sun">@color/blue_200</color>
+    <color name="desaturated_color_mon">@color/orange_200</color>
+    <color name="desaturated_color_tue">@color/deepOrange_200</color>
+    <color name="desaturated_color_wed">@color/red_200</color>
+    <color name="desaturated_color_thur">@color/purple_200</color>
+    <color name="desaturated_color_fri">@color/pink_200</color>
+    <color name="desaturated_color_sat">@color/green_200</color>
+    <!--ended days colors-->
+
+
+    <color name="home_past_word_color">@color/grey_very_extra_light</color>
+
+
+    <color name="splash_wave_color">@color/grey_light</color>
+
+
+    <color name="widget_background">#70000000</color>
+    <color name="widget_background_small">#90000000</color>
+
+
+    <color name="bottomSheetDialogNavigationBarColor">#FFFFFF</color>
+
+    <color name="windowBackgroundColor">#FFFFFF</color>
+
+    <!-- Start Donate Item Colors -->
+    <color name="color_cookie">@color/orange_600</color>
+    <color name="color_coffee">@color/green_600</color>
+    <color name="color_snacks">@color/purple_600</color>
+    <color name="color_gift">@color/pink_600</color>
+    <color name="color_server">@color/blue_600</color>
+    <color name="color_movie">@color/red_600</color>
+    <color name="color_meal">@color/deepOrange_600</color>
+    <!-- End Donate Item Colors -->
+
+    <color name="social_media_background_color">#20ACABAB</color>
+    <color name="social_media_stroke_color">#ACABAB</color>
+
+    <color name="stroke_about_cards">@color/grey_light</color>
+
+    <color name="setting_background">#F6F7F8</color>
+    <color name="setting_stroke">@color/grey_light</color>
+    <color name="setting_card_color">@color/white</color>
+
+
+    <color name="word_details_background">#F6F7F8</color>
+
+
+    <color name="radio_track_color">#41000000</color>
+
+
+    <color name="update_card_stroke_color">#3066bb6a</color>
+    <color name="enable_notification_stroke_color">#80EF9A9A</color>
+
+
+    <color name="notification_timer_background">#F6F7F8</color>
+
+    <color name="button_textColor_highEmphasis">#B3000000</color>
+
+    <color name="buttonPrimary_textColor">#DEFFFFFF</color>
+
+</resources>

@@ -55,7 +55,9 @@ internal fun ClueBanner(
                 .animateContentSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable { onViewWord(clue.wordIdDate) },
+                .clickable(enabled = result != null) {
+                    onViewWord(clue.wordIdDate)
+                },
         shape = RoundedCornerShape(16.dp), // Matches the Timer pill's 16.dp shape
         color = MaterialTheme.colorScheme.secondaryContainer, // Ties the color to the Timer
     ) {

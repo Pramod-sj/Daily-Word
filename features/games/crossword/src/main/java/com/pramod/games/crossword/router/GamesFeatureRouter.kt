@@ -9,10 +9,16 @@ import com.pramod.dialyword.router.FeatureRouter
 import com.pramod.games.crossword.CrosswordActivity
 import javax.inject.Inject
 
-internal class GamesFeatureRouter @Inject constructor() : FeatureRouter {
+class GamesFeatureRouter @Inject constructor() : FeatureRouter {
 
     override fun handles(uri: Uri): Boolean {
-        return uri.scheme == APP_SCHEME && uri.host == "$APP_HOST.games"
+        // Strictly match the crossword path
+        val isCrosswordPath = uri.path == "/games/crossword"
+
+        // Ensure there IS a specific game ID
+        val hasId = uri.getQueryParameter("id") != null
+
+        return isCrosswordPath && hasId
     }
 
     override fun getNavigationIntent(context: Context, uri: Uri): Intent? {

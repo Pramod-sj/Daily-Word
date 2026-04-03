@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.coreKtx)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidxTestJunit)
     androidTestImplementation(libs.espressoCore)
@@ -69,5 +70,6 @@ dependencies {
 
     implementation(projects.features.games.common.gameResults) // UI tooling for debugging Compose
     implementation(projects.core.network)
+    implementation(projects.router)
 
 }

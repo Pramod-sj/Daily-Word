@@ -2,11 +2,13 @@ package com.pramod.dialyword.games.featureCard
 
 import com.google.gson.annotations.SerializedName
 import com.pramod.dailyword.games.results.GameResultEntity
+import com.pramod.dialyword.games.featureCard.paging.InitialPage
 
 
 data class FeatureCardResponse(
+    @SerializedName("pagination") val paginationInfo: PagingMeta,
     @SerializedName("feature_cards") val featureCards: List<FeatureCard>
-)
+) : InitialPage
 
 
 data class FeatureCard(

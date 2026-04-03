@@ -1,7 +1,7 @@
-package com.pramod.games.crossword.di
+package com.pramod.dialyword.games.featureCard.di
 
+import com.pramod.dialyword.games.featureCard.router.GameListingRouter
 import com.pramod.dialyword.router.FeatureRouter
-import com.pramod.games.crossword.router.GamesFeatureRouter
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -10,9 +10,12 @@ import dagger.multibindings.IntoSet
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class CrosswordRouterModule {
+ abstract class GameListingRouterModule {
 
     @Binds
     @IntoSet
-    abstract fun bindGamesFeatureRouter(router: GamesFeatureRouter): FeatureRouter
+    abstract fun bindGameListingRouter(
+        gameListingRouter: GameListingRouter
+    ): FeatureRouter
+
 }
