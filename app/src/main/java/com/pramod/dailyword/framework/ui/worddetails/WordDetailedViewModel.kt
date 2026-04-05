@@ -1,5 +1,10 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
+import android.content.Context
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -18,19 +23,23 @@ import com.pramod.dailyword.business.interactor.MarkBookmarkedWordAsSeenInteract
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
 import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
-import com.pramod.dailyword.framework.haptics.HapticType
-import com.pramod.dailyword.framework.helper.ads.InterstitialAdTracker
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
+import com.pramod.dailyword.framework.ui.worddetails.word_history.parseToCustomAnnotatedString
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,7 +53,8 @@ class WordDetailedViewModel @Inject constructor(
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
     private val markBookmarkedWordAsSeenInteractor: MarkBookmarkedWordAsSeenInteractor,
     val audioPlayer: AudioPlayer,
-    private val hapticFeedbackManager: HapticFeedbackManager
+    private val hapticFeedbackManager: HapticFeedbackManager,
+    @param:ApplicationContext private val context: Context,
 ) : BaseViewModel() {
 
     private var isSeenStatusUpdated = false
@@ -82,12 +92,15 @@ class WordDetailedViewModel @Inject constructor(
         refreshEvent.value = Unit
     }
 
-    private val _word = MutableLiveData<Word?>(stateHandle.get("WORD"))
+    private val _word = MutableLiveData<Word?>(stateHandle["WORD"])
 
     val word: LiveData<Word?>
         get() = _word
 
     val wordAsFlow = word.asFlow()
+
+    private val _wordHistory = MutableStateFlow<WordHistoryUiModel?>(null)
+    val wordHistory: StateFlow<WordHistoryUiModel?> = _wordHistory.asStateFlow()
 
     init {
 
@@ -99,41 +112,72 @@ class WordDetailedViewModel @Inject constructor(
             }.asLiveData(Dispatchers.IO)
         }.asFlow()
 
-        wordResource
-            .onEach {
-                loadingLiveData.value = it.status == Status.LOADING
-                if (it.status == Status.ERROR) {
-                    setMessage(
-                        Message.SnackBarMessage(
-                            it.error?.message ?: "Something went wrong!!"
-                        )
+        wordResource.onEach {
+            loadingLiveData.value = it.status == Status.LOADING
+            if (it.status == Status.ERROR) {
+                setMessage(
+                    Message.SnackBarMessage(
+                        it.error?.message ?: "Something went wrong!!"
                     )
-                }
-                it.data?.let { word ->
-                    _word.value = word
+                )
+            }
+            it.data?.let { word ->
+                _word.value = word
 
-                    Timber.i(": isSeenStatusUpdated:" + isSeenStatusUpdated)
+                _wordHistory.value = parseWordHistoryUiModel(word)
 
-                    if (!isSeenStatusUpdated) {
-                        viewModelScope.launch {
-                            markWordAsSeenInteractor.markAsSeen(word.word)
-                                .collectLatest {
+                Timber.i(": isSeenStatusUpdated:" + isSeenStatusUpdated)
 
-                                }
+                if (!isSeenStatusUpdated) {
+                    viewModelScope.launch {
+                        markWordAsSeenInteractor.markAsSeen(word.word).collectLatest {
 
-                            word.bookmarkedId?.let {
-                                markBookmarkedWordAsSeenInteractor.markAsSeen(word.word)
-                                    .collectLatest {
-                                        Timber.i(": isSeenStatusUpdated" + Gson().toJson(it))
-                                    }
-                            }
-
-                            isSeenStatusUpdated = true
                         }
+
+                        word.bookmarkedId?.let {
+                            markBookmarkedWordAsSeenInteractor.markAsSeen(word.word)
+                                .collectLatest {
+                                    Timber.i(": isSeenStatusUpdated" + Gson().toJson(it))
+                                }
+                        }
+
+                        isSeenStatusUpdated = true
                     }
                 }
-            }.launchIn(viewModelScope)
+            }
+        }.launchIn(viewModelScope)
 
+    }
+
+    private suspend fun parseWordHistoryUiModel(word: Word) = withContext(Dispatchers.Default) {
+        return@withContext word.wordHistory?.let {
+            val color = Color(ContextCompat.getColor(context, word.wordColor))
+            val clickHandler = { routeUri: String ->
+                navigator?.navigateToWeb(routeUri)
+                Unit
+            }
+            WordHistoryUiModel(
+                originStory = it.originStory?.map { entry ->
+                    WordHistoryEntryUiModel(
+                        partOfSpeech = entry.partOfSpeech?.parseToCustomAnnotatedString(
+                            linkColor = color, onLinkClick = clickHandler
+                        ), text = entry.text.parseToCustomAnnotatedString(
+                            linkColor = color, onLinkClick = clickHandler
+                        )
+                    )
+                }, bornIn = it.bornIn?.map { entry ->
+                    WordHistoryEntryUiModel(
+                        partOfSpeech = entry.partOfSpeech?.parseToCustomAnnotatedString(
+                            linkColor = color, onLinkClick = clickHandler
+                        ), text = entry.text.parseToCustomAnnotatedString(
+                            linkColor = color, onLinkClick = clickHandler
+                        )
+                    )
+                }, throughTheAges = it.throughTheAges?.parseToCustomAnnotatedString(
+                    linkColor = color, onLinkClick = clickHandler
+                )
+            )
+        }
     }
 
     private val showTitle = MutableLiveData<Boolean>().apply {
@@ -175,3 +219,16 @@ class WordDetailedViewModel @Inject constructor(
 
 
 }
+
+@Stable
+data class WordHistoryEntryUiModel(
+    val partOfSpeech: AnnotatedString? = null,
+    val text: AnnotatedString? = null
+)
+
+@Stable
+data class WordHistoryUiModel(
+    val originStory: List<WordHistoryEntryUiModel>? = null,
+    val bornIn: List<WordHistoryEntryUiModel>? = null,
+    val throughTheAges: AnnotatedString? = null,
+)

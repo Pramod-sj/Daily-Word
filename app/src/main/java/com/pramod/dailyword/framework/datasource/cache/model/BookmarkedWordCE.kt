@@ -41,5 +41,9 @@ data class BookmarkedWordCE(
 
     var seenAt: Long?,
 
+    val etymology: String? = null,
 
-    )
+    val firstKnownUse: String? = null,
+
+    val timeTraveler: String? = null
+)

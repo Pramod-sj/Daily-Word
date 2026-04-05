@@ -14,6 +14,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -21,6 +24,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.setViewTreeLifecycleOwner
@@ -51,6 +55,7 @@ import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.ui.common.exts.shareApp
 import com.pramod.dailyword.framework.ui.common.exts.shouldShowSupportDevelopmentDialog
 import com.pramod.dailyword.framework.ui.common.exts.showBottomSheet
+import com.pramod.dailyword.framework.ui.worddetails.word_history.WordHistorySection
 import com.pramod.dailyword.framework.util.CalenderUtil
 import com.pramod.dailyword.framework.util.CommonUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -121,6 +126,30 @@ class WordDetailedActivity :
         shouldShowSupportDevelopmentDialog()
         adController.loadBanner(binding.frameAd1)
         adController.loadMediumBanner(binding.adPlaceholderMedium)
+
+        binding.composeViewWordHistory.setContent {
+
+            val word by viewModel.word.asFlow().collectAsStateWithLifecycle(null)
+
+            val wordHistory by viewModel.wordHistory.collectAsStateWithLifecycle(null)
+
+            wordHistory?.let { wordHistory ->
+
+                val color = getContextCompatColor(
+                    if (ThemeManager.isNightModeActive(this)) {
+                        word?.wordDesaturatedColor ?: R.color.textColor_highEmphasis
+                    } else {
+                        word?.wordColor ?: R.color.textColor_highEmphasis
+                    }
+                )
+
+                WordHistorySection(
+                    wordColor = remember(color) { Color(color) },
+                    wordHistory = wordHistory,
+                )
+            }
+        }
+
     }
 
     var job: Job? = null

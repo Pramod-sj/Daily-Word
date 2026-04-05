@@ -8,32 +8,38 @@ import androidx.room.PrimaryKey
 data class WordCE(
     @PrimaryKey
     @NonNull
-    var word: String,
+    val word: String,
 
-    var pronounce: String?,
+    val pronounce: String?,
 
-    var pronounceAudio: String?,
+    val pronounceAudio: String?,
 
-    var meanings: List<String>?,
+    val meanings: List<String>?,
 
-    var didYouKnow: String?,
+    val didYouKnow: String?,
 
-    var attribute: String?,
+    val attribute: String?,
 
-    var examples: List<String>?,
+    val examples: List<String>?,
 
-    var date: String?,
+    val date: String?,
 
-    var dateTimeInMillis: Long?,
+    val dateTimeInMillis: Long?,
 
-    var wordColor: Int = -1,
+    val wordColor: Int = -1,
 
-    var wordDesaturatedColor: Int = -1,
+    val wordDesaturatedColor: Int = -1,
 
-    var synonyms: List<String>?,
+    val synonyms: List<String>?,
 
-    var antonyms: List<String>?,
+    val antonyms: List<String>?,
 
-    var otherWords: List<String>?
+    val otherWords: List<String>?,
+
+    val etymology: String? = null,
+
+    val firstKnownUse: String? = null,
+
+    val timeTraveler: String? = null
 
 )

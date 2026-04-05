@@ -39,4 +39,13 @@ data class WordNE(
 
     @SerializedName("OTHER_WORDS")
     var otherWords: List<String>?,
+
+    @SerializedName("Etymology")
+    var etymology: String? = null,
+
+    @SerializedName("FirstKnownUse")
+    var firstKnownUse: String? = null,
+
+    @SerializedName("TimeTraveler")
+    var timeTraveler: String? = null
 )

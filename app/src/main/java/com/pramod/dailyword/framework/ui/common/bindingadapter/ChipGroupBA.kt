@@ -2,8 +2,6 @@ package com.pramod.dailyword.framework.ui.common.bindingadapter
 
 import android.content.res.ColorStateList
 import android.text.SpannableString
-import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -12,7 +10,6 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.gson.Gson
 import com.pramod.dailyword.R
 import com.pramod.dailyword.databinding.ItemChipLayoutBinding
 
@@ -58,9 +55,7 @@ object ChipGroupBA {
                     chipGroup,
                     false
                 )
-                binding.chip.text = SpannableString("more").also { string ->
-                    string.setSpan(UnderlineSpan(), 0, 4, SpannableString.SPAN_INCLUSIVE_INCLUSIVE)
-                }
+                binding.chip.text = SpannableString("+ more")
 
                 chipColor?.let {
                     binding.chip.setTextColor(ColorUtils.setAlphaComponent(chipColor, 200))
