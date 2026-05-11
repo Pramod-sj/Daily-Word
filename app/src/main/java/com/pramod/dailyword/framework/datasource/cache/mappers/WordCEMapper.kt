@@ -75,7 +75,10 @@ class WordCEMapperV2 @Inject constructor() : EntityMapperV2<WordCE, Word> {
         val dayColor = CommonUtils.getColorBasedOnDay(cal)
 
         val wordHistory =
-            if (entity.etymology != null || entity.firstKnownUse != null || entity.timeTraveler != null) {
+            if (!entity.etymology.isNullOrEmpty() ||
+                !entity.firstKnownUse.isNullOrEmpty() ||
+                !entity.timeTraveler.isNullOrEmpty()
+            ) {
 
                 WordHistory(
                     originStory = WordHistoryParser.parse(entity.etymology),
