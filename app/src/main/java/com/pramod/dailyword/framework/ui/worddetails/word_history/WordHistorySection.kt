@@ -1,5 +1,6 @@
 package com.pramod.dailyword.framework.ui.worddetails.word_history
 
+import androidx.annotation.DimenRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,15 +16,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.themeadapter.appcompat.AppCompatTheme
@@ -38,9 +42,9 @@ fun WordHistorySection(
     wordColor: Color,
     modifier: Modifier = Modifier
 ) {
-    val hasContent = wordHistory.originStory != null
-        || wordHistory.bornIn != null
-        || wordHistory.throughTheAges != null
+    val hasContent = !wordHistory.originStory.isNullOrEmpty()
+            || !wordHistory.bornIn.isNullOrEmpty()
+            || !wordHistory.throughTheAges.isNullOrEmpty()
 
     if (!hasContent) return
 
@@ -60,7 +64,7 @@ fun WordHistorySection(
                 Text(
                     text = "Word History",
                     style = TextStyle(
-                        fontSize = dimensionResource(R.dimen.text_sub_title).value.sp,
+                        fontSize = textSize(R.dimen.text_sub_title),
                         fontWeight = FontWeight.Medium,
                     ),
                     color = colorResource(R.color.textColor_highEmphasis)
@@ -174,4 +178,11 @@ private fun WordHistoryRow(
     }
 
     Spacer(modifier = Modifier.size(16.dp))
+}
+
+@Composable
+private fun textSize(@DimenRes id: Int): TextUnit {
+    val density = LocalDensity.current
+    val size = dimensionResource(id)
+    return remember(size, density) { with(density) { size.toSp() } }
 }
