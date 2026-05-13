@@ -3,6 +3,16 @@ name: Run test and Build
 on:
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Which APK do you want to build?'
+        required: true
+        default: 'Debug'
+        type: choice
+        options:
+          - Debug
+          - Release
 
 permissions:
   contents: read
@@ -30,7 +40,7 @@ jobs:
           echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
 
       - name: Create endpoint.properties files from Secrets
-        run: |          
+        run: |
           touch endpoint.properties
           echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
           echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
@@ -58,21 +68,26 @@ jobs:
       - name: Run unit tests
         run: ./gradlew testDebug
 
-      # --- BUILD AND UPLOAD STEPS (DEVELOP ONLY) ---
 
-      - name: Build Debug APK
-        if: github.base_ref == 'develop' || github.ref_name == 'develop'
-        run: ./gradlew assembleDebug
+      # --- BUILD AND UPLOAD STEPS ---
+
+      - name: Build APK
+        # Runs on PR to develop, push to develop, OR manual trigger
+        if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
+        # Uses the manual input if available, otherwise defaults to 'Debug'
+        run: ./gradlew assemble${{ github.event.inputs.build_type || 'Debug' }}
 
       - name: Upload APK Artifact
-        if: github.base_ref == 'develop' || github.ref_name == 'develop'
+        if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/**/*.apk
+          # Names the zip file dynamically based on what was built
+          name: app-${{ github.event.inputs.build_type || 'Debug' }}-apk
+          # Uses a wildcard (**) to catch the APK whether it is in the /debug/ or /release/ folder
+          path: app/build/outputs/apk/**/*.apk
 
       - name: Comment PR with download link
-        # This step should ONLY run if it's specifically a Pull Request targeting develop
+        # ONLY runs on Pull Requests targeting develop. (Manual triggers and direct pushes do not have PRs to comment on)
         if: github.event_name == 'pull_request' && github.base_ref == 'develop'
         uses: actions/github-script@v7
         with:
@@ -83,5 +98,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **Build successful!**\n\nThe APK has been built successfully for the \`develop\` branch. You can download it directly from the [Workflow Run page](${runUrl}).\n\n> *Note: Scroll to the bottom of the page to the **Artifacts** section to download the \`app-debug-apk.zip\` file.*`
+              body: `🚀 **Build successful!**\n\nThe APK has been built successfully for the \`develop\` branch. You can download it directly from the [Workflow Run page](${runUrl}).\n\n> *Note: Scroll to the bottom of the page to the **Artifacts** section to download the \`app-Debug-apk.zip\` file.*`
             });
