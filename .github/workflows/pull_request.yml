@@ -76,33 +76,24 @@ jobs:
           echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
 
       - name: Create endpoint.properties files from Secrets
-        run: |
-          cat << EOF > endpoint.properties
-          BASE_URL=${{ secrets.BASE_URL }}
-          API_BASE_URL=${{ secrets.API_BASE_URL }}
-          WORLD_TIME_BASE_URL=${{ secrets.WORLD_TIME_BASE_URL }}
-          GET_WORD_OF_THE_DAY=${{ secrets.GET_WORD_OF_THE_DAY }}
-          GET_WORDS=${{ secrets.GET_WORDS }}
-          GET_WORDS_PAGING=${{ secrets.GET_WORDS_PAGING }}
-          GET_RANDOM_WORD=${{ secrets.GET_RANDOM_WORD }}
-          PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}
-          TERM_AND_CONDITION=${{ secrets.TERM_AND_CONDITION }}
-          GET_PUBLIC_IP=${{ secrets.GET_PUBLIC_IP }}
-          GET_IP_DETAILS=${{ secrets.GET_IP_DETAILS }}
-          HOME_BACKGROUND_URL=${{ secrets.HOME_BACKGROUND_URL }}
-          EOF
+        run: |          
+          touch endpoint.properties
+          echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
+          echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
+          echo "WORLD_TIME_BASE_URL=\"${{ secrets.WORLD_TIME_BASE_URL }}\"" >> endpoint.properties
+          echo "GET_WORD_OF_THE_DAY=\"${{ secrets.GET_WORD_OF_THE_DAY }}\"" >> endpoint.properties
+          echo "GET_WORDS=\"${{ secrets.GET_WORDS }}\"" >> endpoint.properties
+          echo "GET_WORDS_PAGING=\"${{ secrets.GET_WORDS_PAGING }}\"" >> endpoint.properties
+          echo "GET_RANDOM_WORD=\"${{ secrets.GET_RANDOM_WORD }}\"" >> endpoint.properties
+          echo "PRIVACY_POLICY=\"${{ secrets.PRIVACY_POLICY }}\"" >> endpoint.properties
+          echo "TERM_AND_CONDITION=\"${{ secrets.TERM_AND_CONDITION }}\"" >> endpoint.properties
+          echo "GET_PUBLIC_IP=\"${{ secrets.GET_PUBLIC_IP }}\"" >> endpoint.properties
+          echo "GET_IP_DETAILS=\"${{ secrets.GET_IP_DETAILS }}\"" >> endpoint.properties
+          echo "HOME_BACKGROUND_URL=\"${{ secrets.HOME_BACKGROUND_URL }}\"" >> endpoint.properties
 
       - name: Create google-services.json from Secrets
         run: |
-          cat << 'EOF' > app/google-services.json
-          ${{ secrets.GOOGLE_SERVICES_JSON }}
-          EOF
-
-      - name: Debug google-services.json
-        run: |
-          cat app/google-services.json
-          echo "---"
-          python3 -m json.tool app/google-services.json
+          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
 
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
