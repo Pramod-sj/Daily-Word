@@ -98,6 +98,12 @@ jobs:
           ${{ secrets.GOOGLE_SERVICES_JSON }}
           EOF
 
+      - name: Debug google-services.json
+        run: |
+          cat app/google-services.json
+          echo "---"
+          python3 -m json.tool app/google-services.json
+
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
 
