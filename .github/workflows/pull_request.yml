@@ -1,8 +1,12 @@
-name: Run test
+name: Run test and Build
 
 on:
   pull_request:
     branches: [ main, develop ]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   builds:
@@ -53,3 +57,31 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew testDebug
+
+      # --- BUILD AND UPLOAD STEPS (DEVELOP ONLY) ---
+
+      - name: Build Debug APK
+        if: github.base_ref == 'develop' || github.ref_name == 'develop'
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK Artifact
+        if: github.base_ref == 'develop' || github.ref_name == 'develop'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/**/*.apk
+
+      - name: Comment PR with download link
+        # This step should ONLY run if it's specifically a Pull Request targeting develop
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Build successful!**\n\nThe APK has been built successfully for the \`develop\` branch. You can download it directly from the [Workflow Run page](${runUrl}).\n\n> *Note: Scroll to the bottom of the page to the **Artifacts** section to download the \`app-debug-apk.zip\` file.*`
+            });
