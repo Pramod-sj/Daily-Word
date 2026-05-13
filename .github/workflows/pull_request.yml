@@ -30,7 +30,43 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-          cache: 'gradle'
+          # Removed cache: 'gradle' here to use the explicit cache below
+
+      # --- CACHING SETUP ---
+
+      - name: Restore Android SDK Cache
+        id: cache-android-sdk
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.android
+            ~/.config
+          key: v4-${{ runner.os }}-android-sdk
+
+      - name: Setup Android SDK
+        if: steps.cache-android-sdk.outputs.cache-hit != 'true'
+        uses: android-actions/setup-android@v3.2.2
+
+      - name: Save Android SDK Cache
+        uses: actions/cache/save@v4
+        if: steps.cache-android-sdk.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.android
+            ~/.config
+          key: v4-${{ runner.os }}-android-sdk
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # --- SECRETS SETUP ---
 
       - name: Create key.properties files from Secrets
         run: |
@@ -40,7 +76,7 @@ jobs:
           echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
 
       - name: Create endpoint.properties files from Secrets
-        run: |
+        run: |          
           touch endpoint.properties
           echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
           echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
@@ -62,32 +98,40 @@ jobs:
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
 
+      # --- BUILD, LINT, AND TEST WITH CACHE OPTIMIZATIONS ---
+
       - name: Run lint
-        run: ./gradlew lintDebug
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew lintDebug --build-cache --parallel --no-daemon
 
       - name: Run unit tests
-        run: ./gradlew testDebug
-
-
-      # --- BUILD AND UPLOAD STEPS ---
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew testDebug --build-cache --parallel --no-daemon
 
       - name: Build APK
-        # Runs on PR to develop, push to develop, OR manual trigger
         if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
-        # Uses the manual input if available, otherwise defaults to 'Debug'
-        run: ./gradlew assemble${{ github.event.inputs.build_type || 'Debug' }}
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew assemble${{ github.event.inputs.build_type || 'Debug' }} --build-cache --parallel --no-daemon
+
+      # --- UPLOAD & COMMENT ---
 
       - name: Upload APK Artifact
         if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
-          # Names the zip file dynamically based on what was built
           name: app-${{ github.event.inputs.build_type || 'Debug' }}-apk
-          # Uses a wildcard (**) to catch the APK whether it is in the /debug/ or /release/ folder
           path: app/build/outputs/apk/**/*.apk
 
       - name: Comment PR with download link
-        # ONLY runs on Pull Requests targeting develop. (Manual triggers and direct pushes do not have PRs to comment on)
         if: github.event_name == 'pull_request' && github.base_ref == 'develop'
         uses: actions/github-script@v7
         with:
