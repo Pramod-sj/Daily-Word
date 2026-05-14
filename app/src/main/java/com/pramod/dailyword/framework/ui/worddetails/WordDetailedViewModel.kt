@@ -1,10 +1,8 @@
 package com.pramod.dailyword.framework.ui.worddetails
 
-import android.content.Context
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -17,19 +15,18 @@ import com.library.audioplayer.AudioPlayer
 import com.pramod.dailyword.business.data.network.Resource
 import com.pramod.dailyword.business.data.network.Status
 import com.pramod.dailyword.business.domain.model.Word
+import com.pramod.dailyword.business.domain.util.ResourceProvider
 import com.pramod.dailyword.business.interactor.GetRandomWordInteractor
 import com.pramod.dailyword.business.interactor.GetWordDetailsByDateInteractor
 import com.pramod.dailyword.business.interactor.MarkBookmarkedWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.MarkWordAsSeenInteractor
 import com.pramod.dailyword.business.interactor.bookmark.ToggleBookmarkInteractor
-import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.HomeScreenBadgeManager
 import com.pramod.dailyword.framework.ui.common.BaseViewModel
 import com.pramod.dailyword.framework.ui.common.Message
 import com.pramod.dailyword.framework.ui.worddetails.word_history.parseToCustomAnnotatedString
 import com.pramod.dailyword.framework.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,8 +50,7 @@ class WordDetailedViewModel @Inject constructor(
     private val markWordAsSeenInteractor: MarkWordAsSeenInteractor,
     private val markBookmarkedWordAsSeenInteractor: MarkBookmarkedWordAsSeenInteractor,
     val audioPlayer: AudioPlayer,
-    private val hapticFeedbackManager: HapticFeedbackManager,
-    @param:ApplicationContext private val context: Context,
+    private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {
 
     private var isSeenStatusUpdated = false
@@ -151,7 +147,7 @@ class WordDetailedViewModel @Inject constructor(
 
     private suspend fun parseWordHistoryUiModel(word: Word) = withContext(Dispatchers.Default) {
         return@withContext word.wordHistory?.let {
-            val color = Color(ContextCompat.getColor(context, word.wordColor))
+            val color = Color(resourceProvider.getColor(word.wordColor))
             val clickHandler = { routeUri: String ->
                 navigator?.navigateToWeb(routeUri)
                 Unit
