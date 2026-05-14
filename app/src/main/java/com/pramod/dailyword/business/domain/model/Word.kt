@@ -4,7 +4,7 @@ import java.io.Serializable
 
 data class WordHistoryEntry(
     val partOfSpeech: String? = null, // e.g., "Noun", "Verb"
-    val text: String
+    val text: String? = null, // The actual text of the entry
 ) : Serializable
 
 data class WordHistory(

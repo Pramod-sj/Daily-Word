@@ -161,7 +161,7 @@ class WordDetailedViewModel @Inject constructor(
                     WordHistoryEntryUiModel(
                         partOfSpeech = entry.partOfSpeech?.parseToCustomAnnotatedString(
                             linkColor = color, onLinkClick = clickHandler
-                        ), text = entry.text.parseToCustomAnnotatedString(
+                        ), text = entry.text?.parseToCustomAnnotatedString(
                             linkColor = color, onLinkClick = clickHandler
                         )
                     )
@@ -169,7 +169,7 @@ class WordDetailedViewModel @Inject constructor(
                     WordHistoryEntryUiModel(
                         partOfSpeech = entry.partOfSpeech?.parseToCustomAnnotatedString(
                             linkColor = color, onLinkClick = clickHandler
-                        ), text = entry.text.parseToCustomAnnotatedString(
+                        ), text = entry.text?.parseToCustomAnnotatedString(
                             linkColor = color, onLinkClick = clickHandler
                         )
                     )
