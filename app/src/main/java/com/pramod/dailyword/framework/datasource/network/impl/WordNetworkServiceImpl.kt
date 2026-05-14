@@ -3,6 +3,7 @@ package com.pramod.dailyword.framework.datasource.network.impl
 import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.framework.datasource.network.abstraction.WordNetworkService
 import com.pramod.dailyword.framework.datasource.network.mappers.WordNEMapper
+import com.pramod.dailyword.framework.datasource.network.mappers.WordNEMapperV2
 import com.pramod.dailyword.framework.datasource.network.model.api.ApiResponse
 import com.pramod.dailyword.framework.datasource.network.service.WordApiService
 import javax.inject.Inject
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class WordNetworkServiceImpl @Inject constructor(
     private val wordApiService: WordApiService,
-    private val wordNEMapper: WordNEMapper
+    private val wordNEMapper: WordNEMapperV2
 ) : WordNetworkService {
     override suspend fun getWordOfTheDay(): ApiResponse<Word> {
         val apiResponse = wordApiService.getWordOfTheDay()

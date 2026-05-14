@@ -2,6 +2,21 @@ package com.pramod.dailyword.business.domain.model
 
 import java.io.Serializable
 
+data class WordHistoryEntry(
+    val partOfSpeech: String? = null, // e.g., "Noun", "Verb"
+    val text: String? = null, // The actual text of the entry
+) : Serializable
+
+data class WordHistory(
+    val originStory: List<WordHistoryEntry>? = null,
+    val bornIn: List<WordHistoryEntry>? = null,
+    val throughTheAges: String? = null,
+
+    val originStoryRawString: String? = null,
+    val bornInRawString: String? = null,
+    val throughTheAgesRawString: String? = null,
+) : Serializable
+
 data class Word(
     val word: String,
 
@@ -39,8 +54,9 @@ data class Word(
 
     val isSeen: Boolean,
 
-    val seenAtTimeInMillis: Long?
+    val seenAtTimeInMillis: Long?,
 
+    val wordHistory: WordHistory? = null
 
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
@@ -68,6 +84,31 @@ data class Word(
         if (isSeen != other.isSeen) return false
         if (seenAtTimeInMillis != other.seenAtTimeInMillis) return false
         if (otherWords != other.otherWords) return false
+        if (wordHistory != other.wordHistory) return false
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = word.hashCode()
+        result = 31 * result + (pronounce?.hashCode() ?: 0)
+        result = 31 * result + (pronounceAudio?.hashCode() ?: 0)
+        result = 31 * result + (meanings?.hashCode() ?: 0)
+        result = 31 * result + (didYouKnow?.hashCode() ?: 0)
+        result = 31 * result + (attribute?.hashCode() ?: 0)
+        result = 31 * result + (examples?.hashCode() ?: 0)
+        result = 31 * result + (date?.hashCode() ?: 0)
+        result = 31 * result + (dateTimeInMillis?.hashCode() ?: 0)
+        result = 31 * result + wordColor
+        result = 31 * result + wordDesaturatedColor
+        result = 31 * result + (otherWords?.hashCode() ?: 0)
+        result = 31 * result + (synonyms?.hashCode() ?: 0)
+        result = 31 * result + (antonyms?.hashCode() ?: 0)
+        result = 31 * result + (bookmarkedId ?: 0)
+        result = 31 * result + (bookmarkedAt?.hashCode() ?: 0)
+        result = 31 * result + (bookmarkedSeenAt?.hashCode() ?: 0)
+        result = 31 * result + isSeen.hashCode()
+        result = 31 * result + (seenAtTimeInMillis?.hashCode() ?: 0)
+        result = 31 * result + (wordHistory?.hashCode() ?: 0)
+        return result
     }
 }

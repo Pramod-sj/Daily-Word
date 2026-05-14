@@ -364,4 +364,9 @@
 
     <string name="notification_weekly_recap_title">Good Afternoon folks!</string>
     <string name="notification_weekly_recap_body">Let\'s review this week\'s words</string>
+
+    <string name="word_history_title">Word History</string>
+    <string name="word_history_etymology">Etymology</string>
+    <string name="word_history_first_known_use">First Known Use</string>
+    <string name="word_history_time_traveler">Time Traveler</string>
 </resources>
