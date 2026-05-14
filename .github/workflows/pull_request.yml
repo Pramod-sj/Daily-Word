@@ -21,6 +21,7 @@ permissions:
 jobs:
   builds:
     runs-on: ubuntu-latest
+    environment: pr-testing
 
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +31,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-          # Removed cache: 'gradle' here to use the explicit cache below
 
       # --- CACHING SETUP ---
 
