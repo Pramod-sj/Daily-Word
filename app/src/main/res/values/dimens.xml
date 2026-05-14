@@ -42,12 +42,12 @@
     <!--end-->
 
 
-    <dimen name="card_elevation_word_details">1dp</dimen>
+    <dimen name="card_elevation_word_details">0dp</dimen>
 
     <item name="alpha_moon" format="float" type="integer">1</item>
     <item name="alpha_mountains" format="float" type="integer">1</item>
 
-    <dimen name="card_elevation_word_item">1dp</dimen>
+    <dimen name="card_elevation_word_item">0dp</dimen>
 
     <dimen name="setting_card_elevation">1dp</dimen>
     <dimen name="setting_stroke_start_margin">17dp</dimen>
