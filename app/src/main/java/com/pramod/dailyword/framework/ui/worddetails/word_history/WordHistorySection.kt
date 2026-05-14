@@ -107,9 +107,9 @@ private fun SubEntry(entry: WordHistoryEntryUiModel) {
             Text(
                 text = it,
                 style = TextStyle(
-                    fontSize = dimensionResource(R.dimen.text_sub_title).value.sp,
+                    fontSize = textSize(R.dimen.text_sub_title),
                     fontWeight = FontWeight.Normal,
-                    lineHeight = dimensionResource(R.dimen.text_sub_title).value.sp * 1.6f
+                    lineHeight = textSize(R.dimen.text_sub_title) * 1.6f
                 ),
                 color = colorResource(R.color.textColor_mediumEmphasis)
             )
@@ -135,7 +135,7 @@ private fun PartOfSpeechBadge(label: AnnotatedString) {
         Text(
             text = label,
             style = TextStyle(
-                fontSize = dimensionResource(R.dimen.text_tiny).value.sp,
+                fontSize = textSize(R.dimen.text_tiny),
                 fontWeight = FontWeight.SemiBold,
                 fontStyle = FontStyle.Italic,
                 letterSpacing = 0.1.sp
@@ -169,7 +169,7 @@ private fun WordHistoryRow(
         Text(
             text = label,
             style = TextStyle(
-                fontSize = dimensionResource(R.dimen.text_tiny).value.sp,
+                fontSize = textSize(R.dimen.text_tiny),
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.1.sp
             ),
