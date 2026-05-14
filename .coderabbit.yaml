@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: "en-US"
+
+reviews:
+  profile: "assertive"
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "develop"
+
+  # Path-specific instructions for Android/Kotlin code reviews
+  path_instructions:
+    - path: "**/*.kt"
+      instructions: |
+        As a Senior Software Architect, review this Kotlin code against Google's Modern Android Development (MAD) and JetBrains' Kotlin Coding Conventions. Prioritize the following:
+
+        1. **Clean Architecture & SOLID**:
+           - Enforce strict separation of concerns (UI, Domain, Data layers).
+           - Ensure the 'Dependency Inversion Principle' is followed; high-level modules should not depend on low-level modules.
+           - Flag any business logic found in UI controllers (Activities/Fragments).
+
+        2. **Memory & Performance (Google Best Practices)**:
+           - Identify 'Context' leaks or improper 'Lifecycle' handling.
+           - Check for efficient 'Coroutine' usage (avoid GlobalScope; ensure 'Dispatchers.IO' for disk/network and 'Dispatchers.Main' for UI).
+           - Verify that 'ViewModel' does not hold references to Views or Lifecycle-bound classes.
+
+        3. **Idiomatic Kotlin (JetBrains Standards)**:
+           - Ensure use of 'apply', 'let', 'also', and 'run' where appropriate.
+           - Enforce 'val' over 'var' to promote immutability.
+           - Flag 'null-safety' anti-patterns (e.g., unnecessary '!!' or complex nested 'if-null' checks).
+
+        4. **Resource & Asset Management**:
+           - Strict ban on hardcoded strings, dimensions, or colors.
+           - Ensure all UI resources are extracted to the 'res' directory for localization readiness.
+
+        5. **OOP & Design Patterns**:
+           - Look for opportunities to use Creational, Structural, or Behavioral patterns (e.g., Factory, Observer, Repository).
+           - Ensure proper use of Kotlin 'interfaces' and 'sealed classes' for state management (MVI/MVVM).
+
+        6. **Testing & Maintainability**:
+           - Flag code that is "untestable" (e.g., hidden dependencies or static singletons).
+           - Ensure variable naming is descriptive and follows the standard 'camelCase' convention.
+
+    - path: "**/*.java"
+      instructions: |
+        Apply the same Android development best practices as Kotlin files, adapted for Java:
+        - Check for proper lifecycle management
+        - Verify memory leak prevention
+        - Ensure resource externalization
+        - Flag anti-patterns and suggest modern alternatives
