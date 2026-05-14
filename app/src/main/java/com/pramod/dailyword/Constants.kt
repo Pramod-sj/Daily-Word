@@ -3,7 +3,6 @@ package com.pramod.dailyword
 import java.util.TimeZone
 
 class Constants {
-
     companion object {
         const val REQUEST_CODE_PENDING_INTENT_ON_WIDGET_CLICK = 200
         const val REQUEST_CODE_PENDING_INTENT_ON_WIDGET_PRONOUNCE_CLICK = 201
