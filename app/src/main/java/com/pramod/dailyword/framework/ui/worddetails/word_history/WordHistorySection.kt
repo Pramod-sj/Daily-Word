@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -73,11 +74,11 @@ fun WordHistorySection(
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
                 val rows = buildList {
-                    wordHistory.originStory?.let { add("Etymology" to it) }
-                    wordHistory.bornIn?.let { add("First Known Use" to it) }
+                    wordHistory.originStory?.let { add(stringResource(R.string.word_history_etymology) to it) }
+                    wordHistory.bornIn?.let { add(stringResource(R.string.word_history_first_known_use) to it) }
                     wordHistory.throughTheAges?.let {
                         add(
-                            "Time Traveler" to listOf(
+                            stringResource(R.string.word_history_time_traveler) to listOf(
                                 WordHistoryEntryUiModel(text = it)
                             )
                         )
