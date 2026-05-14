@@ -76,7 +76,7 @@ jobs:
           echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
 
       - name: Create endpoint.properties files from Secrets
-        run: |          
+        run: |
           touch endpoint.properties
           echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
           echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
@@ -134,7 +134,7 @@ jobs:
 
       - name: Upload to Firebase App Distribution
         if: github.event_name == 'pull_request' && github.base_ref == 'develop'
-        uses: FirebaseExtended/action-appdistribution@v1.4.0
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
