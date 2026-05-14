@@ -8,9 +8,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.library.audioplayer.AudioPlayer
+import com.pramod.dailyword.business.domain.util.ResourceProvider
 import com.pramod.dailyword.framework.haptics.AndroidHapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.prefmanagers.PrefManager
+import com.pramod.dailyword.framework.util.ResourceProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,5 +72,12 @@ object AppModule {
         @ApplicationContext context: Context,
         pref: PrefManager
     ): HapticFeedbackManager = AndroidHapticFeedbackManager(context, pref)
+
+
+    @Provides
+    @Singleton
+    fun provideResourceProvider(@ApplicationContext context: Context): ResourceProvider {
+        return ResourceProviderImpl(context)
+    }
 
 }
