@@ -2,9 +2,10 @@
   {
     "version_name": "3.3.0",
     "version_code": 202605160,
-    "release_name": "Maintenance update",
-    "date": "23 Mar 2026",
+    "release_name": "Feature update",
+    "date": "16 May 2026",
     "changes": [
+      "Explore the fascinating origins of every word! Discover etymology and first known use dates!!",
       "Bug fixes and stability improvements"
     ],
     "is_force_update": false
