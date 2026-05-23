@@ -5,38 +5,47 @@ import com.google.gson.annotations.SerializedName
 data class WordNE(
 
     @SerializedName("GID")
-    var gid: String?,
+    val gid: String?,
 
     @SerializedName("WORD")
-    var word: String?,
+    val word: String?,
 
     @SerializedName("PRONOUNCE")
-    var pronounce: String?,
+    val pronounce: String?,
 
     @SerializedName("PRONOUNCE_AUDIO_URL")
-    var pronounceAudio: String?,
+    val pronounceAudio: String?,
 
     @SerializedName("DEFINATION")
-    var meanings: List<String>?,
+    val meanings: List<String>?,
 
     @SerializedName("DID_YOU_KNOW")
-    var didYouKnow: String?,
+    val didYouKnow: String?,
 
     @SerializedName("ATTRIBUTE")
-    var attribute: String?,
+    val attribute: String?,
 
     @SerializedName("EXAMPLE")
-    var examples: List<String>?,
+    val examples: List<String>?,
 
     @SerializedName("DATE")
-    var date: String?,
+    val date: String?,
 
     @SerializedName("SYNONYMS")
-    var synonyms: List<String>?,
+    val synonyms: List<String>?,
 
     @SerializedName("ANTONYMS")
-    var antonyms: List<String>?,
+    val antonyms: List<String>?,
 
     @SerializedName("OTHER_WORDS")
-    var otherWords: List<String>?,
+    val otherWords: List<String>?,
+
+    @SerializedName("Etymology")
+    val etymology: String? = null,
+
+    @SerializedName("FirstKnownUse")
+    val firstKnownUse: String? = null,
+
+    @SerializedName("TimeTraveler")
+    val timeTraveler: String? = null
 )

@@ -1,12 +1,27 @@
-name: Run test
+name: Run test and Build
 
 on:
   pull_request:
     branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Which APK do you want to build?'
+        required: true
+        default: 'Debug'
+        type: choice
+        options:
+          - Debug
+          - Release
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   builds:
     runs-on: ubuntu-latest
+    environment: pr-testing
 
     steps:
       - uses: actions/checkout@v4
@@ -16,7 +31,42 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-          cache: 'gradle'
+
+      # --- CACHING SETUP ---
+
+      - name: Restore Android SDK Cache
+        id: cache-android-sdk
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.android
+            ~/.config
+          key: v4-${{ runner.os }}-android-sdk
+
+      - name: Setup Android SDK
+        if: steps.cache-android-sdk.outputs.cache-hit != 'true'
+        uses: android-actions/setup-android@v3.2.2
+
+      - name: Save Android SDK Cache
+        uses: actions/cache/save@v4
+        if: steps.cache-android-sdk.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.android
+            ~/.config
+          key: v4-${{ runner.os }}-android-sdk
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # --- SECRETS SETUP ---
 
       - name: Create key.properties files from Secrets
         run: |
@@ -26,7 +76,7 @@ jobs:
           echo "GOOGLE_IN_APP_RSA_KEY=\"${{ secrets.GOOGLE_IN_APP_RSA_KEY }}\"" >> key.properties
 
       - name: Create endpoint.properties files from Secrets
-        run: |          
+        run: |
           touch endpoint.properties
           echo "BASE_URL=\"${{ secrets.BASE_URL }}\"" >> endpoint.properties
           echo "API_BASE_URL=\"${{ secrets.API_BASE_URL }}\"" >> endpoint.properties
@@ -42,14 +92,74 @@ jobs:
           echo "HOME_BACKGROUND_URL=\"${{ secrets.HOME_BACKGROUND_URL }}\"" >> endpoint.properties
 
       - name: Create google-services.json from Secrets
-        run: |
-          echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
       - name: Grant execute permissions for gradlew
         run: chmod +x gradlew
 
+      # --- BUILD, LINT, AND TEST WITH CACHE OPTIMIZATIONS ---
+
       - name: Run lint
-        run: ./gradlew lintDebug
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew lintDebug --build-cache --parallel --no-daemon
 
       - name: Run unit tests
-        run: ./gradlew testDebug
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew testDebug --build-cache --parallel --no-daemon
+
+      - name: Build APK
+        if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
+        env:
+          GRADLE_OPTS: >
+            -Xmx4g
+            -Dkotlin.daemon.jvm.options=-Xmx2g
+        run: ./gradlew assemble${{ github.event.inputs.build_type || 'Debug' }} --build-cache --parallel --no-daemon
+
+      # --- UPLOAD & COMMENT ---
+
+      - name: Find built APK path
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+        id: find_apk
+        run: |
+          # Dynamically locate the APK so the Firebase step knows exactly where it is
+          APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+
+      - name: Upload to Firebase App Distribution
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS }}
+          groups: testers
+          releaseNotes: "Automated build from PR #${{ github.event.pull_request.number }}"
+          file: ${{ env.APK_PATH }}
+
+      - name: Upload APK Artifact (GitHub Zip Backup)
+        if: github.base_ref == 'develop' || github.ref_name == 'develop' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ github.event.inputs.build_type || 'Debug' }}-apk
+          path: app/build/outputs/apk/**/*.apk
+
+      - name: Comment PR with Firebase details
+        if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Build successful & Uploaded!**\n\n✅ The APK has been successfully distributed via **Firebase App Distribution**. Testers should receive an email notification shortly or can check the App Tester app on their devices.\n\nAlternatively, you can download the zipped backup artifact from the [Workflow Run page](${runUrl}).`
+            });

@@ -422,7 +422,12 @@
                             android:layout_marginBottom="@dimen/padding_medium"
                             app:cardCornerRadius="0dp"
                             app:cardElevation="@dimen/card_elevation_word_details"
-                            app:isVisible="@{mediumBannerAdsEnabled}" />
+                            app:isGone="@{!mediumBannerAdsEnabled}" />
+
+                        <androidx.compose.ui.platform.ComposeView
+                            android:id="@+id/composeView_wordHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_go_to_merriam_webster"

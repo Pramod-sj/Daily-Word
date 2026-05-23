@@ -1,11 +1,12 @@
 [
   {
     "version_name": "3.3.0",
-    "version_code": 202603210,
+    "version_code": 202605160,
     "release_name": "Feature update",
-    "date": "21 Mar 2026",
+    "date": "16 May 2026",
     "changes": [
-      "Added Crossword game"
+      "Explore the fascinating origins of every word! Discover etymology and first known use dates!!",
+      "Bug fixes and stability improvements"
     ],
     "is_force_update": false
   },

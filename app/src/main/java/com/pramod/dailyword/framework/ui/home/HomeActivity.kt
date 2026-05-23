@@ -609,17 +609,19 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     }
 
     private fun handledeepLinkNotificationAndWidgetClick() {
+        val notificationPayloadJson =
+            intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)
         val messagePayload: FBMessageService.MessagePayload? =
-            Gson().fromJson(
-                intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD),
-                FBMessageService.MessagePayload::class.java
-            )
-        Timber.i(
-            "deepLinkNotification: ${intent.extras?.getString(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)}"
-        )
+            Gson().fromJson(notificationPayloadJson, FBMessageService.MessagePayload::class.java)
+        Timber.i("deepLinkNotification: $notificationPayloadJson")
 
         val widgetClickWordDate =
             intent.extras?.getString(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+
+        // Consume the extras so activity recreation (e.g. theme change) doesn't re-trigger navigation
+        intent.removeExtra(FBMessageService.EXTRA_NOTIFICATION_PAYLOAD)
+        intent.removeExtra(DailyWordWidgetProvider.EXTRA_INTENT_TO_HOME_WORD_DATE)
+
         if (widgetClickWordDate != null) {
             openWordDetailsPage(widgetClickWordDate, option = null)
         } else
