@@ -524,7 +524,7 @@ internal fun FeatureNudge(
                     } else Modifier
                 )
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(16.dp),
             // Match FeatureCard background logic (surfaceContainer)
             color = colorScheme.surfaceContainer,
             // Match FeatureCard border logic
@@ -548,11 +548,9 @@ internal fun FeatureNudge(
                         } else Modifier
                     )
                     .padding(
-                        start = 10.dp,
-                        end = if (onDismiss != null) 6.dp else 10.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
-                    ),
+                        start = 12.dp,
+                        end = if (onDismiss != null) 6.dp else 12.dp,
+                    ).padding(vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -582,30 +580,21 @@ internal fun FeatureNudge(
                 }
 
                 // Title + subtitle inline
-                Row(
+                Column(
                     modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = card.content?.title.orEmpty(),
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        // Match FeatureCard title color
-                        color = colorAccent,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
+                        style = MaterialTheme.typography.labelMedium,
+                        color = colorAccent
                     )
                     card.content?.subtitle?.let {
                         Text(
                             text = it,
-                            style = MaterialTheme.typography.labelMedium,
-                            // Match FeatureCard subtitle color
+                            style = MaterialTheme.typography.labelSmall,                            // Match FeatureCard subtitle color
                             color = colorScheme.onSurface.copy(alpha = 0.6f),
-                            maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            softWrap = false
+                            maxLines = 2
                         )
                     }
                 }
