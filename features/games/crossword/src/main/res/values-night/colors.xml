@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/green_400</color>
+    <color name="colorPrimaryDark">#202020</color>
+    <color name="colorAccent">@color/green_400</color>
+
+
+    <color name="app_icon_tint">@color/grey_extra_light</color>
+
+
+    <!--Text Colors-->
+    <color name="textColor_highEmphasis">@color/dark_textColor_highEmphasis</color>
+    <color name="textColor_mediumEmphasis">@color/dark_textColor_mediumEmphasis</color>
+    <color name="textColor_disabled">@color/dark_textColor_disabled</color>
+
+    <color name="home_past_word_color">#282828</color>
+
+    <color name="splash_wave_color">#303030</color>
+
+    <color name="bottomSheetDialogNavigationBarColor">#282828</color>
+
+
+    <!-- Start Donate Item Colors -->
+    <color name="color_cookie">@color/orange_200</color>
+    <color name="color_coffee">@color/green_200</color>
+    <color name="color_snacks">@color/purple_200</color>
+    <color name="color_gift">@color/pink_200</color>
+    <color name="color_server">@color/blue_200</color>
+    <color name="color_movie">@color/red_200</color>
+    <color name="color_meal">@color/deepOrange_200</color>
+    <!-- End Donate Item Colors -->
+
+
+    <color name="social_media_background_color">#20ACABAB</color>
+    <color name="social_media_stroke_color">@color/grey_extra_dark</color>
+
+    <color name="stroke_about_cards">#3E3D3D</color>
+
+    <!--dark window background color-->
+    <color name="windowBackgroundColor">#202020</color>
+    <!-- end -->
+
+    <!--colorSurface -->
+
+    <color name="setting_stroke">#302F2F</color>
+    <color name="setting_background">#202020</color>
+    <color name="setting_card_color">#181818</color>
+
+    <color name="word_details_background">#101010</color>
+
+    <color name="radio_track_color">#41FFFFFF</color>
+
+    <color name="update_card_stroke_color">#30F5F3F3</color>
+    <color name="enable_notification_stroke_color">#30EF9A9A</color>
+
+    <color name="notification_timer_background">#191919</color>
+
+    <color name="buttonPrimary_textColor">#B3000000</color>
+
+</resources>

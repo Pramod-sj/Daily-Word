@@ -1,0 +1,67 @@
+{
+  "feature_cards": [
+    {
+      "id": "feat_cw_7",
+      "game_id": "7",
+      "game_type": "CROSSWORD",
+      "status": "NEW",
+      "content": {
+        "title": "Weekly Crossword",
+        "subtitle": "Lock this week's vocabulary permanently into your long-term memory."
+      },
+      "visuals": {
+        "badge_icon": "EXTENSION",
+        "watermark_icon": "GRID_ON",
+        "color_theme": "PRIMARY"
+      },
+      "action": {
+        "button_text": "Play now",
+        "route_uri": "app://dailyword.games/games/crossword?id=7"
+      },
+      "dismiss_config": {
+        "enabled": true,
+        "scope": "TIMED",
+        "ttl_hours": 24
+      },
+      "placement": {
+        "promoted": true,
+        "screens": [
+          "HOME",
+          "DASHBOARD"
+        ],
+        "display_style": "CARD"
+      }
+    },
+    {
+      "id": "nudge_cw_7",
+      "game_id": "7",
+      "game_type": "CROSSWORD",
+      "status": "NEW",
+      "content": {
+        "title": "Weekly Crossword",
+        "subtitle": "New puzzle available"
+      },
+      "visuals": {
+        "badge_icon": "EXTENSION",
+        "watermark_icon": "GRID_ON",
+        "color_theme": "PRIMARY"
+      },
+      "action": {
+        "button_text": "Play now",
+        "route_uri": "app://dailyword.games/games/crossword?id=7"
+      },
+      "dismiss_config": {
+        "enabled": true,
+        "scope": "SESSION",
+        "ttl_hours": null
+      },
+      "placement": {
+        "promoted": false,
+        "screens": [
+          "HOME"
+        ],
+        "display_style": "NUDGE"
+      }
+    }
+  ]
+}

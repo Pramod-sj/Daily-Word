@@ -2,13 +2,13 @@ package com.pramod.dailyword.framework.ui.home
 
 import android.app.ActivityOptions
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
 import android.util.Pair
-import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -36,7 +36,6 @@ import com.pramod.dailyword.business.domain.model.Word
 import com.pramod.dailyword.databinding.ActivityHomeBinding
 import com.pramod.dailyword.framework.firebase.FBMessageService
 import com.pramod.dailyword.framework.firebase.FBRemoteConfig
-import com.pramod.dailyword.framework.haptics.HapticFeedbackManager
 import com.pramod.dailyword.framework.haptics.HapticType
 import com.pramod.dailyword.framework.helper.NotificationHelper
 import com.pramod.dailyword.framework.helper.billing.BillingHelper
@@ -79,6 +78,8 @@ import com.pramod.dailyword.framework.util.buildUpdateAvailableToInstallSpannabl
 import com.pramod.dailyword.framework.util.safeStartUpdateFlowForResult
 import com.pramod.dailyword.framework.widget.DailyWordWidgetProvider
 import com.pramod.dailyword.framework.widget.refreshWidget
+import com.pramod.dialyword.games.featureCard.GameFeatureCards
+import com.pramod.dialyword.router.AppRouter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -123,6 +124,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     @Inject
     lateinit var importantPermissionHandler: ImportantPermissionHandler
 
+    @Inject
+    lateinit var appRouter: AppRouter
+
     private val pastWordAdapter: PastWordAdapter by lazy {
         PastWordAdapter(onItemClickCallback = { i: Int, word: Word ->
             val view = binding.mainRecyclerviewPastWords.layoutManager!!.findViewByPosition(i)
@@ -153,6 +157,15 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
         handleNotificationPermissionLaunch()
         handlePermissionChangedScenario()
         handleNavigationToDisableBatteryOptimization()
+
+        binding.composeView?.setContent {
+            GameFeatureCards(screenName = screenName) { uri ->
+                appRouter.navigateTo(
+                    context = this,
+                    routeUriString = uri
+                )
+            }
+        }
     }
 
     private fun handleNavigationToDisableBatteryOptimization() {
@@ -884,6 +897,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>(R.layout.a
     companion object {
 
         val TAG = HomeActivity::class.simpleName
+
+        fun newIntent(context: Context): Intent {
+            return Intent(context, HomeActivity::class.java)
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 package com.pramod.dailyword.framework.ui.bookmarks
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -106,6 +107,13 @@ class FavoriteWordsActivity :
         doOnViewPreDrawn(binding.recyclerviewWords) {
             supportStartPostponedEnterTransition()
         }
+
+    }
+
+
+    companion object {
+
+        fun newIntent(context: Context) = Intent(context, FavoriteWordsActivity::class.java)
 
     }
 }

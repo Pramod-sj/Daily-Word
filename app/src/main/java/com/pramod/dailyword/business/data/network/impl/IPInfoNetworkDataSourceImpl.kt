@@ -7,15 +7,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class IPInfoNetworkDataSourceImpl @Inject constructor(
-    private val ipInfoIPNetworkService: IPNetworkService
-) :
-    IPInfoNetworkDataSource {
-    override suspend fun getPublicIp(): String? {
-        return ipInfoIPNetworkService.getPublicIp()
-    }
+class IPInfoNetworkDataSourceImpl
+    @Inject
+    constructor(
+        private val ipInfoIPNetworkService: IPNetworkService,
+    ) : IPInfoNetworkDataSource {
+        override suspend fun getPublicIp(): String? = ipInfoIPNetworkService.getPublicIp()
 
-    override suspend fun getIPDetails(publicIp: String): IPInfo? {
-        return ipInfoIPNetworkService.getIPDetails(publicIp)
+        override suspend fun getIPDetails(publicIp: String): IPInfo? = ipInfoIPNetworkService.getIPDetails(publicIp)
     }
-}

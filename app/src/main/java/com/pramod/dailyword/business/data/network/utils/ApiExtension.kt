@@ -1,6 +1,5 @@
 package com.pramod.dailyword.business.data.network.utils
 
-import com.pramod.dailyword.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -28,10 +27,6 @@ suspend fun <T> safeApiCall(
 ): ApiResult<T?> {
     return withContext(dispatcher) {
         try {
-            if (BuildConfig.DEBUG) {
-                //mocking purpose
-                Thread.sleep(1000)
-            }
             ApiResult.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
@@ -39,24 +34,29 @@ suspend fun <T> safeApiCall(
                 is SocketTimeoutException -> {
                     ApiResult.NetworkError("Timeout! Please check your internet connection or retry!")
                 }
+
                 is UnknownHostException -> {
                     ApiResult.NetworkError("You don't have a proper internet connection or server is not up")
                 }
+
                 is ConnectException -> {
                     ApiResult.NetworkError("You don't have a proper internet connection")
                 }
+
                 is IOException -> {
                     ApiResult.NetworkError("Some I/O error occurred!")
                 }
+
                 is HttpException -> {
                     val code = throwable.code()
                     val errorResponse = convertErrorBody(throwable)
-                    Timber.i("ApiExtension", "safeApiCall: $errorResponse ")
+                    Timber.tag("ApiExtension").i("safeApiCall: $errorResponse ")
                     ApiResult.GenericError(
                         code,
                         errorResponse
                     )
                 }
+
                 else -> {
                     ApiResult.GenericError(
                         null,

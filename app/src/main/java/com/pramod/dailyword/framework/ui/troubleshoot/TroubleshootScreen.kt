@@ -58,10 +58,10 @@ fun TroubleshootScreen(
     allowSettingAlarmsClick: () -> Unit = {},
     unusedAppPausingDisableClick: () -> Unit = { },
 ) {
-
-    val windowInsets = WindowInsets(
-        top = WindowInsets.statusBars.getTop(LocalDensity.current),
-    )
+    val windowInsets =
+        WindowInsets(
+            top = WindowInsets.statusBars.getTop(LocalDensity.current),
+        )
 
     val lottieRawComposition by rememberLottieComposition(spec = LottieCompositionSpec.Asset("all_okay.json"))
 
@@ -79,46 +79,46 @@ fun TroubleshootScreen(
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_round_back_arrow),
-                                contentDescription = "Back"
+                                contentDescription = "Back",
                             )
                         }
                     },
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colors.surface,
                 )
             },
         ) {
-
-            if (!isNotificationEnabled
-                || !isBatteryOptimizationDisabled
-                || !isSetAlarmEnabled
-                || !isUnusedAppPausingDisabled
+            if (!isNotificationEnabled ||
+                !isBatteryOptimizationDisabled ||
+                !isSetAlarmEnabled ||
+                !isUnusedAppPausingDisabled
             ) {
                 BoxWithConstraints {
-
                     val maxWidth = remember(maxWidth) { maxWidth }
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(it)
-                            .padding(vertical = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(it)
+                                .padding(vertical = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-
-                        val modifier = remember(maxWidth) {
-                            if (maxWidth > 600.dp)
-                                Modifier.width(maxWidth * 0.5f)
-                            else
-                                Modifier.padding(horizontal = 16.dp)
-                        }
+                        val modifier =
+                            remember(maxWidth) {
+                                if (maxWidth > 600.dp) {
+                                    Modifier.width(maxWidth * 0.5f)
+                                } else {
+                                    Modifier.padding(horizontal = 16.dp)
+                                }
+                            }
 
                         if (!isNotificationEnabled) {
                             TroubleshootCard(
                                 modifier = modifier,
                                 title = stringResource(id = R.string.troubleshoot_card_notification_title),
-                                subtitle = stringResource(id = R.string.troubleshoot_card_notification_desc),//"Please allow us to send daily word notification",
-                                buttonLabel = stringResource(id = R.string.troubleshoot_card_notification_btn)//"Enable notification",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_notification_desc), // "Please allow us to send daily word notification",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_notification_btn), // "Enable notification",
                             ) {
                                 enableNotificationClick()
                             }
@@ -127,9 +127,9 @@ fun TroubleshootScreen(
                         if (!isBatteryOptimizationDisabled) {
                             TroubleshootCard(
                                 modifier = modifier,
-                                title = stringResource(id = R.string.troubleshoot_card_battery_optimization_title),// "Disable Battery Optimization",
-                                subtitle = stringResource(id = R.string.troubleshoot_card_battery_optimization_desc),//"Your devices is set to stop the app to save some battery, this setting prevent you learning new word!",
-                                buttonLabel = stringResource(id = R.string.troubleshoot_card_battery_optimization_btn),//"Disable battery optimization",
+                                title = stringResource(id = R.string.troubleshoot_card_battery_optimization_title), // "Disable Battery Optimization",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_battery_optimization_desc), // "Your devices is set to stop the app to save some battery, this setting prevent you learning new word!",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_battery_optimization_btn), // "Disable battery optimization",
                             ) {
                                 disableBatteryOptimizationClick()
                             }
@@ -138,9 +138,9 @@ fun TroubleshootScreen(
                         if (!isSetAlarmEnabled) {
                             TroubleshootCard(
                                 modifier = modifier,
-                                title = stringResource(id = R.string.troubleshoot_card_exact_alarms_title),//"Allow setting alarms",
-                                subtitle = stringResource(id = R.string.troubleshoot_card_exact_alarms_desc),//"Please allow us set alarms for correct functioning of the app",
-                                buttonLabel = stringResource(id = R.string.troubleshoot_card_exact_alarms_btn),//"Grant permission",
+                                title = stringResource(id = R.string.troubleshoot_card_exact_alarms_title), // "Allow setting alarms",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_exact_alarms_desc), // "Please allow us set alarms for correct functioning of the app",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_exact_alarms_btn), // "Grant permission",
                             ) {
                                 allowSettingAlarmsClick()
                             }
@@ -150,24 +150,23 @@ fun TroubleshootScreen(
                             TroubleshootCard(
                                 modifier = modifier,
                                 title = stringResource(id = R.string.troubleshoot_card_unused_app_title),
-                                subtitle = stringResource(id = R.string.troubleshoot_card_unused_app_desc),//"Please allow us to send daily word notification",
-                                buttonLabel = stringResource(id = R.string.troubleshoot_card_unused_app_btn)//"Enable notification",
+                                subtitle = stringResource(id = R.string.troubleshoot_card_unused_app_desc), // "Please allow us to send daily word notification",
+                                buttonLabel = stringResource(id = R.string.troubleshoot_card_unused_app_btn), // "Enable notification",
                             ) {
                                 unusedAppPausingDisableClick()
                             }
                         }
-
                     }
                 }
             } else {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(it),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(it),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
                         LottieAnimation(
                             modifier = Modifier.size(60.dp),
                             composition = lottieRawComposition,
@@ -176,8 +175,8 @@ fun TroubleshootScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = stringResource(id = R.string.troubleshoot_all_good_message),//"All good!",
-                            style = MaterialTheme.typography.h5
+                            text = stringResource(id = R.string.troubleshoot_all_good_message), // "All good!",
+                            style = MaterialTheme.typography.h5,
                         )
                     }
                 }
@@ -185,7 +184,6 @@ fun TroubleshootScreen(
         }
     }
 }
-
 
 @Composable
 fun TroubleshootCard(
@@ -202,28 +200,32 @@ fun TroubleshootCard(
         border = BorderStroke(1.dp, strokeColor),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 6.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.body1.copy(
-                    fontWeight = FontWeight(500),
-                    color = colorResource(id = R.color.textColor_highEmphasis)
-                )
+                style =
+                    MaterialTheme.typography.body1.copy(
+                        fontWeight = FontWeight(500),
+                        color = colorResource(id = R.color.textColor_highEmphasis),
+                    ),
             )
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.body2.copy(
-                    color = colorResource(id = R.color.textColor_mediumEmphasis)
-                )
+                style =
+                    MaterialTheme.typography.body2.copy(
+                        color = colorResource(id = R.color.textColor_mediumEmphasis),
+                    ),
             )
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     buttonCallback()
-                }) {
+                },
+            ) {
                 Text(text = buttonLabel)
             }
         }

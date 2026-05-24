@@ -2,6 +2,8 @@ package com.pramod.dailyword.framework.ui.words
 
 import android.app.ActivityOptions
 import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import androidx.activity.OnBackPressedCallback
@@ -237,6 +239,8 @@ class WordListActivity :
     }
 
     companion object {
+        fun newIntent(context: Context): Intent = Intent(context, WordListActivity::class.java)
+
         val TAG = WordListActivity::class.java.simpleName
     }
 

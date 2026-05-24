@@ -1,6 +1,8 @@
 package com.pramod.dailyword.framework.ui.recap
 
 import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.transition.Transition
 import androidx.activity.viewModels
@@ -16,6 +18,8 @@ import com.pramod.dailyword.framework.ui.common.BaseActivity
 import com.pramod.dailyword.framework.ui.common.exts.openWordDetailsPage
 import com.pramod.dailyword.framework.ui.common.exts.setUpToolbar
 import com.pramod.dailyword.framework.util.CalenderUtil
+import com.pramod.dialyword.games.featureCard.GameFeatureCards
+import com.pramod.dialyword.router.AppRouter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,6 +38,9 @@ class RecapWordsActivity :
     @Inject
     lateinit var fbRemoteConfig: FBRemoteConfig
 
+    @Inject
+    lateinit var appRouter: AppRouter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         window.sharedElementsUseOverlay = false
         super.onCreate(savedInstanceState)
@@ -41,6 +48,12 @@ class RecapWordsActivity :
         setWeeklyInfoText()
         initAdapter()
         adController.loadBanner(binding.cardAd)
+
+        binding.composeView.setContent {
+            GameFeatureCards(screenName = screenName) { uri ->
+                appRouter.navigateTo(context = this, routeUriString = uri)
+            }
+        }
     }
 
     private fun setWeeklyInfoText() {
@@ -117,6 +130,8 @@ class RecapWordsActivity :
     }
 
     companion object {
+        fun newIntent(context: Context): Intent = Intent(context, RecapWordsActivity::class.java)
+
         val TAG = RecapWordsActivity::class.java
     }
 }
