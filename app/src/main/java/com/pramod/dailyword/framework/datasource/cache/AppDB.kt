@@ -19,7 +19,7 @@ import com.pramod.dailyword.framework.datasource.cache.model.WordCE
 @TypeConverters(ListConverter::class)
 @Database(
     entities = [WordCE::class, BookmarkCE::class, SeenCE::class],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 abstract class AppDB : RoomDatabase() {
@@ -38,7 +38,13 @@ abstract class AppDB : RoomDatabase() {
                         AppDB::class.java,
                         APP_DB_NAME
 
-                    ).addMigrations(migration_6_7, migration_7_8, migration_8_9, migration_9_10)
+                    ).addMigrations(
+                        migration_6_7,
+                        migration_7_8,
+                        migration_8_9,
+                        migration_9_10,
+                        migration_10_11
+                    )
                         .build()
                     return INSTANCE!!
                 }
@@ -135,6 +141,14 @@ abstract class AppDB : RoomDatabase() {
 
                 database.execSQL("DROP TABLE old_Word")
 
+            }
+        }
+
+        private object migration_10_11 : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE Word ADD COLUMN etymology TEXT")
+                database.execSQL("ALTER TABLE Word ADD COLUMN firstKnownUse TEXT")
+                database.execSQL("ALTER TABLE Word ADD COLUMN timeTraveler TEXT")
             }
         }
 
